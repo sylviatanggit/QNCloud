@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>库房温度记录</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+		<!--<link rel="stylesheet" type="text/css" href="../../../css/same.css" />-->
+	</head>
+	<style type="text/css">
+		#addRecord {
+			/*width: calc(100vw+17px);*/
+			font-size: 9pt;
+		}
+		
+		#addRecord legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		#addRecord label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		#addRecord .layui-input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		.layui-input-block {
+			min-height: 28px;
+		}
+		
+		#addRecord select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		#addRecord textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+			border: 1px solid #ddd !important;
+		}
+		
+		#addRecord .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 5px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 0px;
+		}
+		
+		#addRecord button {
+			margin-left: 8px;
+			text-align: center;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		#addRecord {
+			margin-bottom: 80px;
+		}
+	</style>
+
+	<body>
+		<div id="addRecord">
+			<div class="layui-form-item layui-form-title">
+				<button class="layui-btn addRecord_submit">提交</button>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>库房信息</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label">库房名称</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" id="warehouse" class="layui-input warehouse" type="text">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">记录人</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" id="salesman" class="layui-input addRecord_man" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">登记日期</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" id="registerDate" class="layui-input addRecord_logindate" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">适应湿度</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input addRecord_shidu" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">适应温度</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input addRecord_tem" type="text">
+				</div>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>上午</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label">上午检查时间</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" id="am" class="layui-input addRecord_morTime" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">上午检查湿度</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input addRecord_morShidu" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">上午检查温度</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input addRecord_morTem" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">上午养护措施</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input addRecord_yanghu" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">上午处理后湿度</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input addRecord_shidu1" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">上午处理后温度</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input addRecord_tem1" type="text">
+				</div>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>下午</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label">下午检查时间</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" id="pm" class="layui-input addRecord_afterTime" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">下午检查湿度</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input addRecord_afterShidu" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">下午检查温度</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input addRecord_afterTem" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">下午养护措施</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input addRecord_afterYanghu" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">下午处理后湿度</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input addRecord_afterShidu1" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">下午处理后温度</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input addRecord_afterTem1" type="text">
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'layer', "laydate"], function() {
+			var $ = layui.$, //重点处
+				layer = layui.layer;
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: '#registerDate',
+				value: new Date()
+			});
+			//限定可选时间
+			//下午
+			laydate.render({
+				elem: '#pm',
+				type: 'time',
+				value: "14:00:00"
+
+			});
+			//上午
+			laydate.render({
+				elem: '#am',
+				type: 'time',
+				value: "8:00:00"
+
+			});
+
+			function stockList() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetWarehouseDropDownList?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': localStorage.groupcompanyid
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						//							console.log(data)
+						$('#warehouse').bComboSelect({
+							showField: 'warehousename',
+							keyField: 'id',
+							data: data
+						});
+					}
+				});
+			}
+			stockList()
+
+			function staffList() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetEmployeeDropDownList?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': localStorage.groupcompanyid
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						$('#salesman').bComboSelect({
+							showField: 'employeename',
+							keyField: 'employeesid',
+							data: data
+						});
+					}
+				});
+			}
+			staffList()
+		});
+	</script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+</html>

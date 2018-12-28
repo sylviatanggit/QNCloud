@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>出库打印模板设置</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<script src="../../../js/jquery.js" type="text/javascript"></script>
+	  <script src="../../../Sortable/jquery-ui.min.js"></script>
+	  <style>
+	  #sortable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+	  #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px;cursor: pointer; }
+	  #sortable li span { position: absolute; margin-left: -1.3em; display: inline-block;}
+	  #sortable li div { display: inline-block;}
+	  #sortable li .widthInput {width: 80px;height: 25px;padding-left: 2px;border:1px solid silver;border-radius:5px}
+	  #sortable li .lieName {width: 100px;margin-left: 10px;}
+	  #sortable li .widthName {width: 100px;margin-left: 10px;}
+	 
+	  #tableHeadLie { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+	  #tableHeadLie li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+	  #tableHeadLie li span { position: absolute; margin-left: -1.3em; display: inline-block;}
+	  #tableHeadLie li div { display: inline-block;}
+	  #tableHeadLie li .lieName {width: 100px;margin-left: 10px;}
+	  #tableHeadLie li .widthName {width: 100px;margin-left: 10px;}
+	  </style>
+
+	</head>
+	<style type="text/css">
+		#addRecord {
+			/*width: calc(100vw+17px);*/
+			font-size: 9pt;
+		}
+		
+		#addRecord legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		#addRecord label {
+			width: 94px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+			padding: 0;
+		}
+		
+		#addRecord .layui-input {
+			font-size: 9pt !important;
+			width: 200px !important;
+			height: 28px !important;
+		}
+		
+		.layui-input-block {
+			min-height: 28px;
+		}
+		
+		#addRecord select {
+			font-size: 9pt !important;
+			width: 200px !important;
+			height: 28px !important;
+		}
+		
+		#addRecord textarea {
+			font-size: 9pt !important;
+			width: 200px !important;
+			height: 80px;
+			border: 1px solid #ddd !important;
+		}
+		
+		#addRecord .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 5px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 0px;
+		}
+		
+		#addRecord button {
+			margin-left: 8px;
+			text-align: center;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		#addRecord {
+			margin-bottom: 120px;
+		}
+		
+		#addRecord .layui-table {
+			border: none;
+		}
+		
+		#addRecord .layui-table tr {
+			margin-bottom: 15px !important;
+			line-height: 28px !important;
+		}
+		
+		#addRecord .layui-table td {
+			border: none;
+			padding: 0 !important;
+			padding-bottom: 15px !important;
+			line-height: 28px !important;
+		}
+		
+		#addRecord .layui-table tbody tr td:nth-child(1) {
+			text-align: right;
+			width: 100px;
+		}
+		
+		#addRecord .layui-table tbody tr td input {
+			cursor: pointer;
+		}
+		
+		#addRecord .layui-table tbody tr td:nth-child(2) {
+			padding-left: 30px !important;
+			width: 60px;
+		}
+		
+		#addRecord .layui-table tbody tr td:nth-child(3) {
+			width: 94px;
+		}
+		
+		#addRecord .layui-table tbody tr td:nth-child(4) {
+			width: 80px;
+		}
+		
+		#addRecord .layui-table tbody tr td:nth-child(5) {
+			width: 50px;
+		}
+		
+		#addRecord .layui-table tbody tr td:nth-child(6) {
+			width: 60px;
+		}
+		
+		#addRecord .layui-table tbody tr td:nth-child(7) input {
+			line-height: 24px !important;
+		}
+		
+		.layui-table td {
+			color: #232323 !important;
+			font-size: 9pt !important;
+		}
+		
+		.layui-table tr:nth-child(odd) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(even) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(odd) {
+			background-color: #FFFFFF !important;
+		}
+	</style>
+<script>
+  $(function() {
+    $("#sortable").sortable();
+    $("#sortable").disableSelection();
+    
+    $(".widthInput").val("100");
+    
+    var testData = '[{"property":"danwei","name":"规格","width":"100"},{"property":"producemodel","name":"型号","width":"100"}]';
+    testData = JSON.parse(testData);
+
+
+
+    $("#sortable li").each(function(e){
+    			var	property = $(this).find(".lieName").attr("hiddenproperty");
+					var currentObj = $(this);
+					testData.forEach(function (currentValue, index, arr) {
+      		if(currentValue.property == property){
+					  		currentObj.attr("class","checkSelected");
+					  		currentObj.find(".selected").prop("checked",true);		
+					  }
+					
+			    });
+					  
+					
+			});
+					
+    
+    function initData(){
+				$.ajax({
+								type: "get",
+								url: localStorage.serIp + "/WebBackupSql?jsoncallback=?",
+								async: true,
+								dataType: "jsonp",
+								data: {
+									"userId": localStorage.userId,
+									"userPw": localStorage.userPw,
+									'database': localStorage.database
+								},
+								success: function(res) {
+									var data = JSON.parse(res);
+									
+									if(data.length > 0){
+										    $("#sortable li").each(function(e){
+								    			var	property = $(this).find(".lieName").attr("hiddenproperty");
+													var currentObj = $(this);
+													data.forEach(function (currentValue, index, arr) {
+								      		if(currentValue.property == property){
+													  		currentObj.attr("class","checkSelected");
+													  		currentObj.find(".selected").prop("checked",true);		
+													  }
+													
+											    });
+													  
+													
+											});
+									}
+									
+									
+									
+								}
+										,
+								error: function(res) {
+									parent.layer.close(jiazaiIndex);
+										
+										parent.layer.open({
+											title: "提示",
+											content: '服务器异常!',
+												zIndex: parent.layer.zIndex //重点1
+								
+										});
+									
+							
+								}
+							});
+    }
+    
+    $("#allSelectId").click(function(){
+    	if($("#allSelectId").hasClass("allSelect")){
+    		
+				$("#allSelectId").attr("class","allSelected"); //是否全选
+				$("#sortable li").attr("class","checkSelected");//单独li
+				
+			 $(".selected").prop("checked",true);
+				
+			}else{
+				
+			  $(".selected").prop("checked",false);
+				  
+				$("#allSelectId").attr("class","allSelect");
+				$("#sortable li").attr("class","checkSelect");
+			}
+	
+	
+		});
+
+			
+					$("#sortable li").mouseover(function(){
+					  $(this).css("cursor","pointer");
+					});											
+					$("#sortable li").mouseout(function(){
+					  $(this).css("cursor","none");
+					});
+					
+					
+					
+				$("#sortable li").click(function(e){
+					
+					  if($(this).hasClass("checkSelect")){
+    						$(this).find(".selected").prop("checked",true);			
+    						
+    						$(this).attr("class","checkSelected");
+							
+						}else{
+							
+								$(this).find(".selected").prop("checked",false);						  
+								$(this).attr("class","checkSelect");
+						}
+					
+					});
+					
+				
+			$(".demx1").click(function(){
+				var jsonArray =[];
+			  $("#sortable .checkSelected").each(function(){
+			  	
+			  	var property="";
+			  	var name="";
+			  	var width="";
+			  	
+			  	property = $(this).find(".lieName").attr("hiddenproperty");
+			  	name = $(this).find(".lieName").html();
+					width= $(this).find(".widthInput").val();
+					
+			  	var jsonObject = {
+			  		"property" : property,
+			  		"name" :  name,
+			  		"width" : width,
+			  	}
+			  	jsonArray.push(jsonObject);
+			  	
+			  	
+			  });
+			  
+			  alert(JSON.stringify(jsonArray))
+			  
+			});
+
+  });
+  </script>
+	<body>
+		<div id="addRecord">
+			<div class="layui-form-item layui-form-title">
+				<button class="layui-btn addRecord_submit">提交</button>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>列名信息</legend>
+			</fieldset>
+			<ul id="tableHeadLie">
+	<li><div><input type="checkbox" id="allSelectId" class="allSelect"></div><div class="lieName demx1">列名</div><div  class="widthName">宽度</div></li>
+
+</ul>
+
+<ul id="sortable">
+
+  <li class="checkSelect"><div class="selectBox"><input type="checkbox" class="selected"></div><div class="lieName" hiddenproperty="producename">产品名称</div><div class="widthName"><input type="number" class="widthInput"></div></li>
+  <li class="checkSelect"><div class="selectBox"><input type="checkbox"  class="selected"></div><div  class="lieName"  hiddenproperty="danwei">规格</div><div class="widthName"><input type="number" class="widthInput"></div></li>
+  <li class="checkSelect"><div class="selectBox"><input type="checkbox"  class="selected"></div><div  class="lieName"  hiddenproperty="producemodel">型号</div><div class="widthName"><input type="number" class="widthInput"></div></li>
+  <li class="checkSelect"><div class="selectBox"><input type="checkbox"  class="selected"></div><div  class="lieName"  hiddenproperty="producenum">编号</div><div class="widthName"><input type="number" class="widthInput"></div></li>
+  <li class="checkSelect"><div class="selectBox"><input type="checkbox"  class="selected"></div><div  class="lieName"  hiddenproperty="producecode">主条码</div><div class="widthName"><input type="number" class="widthInput"></div></li>
+  <li class="checkSelect"><div class="selectBox"><input type="checkbox"  class="selected"></div><div  class="lieName"  hiddenproperty="producesubbarcode">副条码</div><div class="widthName"><input type="number" class="widthInput"></div></li>
+</ul>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'layer', "laydate"], function() {
+			var $ = layui.$, //重点处
+			layer = layui.layer;
+		
+		
+		
+			$(".addRecord_submit").click(function() {
+				//弹出层转圈圈的那个
+				parent.layer.open({
+				  type: 3, 
+				  zIndex: parent.layer.zIndex, //重点1
+				  success: function(layero, index){
+				  		jiazaiIndex = index;
+						}
+				});
+			
+			
+				var jsonArray =[];
+				$("#sortable .checkSelected").each(function(){
+				  	
+				  	var property="";
+				  	var name="";
+				  	var width="";
+				  	
+				  	property = $(this).find(".lieName").attr("hiddenproperty");
+				  	name = $(this).find(".lieName").html();
+						width= $(this).find(".widthInput").val();
+						
+				  	var jsonObject = {
+				  		"property" : property,
+				  		"name" :  name,
+				  		"width" : width,
+				  	}
+				  	jsonArray.push(jsonObject);
+				  	
+				  	
+				  });
+			  
+				  alert(JSON.stringify(jsonArray))
+			  
+			  
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebAddWarehouseCheckRecord?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'master': JSON.stringify(master)
+					},
+					success: function(res) {
+						parent.layer.close(jiazaiIndex);
+						var data = JSON.parse(res);
+						if(data.ResultValue == 1) {
+							parent.layer.open({
+								title: "提示",
+								content: '提交成功',
+								zIndex: parent.layer.zIndex, //重点1
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								},
+								end: function(){  
+									var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+									parent.layer.close(index); //再执行关闭     
+								}
+							});
+						} else {
+							parent.layer.open({
+								title: "提示",
+								zIndex: parent.layer.zIndex, //重点1
+								content: '提交失败'
+							});
+						}
+					}
+				});
+
+			})
+		});
+	</script>
+
+</html>

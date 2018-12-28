@@ -1,0 +1,229 @@
+
+table thead td {
+    padding: 0;
+    border-left: 1px solid #CAD3DA;
+    background: #DFEBFB;
+}
+table tbody tr:nth-child(even) {
+    background: #E7EFF9;
+}
+
+
+tbody tr:not(:last-child):hover{
+	background-color: rgba(137, 207, 240,.6)!important;
+}
+
+	select {
+    border: 1px solid #ddd;
+}
+
+
+
+.dx-datagrid-rowsview .dx-selection.dx-row > td{
+	background-color: yellow!important;
+}
+
+
+
+	
+	
+
+  .layui-laypage-limits {
+      font-size: 12px;
+      display: none;
+      margin-top: 15px;
+  }
+  
+  .layui-laypage {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 0px;
+    margin: 0px !important;
+   padding-top: 10px !important;
+}
+
+.layui-laypage a, .layui-laypage span {
+   margin-bottom: 0px !important;
+}
+
+
+
+
+		.dx-data-row,.dx-column-lines:not(:first-child) > td:nth-child(2) {
+		cursor: pointer;
+	 }
+	 .dx-widget {
+            font-size: 9pt!important;
+            line-height: 17px;
+        }
+        .option>.dx-selectbox {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .layui-input{
+            color: #000000;
+		  }
+	 .dx-column-lines>td:nth-child(2) {
+        color: #2D89DD;
+	}
+	.dx-data-row,.dx-column-lines > td:nth-child(2) {
+		cursor: pointer;
+	 }
+
+	.fl{
+		float: left;
+	}
+	.fr{
+		float: right;
+	}
+    .dx-datagrid-text-content {
+        color: grey;
+    }
+/**
+ * button按钮样式
+ */
+.dx-button .dx-button-content {
+    padding: 0px !important;
+}
+.dx-button-content {
+    line-height: 28px !important;
+}
+
+
+
+.dev_public_content {
+    font-family: "PingFang SC" !important;
+    font-size: 9pt !important;
+    color: #232323 !important;
+    margin: 0 0px;
+    margin-top: 0px;
+}
+
+
+.find_conditions{
+		border-left: 1px solid #ddd;border-right: 1px solid #ddd;padding-left: 10px;padding-right: 10px;padding-bottom: 10px;
+		
+
+}
+
+
+.btns {
+    float: right;
+    margin-top: 10px;
+}
+
+label {
+    padding: 0 !important;
+    margin-left: 0px;
+}
+
+.btns button,
+.find,
+.import {
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    width: 76px;
+    height: 28px;
+    text-align: center;
+    line-height: 28px;
+    border-radius: 2px;
+    background-color: #2D89DD;
+    color: #FFFFFF;
+    margin-left: 8px;
+    font-size: 9pt;
+}
+
+.btns button {
+    width: 90px;
+}
+
+	.dx-datagrid-content .dx-datagrid-table .dx-row .dx-command-select{
+			padding: 0;
+			width: 45px; 
+			min-width: 45px; 
+			max-width: 45px;
+	}
+		
+	.dx-datagrid-table .dx-row .dx-command-select{
+			width: 45px; 
+			min-width: 45px; 
+			max-width: 45px;
+	}
+
+.cs_container,
+.cs_container_open .cs_input,
+.cs_result_area {
+    width: 250px !important;
+}
+
+div.cs_result_area div.pagination li {
+    margin: 0 5px !important;
+}
+
+    
+.cleardata{
+    cursor: pointer;
+}
+
+.cleardata1{
+    cursor: pointer;
+}
+
+.layui-inline{
+    margin-top: 10px;
+}
+
+
+
+.lendoutcount{
+	  background: #cae1ec;
+}
+
+.lendincount{
+	  background: #d3ecc6;
+}
+
+
+.readycount{
+	  background: #fee9d0;
+}
+
+.realstockcount{
+	  background: #ffc8c8;
+}
+
+.usefulcount{
+	  background: #ffffc0;
+}
+
+
+.fxlock{
+	  background: #e1d5c2;
+}
+.warelock{
+		background-color: rgb(250,224,243) !important;
+}
+
+
+.realcost{
+	  background: #dacfda;
+}
+
+
+.subtotal{
+	  background: #c9f2f1;
+}
+
+/**
+ * 表头背景色
+ */
+.dx-datagrid-headers.dx-datagrid-nowrap {
+	background-color: #E7EFF9 !important;
+}
+td.dx-cell-focus-disabled.dx-datagrid-drag-action {
+	background-color: #E7EFF9 !important;
+}
+tr.dx-row.dx-column-lines.dx-header-row {
+	background-color: #E7EFF9 !important;
+}

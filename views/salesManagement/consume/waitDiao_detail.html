@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加直销手术备货</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	</head>
+	<style type="text/css">
+		input,
+		section,
+		button,
+		select {
+			border-radius: 2px;
+		}
+		
+		.addOperation {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.layui-input-block,
+		.layui-input-block input,
+		.layui-input-block label,
+		.layui-input-block select {
+			line-height: 28px !important;
+			height: 28px !important;
+			min-height: 28px !important;
+		}
+		
+		.layui-form-label {
+			line-height: 28px !important;
+		}
+		
+		.layui-input-block input,
+		.layui-input-block select {
+			width: 150px;
+		}
+		
+		.layui-input-block select {
+			cursor: pointer;
+		}
+		
+		.layui-input-block option {
+			cursor: pointer;
+		}
+		
+		.addOperation .layui-table td,
+		.layui-table th {
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+		}
+		
+		.btns {
+			margin-bottom: 12px;
+			position: absolute;
+			right: 20px;
+			top: 114px;
+		}
+		
+		.addOperation_header1_two {
+			margin-bottom: 12px;
+		}
+		
+		.btns button,
+		.import {
+			cursor: pointer;
+			border: none;
+			width: 90px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.btns button:nth-child(1),
+		.btns button:nth-child(2) {
+			width: auto;
+		}
+		
+		.layui-form-item .layui-input-inline {
+			width: 150px;
+		}
+		
+		.layui-input-block {
+			min-height: 22px;
+		}
+		
+		.two_inputs {
+			padding-top: 12px;
+			background-color: #EFF5FF;
+			margin-top: 50px;
+			padding-bottom: 5px;
+		}
+		
+		.title {
+			margin-top: 12px;
+		}
+	</style>
+
+	<body>
+		<div class="addOperation">
+			<div class="layui-tab">
+				<div class="addOperation_header1">
+					<div class="layui-inline">
+						<button class="layui-btn import" data-type="getCheckDel">确认导入</button>
+					</div>
+				</div>
+				<p class="title">订货详情</p>
+				<table id="addOperation" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: "#addOperationDate"
+			});
+			laydate.render({
+				elem: "#operationDate"
+			});
+			$("input").attr("disabled", "disabled");
+
+			function operationData() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetDirectsellingSlaveTableByOrderNum?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': sessionStorage.ordernumDiao
+					},
+					success: function(res) {
+						var operationData = JSON.parse(res);
+						operationDetail(operationData);
+					}
+				});
+
+			}
+
+			function operationDetail(data) {
+				//展示已知数据
+				table.render({
+					elem: '#addOperation',
+					data: data,
+					id: 'orderTest',
+					height: "full-96",
+					cols: [
+						[ //标题栏
+							{
+								field: "index",
+								title: ' ',
+								width: 40,
+								align: "center",
+								//							sort: true
+							},
+							{
+								checkbox: true,
+								LAY_CHECKED: true,
+								align: "center",
+								width: 40,
+							},
+							{
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 170,
+							}, {
+								field: 'manufacturer',
+								title: '厂家',
+								minWidth: 80
+							},
+							{
+								field: 'danwei',
+								title: '规格',
+								minWidth: 80
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 80
+							}, {
+								field: 'producenum',
+								title: '编号',
+								minWidth: 80
+							}, {
+								field: 'producecode',
+								title: '主条码',
+								minWidth: 80
+							}, {
+								field: 'producesubbarcode',
+								title: '副条码',
+								minWidth: 80
+							}, {
+								field: 'produceunit',
+								title: '单位',
+								minWidth: 80
+							}, {
+								field: 'producecount',
+								title: '数量',
+								minWidth: 80
+							},
+							{
+								field: 'produceusename',
+								title: '通俗名称',
+								minWidth: 80
+							},
+							{
+								field: 'produceseries',
+								title: '产品系列',
+								minWidth: 80
+							}, {
+								field: 'producematerial',
+								title: '材质',
+								minWidth: 80
+							}, {
+								field: 'registrationcertificatename',
+								title: '注册证号',
+								minWidth: 100
+							},
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [10, 20, 30, 40, 50],
+					limit: 50 //每页默认显示的数量
+				});
+			}
+			operationData();
+			var active = {
+				getCheckDel: function() { //获取选中数据
+					var checkStatus = table.checkStatus('orderTest'),
+						data = checkStatus.data;
+					sessionStorage.consumeData_diao = JSON.stringify(data);
+					parent.layer.open({
+						title: "提示",
+						content: '导入成功'
+					});
+				}
+			};
+			$(".import").click(function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			})
+			table.on('edit(orderTest)', function(obj) {
+				var value = obj.value //得到修改后的值
+					,
+					data = obj.data //得到所在行所有键值
+					,
+					field = obj.field; //得到字段
+
+			})
+		});
+	</script>
+
+</html>

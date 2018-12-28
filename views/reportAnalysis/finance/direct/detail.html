@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>直销追溯</title>
+		<link rel="stylesheet" href="../../../../plugins/layui/css/layui.css">
+		<link rel="stylesheet" type="text/css" href="../../../../css/same.css" />
+	</head>
+	<style type="text/css">
+		input,
+		section,
+		button,
+		select {
+			border-radius: 2px;
+		}
+		
+		.detail {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.layui-input-block,
+		.layui-input-block input,
+		.layui-input-block label,
+		.layui-input-block select {
+			line-height: 28px !important;
+			height: 28px !important;
+			min-height: 28px !important;
+		}
+		
+		.layui-form-label {
+			line-height: 28px !important;
+		}
+		
+		.layui-input-block input,
+		.layui-input-block select {
+			width: 170px;
+		}
+		
+		.layui-input-block select {
+			cursor: pointer;
+		}
+		
+		.layui-input-block option {
+			cursor: pointer;
+		}
+		
+		.detail .layui-table td,
+		.layui-table th {
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+		}
+		
+		.btns {
+			position: absolute;
+			right: 20px;
+			top: 133px;
+		}
+		
+		.layui-tab-title li {
+			font-size: 9pt !important;
+		}
+		
+		.detail_header1_two {
+			margin-bottom: 12px;
+		}
+		
+		.find,
+		.btns button {
+			cursor: pointer;
+			border: none;
+			width: 90px;
+			height: 28px !important;
+			line-height: 28px !important;
+			border-radius: 2px;
+			color: #FFFFFF;
+		}
+		
+		.find {
+			background-color: #2D89DD !important;
+			width: 76px;
+		}
+		
+		.detail_header1 {
+			padding-bottom: 40px;
+			border-bottom: 1px solid #F2F2F2;
+		}
+		
+		.detail_header1 ul {
+			float: right;
+		}
+		
+		.detail_header1 ul li {
+			margin-left: 8px;
+			margin-top: -50px;
+			display: inline-block;
+			width: 160px;
+		}
+		
+		.detail_header1 ul li label {
+			display: block;
+			padding: 0 !important;
+			text-align: left;
+			margin-bottom: 4px;
+		}
+		
+		.detail_header1 .layui-input-block {
+			margin-left: 0px !important;
+		}
+		
+		.detail_header1_two {
+			margin-left: 0px;
+			margin-top: 12px;
+		}
+		
+		.detail_header1_two .layui-form-item {
+			display: inline-block !important;
+			margin-bottom: 0 !important;
+		}
+		
+		.detail_header1_two .layui-form-item label {
+			margin-left: 12px;
+			display: block;
+			padding: 0 !important;
+			text-align: left;
+			margin-bottom: 4px;
+		}
+		
+		.layui-form-item .layui-input-inline {
+			width: 160px;
+		}
+		
+		.layui-input-block {
+			min-height: 22px;
+		}
+		
+		.two_inputs {
+			padding-top: 12px;
+			background-color: #EFF5FF;
+			margin-top: 20px;
+			padding-bottom: 5px;
+		}
+		
+		.moreAction {
+			width: 90px !important;
+		}
+		
+		.action {
+			width: 88px !important;
+			right: 0;
+		}
+		
+		.show,
+		.hide {
+			padding: 1px 10px;
+			background-color: #1E9FFF;
+			text-align: center;
+			position: absolute;
+			top: 138px;
+			right: 50%;
+			cursor: pointer;
+		}
+		
+		.hide {
+			display: none;
+		}
+		
+		.title {
+			margin-top: 12px;
+		}
+		
+		.layui-table-header {
+			border-width: 1px;
+		}
+	</style>
+
+	<body>
+		<div class="detail">
+			<div class="layui-tab">
+				<div class="detail_header1">
+					<p style="color: #232323 !important;font-size: 24px !important;margin-top: 30px;">直销追溯</p>
+					<ul>
+						<li>
+							<label class="layui-form-label">操作日期</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" placeholder="请选择日期" autocomplete="off" id="detailDate" class="layui-input detail_date" type="text">
+							</div>
+						</li>
+						<li>
+							<label class="layui-form-label">单号</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off" placeholder="请输入单号" class="layui-input detail_ordernum" type="text">
+							</div>
+						</li>
+						<li>
+							<label class="layui-form-label">自定义单号</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input detail_mynum" type="text">
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="detail_header1_two">
+
+					<!--<i class="layui-icon show">&#xe61a;</i>
+					<i class="layui-icon hide">&#xe619;</i>-->
+					<div class="two_inputs">
+						<div class="layui-form-item">
+							<label class="layui-form-label">往来单位</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input unit" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">主刀医生</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input doctor" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">手术名称</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input surgeryName" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">手术时间</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input surgeryDate" type="text" id="operationDate">
+							</div>
+						</div>
+						<br />
+						<div class="layui-form-item">
+							<label class="layui-form-label">&nbsp;助&nbsp;手&nbsp;1&nbsp;&nbsp;</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input help1" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">助&nbsp;手&nbsp;2&nbsp;&nbsp;&nbsp;</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input help2" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">诊&nbsp;&nbsp;&nbsp;&nbsp;断&nbsp;&nbsp;</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input diagnosis" type="text" style="width: 345px;">
+							</div>
+						</div>
+						<br/>
+						<div class="layui-form-item">
+							<label class="layui-form-label">患者姓名</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input patientName" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">患者年龄</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input patientAge" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">患者性别</label>
+							<div class="layui-input-inline">
+								<select name="" class="patientSex layui-input">
+									<option>男</option>
+									<option>女</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">住院号</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input hospital" type="text">
+							</div>
+						</div>
+						<br />
+						<div class="layui-form-item">
+							<label class="layui-form-label">患者床号</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input patientBed" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">业务员</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input salesman" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">跟台人员</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input gentaiMan" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input notes" type="text" style="width: 345px;">
+							</div>
+						</div>
+					</div>
+				</div>
+				<ul class="layui-tab-title">
+					<li class="layui-this beihuoDetail">备货详情</li>
+					<li class="hejiaDetail">核价详情</li>
+					<li class="shihaoDetail">实耗详情</li>
+					<li class="invoice">发票（未开发票）</li>
+					<li class="payments">收款详情</li>
+				</ul>
+				<div class="content">
+
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$(".show").click(function() {
+				$(".show").hide();
+				$(".hide").show();
+				$(".two_inputs").hide();
+				$(".title").css("margin-top", "54px");
+			});
+			$(".hide").click(function() {
+				$(".hide").hide();
+				$(".show").show();
+				$(".two_inputs").show();
+				$(".title").css("margin-top", "12px");
+			});
+			$(function() {
+				$(".content").load("beihuoDetail.html");
+			})
+			$(".beihuoDetail").click(function() {
+				$(".content").load("beihuoDetail.html")
+				$(".beihuoDetail").addClass("layui-this");
+				$(".beihuoDetail").siblings().removeClass("layui-this");
+			});
+			$(".hejiaDetail").click(function() {
+				$(".content").load("hejiaDetail.html")
+				$(".hejiaDetail").addClass("layui-this");
+				$(".hejiaDetail").siblings().removeClass("layui-this");
+			});
+			$(".shihaoDetail").click(function() {
+				$(".content").load("shihaoDetail.html")
+				$(".shihaoDetail").addClass("layui-this");
+				$(".shihaoDetail").siblings().removeClass("layui-this");
+			})
+			$(".invoice").click(function() {
+				$(".content").load("invoice.html")
+				$(".invoice").addClass("layui-this");
+				$(".invoice").siblings().removeClass("layui-this");
+			})
+			$(".payments").click(function() {
+				$(".content").load("payment.html")
+				$(".payments").addClass("layui-this");
+				$(".payments").siblings().removeClass("layui-this");
+			})
+			laydate.render({
+				elem: "#detailDate"
+			});
+
+			function data() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetSqbhTraceBackDetail?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': sessionStorage.cwdzdOrdernum
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						//Table1：上方信息    Table2：上方信息
+						var desDataT1 = desData.NewDataSet[0].Table1[0];
+						var desDataT2 = desData.NewDataSet[1].Table2[0];
+						var newdate,y,m,r;
+						if(desData.NewDataSet[0].Table1.length != 0 && desData.NewDataSet[0].Table1[0].actiondate.length >10){
+//							newdate = desData.NewDataSet[0].Table1[0].actiondate.slice(0,10);
+							newdate = new Date(newdate);
+							y = newdate.getFullYear();
+							m = newdate.getMonth()+1;
+							r = newdate.getDate();
+							$(".detail_date").val(y + "-" + m + "-" + r);
+						}
+						
+						$(".detail_ordernum").val(desDataT2.ordernum);
+						$(".detail_mynum").val(desDataT2.mynum);
+						$(".unit").val(desDataT2.companyname);
+						$(".doctor").val(desDataT2.masterdoctorname);
+						$(".surgeryName").val(desDataT2.surgery);
+						$(".surgeryDate").val(desDataT2.standby1);
+						$(".help1").val(desDataT2.assistantonename);
+						$(".help2").val(desDataT2.assistanttwoname);
+						$(".diagnosis").val(desDataT2.diagnose);
+						$(".patientName").val(desDataT2.patienname);
+						$(".patientAge").val(desDataT2.patientage);
+						$(".patientSex").val(desDataT2.patientsex);
+						$(".hospital").val(desDataT2.patienthospitalnum);
+						$(".patientBed").val(desDataT2.patientbednum);
+						$(".salesman").val(desDataT2.agentname);
+						$(".gentaiMan").val(desDataT2.follownamename);
+						$(".notes").val(desDataT2.nomo);
+					}
+				});
+			}
+			data()
+		});
+	</script>
+
+</html>

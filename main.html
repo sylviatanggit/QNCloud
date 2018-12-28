@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>系统导航栏</title>
+		<link rel="stylesheet" href="./plugins/layui/css/layui.css" media="all">
+<!--		<link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+-->		<style>
+			* {
+				font-family: "PingFang SC";
+				color: #232323;
+			}
+			
+			.main {
+				margin: 8px 20px 10px 20px;
+			}
+			
+			.main_header {
+				font-size: 20px;
+			}
+			
+			.layui-col-md4 {
+		
+			}
+			
+			.layui-row {
+				width: 83%;
+				margin-top: 28px;
+				/*float: left;*/
+				display: inline-block;
+			}
+			
+			.info_title {
+				height: 43px;
+				padding-left: 8px;
+				font-size: 16px;
+				background-color: #F1F1F1;
+				line-height: 50px;
+				border: 1px solid #8C8C8C;
+			}
+			
+			.info_title a {
+				float: right;
+				margin-right: 8px;
+				font-size: 12px;
+				color: #357BEA;
+			}
+			
+			.info-box {
+				margin-right: 40px;
+			}
+			
+			.info_content {
+				border: 1px solid #8C8C8C;
+				border-top: none;
+				height: 124px;
+				text-align: center;
+				font-size: 16px;
+				padding-top: 35px;
+			}
+			
+			.info_content .num span:nth-child(1) {
+				font-size: 36px;
+				font-weight: 500;
+			}
+			
+			.info_content li {
+				text-align: left;
+				width: 45%;
+				font-size: 14px;
+				margin-left: 5%;
+				float: left;
+				margin-bottom: 12px;
+			}
+			
+			.info_content li span {
+				/*color: #fff;*/
+		
+			}
+			
+			.right {
+				float: right
+			}
+			
+			.right {
+				margin-top: 28px;
+				width: 17%;
+				font-size: 12px !important;
+				display: inline-block;
+			}
+			
+			.right .info-box {
+				/*height: 250px !important;*/
+				margin-right: 0 !important;
+				margin-bottom: 30px;
+			}
+			
+			.right .info-box .info_content {
+				height: 200px;
+			}
+			
+			.right .info_content {
+				padding-top: 20px;
+			}
+			
+			li {
+				cursor: pointer;
+			}
+			
+			.right .info_content li {
+				font-size: 12px !important;
+				width: 100%;
+				clear: both;
+				margin-left: 10px;
+			}
+			
+			.right .info_content li span {
+				float: right;
+				margin-right: 18px;
+				text-align: center;
+				cursor: pointer;
+				display: inline-block;
+				min-width: 30px;
+				height: 20px;
+				background-color: transparent;
+				color: white !important;
+			}
+			a {
+				cursor: pointer;
+			}
+			/*开始写样式咯*/
+			.my_chanpin{
+				width:14%;
+				height: 156px;
+				border-radius: 10px;
+				background: #f29C9F;
+				cursor:pointer;
+				margin-left: 2.1%;
+
+			}
+			
+			.my_chanpinmove{
+			
+				-moz-box-shadow: 12px 18px 8px #9d9d9d; /* 老的 Firefox */
+				box-shadow: 12px 18px 8px #9d9d9d;
+			}
+			.help{
+				height: 1px;
+			}
+			.my_chanpin img{
+				display: block;
+				margin:0 auto;
+				margin-top: 20px;
+				width: 55px;
+				height: 55px;
+				cursor: pointer;
+			}
+			.chanpin_num,.xiegang{
+				font-size: 25px;
+				color: white;
+				text-align: center;
+				margin-top: 13px;
+			}
+			
+			.allowCompanyCount{
+				font-size: 25px;
+				color: white;
+				text-align: center;
+				margin-top: 13px;
+			}
+			.chanpin{
+				font-size: 14px;
+				color: white;
+				text-align: center;
+			}
+			.fl{
+				float: left;
+			}
+			.yuangong{
+				background: #78C1F1;
+			}
+			.gongsi{
+				background: #ACD598;
+			}
+			.changjia{
+				background: #F29B76;
+			}
+			.yiyuan{
+				background: #CEBFFF;
+			}
+			.jiantou{
+				width: 6%;
+			}
+			.neirong{
+				width: 11%;
+			}
+			.fr{
+				float: right;
+			}
+			.up_down{
+				margin-right: 14%;
+			}
+			.up_down img{
+				width: 11px;
+			}
+			.visible{
+				visibility: hidden;
+			}
+			.jingxiaoshang{
+				background: #D1C0A5;
+			}
+			.info_content .neirong{
+				cursor: pointer;
+			}
+			.layui-col-md4 .operationname{
+				margin-left: 10px;
+				margin-right: 5px;
+				color: #232323;
+			}
+			
+			.layui-col-md4 img{
+				width: 18px;height: 18px;
+			}
+			
+			.layui-col-md4 .numStyle{
+				/*display: inline-block;
+				    text-align: center;
+				    width: 30px;height: 20px;*/
+			}
+			
+			
+			
+		</style>
+	</head>
+
+	<body>
+
+		<div class="layui-fluid main">
+			<div class="layui-row">
+				
+		<div style="height: 156px;display: block;">
+				<div class="my_chanpin fl mychanpin" style="margin-left: 0px;">
+					<div class="help"></div>
+					<img src="image/img/my_chanpin.png" />
+					<p class="chanpin_num" id="chanpinshuliang"></p> 
+					<p class="chanpin">我的产品</p>
+				</div>
+				<div class="my_chanpin yuangong myyuangong fl">
+					<div class="help"></div>
+					<img src="image/img/my_yuangong.png" />
+					<p class="chanpin_num" id="wodeyuangong"></p>
+					<p class="chanpin">我的员工</p>
+				</div>
+				<div class="my_chanpin wanglai gongsi fl myCompany">
+					<div class="help"></div>
+					<img src="image/img/my_gs.png" />
+					<p style="text-align: center;"><sapn style="display: inline-block;"  class="chanpin_num " id="chanpin_num"></sapn><span class="xiegang">/</span><span class="allowCompanyCount"></span></p>
+					<p class="chanpin">我的子公司</p>
+				</div>
+				<div class="my_chanpin wanglai changjia fl mygongyingshang">
+					<div class="help"></div>
+					<img src="image/img/29.png" />
+					<p class="chanpin_num" id="gongyingshang"></p>
+					<p class="chanpin">我的供应商</p>
+				</div>
+				<div class="my_chanpin wanglai yiyuan fl myjingxiaoshang">
+					<div class="help"></div>
+					<img src="image/img/changjia.png" />
+					<p class="chanpin_num" id="jingxiaoshang"></p>
+					<p class="chanpin">我的经销商</p>
+				</div>
+				<div class="my_chanpin wanglai jingxiaoshang fl myHospital">
+					<div class="help"></div>
+					<img src="image/img/yiyuan.png" />
+					<p class="chanpin_num" id="yiyuan"></p>
+					<p class="chanpin">我的医院</p>
+				</div>
+				
+		</div>
+				
+				
+				
+				<div class="layui-col-md4" style="margin-top: 40px;clear: both;">
+					<div class="info-box">
+						<div class="info_title">
+							<p>采购事项<span style="color: red;">(待办)</span></p>
+						</div>
+						<div class="info_content" style="padding-top: 20px;">
+							<ul>
+								<li class="orderContract"><img src="image/img/10.png" /><span class="operationname">订货合约</span><span class="numStyle"></span></li>
+								<li class="payment"><img src="image/img/11.png" /><span class="operationname">采购付款</span><span class="numStyle"></span></li>
+								<li class="acceptanceCheck"><img src="image/img/12.png" /><span class="operationname">入库验收</span><span class="numStyle"></span></li>
+								<li class="returnPurchase"><img src="image/img/13.png" /><span class="operationname">采购退货</span><span class="numStyle"></span></li>
+								<li class="pricePurchase"><img src="image/img/14.png" /><span class="operationname">采购核价</span><span class="numStyle"></span></li>
+								<li class="returnReceipts"><img src="image/img/15.png" /><span class="operationname">退货收款</span><span class="numStyle"></span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md4" style="margin-top: 40px;">
+					<div class="info-box">
+						<div class="info_title">
+							<p>直销事项<span style="color: red;">(待办)</span></p>
+						</div>
+						<div class="info_content" style="padding-top: 20px;">
+							<ul>
+								<li class="stockApplication"><img src="image/img/16.png" /><span class="operationname">备货申请</span><span class="numStyle"></span></li>
+								<li class="direcPrice"><img src="image/img/19.png" /><span class="operationname">直销核价</span><span class="numStyle"></span></li>
+
+								<li class="operationEquipment"><img src="image/img/17.png" /><span class="operationname">手术备货</span><span class="numStyle"></span></li>
+								<li class="invoiceOut"><img src="image/img/21.png" /><span class="operationname">发票签出</span><span class="numStyle"></span></li>
+
+								<li class="identifyGoods"><img src="image/img/18.png" /><span class="operationname">确认取货</span><span class="numStyle"></span></li>
+								
+								<li class="returnReceipts"><img src="image/img/22.png" /><span class="operationname">直销收款</span><span class="numStyle"></span></li>
+
+								<li class="realConsumption"><img src="image/img/20.png" /><span class="operationname">实耗清点</span><span class="numStyle"></span></li>
+
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md4" style="margin-top: 40px;">
+					<div class="info-box">
+						<div class="info_title">
+							<p>分销事项<span style="color: red;">(待办)</span></p>
+						</div>
+						<div class="info_content" style="padding-top: 20px;">
+							<ul>
+								<li class="distributionContact"><img src="image/img/23.png" /><span class="operationname">分销合约</span><span class="numStyle"></span></li>
+								<li class="returnReceipts"><img src="image/img/24.png" /><span class="operationname">分销收款</span><span class="numStyle"></span></li>
+								<li class="outgoingVerification"><img src="image/img/25.png" /><span class="operationname">出库验出</span><span class="numStyle"></span></li>
+								<li class="distributionReturn"><img src="image/img/26.png" /><span class="operationname">分销退货</span><span class="numStyle"></span></li>
+								<li class="distributionPrice"><img src="image/img/27.png" /><span class="operationname">分销核价</span><span class="numStyle"></span></li>
+								<li class="payment"><img src="image/img/28.png" /><span class="operationname">退货付款</span><span class="numStyle"></span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md12" style="margin-top: 40px;">
+					<div class="info-box">
+						<div class="info_title">
+							<p>基础信息导入</p>
+						</div>
+						<div class="info_content" style="padding-top: 20px;height:120px;">
+							<ul style="margin-top: 31px;">
+								<img class="neirong myzhucezheng" src="image/产品注册证导入.png"><img class="jiantou" src="image/img/left.png">
+								<img class="neirong mychanpin" src="image/产品导入.png"><img class="jiantou" src="image/img/left.png">
+								<img class="neirong myyuangong" src="image/员工导入.png">
+								<!--<img class="jiantou" src="image/img/left.png">-->
+								<!--<img class="neirong wanglai" src="image/img/4.png"><img class="jiantou" src="image/img/left.png">
+								<img class="neirong myyuangong" src="image/img/5.png">-->
+							</ul>
+							<!--<div class="fr up_down"><img class="up_down" src="image/img/up.png"></div>
+							<div style="clear: both;"></div>
+							<ul>
+								<img class="neirong visible" src="image/img/9.png"><img class="jiantou visible" src="image/img/left.png">
+								<img class="neirong" src="image/img/9.png"><img class="jiantou" src="image/img/right.png">
+								<img class="neirong" src="image/img/8.png"><img class="jiantou" src="image/img/right.png">
+								<img class="neirong" src="image/img/7.png"><img class="jiantou" src="image/img/right.png">
+								<img class="neirong mychanpin" src="image/img/6.png">
+							</ul>-->
+						</div>
+					</div>
+				</div>
+				
+				<div style="width: 100%;display: inline-block;text-align: center;margin-top: 10px;font-size: 9pt;">		
+					<p>版权所有： 南京吉帝思信息科技有限公司</p>
+					<p>Copyright © by G.D.S all rights reserved</p>
+				</div>
+			</div>
+			<!------------------------->
+			<div class="right">
+				<div class="info-box" style="min-width: 200px;">
+					<div class="info_title">
+						<p>报警查询
+							<a class="setUp">设置</a>
+						</p>
+					</div>
+					<div class="info_content">
+						<ul>
+							<li class="safe">安全库存<span></span></li>
+							<li class="proStopdate">产品有效期<span></span></li>
+							<li class="proReg">产品注册证<span></span></li>
+							<li class="lendOut">借出管理<span></span></li>
+							<li class="borrowIn">借入管理<span></span></li>
+							<li class="businessLicense">证件管理<span></span></li>
+						</ul>
+					</div>
+				</div>
+				<div class="info-box" style="min-width: 200px;">
+					<div class="info_title">
+						<p>青囊app下载</p>
+					</div>
+					<div class="info_content">
+						<img src="image/app.png" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="./plugins/layui/layui.js"></script>
+		<script src="./js/public.js"></script>
+		<script>
+			layui.use(['jquery','layer'], function() {
+				var $ = layui.jquery;
+				var layer = layui.layer;
+				$('#test').on('click', function() {
+					parent.message.show({
+						skin: 'cyan'
+					});
+				});
+				
+				
+						var jiazaiIndex;
+			parent.layer.open({
+			  type: 3, 
+			  zIndex: parent.layer.zIndex, //重点1
+			  success: function(layero, index){
+			  		jiazaiIndex = index;
+	  			}
+			});
+		
+				$(".orderContract").click(function() {
+					if(!checkPermissionStatus("订货合约-查看1")){
+		
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						
+						return false;
+					
+					}
+					
+					tiao('views/purchasingManagement/orderContract/orderContract.html','订货合约',"13")
+				});
+				$(".acceptanceCheck").click(function() {
+						if(!checkPermissionStatus("入库验收-查看1")){
+		
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+					tiao('views/purchasingManagement/acceptance/acceptanceCheck.html','入库验收',"14")
+				});
+				$(".returnPurchase").click(function() {
+					
+						if(!checkPermissionStatus("采购退货-查看1")){
+					
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+					
+					tiao('views/purchasingManagement/purchaseReturn/purchase.html','采购退货',"15")
+				});
+				$(".payment").click(function() {
+						if(!checkPermissionStatus("采购付款单-查看1")){
+		
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+					tiao('views/financiaManagement/payment/payment.html','采购付款单',"44")
+				});
+				$(".pricePurchase").click(function() {
+						if(!checkPermissionStatus("采购核价-查看1")){
+		
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+					tiao('views/financiaManagement/purchase/purchase.html','采购核价',"39")
+				});
+				$(".returnReceipts").click(function() {
+						if(!checkPermissionStatus("销售收款单-查看1")){
+		
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+						
+					tiao('views/financiaManagement/receipt/receipt.html','销售收款单',"43")
+				});
+				$(".stockApplication").click(function() {
+					
+						if(!checkPermissionStatus("标准流程-备货申请-查看1")){
+			
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					
+					return false;
+				
+				}
+						
+					tiao('views/salesManagement/direct/direct.html','标准流程-备货申请',"17")
+				});
+				$(".operationEquipment").click(function() {
+						if(!checkPermissionStatus("标准流程-手术备货-查看1")){
+		
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+						
+					tiao('views/salesManagement/operation/operation.html','标准流程-手术备货',"18")
+				});
+				$(".identifyGoods").click(function() {
+						if(!checkPermissionStatus("标准流程-确认取货-查看1")){
+		
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+						
+						
+					tiao('views/salesManagement/get.html','标准流程-确认取货',"19")
+				});
+				$(".direcPrice").click(function() {
+							if(!checkPermissionStatus("直销核价-查看1")){
+					
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+							
+					tiao('views/financiaManagement/directSelling/directSelling.html','直销核价',"41")
+				});
+				$(".realConsumption").click(function() {
+						if(!checkPermissionStatus("标准流程-实耗清点-查看1")){
+					
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+					tiao('views/salesManagement/consume/consume.html','标准流程-实耗清点',"20")
+				});
+				$(".invoiceOut").click(function() {
+						if(!checkPermissionStatus("直销发票签出单-查看1")){
+		
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+					tiao('views/financiaManagement/checkOutZX/checkOut.html','直销发票签出单',"248")
+				});
+
+				$(".distributionContact").click(function() {
+							if(!checkPermissionStatus("分销合约-查看1")){
+		
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+					tiao('views/salesManagement/contract/contract.html','分销合约',"21")
+				});
+
+				$(".outgoingVerification").click(function() {
+						if(!checkPermissionStatus("出库验出-查看1")){
+		
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+					tiao('views/salesManagement/outGoing/outGoing.html','出库验出',"22")
+				});
+				$(".distributionReturn").click(function() {
+								
+					if(!checkPermissionStatus("分销退货-查看1")){
+				
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						
+						return false;
+					
+					}
+					tiao('views/salesManagement/return/return.html','分销退货',"23")
+				});
+				$(".distributionPrice").click(function() {
+						if(!checkPermissionStatus("分销核价-查看1")){
+				
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						
+						return false;
+					
+					}
+						
+					tiao('views/financiaManagement/distribution/distribution.html','分销核价',"40")
+				});
+				
+				
+				
+				$(".mychanpin").click(function() {
+					
+						if(!checkPermissionStatus("我的所有产品-查看1")){
+		
+								parent.layer.open({
+									title: "提示",
+									content: localStorage.jurisdictionTips,
+									zIndex: layer.zIndex //重点1
+									,
+									success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+									}
+								});
+								
+								return false;
+							
+							}
+						
+						
+					tiao('/QNCloud/views/MyProduct/MyAllGuiGe/myAllGuige.html','我的所有产品',"105")
+				});
+				$(".myyuangong").click(function() {
+					
+							
+					if(!checkPermissionStatus("我的员工-查看1")){
+				
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						
+						return false;
+					
+					}
+			
+			
+					tiao('views/basicdataProtect/staffManagement.html','我的员工',"4")
+					
+				});
+				
+					$(".myzhucezheng").click(function() {
+								if(!checkPermissionStatus("我的产品注册证-查看1")){
+		
+								parent.layer.open({
+									title: "提示",
+									content: localStorage.jurisdictionTips,
+									zIndex: layer.zIndex //重点1
+									,
+									success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+									}
+								});
+								
+								return false;
+							
+							}
+					tiao('views/MyProduct/MyAllProduct/myAllProduct.html','我的产品注册证',"104")
+					
+				});
+				
+				
+				$(".myHospital").click(function() {
+						if(!checkPermissionStatus("往来单位管理-查看1")){
+		
+				parent.layer.open({
+					title: "提示",
+					content: localStorage.jurisdictionTips,
+					zIndex: layer.zIndex //重点1
+					,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					}
+				});
+				
+				return false;
+			
+			}
+						
+						
+					tiao('views/basicdataProtect/unit/unit.html','往来单位信息',"12")
+					sessionStorage.companytype = "5"
+				});
+				
+				$(".myjingxiaoshang").click(function() {
+					if(!checkPermissionStatus("往来单位管理-查看1")){
+		
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+						
+						
+					tiao('views/basicdataProtect/unit/unit.html','往来单位信息',"12")
+					sessionStorage.companytype = "4"
+
+				});
+				$(".mygongyingshang").click(function() {
+					if(!checkPermissionStatus("往来单位管理-查看1")){
+		
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+						
+					tiao('views/basicdataProtect/unit/unit.html','往来单位信息',"12")
+										sessionStorage.companytype = "3"
+
+				});
+				
+				$(".myCompany").click(function() {
+						if(!checkPermissionStatus("往来单位管理-查看1")){
+		
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							return false;
+						
+						}
+						
+						
+					tiao('views/basicdataProtect/unit/unit.html','往来单位信息',"12")
+										sessionStorage.companytype = "2"
+
+				});
+				
+				
+				
+				
+				$(".safe").click(function() {
+					tiao('views/warning/safetyStock.html','安全库存',"1000")
+				});
+				$(".proStopdate").click(function() {
+					tiao('views/warning/proStopdate.html','产品有效期',"1001")
+				});
+				
+				$(".proReg").click(function() {
+					
+					sessionStorage.myAllProductType = "YGQ"
+					tiao('views/MyProduct/MyAllProduct/myAllProduct.html','我的产品注册证',"104")
+					
+				});
+				
+				$(".lendOut").click(function() {
+					tiao('views/warning/lendOut.html','借出管理',"1003")
+				});
+				$(".borrowIn").click(function() {
+					tiao('views/warning/borrowIn.html','借入管理',"1004")
+				});
+				$(".businessLicense").click(function() {
+					tiao('views/warning/businessLicense.html','证件管理',"1005")
+				});
+				
+				//报警设置
+				$(".setUp").click(function() {
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">警告查询-设置</span>',
+						area: ['700px', '90%'],
+						offset:"rb",
+						content: 'views/warning/setUp.html',
+						zIndex: layer.zIndex //重点1
+							,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				});
+				//公用跳转的函数
+				function tiao(tiaoUrl,tiaoTitle,num){
+
+
+					parent.layui.element.tabDelete("kitTab","12");
+					parent.tab.tabAdd({
+						icon: '',
+						id: num,
+						title: tiaoTitle,
+						url: tiaoUrl
+					});
+					
+						
+
+				}
+				
+				$('.my_chanpin').hover(function(){
+				    $(this).addClass('my_chanpinmove').stop().animate({marginTop:"-12px",width:"14.5%",height:'162px'})
+				}, function(){
+				    $(this).removeClass('my_chanpinmove').stop().animate({marginTop:"0px",width:"14%",height:'156px'})
+				});
+
+
+
+				
+				
+				//获取首页公司数量信息
+				getNum()
+				function getNum(){
+					console.log(localStorage.groupcompanyid)
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp+"/WebGetIndexCountInfo?jsoncallback=?",
+						dataType: "jsonp",
+						async: true,
+						data: {
+							'userId': localStorage.userId,
+							'userPw': localStorage.userPw,
+							'database': localStorage.database,
+							'groupCompanyId': localStorage.groupcompanyid
+						},
+						success: function(res) {
+																			parent.layer.close(jiazaiIndex);
+
+							var nums = JSON.parse(res);
+							//采购代办
+							publicNum(nums.purchase.OrderCount,'orderContract');
+							publicNum(nums.purchase.InStockCount,'acceptanceCheck');
+							publicNum(nums.purchase.PayingCount,'payment');
+							publicNum(nums.purchase.PricingCount,'pricePurchase');
+							publicNum(nums.purchase.PurchaseRefundCount,'returnPurchase');
+							publicNum(nums.purchase.RefundReceivablesCount,'returnReceipts');
+							//直销代办
+							publicNum(nums.directSelling.ApplyCount,'stockApplication');
+							publicNum(nums.directSelling.ConfirmCount,'identifyGoods');
+							publicNum(nums.directSelling.InvoiceOut,'invoiceOut');
+							publicNum(nums.directSelling.OperationCount,'operationEquipment');
+							publicNum(nums.directSelling.PricingCount,'direcPrice');
+							publicNum(nums.directSelling.RealCount,'realConsumption');
+							publicNum(nums.directSelling.ReceivablesCount,'returnReceipts');
+							//分销代办
+							publicNum(nums.directOut.DirectOutContractCount,'distributionContact');
+							publicNum(nums.directOut.DirectOutPricingCount,'distributionPrice');
+							publicNum(nums.directOut.DirectOutRefundCount,'distributionReturn');
+							publicNum(nums.directOut.OutStockCount,'outgoingVerification');
+							publicNum(nums.directOut.ReceivablesCount,'returnReceipts');
+							publicNum(nums.directOut.RefundPayingCount,'payment');
+							//报警查询
+							baoJing(nums.notice.BusinessLicense,'businessLicense');
+							baoJing(nums.notice.LendIn,'borrowIn');
+							baoJing(nums.notice.LendOut,'lendOut');
+							baoJing(nums.notice.ProduceRegistration,'proReg');
+							baoJing(nums.notice.ProduceValidityDate,'proStopdate');
+							baoJing(nums.notice.SafeStock,'safe');
+							//子公司数量
+							sixKuai(nums.CompanyCount,'chanpin_num');
+							
+							
+							localStorage.currentompanyCount = nums.CompanyCount;
+
+							sixKuai(nums.DistributorCount,'jingxiaoshang');
+							sixKuai(nums.EmployeeCount,'wodeyuangong');
+							sixKuai(nums.MyHospitalCount,'yiyuan');
+							sixKuai(nums.ProductCount,'chanpinshuliang');
+							sixKuai(nums.SupplierCount,'gongyingshang');
+						}
+								,
+						error: function(res) {
+							parent.layer.close(jiazaiIndex);
+								
+								parent.layer.open({
+									title: "提示",
+									content: '服务器异常!',
+										zIndex: parent.layer.zIndex //重点1
+						
+								});
+							
+					
+						}
+					});
+				}
+				//采购代办那一块
+				function publicNum(num,cla){
+					
+					if(num==null || num==0){
+						var OrderCount='('+0+')';
+						$("."+cla+" .numStyle").css("color","#232323")
+						
+					}else{
+						var OrderCount='('+num+')';
+						$("."+cla+" .numStyle").css("color","red")
+
+					}
+					
+					$("."+cla+" span").not(".operationname").text(OrderCount);
+				}
+				
+				
+				//报警查询那一块
+				function baoJing(num,cla){
+					if(num==null || num==0){
+						var OrderCount=0;
+							$("."+cla+" span").css("background-color","green")
+
+					}else{
+						var OrderCount=num;
+													$("."+cla+" span").css("background-color","red")
+
+					}
+					$("."+cla+" span").text(OrderCount);
+				}
+				//那6个小块块
+				function sixKuai(num,idy){
+					if(num==null || num==0){
+						var OrderCount=0;
+					}else{
+						var OrderCount=num;
+					}
+					$("#"+idy).text(OrderCount);
+					$(".allowCompanyCount").text(localStorage.allowCompanyCount)
+				}
+			});
+		</script>
+	</body>
+
+</html>

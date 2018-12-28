@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>直销报价单</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.directQuotation {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+		}
+		
+		.btns {
+			margin-top: 18px;
+			float: right;
+		}
+		
+		label {
+			padding: 0 !important;
+		}
+		
+		.btns button,
+		.find {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+		
+		.directQuotation_header {
+			margin-bottom: 8px;
+		}
+		
+		.layui-form {
+			margin-bottom: 0;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+			z-index: 5;
+			background-color: #FFFFFF;
+		}
+		.cleardata{
+			cursor: pointer;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="directQuotation">
+			<div class="layui-tab">
+				<div class="directQuotation_header">
+					<div class="inputs">
+						<div class="layui-inline" style="margin-top: 18px;">
+							<div class="layui-input-inline">
+								<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="width: 240px;margin-left: 0;">
+							</div>
+						</div>
+						<div class="layui-inline" style="margin-top: 18px;">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						<div class="btns">
+							<button class="layui-btn quotationadd">新增</button>
+							<input type="file" style="display: none;" id="modelup"/>
+							<button class="layui-btn moreAction ">更多操作</button>
+							<ul class="action" style="right: 20px !important;">
+								<li>
+									<a class="modeldown">模板下载</a>
+								</li>
+								<li>
+									<a class="modelup">
+<button type="button" class="layui-btn" id="bjdUpload" style="width: 90px;margin-left:0px;background-color: transparent;height: 25px;line-height: 25px;color: #232323;">导入明细</button></a>
+								</li>
+								<li>
+									<a class="modelout">导出全部</a>
+								</li>
+								<li>
+									<a class="del" data-type="getCheckDel" lay-event='del'>批量删除</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+				</div>
+				<table id="directQuotation" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+		<script src="../../../js/public.js"></script>
+
+	<script>
+		layui.use(['table', 'jquery', 'upload','laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laypage = layui.laypage;
+			var upload = layui.upload;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			//查询
+
+			var limit = 50;
+			var curpage = 1;
+			var count;
+			var oldData=[];
+		
+			var jiazaiIndex;
+			parent.layer.open({
+			  type: 3, 
+			  zIndex: parent.layer.zIndex, //重点1
+			  success: function(layero, index){
+			  		jiazaiIndex = index;
+	  			}
+			});
+			
+			
+			directData(true)
+			function directData(flag) {
+				
+				var bidnum = $(".seachContent").val();
+			
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetContractProductInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'num':limit,
+						'page': curpage,
+						'contractid':sessionStorage.contract_id,
+						'txtCondition':bidnum
+					},
+					success: function(res) {
+						parent.layer.close(jiazaiIndex);
+
+						var hq_data = JSON.parse(res);
+						count = hq_data.count;
+						oldData=JSON.parse(hq_data.data);
+						firectInfo(oldData)
+						
+						
+						if(flag) {
+							direct_pages();
+						}
+					}			,
+					error: function(res) {
+						parent.layer.close(jiazaiIndex);
+							
+							parent.layer.open({
+								title: "提示",
+								content: '服务器异常!',
+									zIndex: parent.layer.zIndex //重点1
+					
+							});
+						
+				
+					}
+				});
+			}
+
+			function firectInfo(data) {
+				//展示已知数据
+				table.render({
+					elem: '#directQuotation',
+					data: data,
+					height: "full-105",
+					cols: [
+						[ //标题栏
+							 {
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							}, {
+								field: 'contractprice_bidnum',
+								title: '可交易商品编号',
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+								minWidth: 60,
+							}, {
+								field: 'contractprice_quotename',
+								title: '医用耗材名称',
+								minWidth: 60
+							}, {
+								field: 'contractprice_bidprojectnum',
+								title: '项目商品编号',
+								minWidth: 60,
+							}, {
+								field: 'contractprice_unitmodel',
+								title: '型号',
+								minWidth: 60,
+							}, {
+								field: 'contractprice_unitformat',
+								title: '规格',
+								minWidth: 60,
+							}, {
+								field: 'contractprice_bidprice',
+								title: '配送价',
+								minWidth: 60,
+							}, {
+								field: 'contractprice_medicarenum',
+								title: '医保号',
+								minWidth: 60
+							}, {
+								field: 'contractprice_medicareprice',
+								title: '医保价',
+								minWidth: 60
+							}, {
+								field: 'contractprice_proportion',
+								title: '医保报销比例',
+								minWidth: 60,
+							}, {
+								field: 'contractprice_manufactor',
+								title: '品牌',
+								minWidth: 60,
+							}, {
+								field: 'contractprice_subfactroy',
+								title: '经销企业',
+								minWidth: 60,
+							}, {
+								field: 'contractprice_factroy',
+								title: '生产企业',
+								minWidth: 60,
+							}, {
+								field: 'contractprice_nomo',
+								title: '备注',
+								minWidth: 60,
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					limit: limit //每页默认显示的数量
+				});
+			}
+			//分页
+			function direct_pages() {
+				laypage.render({
+					elem: 'directQuotation', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj,first) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						if(!first){
+							directData(false);
+						}
+						
+					}
+				})
+			}
+			$(".find").click(function() {
+		
+				directData(true);
+			})
+			//查询回车事件
+			$(".seachContent").bind("keydown",function(e){
+			　　  var theEvent = e || window.event;
+			　　  var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+			　　   if (code == 13) {
+			　　	 
+		
+					directData(true);
+			　　  }
+			});
+			table.on('tool(demo)', function(obj) {
+						if(!checkPermissionStatus("购销合同管理-保存1")){
+					
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: parent.layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return
+				
+				}
+				var data = obj.data;
+				if(obj.event === 'detail') {
+					var id = data.contractprice_contractid;
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">编辑报价单</span>',
+						area: ['700px', '90%'],
+						offset: "rb",
+						content: 'views/basicdataProtect/contract/editDirect.html',
+						zIndex: parent.layer.zIndex, //重点1,
+						success: function(layero, index) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$('.adddirect_midnum', paentIfarame).val(data.contractprice_bidnum);
+							$('.adddirect_midprice', paentIfarame).val(data.contractprice_bidprice);
+							$('.adddirect_num', paentIfarame).val(data.contractprice_medicarenum);
+							$('.adddirect_price', paentIfarame).val(data.contractprice_medicareprice);
+							$('.adddirect_name', paentIfarame).val(data.contractprice_quotename);
+							$('.adddirect_bili', paentIfarame).val(data.contractprice_proportion);
+							$('.adddirect_type', paentIfarame).val(data.contractprice_unitmodel);
+							$('.adddirect_notes', paentIfarame).val(data.contractprice_nomo);
+							
+							$('.contractprice_manufactor', paentIfarame).val(data.contractprice_manufactor);
+							$('.contractprice_bidprojectnum', paentIfarame).val(data.contractprice_bidprojectnum);
+							$('.contractprice_factroy', paentIfarame).val(data.contractprice_factroy);
+							$('.contractprice_subfactroy', paentIfarame).val(data.contractprice_subfactroy);
+							$('.contractprice_unitformat', paentIfarame).val(data.contractprice_unitformat);
+							
+							
+							$(".adddirect_submit", paentIfarame).click(function() {
+						
+								var contractprice_bidnum = $('.adddirect_midnum', paentIfarame).val();
+								var contractprice_bidprice = $('.adddirect_midprice', paentIfarame).val();
+								var contractprice_medicarenum = $('.adddirect_num', paentIfarame).val();
+								var contractprice_medicareprice = $('.adddirect_price', paentIfarame).val();
+								var contractprice_quotename = $('.adddirect_name', paentIfarame).val();
+								var contractprice_proportion = $('.adddirect_bili', paentIfarame).val();
+								var contractprice_unitmodel = $('.adddirect_type', paentIfarame).val();
+					
+								var contractprice_manufactor = $('.contractprice_manufactor', paentIfarame).val();
+								var contractprice_bidprojectnum = $('.contractprice_bidprojectnum', paentIfarame).val();
+								var contractprice_factroy = $('.contractprice_factroy', paentIfarame).val();
+								var contractprice_subfactroy = $('.contractprice_subfactroy', paentIfarame).val();
+								var contractprice_unitformat = $('.contractprice_unitformat', paentIfarame).val();
+								
+								
+								var contractprice_nomo = $('.adddirect_notes', paentIfarame).val();
+								
+								if(contractprice_manufactor == "" || contractprice_manufactor ==null){
+										parent.layer.open({
+											title: "提示",
+											content: '品牌不能为空！',
+											zIndex: parent.layer.zIndex, //重点1,
+											end: function(){  
+				                  			} 
+										});
+										
+										return;
+								}
+								
+								if(contractprice_bidnum == "" || contractprice_bidnum ==null){
+										parent.layer.open({
+											title: "提示",
+											content: '可交易商品编号不能为空！',
+											zIndex: parent.layer.zIndex, //重点1,
+											end: function(){  
+				                  			} 
+										});
+										
+										return;
+								}
+								
+								
+								if(contractprice_bidprice == "" || contractprice_bidprice ==null){
+										parent.layer.open({
+											title: "提示",
+											content: '中标价不能为空！',
+											zIndex: parent.layer.zIndex, //重点1,
+											end: function(){  
+				                  			} 
+										});
+										
+										return;
+								}
+								
+									if(contractprice_quotename == "" || contractprice_quotename ==null){
+												parent.layer.open({
+													title: "提示",
+													content: '医用耗材名称不能为空！',
+													zIndex: parent.layer.zIndex, //重点1,
+													end: function(){  
+						                  			} 
+												});
+												
+												return;
+									}
+								
+								var master = {
+									'contractprice_bidnum': contractprice_bidnum,
+									'contractprice_bidprice': contractprice_bidprice,
+									'contractprice_medicarenum': contractprice_medicarenum,
+									'contractprice_medicareprice': contractprice_medicareprice,
+									'contractprice_quotename': contractprice_quotename,
+									'contractprice_proportion': contractprice_proportion,
+									'contractprice_unitmodel': contractprice_unitmodel,
+									'contractprice_nomo': contractprice_nomo,
+									'contractprice_contractid':sessionStorage.contract_id,
+									'contractprice_manufactor': contractprice_manufactor,
+									'contractprice_unitformat': contractprice_unitformat,
+									'contractprice_subfactroy': contractprice_subfactroy,
+									'contractprice_factroy': contractprice_factroy,
+									'contractprice_bidprojectnum': contractprice_bidprojectnum
+								};
+								
+								//弹出层转圈圈的那个
+								parent.layer.open({
+								  type: 3, 
+								  zIndex: parent.layer.zIndex, //重点1
+								  success: function(layero, index){
+								  		jiazaiIndex = index;
+										}
+								});
+								
+								$.ajax({
+									type: "POST",
+									url: localStorage.serIp+"/WebUpdateContractProductBXDInfo",
+									async: true,
+									dataType: 'json',
+									crossDomain: true,
+									contentType:'application/json; charset=utf-8',
+									data:JSON.stringify({
+										"userId": localStorage.userId,
+										"userPw": localStorage.userPw,
+										'database': localStorage.database,
+										'id':data.contractprice_id,
+										'master': JSON.stringify(master)
+									}),
+									success: function(res) {
+										parent.layer.close(jiazaiIndex);
+										var data1 = JSON.parse(res);
+										if(data1.ResultValue == "1") {
+											parent.layer.open({
+												title: "提示",
+												content: '提交成功！',
+												zIndex: parent.layer.zIndex, //重点1,
+												end: function(){  
+					                    			parent.layer.close(index); 
+					                  			} 
+											});
+												directData(true);
+										} 
+										
+										if(data1.ResultValue == "2") {
+											parent.layer.open({
+												title: "提示",
+												zIndex: parent.layer.zIndex, //重点1,
+												content: '可交易商品编号已存在！'
+											});
+											
+											return
+										}
+										
+										if(data1.ResultValue == "0") {
+											parent.layer.open({
+												title: "提示",
+												zIndex: parent.layer.zIndex, //重点1,
+												content: '服务器异常！'
+											});
+																						return
+
+										}
+
+									}
+								});
+							})
+						}
+					});
+				}
+
+			});
+			//点击新增
+			$(".quotationadd").click(function() {
+				
+						if(!checkPermissionStatus("购销合同管理-保存1")){
+					
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: parent.layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return
+				
+				}
+					
+					
+					
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">添加报价单</span>',
+					area: ['700px', '90%'],
+					offset: "rb",
+					content: 'views/basicdataProtect/contract/addbaojia.html',
+					zIndex: parent.layer.zIndex, //重点1,
+					success: function(layero, index) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+					},
+					end: function() {
+							directData(true);
+					}
+				});
+			});
+			
+			//删除
+			$(".del").click(function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+			//点击删除
+			var $ = layui.$,
+			active = {
+				getCheckDel: function() { //获取选中数据
+					
+							if(!checkPermissionStatus("购销合同管理-保存1")){
+					
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: parent.layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return
+				
+				
+				}
+					
+					
+					
+					var checkStatus = table.checkStatus('directQuotation'),
+						data1 = checkStatus.data;
+					var idstr = "";
+					if(data1.length == 0){
+						parent.layer.open({
+							title: "提示",
+							zIndex: parent.layer.zIndex, //重点1,
+							content: '请选择要删除的数据!!!'
+						});
+						return;
+					}
+				    for(var i=0;i<data1.length;i++) { 
+			      		idstr += data1[i].contractprice_id ;
+			      		if((i+1)!=data1.length){
+			      			idstr += ",";
+			      		}
+					} 
+					parent.layer.confirm('确定删除记录？', {
+						icon: 3,
+						zIndex: parent.layer.zIndex, //重点1,
+						title: '删除'
+					}, function(index) {
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp+"/WebDeleteContractProductInfo?jsoncallback=?",
+							async: true,
+							dataType: 'jsonp',
+							data: {
+								"userId": localStorage.userId,
+								"userPw": localStorage.userPw,
+								"database": localStorage.database,
+								"id": idstr
+							},
+							success: function(res) {
+								var data = JSON.parse(res);
+								if(data[0].ResultValue == 1) {
+									parent.layer.open({
+										title: "提示",
+										zIndex: parent.layer.zIndex, //重点1,
+										content: '删除成功'
+									});
+									directData(true);
+								} else{
+									parent.layer.open({
+										title: "提示",
+										zIndex: parent.layer.zIndex, //重点1,
+										content: '删除失败'
+									});
+								}
+							}
+						});
+						parent.layer.close(index);
+					});
+				}
+			};
+		
+			
+			
+			//清空查询
+			$(".cleardata").click(function(){
+				$(".unitInfo").val("");
+			})
+			
+			
+			//模板下载
+			$(document).on("click", ".modeldown", function() {
+						if(!checkPermissionStatus("购销合同管理-保存1")){
+					
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: parent.layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return
+				
+				}
+					
+					
+				window.location.href = encodeURI("/QNCloud/templetDown/报价单导入模板.xls");
+			})
+		
+		
+			//导出全部
+			$(".modelout").click(function(){
+				
+				if(!checkPermissionStatus("购销合同管理-保存1")){
+					
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: parent.layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return
+				
+				}
+					
+					
+					
+					    
+				parent.layer.confirm('确定导出全部吗？', {
+					icon: 3,
+					zIndex: parent.layer.zIndex ,//重点1
+					title: '导出全部'
+				}, function(index) {
+					
+				parent.layer.open({
+				  type: 3, 
+				  zIndex: parent.layer.zIndex, //重点1,
+				  success: function(layero, index){
+				  		jiazaiIndex = index;
+					}
+				});
+				
+
+				
+				var bidnum = $(".seachContent").val();
+				var timestamp=new Date().getTime();
+
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp + "/WebExportContractProduct?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'type':2,
+						"database": localStorage.database,
+						'contractid':sessionStorage.contract_id,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'filename':sessionStorage.contract_name + timestamp +".xls",
+						'txtCondition':bidnum
+
+					},
+					success: function(res) {
+						parent.layer.close(jiazaiIndex);
+			
+						var res = JSON.parse(res);
+						if(res.ResultValue == '0') {
+							
+							parent.layer.open({
+								title: "提示",
+								content: '导出失败！',zIndex: parent.layer.zIndex //重点1
+							});
+							
+					
+						}else{
+							
+							url = "/"+ res.ResultValue
+							
+							setTimeout(function () {
+	  	
+				  					window.location.href = url;	
+			
+			      			 },500);
+			      			 
+			      			 
+							parent.layer.open({
+								title: "提示",
+								content: '导出成功！',zIndex: parent.layer.zIndex //重点1
+									,
+								success: function(layero,index) {
+								parent.layer.setTop(layero); //重点2
+							
+								},
+								
+							});
+							
+								
+						}
+						
+					},
+					error: function(res) {
+						parent.layer.close(jiazaiIndex);
+						
+					}
+				});
+					
+				});
+			})
+			
+
+//报价单上传Excel
+layui.use('upload', function() {
+	var $ = layui.jquery,
+	upload = layui.upload;
+	upload.render({
+		elem: '#bjdUpload',
+		accept: 'file', //允许上传的文件类型
+		url: localStorage.serImportIp+'/WebImportContractProduct?type=2&database='+ localStorage.database + "&userId=" + localStorage.userId + "&userPw=" + localStorage.userPw + "&contractid="+sessionStorage.contract_id,
+		multiple: true,
+		before: function(obj) {
+				if(!checkPermissionStatus("购销合同管理-保存1")){
+					
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: parent.layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return
+				
+				}
+					
+			//弹出层转圈圈的那个
+			parent.layer.open({
+			  type: 3, 
+			  zIndex: parent.layer.zIndex, //重点1
+			  success: function(layero, index){
+			  		jiazaiIndex = index;
+				}
+			});
+				
+			       
+			obj.preview(function(index, file, result) {
+			});
+		},
+		done: function(res) {
+			
+			 var timer = setTimeout(function () {
+					
+				  parent.layer.close(jiazaiIndex);
+
+			 },10000);
+			       
+			       
+			switch(res.ResultValue) 
+			{
+				case "0":	
+//				parent.layer.close(jiazaiIndex);
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+						layer = parent.layui.layer;
+						parent.layer.open({
+							zIndex: parent.layer.zIndex, //重点1
+							content: '上传失败',zIndex: parent.layer.zIndex //重点1
+						});
+					})
+				  break;
+				case "1":  
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+							layer = parent.layui.layer;
+						parent.layer.open({
+							zIndex: parent.layer.zIndex, //重点1
+							content: '上传成功,请耐心等待!',zIndex: parent.layer.zIndex //重点1
+						});
+					})
+					directData(true);
+				  break;
+			}
+		} ,error: function(index, upload,obj){
+	      //请求异常回调
+	    }
+	})
+});
+
+
+		
+		});
+	</script>
+
+</html>

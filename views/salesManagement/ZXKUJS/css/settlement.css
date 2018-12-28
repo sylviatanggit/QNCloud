@@ -1,0 +1,153 @@
+
+table thead td {
+    padding: 0;
+    border-left: 1px solid #CAD3DA;
+    background: #DFEBFB;
+}
+table tbody tr:nth-child(even) {
+    background: #E7EFF9;
+}
+.clearfix:after {
+      content: '.';
+      height: 0;
+      display: block;
+      clear: both;
+  }
+ 
+	#lay-ignore {
+      height: 25px;
+      width: 60px;
+    
+    }
+     #lay-ignore {
+      height: 25px;
+      width: 60px;
+     
+	}
+	tbody tr:not(:last-child):hover{
+	background-color: rgba(137, 207, 240,.6)!important;
+}
+
+.dx-datagrid-rowsview .dx-selection.dx-row > td{
+	background-color: yellow!important;
+}
+colgroup > col:first-child{
+	width: 45px!important;
+}
+
+.dx-col-fixed{
+	width: 45px !important;
+}
+
+ 
+
+
+		.dx-data-row,.dx-column-lines:not(:first-child) > td:nth-child(2) {
+		cursor: pointer;
+	 }
+	 .dx-widget {
+            font-size: 9pt!important;
+            line-height: 17px;
+        }
+        .option>.dx-selectbox {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .layui-input{
+            color: #000000;
+		  }
+		  .dx-column-lines>td:nth-child(2) {
+        color: #2D89DD;
+	}
+	.dx-data-row,.dx-column-lines > td:nth-child(2) {
+		cursor: pointer;
+	 }
+
+	.fl{
+		float: left;
+	}
+	.fr{
+		float: right;
+	}
+    .dx-datagrid-text-content {
+        color: grey;
+    }
+
+
+/* 原页面样式 */
+.purchase {
+    font-family: "PingFang SC" !important;
+    /*font-size: 12px !important;*/
+    font-size: 9pt !important;
+    color: #232323 !important;
+    margin: 0 20px;
+    margin-top: 10px;
+}
+
+.btns {
+    float: right;
+    margin-top: 18px;
+}
+
+label {
+    padding: 0 !important;
+    margin-left: 0px;
+}
+
+.btns button,
+.find,
+.import {
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    width: 76px;
+    height: 28px;
+    text-align: center;
+    line-height: 28px;
+    border-radius: 2px;
+    background-color: #2D89DD;
+    color: #FFFFFF;
+    margin-left: 8px;
+    font-size: 9pt;
+}
+
+.btns button {
+    width: 90px;
+}
+
+.purchase_header {
+    /*margin-top: -10px;*/
+    margin-bottom: 8px;
+}
+
+.layui-laypage {
+    margin: 0;
+    position: absolute;
+    bottom: 0px;
+    left: 25px;
+}
+
+
+
+.cs_container,
+.cs_container_open .cs_input,
+.cs_result_area {
+    width: 250px !important;
+}
+
+div.cs_result_area div.pagination li {
+    margin: 0 5px !important;
+}
+
+    
+.cleardata{
+    cursor: pointer;
+}
+
+.cleardata1{
+    cursor: pointer;
+}
+
+.layui-inline{
+    margin-top: 10px;
+}

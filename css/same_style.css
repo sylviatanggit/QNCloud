@@ -1,0 +1,128 @@
+.layui-table td,
+.layui-table th {
+	font-size: 9pt !important;
+}
+
+.layui-form-label {
+	line-height: 28px !important;
+}
+
+.layui-input-inline input,
+.layui-input-inline select {
+	width: 150px;
+}
+
+.layui-input-inline select {
+	cursor: pointer;
+}
+
+.layui-input-inline option {
+	cursor: pointer;
+}
+
+.moreAction {
+	background: #FFFFFF !important;
+	border: 1px solid #2D89DD !important;
+	color: #2D89DD !important;
+}
+
+.moreAction:hover {
+	border-bottom: none !important;
+}
+
+.action {
+	background-color: #CCCCCC;
+	position: absolute;
+	right: 20px;
+	z-index: 10;
+	border: 1px solid #2D89DD;
+	display: none;
+}
+
+.action li {
+	margin-left: 0 !important;
+}
+
+.action li a {
+	display: block;
+	color: #357BEA;
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background-color: #FFFFFF;
+	box-shadow: 2px;
+}
+
+.action li a {
+	color: #232323;
+}
+
+.action:hover {
+	border-top: none;
+}
+
+.action li a:hover {
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background: #ACD7FF;
+}
+
+
+.layui-input-inline input,
+.layui-input-inline label,
+.layui-input-inline select {
+	line-height: 28px !important;
+	height: 28px !important;
+	min-height: 28px !important;
+}
+
+.layui-input-inline input,
+.layui-input-inline select {
+	margin-left: 12px;
+}
+
+.layui-input-inline select {
+	border: 1px solid #8C8C8C;
+	border-radius: 2px;
+}
+
+.layui-table tr:nth-child(odd) {
+	background-color: #EFF5FF !important;
+}
+
+.layui-table tbody tr:nth-child(even) {
+	background-color: #EFF5FF !important;
+}
+
+.layui-table tbody tr:nth-child(odd) {
+	background-color: #FFFFFF !important;
+}
+
+.layui-table-tool {
+	border-width: 0;
+}
+
+.content {
+	border-top: none;
+}
+
+.layui-tab {
+	margin: 0;
+}
+
+.layui-table-cell .layui-table-link {
+	display: block;
+	width: 100%;
+}
+
+.dsh,
+.ysh {
+	display: none;
+	position: absolute;
+	height: 50px;
+	top: 20px;
+	left: 120px;
+}

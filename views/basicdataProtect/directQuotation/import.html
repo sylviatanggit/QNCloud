@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>工具组套详情</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		
+		input,
+		label {
+			line-height: 22px !important;
+			height: 22px !important;
+			min-height: 22px !important;
+		}
+		input {
+			margin-left: 10px;
+		}
+		.import {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			height: 22px;
+			text-align: center;
+			line-height: 22px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px !important;
+		}
+		
+		.import {
+			width: 100px;
+		}
+	</style>
+
+	<body>
+		<div style="margin-top:10px">
+			<input type="text" class="layui-input" style="width:400px;display:inline-block;" />
+			<button class="layui-btn import">选择导入文件</button>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+
+		});
+	</script>
+
+</html>

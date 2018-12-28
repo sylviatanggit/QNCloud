@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>产品分组</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link rel="stylesheet" type="text/css" href="../../../easyui/themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../../../easyui/themes/icon.css" />
+		<script type="text/javascript" src="../../../easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="../../../easyui/jquery.easyui.min.js"></script>
+	</head>
+	<style type="text/css">
+		.group {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		.layui-tab {
+			margin-top: 14px;
+		}
+		
+		.group .layui-table td,
+		.layui-table th {
+			font-size: 9pt !important;
+		}
+		
+		.group_header button {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 22px;
+			text-align: center;
+			line-height: 22px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.layui-table tr:nth-child(odd) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(odd) {
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(even) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-table td,
+		.layui-table th {
+			padding: 0 3.5vw !important;
+		}
+		
+		.group_header {
+			/*margin-top: -10px;*/
+			margin-bottom: 13px;
+		}
+		
+		.group .datagrid-view .table{
+			width: 100% !important;
+		}
+		
+		.datagrid-header-inner{
+			width: 100% !important;
+		}
+	</style>
+
+	<body>
+		<div class="group">
+			<div class="layui-tab">
+				<div class="group_header">
+					<button class="layui-btn groupadd" style="margin-left: 20px;">选择</button>
+		
+				</div>
+				<div id="demo2" style="margin-left:20px ;">
+					<table id="tree" class="easyui-treegrid tree" style="width:94%;height:600px;" data-options="">
+						<thead>
+							<tr>
+								<th data-options="field:'name'" width="278">所有产品</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'layer','element'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var layer = layui.layer;
+
+			var rows,deep;
+			var flag = false;
+			stockData();
+			
+			
+				
+			function stockData() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp  +"/WebGetChildTypeByFatherID?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+//						'groupCompanyId': localStorage.groupcompanyid,
+						'fatherid': "1",
+
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						
+						
+						var yijilumuData= [{
+							id : "1",
+							name : "所有产品",
+							_parentid:"",
+							children: desData
+						}];
+						
+						//右边树一级目录
+						$("#tree").treegrid({
+							data: yijilumuData,
+							method: 'get',
+							rownumbers: false,
+							idField: 'id',
+							treeField: 'name',
+							onClickRow: function(row) {
+								typeid = row.id;
+								rows = row;		 deep = row.deep;
+								if(row.children) {
+									return false;
+								}
+								
+							
+								 getMuluXinXi(row);
+
+							}
+							
+					});
+						$(".group .datagrid-view .datagrid-body table").css("width", "100%");
+						$(".group .datagrid-view .datagrid-body div").css("width", "100%");
+						
+					}
+				});
+
+			}
+			
+			
+			function getMuluXinXi(row){
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp  +"/WebGetChildTypeByFatherID?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'fatherid': row.id
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						
+						if(data.length == 0) {
+							return false;
+						}
+						$('#tree').treegrid('append', {
+							parent: row.id, 
+							data: data
+						});
+					}
+				});
+			}
+				
+			
+			
+			$('.groupadd').click(function() {
+
+				if(sessionStorage.productGroupsData ||  sessionStorage.productGroupsData== "[]") {
+					sessionStorage.removeItem('productGroupsData');
+				}
+				
+				if(rows){
+								
+					var productGroupsData = {
+						"id" : rows.id,
+						"name":rows.name
+					}
+				
+					sessionStorage.productGroupsData = JSON.stringify(productGroupsData);;
+					var index = parent.layer.getFrameIndex(window.name); 
+					parent.layer.close(index);
+				}else{
+						
+					parent.layer.open({
+							content: "请选择分组",
+							
+						zIndex: parent.layerr.zIndex //重点1
+								,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						})	
+					
+				}
+					
+				
+			});
+			
+		
+	});
+
+	</script>
+
+</html>

@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>借货出库</title>
+	<!-- <script src="../../../js/jquery.js" type="text/javascript"></script> -->
+	<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+	<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	<!-- DevExtreme themes -->
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+	<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	<style>
+				.layui-laypage-limits{
+                    display: none;
+                 }
+		.layui-laypage-limits {
+			font-size: 12px;
+			display: none;
+			float: left;
+			margin-top: 7px;
+		}
+
+		.totalInfo {
+			width: 100px;
+			height: 20px;
+			float: left;
+			margin-top: 12px;
+		}
+
+		table thead td {
+			padding: 0;
+			border-left: 1px solid #CAD3DA;
+			background: #DFEBFB;
+		}
+
+		table tbody tr:nth-child(even) {
+			background: #E7EFF9;
+		}
+
+		.dx-datagrid-text-content {
+			color: grey;
+		}
+
+		.clearfix:after {
+			content: '.';
+			height: 0;
+			display: block;
+			clear: both;
+		}
+
+		
+
+		#lay-ignore {
+			height: 25px;
+			width: 60px;
+
+		}
+
+		#lay-ignore {
+			height: 25px;
+			width: 60px;
+
+		}
+
+		tbody tr:not(:last-child):hover {
+			background-color: rgba(137, 207, 240, .6) !important;
+		}
+
+		.dx-datagrid-rowsview .dx-selection.dx-row>td {
+			background-color: yellow !important;
+		}
+
+		colgroup>col:first-child {
+			width: 45px !important;
+		}
+
+		.dx-col-fixed:nth-child(1) {
+			width: 45px !important;
+		}
+		
+		.layui-tab{
+			margin: 0px !important;
+		}
+
+		.M-box2 {
+			display: inline-block;
+			padding: 0 15px;
+			height: 28px;
+			color: #333;
+			font-size: 12px;
+			margin-top: 6px;
+		}
+
+		.M-box2 a {
+			margin-left: 15px;
+			padding: 0 15px;
+			text-decoration: none;
+			background-color: #ffffff;
+			color: #000000;
+		}
+
+		.M-box2 .active {
+			margin-left: 5px;
+			padding: 0 15px;
+			color: #ffffff;
+			width: 100%;
+			height: 100%;
+			background-color: #2D89DD;
+			border: 1px solid #e2e2e2;
+		}
+
+		.jump-ipt {
+			float: none;
+			margin-left: 5px;
+			margin-left: 11px;
+			width: 60px;
+			border: 1px solid #e6e6e6;
+			height: 20px !important;
+		}
+
+		.dx-data-row,
+		.dx-column-lines:not(:first-child)>td:nth-child(2) {
+			cursor: pointer;
+		}
+
+		.dx-widget {
+			font-size: 9pt !important;
+			line-height: 17px;
+		}
+
+		.option>.dx-selectbox {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		.layui-input {
+			color: #000000;
+		}
+
+		.dx-column-lines>td:nth-child(2) {
+			color: #2D89DD;
+		}
+
+		.dx-data-row,
+		.dx-column-lines>td:nth-child(2) {
+			cursor: pointer;
+		}
+
+		.fl {
+			float: left;
+		}
+
+		.fr {
+			float: right;
+		}
+
+
+
+		.purchase {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+
+		}
+
+		.btns {
+			float: right;
+			margin-top: 18px;
+		}
+
+		label {
+			padding: 0 !important;
+			margin-left: 0px;
+		}
+
+		.btns button,
+		.find,
+		.import {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px;
+			font-size: 9pt;
+		}
+
+		.btns button {
+			width: 90px;
+		}
+
+		.purchase_header {
+			margin-bottom: 8px;
+		}
+
+
+
+
+		.cs_container,
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+
+		div.cs_result_area div.pagination li {
+			margin: 0 5px !important;
+		}
+
+
+		.cleardata {
+			cursor: pointer;
+		}
+
+		.cleardata1 {
+			cursor: pointer;
+		}
+
+		.layui-inline {
+			margin-top: 10px;
+		}
+
+		.footer {
+			height: 20px;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div class="purchase">
+		<div class="layui-tab">
+			<div class="purchase_header">
+				<div class="inputs" style="margin-left: 10px;margin-bottom: 8px;margin-right: 10px;">
+					<div style="width: 100%;height: auto;">
+						<div class="layui-inline" id="fengongsiId" style="margin-right: 15px;">
+							<label class="layui-form-label" style="margin-left: 0px;">所属公司</label>
+							<div class="layui-input-inline">
+								<select name="" class="layui-input companytypeid" style="width: 200px;">
+									<option value="-1">全部</option>
+
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline" style="margin-right: 15px;width: 308px;">
+							<label class="layui-form-label" style="margin-right: 10px;padding-left: 0px;">对应仓库</label>
+							<div id="duiywarehouseId">
+								<input value="" data-id="" autocomplete="off" id="warehouseId" class="layui-input warehouse" type="text" style="width: 250px !important;;height: 26px !important;line-height: 26px !important;padding-left: 0px !important;">
+							</div>
+						</div>
+						
+						<div class="layui-inline" style="margin-right: 15px;width: 308px;">
+							<label class="layui-form-label" style="margin-right: 10px;">往来单位</label>
+							<div id="append_group">
+								<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" class="layui-input unit" type="text" id="unit" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+			
+						</div>
+						<div class="layui-inline" style="margin-right: 15px;width: 308px;">
+							<label class="layui-form-label" style="margin-right: 10px;">所属部门</label>
+							<div id="addGroup">
+								<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" class="layui-input owngroup" type="text" id="owngroup" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+			
+						</div>
+						</div>
+						<div class="layui-inline" style="margin-right: 15px;">
+							<label class="layui-form-label">借出状态</label>
+							<div class="layui-input-inline">
+								<select name="" class="layui-input state">
+									<option value="-1">全部</option>
+									<option value="2">借用中</option>
+									<option value="3">已完结</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">日期范围</label>
+							<div class="layui-input-inline">
+								<input autocomplete="off" id="borrowOutdate1" class="layui-input" type="text">
+							</div>
+							-
+							<div class="layui-input-inline">
+								<input autocomplete="off" id="borrowOutdate2" class="layui-input" type="text" style="margin-left: 0;">
+							</div>
+						</div>
+						<br />
+						<div class="layui-inline" style="margin-top: 8px;margin-right: 0px;">
+							<div class="layui-input-inline">
+								<input autocomplete="off" placeholder="请输入关键字或对应产品" class="layui-input seachContent" type="text" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						<div class="layui-inline" style="margin-top: 8px;">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						
+						<div class="btns" style="margin-top: 8px;">
+								
+								<button class="layui-btn moreAction">更多操作</button>
+								<ul class="action" style="margin-right: 10px;">
+									<li>
+										<a class="export  combineExport" data-type="combineExport">合并导出</a>
+									</li>
+									<li>
+										<a class="allExport" data-type="allExport">导出全部</a>
+									</li>
+									
+								</ul>
+							</div>
+
+					</div>
+
+				</div>
+				<div lay-filter="demo" style="margin-top: 10px;">
+					<div class="demo-container">
+						<div id="gridContainer"></div>
+					</div>
+				</div>
+			</div>
+			<div class="footer .clearfix">
+				<div class="totalInfo fl"></div>
+				<div class="M-box2 fl"></div>
+				<span class="layui-laypage-limits">
+					<select id="lay-ignore">
+						<option value="50" selected>50</option>
+						<option value="100">100</option>
+						<option value="200">200</option>
+					</select>
+					<span>条/页</span>
+				</span>
+			</div>
+		</div>
+	</div>
+</body>
+<!-- 本页面功能 -->
+<script type="text/javascript">
+    // 根据可视区的高度判断
+	var viewHeight = $(window).height();
+	if (viewHeight == 855) {
+		$('#gridContainer').css('height', 650 + 'px'); //855*0.74
+	} else {
+		$('#gridContainer').css('height', viewHeight * 0.66 + 'px');
+	}
+
+    
+   //点击单号修改功能
+   $('.demo-container').on('click', ' .dx-datagrid-rowsview .dx-column-lines > td:nth-child(2)', function () {
+	var id = $(this).parent().attr('aria-rowindex');
+    sessionStorage.borrowOut_order =  $(this).text();
+	parent.layer.open({
+        type: 2 //此处以iframe举例
+            ,
+        title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">借货出库明细</span>',
+        area: ['85%', '90%'],
+        offset: "rb",
+        content: 'views/reportAnalysis/borrowGoods/borrowOut/detail.html',
+        zIndex: layer.zIndex //重点1
+            ,
+        success: function(layero) {
+            parent.layer.setTop(layero); //重点2
+        },
+        end: function(layero) {
+                if(sessionStorage.borrow_order){
+                    sessionStorage.removeItem("borrowOut_order");
+                }
+                if(sessionStorage.seachOutContent){
+                    sessionStorage.removeItem("seachOutContent");
+                }
+        }
+    });
+});
+
+
+var limit = 50;
+var currentPage = 1;
+var totalInfo = '';
+var count;
+
+layui.use(['table', 'jquery', 'laydate', 'laypage'], function() {
+    var table = layui.table;
+    var $ = layui.jquery;
+    $('.moreAction').hover(function() {
+        $(".action").show();
+    }, function() {
+        $(".action").hide();
+    });
+    $('.action').hover(function() {
+        $(".action").show();
+    }, function() {
+        $(".action").hide();
+    });
+    
+    
+    var laypage = layui.laypage;
+    var laydate = layui.laydate;
+    var myDate = new Date();
+
+    
+    var currentMothFirstDay = getCurrentMothFirstDay();
+    var currentDate =  myDate.getFullYear() + '-' +(myDate.getMonth() + 1)  + '-'+  myDate.getDate();
+    laydate.render({
+        elem: '#borrowOutdate1',
+        value: currentMothFirstDay
+    });
+    laydate.render({
+        elem: '#borrowOutdate2',
+        value:  new Date()
+    });
+    
+
+    // 联动查询
+	$(".find").click(function () {
+		borrowReportData(currentPage, limit, totalInfo);
+	})
+
+
+	//回车事件
+	$(".seachContent").keydown(function (event) {
+		if (event.keyCode == "13") { //keyCode=13是回车键
+			$('.find').click();
+		}
+	});
+	
+	
+
+    $(".state").change(function() {
+        borrowReportData(currentPage, limit, totalInfo);
+    })
+    
+    getunit('-1');
+    //所属公司
+    if(localStorage.groupcompanyid != "0"){
+        $("#fengongsiId").css("display","none");
+           stockList();
+        borrowReportData(currentPage, limit, totalInfo);
+         
+    }else{
+        dataFun1();
+	}
+	
+    //获取公司信息
+    function dataFun1() {
+        $.ajax({
+            type: "get",
+            url: localStorage.serIp+"/WebGetAllGroupCompany?jsoncallback=?",
+            dataType: "jsonp",
+            async: true,
+            data: {
+                'userId': localStorage.userId,
+                'userPw': localStorage.userPw,
+                'database': localStorage.database,
+                "groupCompanyId": localStorage.groupcompanyid
+            },
+            success: function(res) {
+                var desData = JSON.parse(res);
+                var optionsStr = "";
+                for(var i=0;i<desData.length;i++){
+                    var id= desData[i].myg_companyid;
+                    var name= desData[i].companyname;
+                    if(id == localStorage.groupcompanyid){
+                        optionsStr+= "<option value='"+id+"' selected='selected'>"+name+"</option>";
+                    }else{
+                        optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+                    }
+                }
+                $(".companytypeid").append(optionsStr);
+                stockList();
+				borrowReportData(currentPage, limit, totalInfo);
+				
+            }
+        });
+    
+	}
+	
+
+	getowngroupList(localStorage.groupcompanyid);
+
+
+
+$(".companytypeid").change(function () {
+	$('.unit').val("");
+	$("#unit").val("");
+	borrowReportData(curpage, limit, totalInfo);
+	
+	var groupcompanyid= $(".companytypeid").val();
+
+	groupcompanyid=groupcompanyid==-1?'':groupcompanyid;
+
+	var warehouse = '<input  value="" data-id=""  autocomplete="off" id="warehouseId" class="layui-input warehouse" type="text" style="width: 250px !important;;height: 26px !important;line-height: 26px !important;padding-left: 0px !important;">';
+
+	$("#duiywarehouseId").empty();
+	$("#duiywarehouseId").append(warehouse);
+
+	stockList();
+
+	var bandstr = '<input value="" data-id="" autocomplete="off" id="duiyingstockareaId" class="layui-input stockarea" type="text" style="width: 250px;height: 26px !important;line-height: 26px !important;padding-left: 0px;;">';
+	$("#stockareaId").empty();
+	$("#stockareaId").append(bandstr);
+  
+	var addGroup = '<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,"")" class="layui-input owngroup" type="text" id="owngroup" style="width: 250px;height: 28px;line-height: 28px;">';
+	$("#addGroup").empty().append(addGroup);
+	 getowngroupList(groupcompanyid);
+});
+
+var groupcompanyid = localStorage.groupcompanyid;
+//获取仓库
+function stockList(){
+
+	if (localStorage.groupcompanyid == "0") {
+		companytypeid = $('.companytypeid option:selected').val();
+	} else {
+		companytypeid = localStorage.groupcompanyid;
+	}
+	$.ajax({
+		type: "post",
+		url: localStorage.serIp + "/WebGetWarehouseListByDropDown?jsoncallback=?",
+		async: true,
+		dataType: 'jsonp',
+		data: {
+			"userId": localStorage.userId,
+			"userPw": localStorage.userPw,
+			'database': localStorage.database,
+			'groupCompanyId': companytypeid,
+			'type': 1
+		},
+		success: function (res) {
+			var data = JSON.parse(res);
+			var warehouseDate = [];
+			for (var i = 0; i < data.length; i++) {
+				var slve = {};
+
+				slve.warehouse_id = data[i].warehouse_id;
+				slve.warehousename = data[i].warehousename + "(" + data[i].naturename + ")";
+
+				warehouseDate.push(slve);
+			}
+
+			$('#warehouseId').bComboSelect({
+				showField: 'warehousename',
+				keyField: 'warehouse_id',
+				data: warehouseDate
+			});
+		}
+	});
+}
+
+    
+    
+    
+    table.on('tool(demo)', function(obj) {
+        var data = obj.data;
+        if(obj.event === 'detail') {
+            sessionStorage.borrowOut_order = data.ordernum
+            parent.layer.open({
+                type: 2 //此处以iframe举例
+                    ,
+                title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">借货出库明细</span>',
+                area: ['85%', '90%'],
+                offset: "rb",
+                content: 'views/reportAnalysis/borrowGoods/borrowOut/detail.html',
+                zIndex: layer.zIndex //重点1
+                    ,
+                success: function(layero) {
+                    parent.layer.setTop(layero); //重点2
+                },
+                end: function(layero) {
+                        if(sessionStorage.borrow_order){
+                            sessionStorage.removeItem("borrowOut_order");
+                        }
+                        if(sessionStorage.seachOutContent){
+                            sessionStorage.removeItem("seachOutContent");
+                        }
+                }
+            });
+        }
+    });
+    
+    
+    var limit = 50;
+    var curpage = 1;
+    var count;
+
+     var targetstockId = '';
+    function borrowReportData(currentPage, limit) {
+		var state = $('.state').val();
+				var unit = $('#unit').val();
+				var seachContent = $('.seachContent').val();
+				
+	
+				var beginTime = $('#borrowIndate1').val() !='' ? $('#borrowIndate1').val() :currentMothFirstDay;
+				var endTime = $('#borrowIndate2').val() != '' ? $('#borrowIndate2').val() : currentDate;
+				if(localStorage.groupcompanyid == "0"){
+					companytypeid = $('.companytypeid option:selected').val();
+				}else{
+					companytypeid = localStorage.groupcompanyid;
+				}
+			
+				 targetstockid = $("#warehouseId").val();
+			
+				var employeedep = $('#owngroup').val();
+        $.ajax({
+            type: "get",
+            url: localStorage.serIp  + "/WebGetLendReport?jsoncallback=?",
+            dataType: "jsonp",
+            async: true,
+            data: {
+                'userId': localStorage.userId,
+                'userPw': localStorage.userPw,
+                'num': limit,
+                'page': currentPage,
+                'groupCompanyId': companytypeid,
+                'database': localStorage.database,
+                "beginTime": beginTime,
+                'companyId': unit,
+                'endTime': endTime,
+                'txtCondition': seachContent,
+                'type': 1,
+				'states': state ? state : -1,
+					// 对应仓库
+				"targetstockid": targetstockid,
+				//所属部门
+				"employeedep": employeedep
+            },
+            success: function(res) {
+                $('.totalInfo').children().remove();
+
+
+                var desData = JSON.parse(res);
+                var data = JSON.parse(desData.data);
+                
+                count = desData.count;
+               
+				var totalInfoTag = '<span>' + '共' + count + '条' + '</span>';
+				$('.totalInfo').append(totalInfoTag);
+                borrowOut(data, limit);
+                
+                pagination(currentPage, limit, count);
+				$('.layui-laypage-limits').css('display','block');
+                
+
+                        
+             
+            }
+        });
+
+    }
+    
+
+    function borrowOut(data) {
+        //展示已知数据
+        $(function () {
+            var dataGrid = $("#gridContainer").dxDataGrid({
+                dataSource: data,
+                allowColumnReordering: false,
+                showBorders: true,
+                keyExpr: "ordernum",
+               columnChooser: {
+                    enabled: false,
+                    mode: "dragAndDrop",
+                },
+                headerFilter: {
+                    visible: false
+                },
+                sorting: {
+                    mode: "none"//none
+                },
+                filterRow: {
+                    visible: false,
+                },
+                paging: {
+                    pageSize: 200,
+                },
+                selection: {
+                    mode: "multiple",
+                },
+                allowColumnResizing: true,
+                columnFixing: {
+                    enabled: false
+                },
+                grouping: {
+                    contextMenuEnabled: false,
+                    expandMode: "rowClick"
+                },   
+                groupPanel: {
+                    visible: false
+                },
+                columns: [{
+                    dataField: "ordernum",
+                    caption: "单号",
+                   
+                }
+                ,
+                {
+                    dataField: "owncomapanyname",
+                    
+                    caption: "所属公司",
+                 
+                },
+                {
+                    dataField: "companyname",
+                   
+                    caption: "往来单位",
+                   
+                }
+                ,
+                {
+                    dataField: "lendcount",
+                   
+                    caption: "借出数量",
+                    
+                }, {
+                    dataField: "lenddate",
+                   
+                    caption: "借出时间",  width: 90,
+                    
+                },
+                {
+                    dataField: "returncount",
+                    
+                    caption: "归还数量",
+                    
+                }, {
+                    dataField: "returndate",
+                   
+                    caption: "归还时间",  width: 90,
+                }, {
+                    dataField: "days",
+                   
+                    caption: "借出时长",
+                }
+                , {
+                    dataField: "states",
+                  
+                    caption: "状态",
+                }
+                ]
+               , 
+         	  onSelectionChanged: function () {
+					dataGrid.refresh();
+				},
+				summary: {
+					totalItems: [{
+						name: "lendcountSummary",
+						showInColumn: "lendcount",
+						summaryType: "custom",
+					}
+						,
+					{
+						name: "returncountSummary",
+						showInColumn: "returncount",
+						summaryType: "custom",
+					}
+					],
+					calculateCustomSummary: function (options) {
+						if (options.name === "lendcountSummary") {
+							if (options.summaryProcess === "start") {
+								options.totalValue = 0;
+							};
+							if (options.summaryProcess === "calculate") {
+								if (options.component.isRowSelected(options.value.ordernum)) {
+									options.totalValue = options.totalValue + options.value.lendcount;
+								}
+							}
+						}
+						
+						if (options.name === "returncountSummary") {
+							if (options.summaryProcess === "start") {
+								options.totalValue = 0;
+							};
+							if (options.summaryProcess === "calculate") {
+								if (options.component.isRowSelected(options.value.ordernum)) {
+									options.totalValue = options.totalValue + options.value.returncount;
+								}
+							}
+						}
+					},
+
+				}
+           
+            }).dxDataGrid('instance');
+            
+        });
+    }
+
+
+
+
+// 获取当前页面渲染数量
+$('#lay-ignore').change(function () {
+    limit = $(this).children('option:selected').val();
+    borrowReportData(currentPage, limit, totalInfo);
+});
+
+
+$('.M-box2').on('click', 'a', function () {
+    currentPage = $(this).data('page');
+    borrowReportData(currentPage, limit, totalInfo);
+});
+
+
+
+//分页
+function pagination(currentPage, limit, totalInfo) {
+    $('.M-box2').empty();
+
+    if (totalInfo == 0) {
+        return;
+    }
+    $('.M-box2').pagination({
+        current: currentPage,
+        totalData: totalInfo,
+        showData: limit,
+        pageCount: Math.floor(totalInfo / limit),
+        mode: 'fixed',
+        isHide: true,
+        jump: true,
+        callback: function (api) {
+            currentPage = api.getCurrent();
+            borrowReportData(currentPage, limit, totalInfo);
+        }
+    });
+}
+
+//合并导出功能
+	$('.export').on('click', function () {
+
+		if (!checkPermissionStatus("借货统计分析-导出1")) {
+
+			parent.layer.open({
+				title: "提示",
+				content: localStorage.jurisdictionTips,
+				zIndex: parent.layer.zIndex //重点1
+				,
+				success: function (layero) {
+					parent.layer.setTop(layero); //重点2
+				}
+			});
+			return
+
+		}
+		var ordernumList = '';
+		var arrForOderNum = [];
+		var danhao = ' ';
+		var danhao = $('.dx-selection');
+		var newarr = [];
+		danhao.get().forEach(function (currentValue, index, arr) {
+			danhao = "\'" + currentValue.childNodes[1].innerText + "\'";
+			newarr = arrForOderNum.push(danhao);
+			ordernumList = arrForOderNum.join(",");
+		});
+		if (ordernumList.length == 0) {
+			parent.layer.open({
+				title: "提示",
+				zIndex: parent.layer.zIndex, //重点1,
+				content: '请选择要导出的单据!'
+			});
+			return;
+		};
+
+		if ($(this).hasClass('combineExport')) {
+			parent.layer.confirm('确定导出？', {
+				icon: 3,
+				zIndex: parent.layer.zIndex,//重点1
+				title: '合并导出'
+			}, function () {
+				combineExport("JHCKTJFX", ordernumList);
+			});
+		};
+
+	});
+
+
+        //导出全部
+        $(".allExport").click(function () {
+	
+			if(!checkPermissionStatus("借货统计分析-导出1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return;
+					}
+
+    parent.layer.confirm('确定导出全部吗？', {
+        icon: 3,
+        zIndex: parent.layer.zIndex,//重点1
+        title: '导出全部'
+    }, function (index) {
+
+        parent.layer.open({
+            type: 3,
+            zIndex: parent.layer.zIndex, //重点1,
+            success: function (layero, index) {
+                jiazaiIndex = index;
+            }
+        });
+        
+        
+        var state = $('.state').val();
+        var unit = $('#unit').val();
+        var seachContent = $('.seachContent').val();
+        var companytypeid ="";
+        if(localStorage.groupcompanyid == "0"){
+            companytypeid = $('.companytypeid option:selected').val();
+        }else{
+            companytypeid = localStorage.groupcompanyid;
+        }
+        var beginTime = $('#borrowOutdate1').val() !='' ? $('#borrowOutdate1').val() :currentMothFirstDay;
+        var endTime = $('#borrowOutdate2').val() != '' ? $('#borrowOutdate2').val() : currentDate;
+        
+        var timestamp = new Date().getTime();
+
+        $.ajax({
+            type: "get",
+            url: localStorage.serIp + "/WebGetLendInReportExportALL?jsoncallback=?",
+            async: true,
+            dataType: 'jsonp',
+            data: {
+                'userId': localStorage.userId,
+                'userPw': localStorage.userPw,
+                'num': limit,
+                'page': currentPage,
+                'groupCompanyId': companytypeid,
+                'database': localStorage.database,
+                "beginTime": beginTime,
+                'companyId': unit,
+                'endTime': endTime,
+                'txtCondition': seachContent,
+                'type': 1,
+                'states': state ? state : -1,
+                'filename': "借货出库统计分析" + timestamp + ".xls"
+
+            },
+            success: function (res) {
+                parent.layer.close(jiazaiIndex);
+
+                var res = JSON.parse(res);
+                if (res.ResultValue == '0') {
+
+                    parent.layer.open({
+                        title: "提示",
+                        content: '导出失败！', zIndex: parent.layer.zIndex //重点1
+                    });
+
+                } else {
+
+                    var downurl = "\\" + res.ResultValue
+                    while (true) {
+                        var isExists = 0;
+                        $.ajax({
+                            url: downurl,
+                            async: false,
+                            type: 'HEAD',
+                            error: function () {
+                                isExists = 0;
+
+                            },
+                            success: function () {
+                                isExists = 1;
+                            }
+                        });
+
+
+                        if (isExists == 1) {
+                            parent.layer.close(jiazaiIndex);
+                            window.location.href = downurl;
+                            break;
+                        }
+
+
+                    }
+
+                    parent.layer.open({
+                        title: "提示",
+                        content: '导出成功！', zIndex: parent.layer.zIndex //重点1
+                        ,
+                        success: function (layero, index) {
+                            parent.layer.setTop(layero); //重点2
+
+                        },
+
+                    });
+                }
+
+            },
+            error: function (res) {
+                parent.layer.close(jiazaiIndex);
+            }
+        });
+
+	});
+	
+});
+
+});
+
+</script>
+</html>

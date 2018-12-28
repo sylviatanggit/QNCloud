@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>不良事件监测记录</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.monitoringRecords {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.layui-input-inline input {
+			width: 150px;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		label {
+			padding: 0 !important;
+			margin-left: 20px;
+		}
+		
+		.btns button,
+		.find,
+		.import {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 90px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px;
+			font-size: 9pt;
+		}
+		
+		.find {
+			width: 76px;
+		}
+		
+		.action {
+			right: 0px !important;
+		}
+		
+		.inputs {
+			margin-bottom: 8px;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+		}
+		
+			.cleardata{
+			cursor: pointer;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="monitoringRecords">
+			<div class="layui-tab">
+				<div class="monitoringRecords_header">
+					<div class="inputs">
+						<div class="layui-inline">
+							<label class="layui-form-label" style="margin-left: 0;">产品名称</label>
+							<div class="layui-input-inline">
+								<input autocomplete="off" class="layui-input productList" type="text" style="width: 260px;">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">日期范围</label>
+							<div class="layui-input-inline">
+								<input autocomplete="off" id="orderdate1" class="layui-input" type="text">
+							</div>
+							-
+							<div class="layui-input-inline">
+								<input autocomplete="off" id="orderdate2" class="layui-input" type="text" style="margin-left: 0;">
+							</div>
+						</div>
+						<br />
+						<div class="layui-inline" style="margin-top: 18px;">
+							<div class="layui-input-inline">
+								<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						<div class="layui-inline" style="margin-top: 18px;">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						<div class="btns" style="position: relative;margin-top: 18px;">
+							<button class="layui-btn addRecord">新增</button>
+							<button class="layui-btn moreAction">更多操作</button>
+							<ul class="action">
+								<li>
+									<a class="del" data-type="getCheckDel" lay-event='del'>批量删除</a>
+								</li>
+
+							</ul>
+						</div>
+					</div>
+
+				</div>
+				<table id="monitoringRecords" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+			<script src="../../../js/public.js"></script>
+
+	<script>
+		layui.use(['table', 'jquery', 'laydate', 'laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			var laypage = layui.laypage;
+			var laydate = layui.laydate;
+			var myDate = new Date();
+			var currentMothFirstDay = myDate.getFullYear() + '-' +  (myDate.getMonth() + 1) +"-" + '01';
+			var currentDate =  myDate.getFullYear() + '-' +(myDate.getMonth() + 1)  + '-'+  myDate.getDate();
+			
+			laydate.render({
+				elem: '#orderdate1',
+				value: currentMothFirstDay
+			});
+			laydate.render({
+				elem: '#orderdate2',
+				value: currentDate
+			});
+			var limit = 50;
+			var curpage = 1;
+			var count;
+	
+
+			function getEMR(jumpFlag) {
+				var productList ="";
+				if($('.productList').attr('data-id')){
+					productList = $('.productList').attr('data-id')
+				}
+				var seachContent = $(".seachContent").val();
+			
+			
+				var beginTime = $('#orderdate1').val() != "" ?   $('#orderdate1').val() : currentMothFirstDay;
+				var endTime = $('#orderdate2').val() != "" ? $('#orderdate2').val() : currentDate;
+			
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetAdverseEventSurveyList?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'database': localStorage.database,
+						'produceId': productList,
+						"beginTime": beginTime,
+						"txtCondition" :seachContent,
+						'endTime': endTime
+					},
+					success: function(res) {
+						var temData = JSON.parse(res);
+						var data = JSON.parse(temData.data);
+						count = temData.count;
+						detail(data, limit);
+						$("[data-field=reportdate] div:gt(0)").each(function(i) {
+							$(this).html(data[i].reportdate.replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''));
+						});
+						if(jumpFlag) {
+							pages();
+						}
+					}
+				});
+
+			}
+			getEMR(true)
+
+			function detail(data, limit) {
+				//展示已知数据
+				table.render({
+					elem: '#monitoringRecords',
+					data: data,
+					height: "full-150",
+					id: 'idTest',
+					cols: [
+						[ //标题栏
+						 {
+								checkbox: true,
+								LAY_CHECKED: false,
+								width: 40,
+							}, {
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 200,
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+								//								templet: '<div><span ondblclick="checkProSell({{=JSON.stringify(d)}})" class="layui-table-link">{{d.producename}}</span></div>'
+							},
+							{
+								field: 'produceid',
+								title: '产品Id',
+								minWidth:200,
+							}, {
+								field: 'danwei',
+								title: '规格',
+								minWidth: 100
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 100
+							}, {
+								field: 'referencenum',
+								title: '注册证号',
+								minWidth: 200
+							}, {
+								field: 'producenum',
+								title: '产品编号',
+								minWidth: 100,
+							}, {
+								field: 'batchno',
+								title: '生产批号',
+								minWidth: 100,
+							}, {
+								field: 'sterilization',
+								title: '灭菌批号',
+								minWidth: 100,
+							}, {
+								field: 'enterpriseaddress',
+								title: '生产企业地址',
+								minWidth: 100,
+							}, {
+								field: 'reporter',
+								title: '报告人姓名',
+								minWidth: 100,
+							}, {
+								field: 'reportdate',
+								title: '报告日期',
+								minWidth: 100,
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					limit: limit //每页默认显示的数量
+				});
+			}
+			//分页
+			function pages() {
+				laypage.render({
+					elem: 'monitoringRecords', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						//						console.log(obj);
+						curpage = obj.curr;
+						limit = obj.limit;
+						getEMR(false);
+					}
+				})
+			}
+			
+			
+					
+		$("body").keydown(function(event) {
+				if(event.keyCode == "13") { //keyCode=13是回车键
+					$('.find').click();
+
+				}
+		});
+			$(".find").click(function() {
+
+				getEMR(true);
+			})
+			table.on('tool(demo)', function(obj1, index) {
+						if(!checkPermissionStatus("不良事件监测记录-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}
+				
+				
+				var obj = obj1.data;
+				if(obj1.event === 'detail') {
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">不良事件监测记录</span>',
+						area: ['700px', '90%'],
+						offset: "rb",
+						content: 'views/qualityManagement/eventMonitoringRecords/addRecord.html',
+						zIndex: parent.layer.zIndex, //重点1
+						success: function(layero, index) {
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$(".bacic", paentIfarame).attr('data-id', obj.id)
+							$(".eventLaiyuan", paentIfarame).val(obj.reportsource)
+							$(".eventDanwei", paentIfarame).val(obj.companyname)
+							$(".eventAddress", paentIfarame).val(obj.companyaddress)
+							$(".eventTel", paentIfarame).val(obj.companyphone)
+							$(".eventName", paentIfarame).val(obj.patientname)
+							$(".eventAge", paentIfarame).val(obj.patientage)
+							$(".eventSex", paentIfarame).val(obj.patientsex)
+							$(".eventYufang", paentIfarame).val(obj.expecttreat)
+							$(".eventJibing", paentIfarame).val(obj.pastdisease)
+							$(".eventTime", paentIfarame).val(obj.eventtime)
+							$(".eventResult", paentIfarame).val(obj.eventresult)
+							$(".eventResultChengshu", paentIfarame).val(obj.eventdeclare)
+							$(".eventReport", paentIfarame).val(obj.reportman)
+							$(".eventProduct", paentIfarame).val(obj.producename)
+							$(".eventProduct", paentIfarame).attr('data-id', obj.produceid)
+							$(".eventGuige", paentIfarame).val(obj.danwei)
+							$(".eventXinghao", paentIfarame).val(obj.producemodel)
+							$(".eventReg", paentIfarame).val(obj.referencenum)
+							$(".eventBianhao", paentIfarame).val(obj.producenum)
+							$(".eventShengchanPihao", paentIfarame).val(obj.batchno)
+							$(".eventMeijunpihao", paentIfarame).val(obj.sterilization)
+							$(".eventChangjia", paentIfarame).val(obj.enterpriseaddress)
+							$(".eventshengchanaddress", paentIfarame).val(obj.enterpriseaddress)
+							$(".eventShengchanReport", paentIfarame).val(obj.reportman)
+							$("#overDate", paentIfarame).val(obj.termofvalidity.slice(0, 10))
+							$("#stopDate", paentIfarame).val(obj.stopusetime.slice(0, 10))
+							$("#startDate", paentIfarame).val(obj.implantationtime.slice(0, 10))
+							$(".eventReason", paentIfarame).val(obj.analysisofcauses)
+							$(".eventCuoshi", paentIfarame).val(obj.remedialmeasure)
+							$(".eventStatus", paentIfarame).val(obj.medicaldevicesstate)
+							$(".eventShengADR", paentIfarame).val(obj.provincialleveldeclare)
+							$(".eventCountryADR", paentIfarame).val(obj.countrydeclare)
+							$(".eventQianming", paentIfarame).val(obj.reportername)
+							$(".eventReportDate", paentIfarame).val(obj.reportdate.slice(0, 10))
+						},
+						end: function() {
+							getEMR(true)
+						}
+					});
+				}
+
+			});
+			//点击新增
+			$(".addRecord").click(function() {
+					if(!checkPermissionStatus("不良事件监测记录-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}
+					
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">添加不良事件检测记录</span>',
+					area: ['700px', '90%'],
+					offset: "rb",
+					content: 'views/qualityManagement/eventMonitoringRecords/newaddRecord.html',
+					zIndex: parent.layer.zIndex, //重点1
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					},
+					end: function() {
+						getEMR(true);
+					}
+				});
+			});
+			
+			
+			//点击删除
+			var $ = layui.$,
+				active = {
+					getCheckDel: function() { //获取选中数据
+							if(!checkPermissionStatus("不良事件监测记录-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}
+							
+							
+						var checkStatus = table.checkStatus('idTest'),
+							data1 = checkStatus.data;
+						// 判断删除是否为空
+						if(data1.length == 0){
+							parent.layer.open({
+								title: "提示",
+								zIndex: parent.layer.zIndex, //重点1
+								content: '请选择要删除的数据!!!'
+							});
+							return;
+						}
+						var idstr = "";
+					    for(var i=0;i<data1.length;i++) { 
+				      		idstr += "'"+data1[i].id + "'";
+		
+				      		if((i+1)!=data1.length){
+				      			idstr += ",";
+				      		}
+						}
+						parent.layer.confirm('确定删除记录？', {
+							icon: 3,
+							title: '删除'
+						}, function(index) {
+							$.ajax({
+								type: "get",
+								url: localStorage.serIp+"/WebDeleteAdverseEventSurvey?jsoncallback=?",
+								async: true,
+								dataType: 'jsonp',
+								data: {
+									"userId": localStorage.userId,
+									"userPw": localStorage.userPw,
+									'database': localStorage.database,
+									'id': idstr
+								},
+								success: function(res) {
+									var data = JSON.parse(res);
+									if(data.ResultValue == 1) {
+										parent.layer.open({
+											title: "提示",
+											content: '删除成功',
+											zIndex: parent.layer.zIndex, //重点1
+											success: function(layero) {
+												parent.layer.setTop(layero); //重点2
+											}
+										});
+									} else {
+										parent.layer.open({
+											title: "提示",
+											content: '删除失败',
+											zIndex: parent.layer.zIndex, //重点1
+											success: function(layero) {
+												parent.layer.setTop(layero); //重点2
+											}
+										});
+									}
+										getEMR(true);
+								}
+							});
+							parent.layer.close(index);
+						});
+					}
+				};
+
+			$('.del').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+			
+			
+					$(".productList").click(function() {
+			
+				if(sessionStorage.newData) {
+					sessionStorage.removeItem('newData');
+				}
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">产品列表</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/public/product/productPublicList.html',
+					zIndex: parent.layer.zIndex, //重点1
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$(".iframeName", paentIfarame).val(window.name)
+
+
+					},
+					cancel: function() {
+						if(sessionStorage.newData) {
+							if(sessionStorage.newData.length>0 && sessionStorage.newData!= "[]"){
+							var data = JSON.parse(sessionStorage.newData);
+							$(".productList").val(data[0].producename);
+							$(".productList").attr('data-id', data[0].id);
+
+							}
+						
+						}
+
+					},
+					end: function(){  
+						if(sessionStorage.newData.length>0 && sessionStorage.newData!= "[]"){
+							var data = JSON.parse(sessionStorage.newData);
+							$(".productList").val(data[0].producename);
+							$(".productList").attr('data-id', data[0].id);
+
+							}
+						
+					}
+				});
+			});
+		});
+
+
+	</script>
+
+</html>

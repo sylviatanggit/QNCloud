@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+			<title>扫码出库</title>
+			<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		</head>
+	</head>
+	<style type="text/css">
+		body {	overflow: hidden;
+			margin: 0;
+			padding: 0;
+			font-family: "PingFang SC" !important;
+		}
+		
+		* {
+			font-size: 9pt;
+		}
+		
+		.scanCode_body {
+			margin: 0 10px;
+		}
+		
+		.scanCode_body .layui-tab-title {
+			font-size: 14px !important;
+			line-height: 33px;
+			height: 33px;
+		}
+		
+		.scanCode_body .layui-tab-title li {
+			line-height: 33px;
+			height: 33px;
+			vertical-align: inherit;
+			font-size: 9pt;
+		}
+		
+		.layui-tab-title .layui-this {
+			background-color: #ACD7FF !important;
+		}
+		
+		legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		.scanCode_body .layui-tab-item {
+			font-size: 12px !important;
+			height: 60px !important;
+		}
+		
+		.scanCode_body .layui-form-item {
+			margin-bottom: 0 !important;
+		}
+		
+
+		.scanCode_body .layui-tab-item label {
+			margin-right: 12px;
+			width: 90px;
+			line-height: 28px !important;
+			height: 28px !important;
+			padding: 0 !important;
+		}
+		
+		.scanCode_body .layui-tab-item input {
+			width: 400px;
+			line-height: 28px !important;
+			height: 28px !important;
+		}
+		
+		.title {
+			margin: 10px auto;
+			font-size: 12px !important;
+			text-align: center;
+		}
+		
+		.scanCode_content {
+			margin: 0 10px;
+			border: 1px solid #CCCCCC;
+			font-size: 9pt;
+			margin-bottom: 50px;
+		}
+	
+		.scanCode_content .layui-form-item{
+			display: inline-block !important; 
+		}
+	
+		.scanCode_content .layui-form-item label {
+			margin-right: 12px;
+			line-height: 28px !important;
+			height: 28px !important;
+			padding: 0 !important;
+			width: 100px;
+		}
+		
+		.scanCode_content .layui-form-item input {
+			width: 200px;
+			line-height: 28px !important;
+			height: 28px !important;
+		}
+		
+		.scanCode_content .layui-form-item select {
+			width: 200px;
+			line-height: 28px !important;
+			height: 28px !important;
+		}
+		
+		.layui-form-item .layui-input-inline {
+			width: 100px;
+		}
+		
+		.scanCode_content .layui-input-block {
+			margin-left: 0;
+			min-height: 28px;
+			display: inline-block !important; 
+
+		}
+		.layui-tab-card{
+			box-shadow: none;
+		}
+	</style>
+
+	<body>
+		<div class="scanCode_body">
+			<div class="layui-tab layui-tab-card">
+				<ul class="layui-tab-title">
+					<li class="layui-this">主副分开条码</li>
+					<li>主副合并条码</li>
+				</ul>
+				<div class="layui-tab-content" style="100px">
+					<div class="layui-tab-item layui-show">
+						<div class="layui-form-item">
+							<label class="layui-form-label">扫描副条码：</label>
+							<div class="layui-input-block">
+								<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" required="required" class="layui-input scanCode_seriesName" id="scanCode_seriesName" type="text">
+
+							</div>
+						</div>
+					</div>
+					<div class="layui-tab-item">
+						<div class="layui-form-item">
+							<label class="layui-form-label">扫描合并条码：</label>
+							<div class="layui-input-block">
+								<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" required="required" class="layui-input scanCode_merge" type="text">
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<p class="title">（扫描条码时请让输入法工作在英文模式下）</p>
+		<div class="scanCode_content">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+				<legend>产品信息</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label">产品名称：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input producename" type="text" disabled="disabled">
+						
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">品牌信息：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input manufacturer" type="text" disabled="disabled">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">产品规格：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input danwei" type="text" disabled="disabled">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">产品型号：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input producemodel" type="text" disabled="disabled">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">产品编号：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input producenum" type="text" disabled="disabled">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">产品单位：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input produceunit" type="text" disabled="disabled">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">产品厂家：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input manufacturer" type="text" disabled="disabled">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">所属分组：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input fathername" type="text" disabled="disabled">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">通俗名称：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input produceusename" type="text" disabled="disabled">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">产品系列：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input produceseries" type="text" disabled="disabled">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">材　　质：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input producematerial" type="text" disabled="disabled">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">注册证：</label>
+				<div class="layui-input-block">
+							<div class="layui-input-inline">
+								<select name="" class="layui-input registrationcertificatename">
+									
+											
+								</select>
+							</div>
+				</div>
+			</div>
+			
+			<div style="background: #e6e6e6;height: 1px;width: 100%;margin-bottom: 10px;"></div>
+			
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">产品批号：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input iots" type="text">
+				</div>
+			</div>
+		
+			<div class="layui-form-item">
+				<label class="layui-form-label">生产日期：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input productiondate" type="text" id="productionDate">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">有效期：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input indate" type="text" id="stopDate">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">合　　格：</label>
+				<div class="layui-input-block">
+					<select name="" class="layui-input">
+						<option value="1">合格</option>
+						<option value="0">不合格</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<video src="../../../video/产品信息缺失请重新扫.mp3" controls  style="display: none;" id="video_one"></video>
+		<video src="../../../video/存在重复产品信息需要.mp3" controls  style="display: none;" id="video_two"></video>
+		<video src="../../../video/条码格式不正确请重新.mp3" controls  style="display: none;" id="video_three"></video>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../../js/public.js" type="text/javascript" charset="utf-8"></script>
+
+	<script type="text/javascript">
+		layui.use(['element', 'laydate','jquery','layer'], function() {
+			var $ = layui.jquery,
+				laydate = layui.laydate; 
+			var layer = layui.layer;
+			element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+			laydate.render({
+				elem: '#productionDate'
+			});
+			laydate.render({
+				elem: '#stopDate'
+			});
+
+			var productData = [];
+
+			
+	
+			$(".scanCode_seriesName").focus();			
+
+			
+			//副条码
+			$(".scanCode_seriesName").bind("keydown",function(e){
+			
+			　　  var theEvent = e || window.event;
+			　　  var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+			　　   if (code == 13) {
+			　　	 	var seriesName =$(".scanCode_seriesName").val();
+					if(seriesName != "" && seriesName != null){
+						seriesName = seriesName.toUpperCase();
+					}
+			
+					seriesName = getJieXiData(seriesName); 
+					
+					$(".scanCode_seriesName").val(seriesName);
+					
+					productInfoByMainBarCode("",seriesName);
+		
+					
+			　　  }
+			});
+			
+			
+			//合并条码
+			$(".scanCode_merge").bind("keydown",function(e){
+				productData = [];
+			　　  var theEvent = e || window.event;
+			　　  var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+			　　   if (code == 13) {
+			　　	 	var scanCode_merge =	$(".scanCode_merge").val();
+			
+					if(scanCode_merge != "" && scanCode_merge != null){
+						scanCode_merge = scanCode_merge.toUpperCase();
+					}
+			
+					scanCode_merge = getJieXiData(scanCode_merge); 
+					
+					$(".scanCode_merge").val(scanCode_merge);
+			
+					var  getValue  = mainBarCodeAndsubBarCode(scanCode_merge);
+
+					var subBarCode = getValue.subBarCode;
+					var	mainBarCode = getValue.mainBarCode;
+					
+					if(subBarCode == "" && mainBarCode ==""){
+						layer.tips('条码有误!',".scanCode_merge");
+						var video_three = document.getElementById('video_three');
+						video_three.play(); 
+						
+						$(".scanCode_merge").select();
+						
+						return;
+					}
+					
+					productInfoByMainBarCode(mainBarCode,subBarCode)
+				
+			
+			　　  }
+			});
+			
+			
+			//合并条码操作
+			function scanCodeMerge(mainBarCode,subBarCode,isMoreRegis){
+				var returnData  = getSaoMaData(subBarCode,mainBarCode);
+				
+				var iots = returnData.iots;
+						
+		
+					
+				var indate = returnData.indate;
+				var productionDate = returnData.productionDate;
+
+				
+				$(".iots").val(iots);
+				$("#stopDate").val(indate);
+				$("#productionDate").val(productionDate);
+				
+
+	
+				productData[0].iots = iots;
+				productData[0].indate = indate;
+				productData[0].productiondate =productionDate;
+				productData[0].producecount = "1";
+				productData[0].producecode = mainBarCode;
+				productData[0].producesubbarcode = subBarCode;
+				
+				var ordernum=	$(".layui-show", parent.document).attr("lay-item-id");
+				
+				if(isMoreRegis ==0){
+					$(window.parent.document).find(".layui-tab-content div[lay-item-id="+ordernum+"] iframe")[0].contentWindow.scanCodeOutStoreData(productData)
+
+					productInfoDeal(1);
+				}
+				
+			}
+			
+			
+			function productInfoDeal(flag){
+				$(".producename").val("");
+				$(".manufacturer").val("");
+				$(".danwei").val("");
+				$(".producemodel").val("");
+				$(".producenum").val("");
+				$(".produceunit").val("");
+				$(".fathername").val("");
+				$(".produceusename").val("");
+				$(".produceseries").val("");
+				$(".producematerial").val("");
+				$(".registrationcertificatename").val("");
+				
+				$(".iots").val("");
+				$("#stopDate").val("");
+				$("#productionDate").val("");
+				$(".producecount").val("1")
+				
+	
+				
+				if(flag == 1){ //主副条码合并
+					$(".scanCode_merge").val("");
+
+					$(".scanCode_merge").focus();	
+
+				}else{
+					$(".scanCode_seriesName").val("");
+					$(".scanCode_seriesName").focus();			
+
+				}
+				
+
+			}
+			
+			var getReisterData = [];
+			isMoreRegis=0; //0一个注册证，1多注册证,
+			mainSubCode = 0;//0主副分开，
+			
+			function productInfoByMainBarCode(mainBarCode,subBarCode){
+				$(".registrationcertificatename").empty();
+				 mainSubCode =0;isMoreRegis=0; 
+				productData = [];
+//				
+				var scanCodeOutStockId =  sessionStorage.scanCodeOutStockId;
+				var scanCodeOutstockareaId =  sessionStorage.scanCodeOutstockareaId;
+				var scanCodeOutgoodsshelvesId =  sessionStorage.scanCodeOutgoodsshelvesId;
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetStoreInfoByProduceCode?jsoncallback=?",
+					async: false,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'produceSubbarCode': subBarCode,
+						'targetstockId':scanCodeOutStockId,
+						'stockarea' : scanCodeOutstockareaId,
+						'goodsshelves_id' : scanCodeOutgoodsshelvesId
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+							
+						if(data.length == 0){
+								if(mainBarCode == ""){
+									layer.tips('没有找到产品!',".scanCode_seriesName");
+									$(".scanCode_seriesName").select();
+								}else{
+									layer.tips('没有找到产品!',".scanCode_merge");
+									$(".scanCode_merge").select();
+								}
+
+								var video_one = document.getElementById('video_one');
+								video_one.play(); 
+								return;
+						}
+						
+						
+							$(".producename").val(data[0].producename);
+							$(".manufacturer").val(data[0].manufacturer);
+							$(".danwei").val(data[0].danwei);
+							$(".producemodel").val(data[0].producemodel);
+							$(".producenum").val(data[0].producenum);
+							$(".produceunit").val(data[0].produceunit);
+							$(".fathername").val(data[0].fathername);
+							$(".produceusename").val(data[0].produceusename);
+							$(".produceseries").val(data[0].produceseries);
+							$(".producematerial").val(data[0].producematerial);
+							
+							
+							$(".iots").val(data[0].iots);
+							$("#stopDate").val(data[0].indate);
+							$("#productionDate").val(data[0].productiondate);
+							
+							
+							
+						if(data.length ==1){
+										
+							productData = data;
+							
+							isMoreRegis =0;
+							
+							var optionsStr ="";
+							
+							for(var i=0;i<data.length;i++){
+								
+								var referencenum  = data[i].referencenum  !=  null ? data[i].referencenum : "无注册证信息"
+								var name= referencenum + "(" +data[i].producename+ ")";
+								
+							
+								optionsStr+= "<option value='"+i+"'>"+name+"</option>";
+								
+							}
+							
+								$(".registrationcertificatename").append(optionsStr);
+								productData[0].producecount = 1;
+								productData[0].subtotal = 1 * productData[0].realcost;
+								productData[0].producesubbarcode = subBarCode;
+								var ordernum=	$(".layui-show", parent.document).attr("lay-item-id");
+								$(window.parent.document).find(".layui-tab-content div[lay-item-id="+ordernum+"] iframe")[0].contentWindow.scanCodeOutStoreData(productData)
+								
+								if(mainBarCode!=""){
+									productInfoDeal(1);
+								}else{
+									productInfoDeal(0);
+								}
+		
+						}else{
+							
+							
+							var optionsStr ="<option value=''></option>";
+							isMoreRegis =1;
+							
+							getReisterData = data;
+							
+							for(var i=0;i<data.length;i++){
+								
+								var referencenum  = data[i].referencenum  !=  null ? data[i].referencenum : "无注册证信息"
+								var name= referencenum + "(" +data[i].producename+ ")";
+								
+							
+								optionsStr+= "<option value='"+i+"'>"+name+"</option>";
+	
+								
+							}
+							
+							$(".registrationcertificatename").append(optionsStr);
+
+							
+							$(".scanCode_seriesName").focus();	
+							
+							var video_two = document.getElementById('video_two');
+							video_two.play(); 
+							
+							productData.push(data[0]);
+							
+							layer.tips('有多条注册证信息!',".registrationcertificatename");
+						
+						}
+							
+			
+//						if(mainBarCode!=""){
+//							mainSubCode=1;
+//							scanCodeMerge(mainBarCode,subBarCode,isMoreRegis);
+//						}
+					}
+				});
+			}
+			
+		
+			
+			$(".registrationcertificatename").change(function(){
+					productData = [];
+					var value = $(".registrationcertificatename").val();
+				
+					productData.push(getReisterData[value]);
+					
+					$(".producename").val(getReisterData[value].producename);
+
+					
+					$(".manufacturer").val(getReisterData[value].manufacturer);
+					$(".danwei").val(getReisterData[value].danwei);
+					$(".producemodel").val(getReisterData[value].producemodel);
+					$(".producenum").val(getReisterData[value].producenum);
+					$(".produceunit").val(getReisterData[value].produceunit);
+					$(".fathername").val(getReisterData[value].fathername);
+					$(".produceusename").val(getReisterData[value].produceusename);
+					$(".produceseries").val(getReisterData[value].produceseries);
+					$(".producematerial").val(getReisterData[value].producematerial);
+					
+							
+					$(".iots").val(getReisterData[0].iots);
+					$("#stopDate").val(getReisterData[0].indate);
+					$("#productionDate").val(getReisterData[0].productiondate);
+					
+					
+					productData[0].producecount = 1;
+					productData[0].producesubbarcode = subBarCode;
+					var ordernum=	$(".layui-show", parent.document).attr("lay-item-id");
+
+					$(window.parent.document).find(".layui-tab-content div[lay-item-id="+ordernum+"] iframe")[0].contentWindow.scanCodeOutStoreData(productData)
+			　　  
+					if(mainSubCode ==0){
+						
+						productInfoDeal(0);
+						
+					}else{
+						
+						productInfoDeal(1);
+		
+					}
+					
+
+					
+			})
+		});
+	</script>
+
+</html>

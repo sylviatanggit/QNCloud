@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>新增产品</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		#addGuige {
+			/*width: calc(100vw+17px);*/
+			font-size: 9pt;
+		}
+		
+		#guige_addGuige legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		#guige_addGuige label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		#guige_addGuige input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		#guige_addGuige select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+			border: 1px solid #ddd;
+		}
+		
+		#guige_addGuige textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+			border: 1px solid #ddd;
+		}
+		
+		#guige_addGuige .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 5px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 1px;
+		}
+		
+		#guige_addGuige button {
+			margin-left: 8px;
+			text-align: center;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 9pt !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+		}
+		
+		.layui-input-block ul {
+			width: 440px;
+			height: 100px;
+			margin-bottom: 44px;
+		}
+		
+		.layui-input-block ul li {
+			display: inline-block;
+			width: 64px;
+			height: 24px;
+			color: #A0A0A0 !important;
+			font-family: "PingFang";
+			font-size: 9pt;
+			border: 1px solid #C5C5C5;
+			line-height: 24px;
+			text-align: center;
+			border-radius: 2px;
+			margin-right: 8px;
+			margin-top: 8px;
+			cursor: pointer;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		#guige_addGuige {
+			margin-bottom: 120px;
+		}
+	</style>
+
+	<body>
+		<div id="guige_addGuige">
+			<div class="layui-form-item layui-form-title">
+				<!--<button class="layui-btn">预览</button>
+				<button class="layui-btn">暂存</button>-->
+				<button class="layui-btn addGuige_submit">提交</button>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>规格信息</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>注册证产品名称：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input guige_addGuige_regname" type="text" value="" disabled="" style="border: none !important;">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>证件信息：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input guige_addGuige_reginfo" data-id="" type="text" value="" disabled="" style="border: none !important;">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>时间：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input guige_addGuige_regdate" type="text" value="" disabled="" style="border: none !important;">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>产品名称：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input guige_addGuige_proName" type="text">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>产品编号：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input guige_addGuige_proNum" type="text">
+
+				</div>
+			</div>
+			<!--<div class="layui-form-item">
+				<label class="layui-form-label">备注：</label>
+				<div class="layui-input-block">
+					<textarea class="addGuige_notes" name="" rows="" cols="" style="width: 400px;height: 80px;"></textarea>
+				</div>
+			</div>-->
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>产品类别：</label>
+				<div class="layui-input-block">
+					<select name="" required="required" class="guige_addGuige_proType">
+						<option value="0" selected="selected">产品</option>
+						<option value="1">工具</option>
+						<!--<option value="2">产品类别</option>-->
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>规格：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input guige_addGuige_proUnit" multiple="multiple" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">型号：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input guige_addGuige_proModel" multiple="multiple" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>单位：</label>
+				<div class="layui-input-block">
+					<input class="guige_danwei" type="text" id="comboSelect3" class="layui-input" required="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>包装：</label>
+				<div class="layui-input-block">
+					<select name="" class="guige_addGuige_package">
+						<option value="0" selected="selected">灭菌包装</option>
+						<option value="1">非灭菌包装</option>
+						<!--<option value="2">小包装</option>-->
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">材质：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input guige_addGuige_proMaterial" required="required" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>存储方式：</label>
+				<div class="layui-input-block">
+					<select name="" class="guige_addGuige_con">
+						<option value="0" selected="selected">常温</option>
+						<option value="1">冷藏</option>
+						<!--<option value="2">常温</option>-->
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">主条码：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input guige_addGuige_code" type="text">
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'layer'], function() {
+			var $ = layui.$, //重点处
+				layer = layui.layer;
+			$(function() {
+				var guige_danwei = $(".guige_danwei").val();
+				$.ajax({
+					type: "post",
+					url: "http://www.gudaiwang.com/QingNangServer/AllProductManagerAPI?method=13",
+					async: true,
+					dataType: "json",
+					success: function(data) {
+						var htmlStr = "";
+						for(var i = 0; i < data.length; i++) {
+							htmlStr += "<option>" + data[i].unitName + "</option>";
+						}
+						$(".guige_addGuige_prodanwei").html(htmlStr)
+					},
+					error: function() {
+						layui.use(['jquery', 'layer'], function() {
+							var $ = layui.$ //重点处
+								,
+								layer = layui.layer;
+							parent.layer.open({
+								content: '服务器错误，请稍后再试'
+							});
+						})
+					}
+				})
+			});
+		});
+	</script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var guige_danwei = $(".guige_danwei").val();
+			$.ajax({
+				type: "post",
+				url: "http://www.gudaiwang.com/QingNangServer/AllProductManagerAPI?method=13",
+				async: true,
+				dataType: "json",
+				success: function(data) {
+				},
+				error: function() {
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+							layer = layui.layer;
+						parent.layer.open({
+							content: '服务器错误，请稍后再试'
+						});
+					})
+				}
+			})
+		});
+	</script>
+
+</html>

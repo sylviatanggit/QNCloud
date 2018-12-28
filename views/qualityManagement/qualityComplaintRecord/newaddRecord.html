@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>质量投诉记录</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<script src="../../../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+
+	</head>
+	<style type="text/css">
+		#addRecord {
+			/*width: calc(100vw+17px);*/
+			font-size: 9pt;
+		}
+		
+		#addRecord legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		#addRecord label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		#addRecord .layui-input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		.layui-input-block {
+			min-height: 28px;
+		}
+		
+		#addRecord select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		#addRecord .result_notes {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+		}
+		
+		textarea,
+		select {
+			padding-left: 10px !important;
+		}
+		
+		#addRecord .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 5px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 0px;
+		}
+		
+		#addRecord button {
+			margin-left: 8px;
+			text-align: center;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		#addRecord {
+			margin-bottom: 80px;
+		}
+	</style>
+
+	<body>
+			<div id="addRecord">
+			<div class="layui-form-item layui-form-title">
+				<button class="layui-btn addRecord_submit">提交</button>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>投诉人信息</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label">受理日期</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" id="shouli" required="required" class="layui-input complaint_acceptDate" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">受理人</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input complaint_accepter" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">投诉者姓名</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input complaintName" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">性别</label>
+				<div class="layui-input-block">
+					<select name="" class="layui-input  complaint_sex">
+						<option value="0">男</option>
+						<option value="1">女</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">年龄</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input complaint_age" type="number">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">联系电话</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input complaint_tel" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">工作单位或家庭住址</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input complaint_address" type="text">
+				</div>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>投诉内容</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label">投诉内容</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input complaint_content" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">处理情况包括</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input complaint_handel" type="text">
+				</div>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>处理意见</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label">处理意见及处理措施</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input handle_suggestion" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">负责人</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input handle_responsibler" type="text" id="handleresponsibler" style="width: 250px;">
+					</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">时间</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" id="chuliyijian" required="required" class="layui-input handle_time" type="text">
+				</div>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>质量管理部门意见</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label">质量管理部门意见</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input group_suggestion" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">负责人</label>
+				<div class="layui-input-inline">
+				<input autocomplete="off" class="layui-input group_responsibler" type="text" id="grouprResponsibler"  style="width: 250px;">
+				</div>
+				
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">时间</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" id="bumenyijian" required="required" class="layui-input group_time" type="text">
+				</div>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>主管领导意见</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label">主管领导意见</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input leader_suggestion" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">负责人</label>
+				<div class="layui-input-inline">
+					<input autocomplete="off" class="layui-input leader_responsibler" type="text" id="leaderResponsibler" style="width: 250px;">
+				</div>
+				
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">时间</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" id="lingdaoyijian" required="required" class="layui-input leader_time" type="text">
+				</div>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>处理结果</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label">处理结果</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input result" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">执行人</label>
+				<div class="layui-input-inline">
+					<input autocomplete="off" class="layui-input executor" type="text" id="executor" style="width: 250px;">
+				</div>
+			
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">时间</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" id="chulijieguo" required="required" class="layui-input result_time" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">备注</label>
+				<div class="layui-input-block">
+					<textarea name="" rows="" cols="" class="layui-input result_notes" style="height: 80px !important;"></textarea>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['layer', "laydate"], function() {
+			var $ = layui.$, //重点处
+				layer = layui.layer;
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: '#shouli',
+				value: new Date()
+			});
+			laydate.render({
+				elem: '#chuliyijian'
+			});
+			laydate.render({
+				elem: '#bumenyijian'
+			});
+			laydate.render({
+				elem: '#lingdaoyijian'
+			});
+			laydate.render({
+				elem: '#chulijieguo'
+			});
+			
+			
+		staffList();
+		function staffList() {
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp  + "/WebGetEmployeeDropDownList?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					'groupCompanyId': localStorage.groupcompanyid
+				},
+				success: function(res) {
+					var data = JSON.parse(res);
+					$('.handle_responsibler').bComboSelect({
+						showField: 'employeename',
+						keyField: 'employeesid',
+						data: data
+					});
+			
+					$('.group_responsibler').bComboSelect({
+						showField: 'employeename',
+						keyField: 'employeesid',
+						data: data
+					});
+					
+					$('.leader_responsibler').bComboSelect({
+						showField: 'employeename',
+						keyField: 'employeesid',
+						data: data
+					});
+				
+					$('.executor').bComboSelect({
+						showField: 'employeename',
+						keyField: 'employeesid',
+						data: data
+					});
+				}
+			});
+							
+			}		
+		});
+		
+		
+		function mySubmitData(){
+			
+				var dealdate = $('.complaint_acceptDate').val();
+				var dealman = $(".complaint_accepter").val();
+				var complainman = $('.complaintName').val();
+				var sex = $(".complaint_sex").val();
+				var age = $(".complaint_age").val();
+				var phone = $(".complaint_tel").val();
+				var address = $(".complaint_address").val();
+				var complaincontent = $(".complaint_content").val();
+				var dealcontent = $(".complaint_handel").val();
+				var dealsuggest = $(".handle_suggestion").val();
+				var suggestman = $("#handleresponsibler").val();
+				var suggestdate = $(".handle_time").val();
+				var qualitysuggest = $(".group_suggestion").val();
+				var qualityman = $("#grouprResponsibler").val();
+				var qualitydate = $(".group_time").val();
+				var leadershipsuggest = $(".leader_suggestion").val();
+				var leadershipman = $("#leaderResponsibler").val();
+				var leadershipdate = $(".leader_time").val();
+				var executeresult = $(".result").val();
+				var executeman = $("#executor").val();
+				var executedate = $(".result_time").val();
+				var nomo = $(".result_notes").val();
+				
+				var master = {
+					'dealdate': dealdate,
+					'dealman': dealman,
+					'complainman': complainman,
+					'sex': sex,
+					'age': age,
+					'phone': phone,
+					'address': address,
+					'complaincontent': complaincontent,
+					'dealcontent': dealcontent,
+					'dealsuggest': dealsuggest,
+					'suggestman': suggestman,
+					'suggestdate': suggestdate,
+					'qualitysuggest': qualitysuggest,
+					'qualityman': qualityman,
+					'qualitydate': qualitydate,
+					'leadershipsuggest': leadershipsuggest,
+					'leadershipman': leadershipman,
+					'leadershipdate': leadershipdate,
+					'executeresult': executeresult,
+					'executeman': executeman,
+					'executedate': executedate,
+					'nomo': nomo
+				};
+				
+				return master;
+				
+		}
+	</script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+</html>

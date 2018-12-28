@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>经营范围</title>
+		<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../../themes/icon.css">
+		<script type="text/javascript" src="../../jquery.min.js"></script>
+		<script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+	</head>
+	<style type="text/css">
+		.group {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		.group .layui-table td,
+		.layui-table th {
+			font-size: 9pt !important;
+		}
+		
+		.group_header button {
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt !important;
+		}
+		
+		.group_header {
+			margin: 10px;
+			margin-left: 570px;
+		}
+		
+		.layui-tree {
+			margin-left: 20px;
+		}
+		
+		.choose {
+			text-align: center;
+			display: inline-block;
+			margin: 20px auto;
+			margin-left: 12px;
+		}
+		
+		.choose button {
+			margin: 0 auto;
+			width: 100px;
+			border: 1px solid #2D89DD;
+			background-color: #2D89DD;
+			color: white;
+			height: 30px;
+			line-height: 30px;
+			margin-bottom: 10px;
+			cursor: pointer;
+			display: block;
+		}
+		
+		#demo {
+			/*width: 45% !important;*/
+			/*display: inline-block;*/
+			float: left;
+		}
+		
+		#demo1 {
+			/*width: 45% !important;*/
+			/*display: inline-block;*/
+			float: right;
+		}
+		
+		.panel {
+			float: left !important;
+		}
+		
+		.datagrid-view2 {
+			overflow-x: hidden !important;
+		}
+	</style>
+
+	<body>
+		<div class="group">
+			<div class="group_header">
+				<button class="layui-btn" id="submit" style="margin-left: 20px;">确认</button>
+			</div>
+			<div id="demo">
+				<table id="tree" class="easyui-treegrid tree" style="width:280px;height:600px" data-options="">
+					<thead>
+						<tr>
+							<th data-options="field:'name'" width="138">类别</th>
+							<th data-options="field:'date'" width="140">名称</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div class="choose">
+				<button class="choose_ture">选择>></button>
+				<button class="cancel"><<取消</button>
+			</div>
+			<div id="demo1">
+				<table id="tree1" class="easyui-treegrid tree1" style="width:280px;height:600px" data-options="">
+					<thead>
+						<tr>
+							<th data-options="field:'name'" width="138">类别</th>
+							<th data-options="field:'date'" width="140">名称</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['table','element', 'layer'], function() {
+			var layer = layui.layer;
+			var rows, rows2;
+		
+			var treeData ="";
+			
+			//左边树
+			function treegrid(data){
+				$("#tree").treegrid({
+					data:data,
+					rownumbers: false,
+					idField: 'id',
+					treeField: 'name',
+					onClickRow: function(row) {
+						rows = row;
+					},
+					onDblClickRow: function(row) {
+						if(row._parentId) {
+							rows = row;
+							$('#tree').treegrid('remove', rows.id);
+							$('#tree1').treegrid('append', {
+								parent: rows._parentId,
+								data: [rows]
+							});
+						}
+					}
+				});
+			}
+			
+			//右边树
+			function treegrid1(data){
+				$("#tree1").treegrid({
+					data: data,
+					rownumbers: false,
+					idField: 'id',
+					treeField: 'name',
+					onClickRow: function(row) {
+						rows2 = row;
+					},
+					onDblClickRow: function(row) {
+						if(row._parentId) {
+							rows2 = row;
+							$('#tree1').treegrid('remove', rows2.id);
+							$('#tree').treegrid('append', {
+								parent: rows2._parentId,
+								data: [rows2]
+							});
+						}
+					}
+				});
+			}
+			
+			
+			//选择
+			$(".choose_ture").click(function() {
+				if(rows) {
+					if(rows._parentId) {
+						$('#tree').treegrid('remove', rows.id);
+						$('#tree1').treegrid('append', {
+							parent: rows._parentId,
+							data: [rows]
+						});
+						rows = false;
+					}else{
+						parent.layer.open({
+						title: '提示',
+						content: '不能选择根节点',
+									zIndex: parent.layer.zIndex //重点1
+					});
+					}
+				} else {
+					parent.layer.open({
+						title: '提示',
+						content: '请选择左侧子节点',
+									zIndex: parent.layer.zIndex //重点1
+					});
+				}
+			})
+			
+			//取消
+			$(".cancel").click(function() {
+				if(rows2) {
+					if(rows2._parentId) {
+						$('#tree1').treegrid('remove', rows2.id);
+						$('#tree').treegrid('append', {
+							parent: rows2._parentId,
+							data: [rows2]
+						});
+						rows2 = false;
+					}else{
+						
+						parent.layer.open({
+						title: '提示',
+						content: '不能选择根节点',
+									zIndex: parent.layer.zIndex //重点1
+					});
+					
+					}
+				} else {
+					parent.layer.open({
+						title: '提示',
+						content: '请选择右侧子节点',
+									zIndex: parent.layer.zIndex //重点1
+					});
+				}
+			})
+			
+			
+			//确认
+			$("#submit").click(function(){
+				sessionStorage.jyfwTreeData = JSON.stringify($('#tree1').treegrid("getData"));
+				sessionStorage.jyfData =sessionStorage.jyfwTreeData;
+			})
+			
+			
+			function initData(){
+				//左边的数据
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetMedicaldeviceslist?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'companyId': "",
+						'type':0
+					},
+					success: function(res) {
+						var data_back=JSON.parse(res)
+						treegrid(data_back);
+					}
+				});
+				
+				
+					//右边的数据
+				if(sessionStorage.jyfData != 'undefined' && sessionStorage.jyfData){
+					var jyfwTreeData=JSON.parse(sessionStorage.jyfData);
+					treegrid1(jyfwTreeData);
+				}else{
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp+"/WebGetMedicaldeviceslist?jsoncallback=?",
+						async: true,
+						dataType: 'jsonp',
+						data: {
+							"userId": localStorage.userId,
+							"userPw": localStorage.userPw,
+							'database': localStorage.database,
+							'companyId': '-1',
+							'type':'1'
+						},
+						success: function(res) {
+							var data_back=JSON.parse(res)
+							treegrid1(data_back);
+						}
+					});
+				}
+
+				
+			}
+			
+			initData();
+		
+		})
+		
+	</script>
+
+</html>

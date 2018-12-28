@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>员工详情</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+	</head>
+	<style type="text/css">
+		.staffDetail {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 8px 14px;
+		}
+		
+		.staffDetail fieldset {
+			margin: 10px 0;
+			margin-top: 20px;
+		}
+		
+		.staffDetail legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		.staffDetail_header {
+			margin-top: 20px;
+			margin-bottom: 20px;
+		}
+		
+		.layui-input-inline {
+			width: 400px !important;
+		}
+		
+		.staffDetail .layui-form-item label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		.staffDetail .layui-form-item .layui-input-inline input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		.staffDetail .layui-form-item .layui-input-inline select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+			/*border: 1px solid #DDDDDD !important;*/
+		}
+		
+		.staffDetail .layui-form-item .layui-input-inline textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+			/*border: 1px solid #ddd !important;*/
+		}
+		
+		.staffDetail .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 10px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 0px;
+		}
+		
+		.addstaff_submit {
+			display: inline-block;
+			text-align: center;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 9pt !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+			margin-right: 20px;
+		}
+		
+		.layui-table tr:nth-child(odd) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(odd) {
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(even) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-form-item .layui-input-inline,
+		.layui-form-item input,
+		.layui-form-item label {
+			line-height: 28px !important;
+			height: 28px !important;
+			min-height: 28px !important;
+		}
+		
+		.layui-form-item .layui-input-inline {
+			width: 235px;
+		}
+		
+		.layui-form-item {
+			margin-bottom: 10px;
+		}
+		
+		.layui-tab-content .layui-form-item label {
+			width: 60px;
+			padding: 0 10px !important;
+		}
+		
+		.layui-form-label {
+			padding: 0 10px;
+		}
+		
+		.caozuo #tree-view .layui-table-cell {
+			padding: 0px!important;
+		}
+		
+		#stock .layui-table-cell {
+			padding: 0px 6px 0px 6px!important;
+		}
+		
+		#job .layui-table-cell {
+			padding: 0px 6px 0px 6px!important;
+		}
+		
+		.caozuo #tree-view .layui-table td,
+		.layui-table th {
+			padding: 0 2.9vw !important;
+			text-align: center;
+		}
+		.caozuo #tree-view .layui-table td,
+		.layui-table input {
+			margin-left: 18.5px;
+		}
+		
+		#job
+		.layui-table th {
+			padding: 0px!important;
+		}
+		
+		#stock
+		.layui-table th {
+			padding: 0px!important;
+		}
+		.caozuo {
+			position: relative;
+		}
+		
+		#tree {
+			position: absolute;
+			top: 30px;
+			width: 180px;
+			display: inline-block;
+		}
+		
+		#tree ul li {
+			width: 100px;
+		}
+		
+		#tree-view {
+			margin-left: 190px;
+			/*border: 1px solid #CCCCCC;*/
+			display: inline-block;
+			width: 70%;
+			height: 340px;
+		}
+		
+		#tree-view .layui-table-view {
+			display: none;
+		}
+		
+		#tree-view .layui-table-view:nth-child(2) {
+			display: block;
+		}
+		
+		#job .layui-form,
+		#stock .layui-form {
+			margin-top: 40px;
+		}
+		
+		.btns_job,
+		.btns_stock {
+			position: relative;
+			float: right;
+		}
+		
+		.moreAction {
+			background: #FFFFFF !important;
+			border: 1px solid #2D89DD !important;
+			color: #2D89DD !important;
+			width: 90px;
+		}
+		
+		.moreAction:hover {
+			border-bottom: none !important;
+		}
+		
+		.action {
+			background-color: #CCCCCC;
+			position: absolute;
+			right: 20px;
+			top: 27px;
+			z-index: 10;
+			border: 1px solid #2D89DD;
+			display: none;
+		}
+		
+		.action li {
+			margin-left: 0 !important;
+		}
+		
+		.action li a {
+			display: block;
+			color: #357BEA;
+			cursor: pointer;
+			width: 88px;
+			line-height: 28px;
+			text-align: center;
+			background-color: #FFFFFF;
+			box-shadow: 2px;
+		}
+		
+		.action li a {
+			color: #232323;
+		}
+		
+		.action:hover {
+			border-top: none;
+		}
+		
+		.action li a:hover {
+			cursor: pointer;
+			width: 88px;
+			line-height: 28px;
+			text-align: center;
+			background: #ACD7FF;
+		}
+		
+		.btns_stock button,
+		.btns_job button {
+			display: inline-block;
+			text-align: center;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 9pt !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+			margin-right: 20px;
+			width: 90px;
+		}
+		
+		.layui-form input[type=checkbox] {
+			display: block !important;
+			margin-top: 5px;
+		}
+		
+		#job .layui-form input[type=checkbox],
+		#stock .layui-form input[type=checkbox] {
+			display: none !important;
+		}
+		
+			.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 388px !important;
+
+		}
+		
+		.cs_result_area{
+			font-size: 9pt;
+		}
+		
+		.layui-form-item .layui-inline{
+			margin-bottom: 10px !important;
+		}
+		#job table,#stock table{
+			text-align: center;
+		}
+		.bitian{
+			color: #f10505;
+		    font-size: 11px;
+		    margin-left: 5px;
+		}
+	</style>
+
+	<body>
+		<div class="staffDetail">
+			<div class="layui-form-item layui-form-title">
+				<button class="layui-btn addstaff_submit">提交</button>
+			</div>
+			<div>
+				<div class="layui-form-item " style="margin-top: 40px;margin-bottom: 0px !important;display: none;" id="fengongsiId">
+				<div class="layui-inline"  style="margin-right: 10px;">
+						<label class="layui-form-label" style="margin-left: 0px;">所属公司：</label>
+						<div class="layui-input-inline">
+							<select name="" class="layui-input companytypeid" style="width: 200px;">
+								
+							</select>
+						</div>
+				</div>
+				</div>	
+				
+								<div class="layui-form-item " style="margin-top: 40px;margin-bottom: 0px !important;display: none;" id="managegCompanyid">
+				<div class="layui-inline"  style="margin-right: 10px;">
+						<label class="layui-form-label" style="margin-left: 0px;">分管公司：</label>
+						<div class="layui-input-inline">
+							<select name="" class="layui-input managegCompany" style="width: 200px;">
+								
+							</select>
+						</div>
+				</div>
+				</div>
+					
+				<fieldset class="layui-elem-field layui-field-title"  id="jichuxinxiID" style="margin-top: 10px;">
+					<legend>基本信息</legend>
+				</fieldset>
+				<div class="layui-form-item ">
+				
+					
+					<div class="layui-inline">
+						<label class="layui-form-label"><span class="bitian">*</span>员工编码：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input basic_staffNum" type="text" placeholder="请输入小写字母+数字组合">
+						</div>
+					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label"><span class="bitian">*</span>姓　　名：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input basic_staffName" type="text">
+						</div>
+					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label">拼   音   码：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input basic_staffPinyin" type="text">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label"><span class="bitian">*</span>部　　门：</label>
+						<div class="layui-input-inline" id="mygroupId">
+							<input autocomplete="off" class="layui-input group" type="text" id="group" style="width: 388px !important;height: 26px !important;line-height: 26px !important">
+						</div>
+					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label">手　　机：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input basic_staffPhone" type="text">
+						</div>
+					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label">身份证号：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input basic_staffID" type="text">
+						</div>
+					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label">性　　别：</label>
+						<div class="layui-input-inline">
+							<select name="" class="basic_staffSex layui-input">
+								<option value="0">男</option>
+								<option value="1">女</option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label">婚姻状况：</label>
+						<div class="layui-input-inline">
+							<select name="" class="basic_staffMarry layui-input">
+								<option value="0">未婚</option>
+								<option value="1">已婚</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">邮　　箱：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input basic_staffEmail" type="text">
+						</div>
+					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label">文化程度：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input basic_staffCulture" type="text">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">籍　　贯：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input basic_staffPlace" type="text">
+						</div>
+					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label">入职日期：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input basic_staffDate" type="text" id="jobDate">
+						</div>
+					</div>
+					
+					
+					<div class="layui-inline">
+						<label class="layui-form-label">家庭住址：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input basic_staffAddress" type="text">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">现居住地：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input basic_staffNowaddress" type="text">
+						</div>
+					</div>
+					
+					<div class="layui-inline" id="yuangongTypeId">
+						<label class="layui-form-label">员工类别：</label>
+						<div class="layui-input-inline">
+							<select name="" class="role layui-input">
+								<!--<option value="1">超级管理员</option>-->
+								<option value="2">总公司员工</option>
+								<option value="0">子公司管理员</option>
+								<option value="3">子公司普通员工</option>
+
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">单据权限：</label>
+						<div class="layui-input-inline">
+							<select name="" class="basic_staffBill layui-input">
+								<option value="0">无</option>
+								<option value="1">部门</option>
+								<option value="2">全部</option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="layui-inline" id="baoxiaoQuanxianId">
+						<label class="layui-form-label">操作权限：</label>
+						<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input permission_id" type="text">
+
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">手机权限：</label>
+						<div class="layui-input-inline">
+							<select name="" class="basic_staffPhonepower layui-input">
+								<!--<option value="S">有权限</option>
+								<option value="O">无权限</option>-->
+								<option value="SSS">老板</option>
+								<option value="SOO">员工</option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="layui-inline" id="baoxiaoQuanxianId">
+						<label class="layui-form-label">报销权限：</label>
+						<div class="layui-input-inline">
+							<select name="" class="employeeposition layui-input">
+							
+							</select>
+						</div>
+					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label">报销额度：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input applyfeelimit" type="number">
+						</div>
+					</div>
+					
+				</div>
+
+			
+				<p style="margin-left: 75px;display: inline-block;width: 475px;">
+					<input type="checkbox"  class="login" checked="checked"/> 允许登录系统，初始密码为123456
+				</p>
+				
+					<p style="margin-left: 75px;display: inline-block;">
+					<input type="checkbox"  class="lookrealcost"/> 是否可以查看成本价
+				</p>
+			</div>
+			
+			
+			<div class="">
+				<fieldset class="layui-elem-field layui-field-title">
+					<legend>附加信息</legend>
+				</fieldset>
+				<div class="layui-form-item ">
+					<div class="layui-inline">
+						<label class="layui-form-label">紧急联系人：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input additional_person" type="text">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">联系人电话：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input additional_tel"  type="text">
+						</div>
+					</div>
+					
+						<div class="layui-inline">
+						<label class="layui-form-label">是否离职：</label>
+						<div class="layui-input-inline">
+							<select name="" class="additional_quit layui-input">
+								<option value="0">在职</option>
+								<option value="1">离职</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">离职日期：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input additional_quitDate" type="text" id="leaveDate">
+						</div>
+					</div><br />
+					
+						<div class="layui-inline">
+						<label class="layui-form-label">备　　注：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input additional_notes" type="text">
+						</div>
+					</div>
+				</div>
+			
+			
+			</div>
+			
+			
+			<!--<div class="caozuo">
+				<fieldset class="layui-elem-field layui-field-title">
+					<legend>操作权限</legend>
+				</fieldset>
+				<ul id="tree"></ul>
+
+				<ul id="tree-view">
+					<table id="11" style="display: block;"></table>
+					<table id="12"></table>
+					<table id="13"></table>
+					<table id="14"></table>
+					<table id="15"></table>
+					<table id="16"></table>
+					<table id="17"></table>
+					<table id="18"></table>
+					<table id="19"></table>
+					<table id="110"></table>
+					<table id="120"></table>
+				</ul>
+			</div>
+			
+			<div id="job">
+				<fieldset class="layui-elem-field layui-field-title">
+					<legend>职能权限</legend>
+				</fieldset>
+				<div class="btns_job">
+					<button class="layui-btn moreAction">更多操作</button>
+					<button class="layui-btn addStaff">新增</button>
+
+					<ul class="action">
+						<li>
+							<a class="del1" data-type="del" lay-event='del'>删除</a>
+						</li>
+					</ul>
+				</div>
+				<table id="jobPower"></table>
+			</div>
+			<div id="stock">
+				<fieldset class="layui-elem-field layui-field-title">
+					<legend>仓库权限</legend>
+				</fieldset>
+				<div class="btns_stock">
+					<button class="layui-btn moreAction">更多操作</button>
+					<button class="layui-btn addStock">新增</button>
+
+					<ul class="action">
+						<li>
+							<a class="del2" data-type="del" lay-event='del'>删除</a>
+						</li>
+					</ul>
+				</div>
+
+				<table id="wareHouse"></table>
+			</div>-->
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script src="../../../js/public.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'element', 'tree', 'laydate'], function() {
+
+			var $ = layui.jquery,
+				element = layui.element,
+				laydate = layui.laydate;
+			var table = layui.table;
+			laydate.render({
+				elem: "#jobDate"
+			});
+			laydate.render({
+				elem: "#leaveDate"
+			});
+			$('.btns_job .moreAction').hover(function() {
+				$(".btns_job .action").show();
+			}, function() {
+				$(".btns_job .action").hide();
+			});
+			$('.btns_job .action').hover(function() {
+				$(".btns_job .action").show();
+			}, function() {
+				$(".btns_job .action").hide();
+			});
+			$('.btns_stock .moreAction').hover(function() {
+				$(".btns_stock .action").show();
+			}, function() {
+				$(".btns_stock .action").hide();
+			});
+			$('.btns_stock .action').hover(function() {
+				$(".btns_stock .action").show();
+			}, function() {
+				$(".btns_stock .action").hide();
+			});
+			
+			//定义一个接收职能权限的数组
+			var znqx=[];
+			var ckqx=[];
+					
+			if(localStorage.groupcompanyid != 0){
+				$("#jichuxinxiID").css("margin-top","40px");
+				$("#fengongsiId").css("display","none");
+				$("#yuangongTypeId").css("display","none");
+				groupList();
+
+			}else{
+				$("#fengongsiId").css("display","inline-block");
+								$("#managegCompanyid").css("display","inline-block");
+
+					getCompanyInfo();getFenGuanCompanyInfo();
+			}
+
+			
+			//获取公司信息
+			function getCompanyInfo() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetAllGroupCompany?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid
+
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						var optionsStr = "";
+						for(var i=0;i<desData.length;i++){
+							var id= desData[i].myg_companyid;
+							var name= desData[i].companyname;
+							
+							if(id == localStorage.groupcompanyid){
+								optionsStr+= "<option value='"+id+"' selected='selected'>"+name+"</option>";
+
+							}else{
+								optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+
+							}
+							
+						}
+						$(".companytypeid").append(optionsStr);
+						
+						groupList();
+					}
+				});
+
+			}
+			
+			$(document).delegate(".companytypeid","change",function(){
+			 	 if($(this).val() == 0){
+			 	 	$("#managegCompanyid").css("display","inline-block");
+			 	 }else{
+			 	 	$("#managegCompanyid").css("display","none");
+			 	 }
+			});
+
+					
+			//分管公司
+			function getFenGuanCompanyInfo() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetCompanyByDropList?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid,
+						'type':8
+
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						var optionsStr = "<option value='' selected='selected'></option>";
+						for(var i=0;i<desData.length;i++){
+							var id= desData[i].myg_companyid;
+							var name= desData[i].companyname;
+				
+								optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+
+							
+						}
+						$(".managegCompany").append(optionsStr);
+					
+			
+					}
+				});
+
+			}
+			
+			
+			
+			
+			
+			//获取报销信息
+			function getbaoXiaoQuanxianInfo() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetEmployeePosition?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid
+
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						var optionsStr = "";
+						for(var i=0;i<desData.length;i++){
+							var id= desData[i].p_id;
+							var name= desData[i].p_name;
+							
+							if(localStorage.groupcompanyid != "0"){
+								
+								if(id != 3 && id != 4 && id != 5){
+									optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+								}
+								
+//								optionsStr+= "<option value='"+id+"' selected='selected'>"+name+"</option>";
+
+							}else{
+								optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+
+							}
+							
+					
+							
+						}
+						$(".employeeposition").append(optionsStr);
+						
+						
+					}
+				});
+
+			}
+			getbaoXiaoQuanxianInfo();
+			
+			
+			$(".companytypeid").change(function(){
+				
+				var str = '<input autocomplete="off" class="layui-input group" type="text" id="group" style="width: 388px !important;height: 26px !important;line-height: 26px !important">';
+		
+				$("#mygroupId").empty();
+				$("#mygroupId").append(str);
+				
+				groupList();
+		
+			})
+			
+			function groupList() {
+				var companytypeid = "";
+				if(localStorage.groupcompanyid == "0"){
+					companytypeid = $('.companytypeid option:selected').val() ;
+			
+				}else{
+					companytypeid = localStorage.groupcompanyid;
+				}
+				
+				$.ajax({
+					type: "get",
+					url:  localStorage.serIp  +"/WebGetEmployeegrouptable?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': companytypeid
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						data =data[0].children;
+						
+						console.log(data)
+						$('#group').bComboSelect({
+							showField: 'name',
+							keyField: 'id',
+							data: data
+						});
+			
+					}
+				});
+			}
+			
+			//部门
+//			$(".group").click(function() {
+//				sessionStorage.staffDepartData="";
+//				
+//				var companytypeid = "";
+//				if(localStorage.groupcompanyid == "0"){
+//					companytypeid = $('.companytypeid option:selected').val();
+//				}else{
+//					companytypeid = localStorage.groupcompanyid;
+//				}
+//				
+//				
+//				sessionStorage.addStaffcompanytypeid = companytypeid;
+//				
+//				parent.layer.open({
+//					type: 2 //此处以iframe举例
+//						,
+//					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">部门详情</span>',
+//					area: ['700px', '90%'],
+//					offset: "rb",
+//					content: 'views/public/staff/staffDepartPublicList.html',
+//					zIndex: parent.layer.zIndex //重点1
+//						,
+//					success: function(layero) {
+//						parent.layer.setTop(layero); //重点2
+//					},
+//					end:function(){
+//						if(sessionStorage.staffDepartData){
+//							var gs=JSON.parse(sessionStorage.staffDepartData);
+//							$(".group").val(gs.name);
+//							$(".group").attr("nameid",gs.id);
+//						}
+//						
+//							if(sessionStorage.staffNewData){
+//							sessionStorage.removeItem("addStaffcompanytypeid");
+//						}
+//					}
+//				});
+//			})
+			
+			//添加职工权限
+			$(".addStaff").click(function() {
+				sessionStorage.staffNewData="";
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">员工列表</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/public/staff/staffPublicList.html',
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					},
+					end:function(layero){
+						if(sessionStorage.staffNewData){
+							data=JSON.parse(sessionStorage.staffNewData);
+							for(var i=0;i<data.length;i++){
+								znqx.push(data[i])
+							}
+							znqx=uniqueArrayZX(znqx,4)
+							dataFun(znqx)
+							for(var i=0;i<znqx.length;i++){
+								$("#job tbody tr:eq("+i+")").attr("sid",data[i].id);
+							}
+						}
+					}
+				});
+			});
+			
+			//添加操作权限
+			$(".permission_id").click(function() {
+				if(sessionStorage.jurisdictionData){
+					sessionStorage.removeItem("jurisdictionData");
+				}
+				
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">权限管理</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/public/staff/jurisdiction.html',
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					},
+					end:function(layero){
+						if(sessionStorage.jurisdictionData){
+							var gs=JSON.parse(sessionStorage.jurisdictionData);
+							$(".permission_id").val(gs[0].permission_name);
+							$(".permission_id").attr("nameid",gs[0].permission_id);
+							
+							
+							var quanxian=gs[0].permission_list;
+							var czqx=quanxian.split(";");
+							var arr_get=[11,12,13,14,15,16,17,18,19,110,120];
+							var arr_num=[8,20,36,52,84,100,144,184,244,284,308];
+							for(var i=0;i<arr_get.length;i++){
+								var small_arr=[];
+								if(i==0){
+									for(var j=0;j<8;j++){
+										small_arr.push(czqx[j]);
+									}
+									putData(small_arr,arr_get[i]);
+								}else{
+									for(var j=arr_num[i-1];j<arr_num[i];j++){
+										small_arr.push(czqx[j]);
+									}
+									putData(small_arr,arr_get[i]);
+								}
+								
+							}
+							function putData(small_arr,arr_id){
+								var ii=0;
+								var tr=$("#"+arr_id).next().find("tbody").find("tr");
+								for(var j=0;j<tr.length;j++){
+									for(var k=2;k<6;k++){
+										var czqx_length=small_arr[ii].length;
+										var czqx_data=small_arr[ii].slice(czqx_length-1,czqx_length);
+										if(czqx_data == 1){
+											$("#"+arr_id).next().find("tbody").find("tr:eq("+j+")").find("td:eq("+k+") input").prop("checked",true)
+										}
+										++ii;
+									}
+								}
+							}
+				
+				
+							$(".caozuo input").attr("disabled","disabled")
+						}
+					}
+				});
+			});
+			
+			
+			$(".permission_id").change(function(){
+				var permission_id = $(".permission_id").val();
+				if(permission_id == ""){
+					$(".caozuo input").removeAttr("disabled");
+				}
+				
+			})
+			
+			
+			//仓库权限
+			$(".addStock").click(function() {
+				sessionStorage.houseData="";
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">仓库列表</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/public/wareHouse/housePublicList.html',
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					},
+					end:function(layero){
+						if(sessionStorage.houseData){
+							data1=JSON.parse(sessionStorage.houseData);
+							for(var i=0;i<data1.length;i++){
+								ckqx.push(data1[i])
+							}
+							ckqx=uniqueArrayZX(ckqx,4)
+							huo_data(ckqx)
+							for(var i=0;i<data1.length;i++){
+								$("#stock tbody tr:eq("+i+")").attr("hid",data1[i].id);
+							}
+						}
+					}
+				});
+			});
+			dataFun(null)
+		
+			function dataFun(data){
+				table.render({
+					elem: '#jobPower',
+					data: data,
+					height: 350,
+					cols: [
+						[ //标题栏
+							{
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							}, {
+								field: 'employeename',
+								title: '姓名',
+								event: 'detail',
+								style: "color:#2D89DD;cursor:pointer",
+								minWidth: 80
+							}, {
+								field: 'employeesid',
+								title: '员工编号',
+								minWidth: 80,
+							}, {
+								field: 'employeesex',
+								title: '性别',
+								minWidth: 20,
+							}, {
+								field: 'employeephone',
+								title: '手机号',
+								minWidth: 100
+							}, {
+								field: 'employeeide',
+								title: '身份证号',
+								minWidth: 150
+							}, {
+								field: 'companyname',
+								title: '所属公司',
+								minWidth: 200
+							}, {
+								field: 'employeedep',
+								title: '所属部门',
+								minWidth: 100
+							}, {
+								field: 'lookorderpermissionname',
+								title: '单据权限',
+								minWidth: 100
+							}, {
+								field: 'employeepositionname',
+								title: '报销权限',
+								minWidth: 120
+							}, {
+								field: 'applyfeelimit',
+								title: '报销额度',
+								minWidth: 120
+							}, {
+								field: 'appordername',
+								title: '手机端权限',
+								minWidth: 100
+							}, {
+								field: 'loginordername',
+								title: '电脑登录权',
+								minWidth: 100
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [10, 20, 30, 40, 50],
+					limit: 10 //每页默认显示的数量
+				});
+			}
+			huo_data(null)
+			function huo_data(data1){
+				table.render({
+					elem: '#wareHouse',
+					data: data1,
+					cols: [
+						[{
+							checkbox: true,
+							LAY_CHECKED: false,
+							align: "center",
+							width: 50,
+						}, {
+							field: 'warehousename',
+							width: 400,
+							title: '仓库名称'
+						}, {
+							field: 'goodsareacount',
+							width: 400,
+							title: '货区',
+						}, {
+							field: 'watrehousenote',
+							width: 400,
+							title: '备注'
+						}]
+					],
+					height: 350,
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [50],
+					limit: 50 //每页默认显示的数量
+				});
+			}
+
+			//操作权限
+		var data11 = [{
+				"index": "1",
+				"power": "企业信息"
+			}, {
+				"index": "2",
+				"power": "我的员工"
+			}];
+			table.render({
+				elem: '#11',
+				data: data11,
+				height: 300,
+			
+				cols: [
+					[{
+						field: 'index',
+						width: 30,
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 180,
+						title: '功能模块'
+					}, {
+						field: 'look',
+						title: '查看',
+						align: "center",
+						width: 50,
+					}, {
+						field: 'baocun',
+						width: 50,
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 50,
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 50,
+						title: '打印'
+					}]
+				],
+				skin: 'row' //表格风格
+					,
+				even: true,
+
+			});
+			var data12 = [{
+				"index": "1",
+				"power": "往来单位信息"
+			}, {
+				"index": "2",
+				"power": "合同管理"
+			}, {
+				"index": "3",
+				"power": "供货授权书"
+			}];
+			table.render({
+				elem: '#12',
+				data: data12,
+				height: 300,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 180,
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 50,
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 50,
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 50,
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 50,
+						title: '打印'
+					}]
+				],
+				limit: 20 //每页默认显示的数量
+			});
+			var data13 = [{
+				"index": "1",
+				"power": "我的所有产品"
+			}, {
+				"index": "2",
+				"power": "我的所有规格"
+			}, {
+				"index": "3",
+				"power": "工具组套管理"
+			}, {
+				"index": "4",
+				"power": "手术配货管理"
+			}];
+			table.render({
+				elem: '#13',
+				data: data13,
+				height: 300,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 180,
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 50,
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 50,
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 50,
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 50,
+						title: '打印'
+					}]
+				]
+			});
+			var data14 = [{
+				"index": "1",
+				"power": "订货合约"
+			}, {
+				"index": "2",
+				"power": "入库验收"
+			}, {
+				"index": "3",
+				"power": "采购退货"
+			}, {
+				"index": "4",
+				"power": "赠送入库"
+			}];
+			table.render({
+				elem: '#14',
+				data: data14,
+				height: 300,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 180,
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 50,
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 50,
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 50,
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 50,
+						title: '打印'
+					}]
+				]
+			});
+			var data15 = [{
+				"index": "1",
+				"power": "直销备货申请"
+			}, {
+				"index": "2",
+				"power": "直销手术备货"
+			}, {
+				"index": "3",
+				"power": "直销确认取货"
+			}, {
+				"index": "4",
+				"power": "直销实耗清点"
+			}, {
+				"index": "5",
+				"power": "分销合约"
+			}, {
+				"index": "6",
+				"power": "出库验出"
+			}, {
+				"index": "7",
+				"power": "分销退货"
+			}, {
+				"index": "8",
+				"power": "赠送出库"
+			}];
+			table.render({
+				elem: '#15',
+				data: data15,
+				height: 300,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 180,
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 50,
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 50,
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 50,
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 50,
+						title: '打印'
+					}]
+				]
+			});
+			var data16 = [{
+				"index": "1",
+				"power": "借货入库"
+			}, {
+				"index": "2",
+				"power": "还货出库"
+			}, {
+				"index": "3",
+				"power": "借货出库"
+			}, {
+				"index": "4",
+				"power": "还货入库"
+			}];
+			table.render({
+				elem: '#16',
+				data: data16,
+				height: 300,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 180,
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 50,
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 50,
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 50,
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 50,
+						title: '打印'
+					}]
+				]
+			});
+			var data17 = [{
+				"index": "1",
+				"power": "库存盘点"
+			}, {
+				"index": "2",
+				"power": "库存初始化"
+			}, {
+				"index": "3",
+				"power": "仓库管理"
+			}, {
+				"index": "4",
+				"power": "仓库调拨"
+			}, {
+				"index": "5",
+				"power": "报溢单"
+			}, {
+				"index": "6",
+				"power": "报损单"
+			}, {
+				"index": "7",
+				"power": "库存调整建议"
+			},{
+				"index": "8",
+				"power": "仓库台账"
+			} , {
+				"index": "9",
+				"power": "存货总账"
+			}, {
+				"index": "10",
+				"power": "存货明细"
+			}, {
+				"index": "11",
+				"power": "存货收发结存表"
+			}]
+			table.render({
+				elem: '#17',
+				data: data17,
+				height: 300,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 180,
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 50,
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 50,
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 50,
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 50,
+						title: '打印'
+					}]
+				],
+				limit: 20 //每页默认显示的数量
+			});
+			var data18 = [{
+				"index": "1",
+				"power": "采购核价"
+			},{
+				"index": "2",
+				"power": "分销核价"
+			},{
+				"index": "3",
+				"power": "直销核价"
+			},{
+				"index": "4",
+				"power": "直销备货结算"
+			},{
+				"index": "5",
+				"power": "收款单"
+			},{
+				"index": "6",
+				"power": "付款单"
+			},{
+				"index": "7",
+				"power": "一般收入单"
+			},{
+				"index": "8",
+				"power": "一般费用单"
+			},{
+				"index": "9",
+				"power": "发票签入单"
+			},{
+				"index": "10",
+				"power": "发票签出单"
+			}]
+			table.render({
+				elem: '#18',
+				height: 300,
+				data: data18,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 180,
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 50,
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 50,
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 50,
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 50,
+						title: '打印'
+					}]
+				]
+			});
+			var data19 = [{
+				"index": "1",
+				"power": "财务对账单"
+			}, {
+				"index": "2",
+				"power": "直销单据查询"
+			}, {
+				"index": "3",
+				"power": "现金银行查询"
+			}, {
+				"index": "4",
+				"power": "资金往来查询"
+			}, {
+				"index": "5",
+				"power": "收支明细查询"
+			}, {
+				"index": "6",
+				"power": "业务单据查询"
+			}, {
+				"index": "7",
+				"power": "产品批号查询"
+			}, {
+				"index": "8",
+				"power": "产品调拨查询"
+			}, {
+				"index": "9",
+				"power": "采购统计分析"
+			}, {
+				"index": "10",
+				"power": "销售统计分析"
+			}, {
+				"index": "11",
+				"power": "借货入库报表"
+			}, {
+				"index": "12",
+				"power": "借货出库报表"
+			}, {
+				"index": "13",
+				"power": "报溢单统计"
+			}, {
+				"index": "14",
+				"power": "报损单统计"
+			}, {
+				"index": "15",
+				"power": "进销存汇总"
+			}]
+			table.render({
+				elem: '#19',
+				height: 300,
+				data: data19,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 180,
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 50,
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 50,
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 50,
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 50,
+						title: '打印'
+					}]
+				],
+				limit: 20 //每页默认显示的数量
+			});
+			var data110 = [{
+				"index": "1",
+				"power": "库房巡检记录"
+			}, {
+				"index": "2",
+				"power": "库房温度记录"
+			}, {
+				"index": "3",
+				"power": "产品保养记录"
+			}, {
+				"index": "4",
+				"power": "产品销毁记录"
+			}, {
+				"index": "5",
+				"power": "产品召回记录"
+			}, {
+				"index": "6",
+				"power": "员工健康档案"
+			}, {
+				"index": "7",
+				"power": "员工培训记录"
+			}, {
+				"index": "8",
+				"power": "不良事件监测记录"
+			}, {
+				"index": "9",
+				"power": "设施设备维护记录"
+			}, {
+				"index": "10",
+				"power": "质量投诉记录"
+			}];
+			table.render({
+				elem: '#110',
+				height: 300,
+				data: data110,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 180,
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 50,
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 50,
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 50,
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 50,
+						title: '打印'
+					}]
+				]
+			});
+			var data120 = [{
+				"index": "1",
+				"power": "操作日志查询"
+			}, {
+				"index": "2",
+				"power": "备份账套数据"
+			}, {
+				"index": "3",
+				"power": "单据规则编号设置"
+			}, {
+				"index": "4",
+				"power": "结存并新开账套"
+			}, {
+				"index": "5",
+				"power": "新开账套"
+			}, {
+				"index": "6",
+				"power": "初期开账"
+			}];
+			table.render({
+				elem: '#120',
+				height: 300,
+				data: data120,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 180,
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 50,
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 50,
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 50,
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 50,
+						title: '打印'
+					}]
+				]
+			});
+			layui.tree({
+				elem: '#tree',
+				nodes: [{ //节点数据
+					name: '全部功能模块',
+					id: 1,
+					spread: true,
+					children: [{
+						name: '我的企业',
+						id: 11
+					}, {
+						name: '往来单位',
+						id: 12
+					}, {
+						name: '我的产品',
+						id: 13
+					}, {
+						name: '采购管理',
+						id: 14
+					}, {
+						name: '销售管理',
+						id: 15
+					}, {
+						name: '借货管理',
+						id: 16
+					}, {
+						name: '库存管理',
+						id: 17
+					}, {
+						name: '财务管理',
+						id: 18
+					}, {
+						name: '报表分析',
+						id: 19
+					}, {
+						name: '质量管理',
+						id: 110
+					}, {
+						name: '系统管理',
+						id: 120
+					}]
+				}],
+				click: function(node) {
+					$("#" + node.id).next(".layui-table-view").siblings().css("display", "none");
+					$("#" + node.id).next(".layui-table-view").css("display", "block");
+				}
+			});
+			
+			
+			$(function() {
+				$(".caozuo #tree-view .layui-table tbody [data-field=look] div").each(function() {
+					var checkBox = '<input type="checkbox" />';
+					$(this).html(checkBox);
+				});
+				$(".caozuo #tree-view .layui-table tbody [data-field=baocun] div").each(function() {
+					var checkBox = '<input type="checkbox" />';
+					$(this).html(checkBox);
+				});
+				$(".caozuo #tree-view .layui-table tbody [data-field=shenhe] div").each(function() {
+					var checkBox = '<input type="checkbox" />';
+					$(this).html(checkBox);
+				});
+				$(".caozuo #tree-view .layui-table tbody [data-field=print] div").each(function() {
+					var checkBox = '<input type="checkbox" />';
+					$(this).html(checkBox);
+				});
+			})
+			
+			
+			//点击保存
+			$(".addstaff_submit").click(function() {
+				//基本信息
+				var employeesid = $('.basic_staffNum').val();
+				if(employeesid == undefined || employeesid ==""){
+					parent.layer.open({
+						title: "提示",
+						content: '员工编码不能为空!',	
+						zIndex: parent.layer.zIndex //重点1
+					});
+					return ;
+				}
+					
+				var employeename = $('.basic_staffName').val();
+				if(employeename == undefined || employeename ==""){
+					parent.layer.open({
+						title: "提示",
+						content: '员工姓名不能为空!',	
+						zIndex: parent.layer.zIndex //重点1
+					});
+					return ;
+				}
+					
+				var pinyinnum = $('.basic_staffPinyin').val();
+				var employeedep = $('#group').val();
+				
+				if(employeedep == undefined){
+					parent.layer.open({
+						title: "提示",
+						content: '请正确选择部门',	
+						zIndex: parent.layer.zIndex //重点1
+					});
+					return ;
+				}
+				
+				
+				var  jiazaiIndex;
+				parent.layer.open({
+				  type: 3, zIndex: parent.layer.zIndex ,	//重点1
+				  success: function(layero, index){
+				  	jiazaiIndex = index;
+		  			}
+				});
+				
+				var g_companyid = $('.companytypeid option:selected').val() ; //所属公司
+				if(typeof(g_companyid) == "undefined"){
+					g_companyid = localStorage.groupcompanyid;
+				}
+				
+				var managegCompany = "";
+				if(g_companyid == 0){
+					var managegCompany = $('.managegCompany option:selected').val() ; //分管公司
+					if(typeof(managegCompany) == "undefined"){
+						managegCompany = "";
+					}
+					
+				}
+							
+								
+								
+				var employeeposition = $('.employeeposition option:selected').val() ; //报销权限
+				var applyfeelimit = $('.applyfeelimit').val() ; //报销额度
+				var role = $('.role option:selected').val() ; //员工类别
+				if(typeof(role) == "undefined"){
+					role = "3";
+				}
+				
+				
+				var employeetel = $('.basic_staffTel').val();
+				var employeephone = $('.basic_staffPhone').val();
+				var lookorderpermission = $('.basic_staffBill').find("option:checked").attr("value");
+				var employeesex = $('.basic_staffSex').find("option:checked").attr("value");
+				var employeeide = $('.basic_staffID').val();
+				var marriagestate = $('.basic_staffMarry').find("option:checked").attr("value");
+				var employeeemail = $('.basic_staffEmail').val();
+				var culture = $('.basic_staffCulture').val();
+				var native = $('.basic_staffPlace',).val();
+				var employeeaddress = $('.basic_staffAddress').val();
+				var newaddress = $('.basic_staffNowaddress').val();
+				var entrydate = $('.basic_staffDate').val();
+				var apporder = $('.basic_staffPhonepower').val();
+				//是否允许登录系统
+				var loginorder=$('.login').is(':checked');
+				loginorder = loginorder==true?1:0;
+				
+				//是否可以查看成本价
+				var lookrealcost =$('.lookrealcost ').is(':checked');
+				lookrealcost  = lookrealcost ==true?1:0;
+				
+				//附加信息
+				var urgentman = $('.additional_person').val();
+				var urgentphone = $('.additional_tel').val();
+				var errorFlag = $('.additional_quit').find("option:checked").attr("value");
+				var leavedate = $('.additional_quitDate').val();
+				var nomo = $('.additional_notes').val();
+				var permission_id =  $('.permission_id').attr("nameid");;
+				//操作权限employeeorder
+				var employeeorder="";
+//				var small1="";
+//				var arr=[11,12,13,14,15,16,17,18,19,110,120];
+//				for(var j=0;j<arr.length;j++){
+//					var tr=$("#"+arr[j]).next().find("tbody").find("tr");
+//					for(var i=0;i<tr.length;i++){
+//						var text=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+//						var true_1=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+//						true_1 = true_1==true?1:0;
+//						var true_2=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+//						true_2 = true_2==true?1:0;
+//						var true_3=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+//						true_3 = true_3==true?1:0;
+//						var true_4=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(5) input").is(':checked')
+//						true_4 = true_4==true?1:0;
+//						small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'审核'+true_3+';'+text+'-'+'打印'+true_4+';';
+//					}
+//					employeeorder=small1;
+//				}
+				
+				
+				//职能权限SID
+				var SID=[];
+//				var yuan_length=$("#job tbody tr").length;
+//				for(var i=0;i<yuan_length;i++){
+//					var sid = $("#job tbody tr:eq("+i+") .layui-table-cell:eq(1)").attr("sid");
+//					var obj_sid={"sid":sid}
+//					SID.push(obj_sid);
+//				}
+				
+				
+				//仓库权限CID
+				var CID=[];
+//				var ck_length=$("#stock tbody tr").length;
+//				for(var i=0;i<ck_length;i++){
+//					var cid = $("#stock tbody tr:eq("+i+")").attr("hid");
+//					var obj_cid={"cid":cid}
+//					CID.push(obj_cid);
+//				}
+				
+				
+				var master={
+					'employeesid':employeesid,
+					'employeename':employeename,
+					'pinyinnum':pinyinnum,
+					'employeedep':employeedep,
+					'employeetel':employeetel,
+					'employeephone':employeephone,
+					'lookorderpermission':lookorderpermission,
+					'employeesex':employeesex,
+					'employeeide':employeeide,
+					'marriagestate':marriagestate,
+					'employeeemail':employeeemail,
+					'culture':culture,
+					'native':native,
+					'employeeaddress':employeeaddress,
+					'newaddress':newaddress,
+					'entrydate':entrydate,
+					'apporder':apporder,
+					'loginorder':loginorder,
+					'employeeorder':employeeorder,
+					'urgentman':urgentman,
+					'urgentphone':urgentphone,
+					'errorFlag':errorFlag,
+					'leavedate':leavedate,
+					'nomo':nomo,
+					'lookrealcost':lookrealcost,
+					'employeeposition':employeeposition,
+					'applyfeelimit':applyfeelimit,
+					'role':role,
+					'permission_id' : permission_id,
+					'manageg_companyid' :managegCompany
+				}
+				$.ajax({
+					type: "POST",
+					url: localStorage.serIp+"/WebAddEmployeeTable",
+					async: true,
+					dataType: 'json',
+					crossDomain: true,
+					contentType:'application/json; charset=utf-8',
+					data:JSON.stringify({
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'employee': JSON.stringify(master),
+						"groupCompanyId": g_companyid
+//						'slaveEmployeeDuty':JSON.stringify(SID),
+//						'slaveWarehouseDuty':JSON.stringify(CID)
+					}),
+					success: function(res) {
+						var data = JSON.parse(res);
+							parent.layer.close(jiazaiIndex); 
+						if(data.ResultValue == 1) {
+							
+						
+							parent.layer.open({
+								title: "提示",
+								content: '提交成功',	zIndex: parent.layer.zIndex //重点1
+							});
+							
+							var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+							parent.layer.close(index); //再执行关闭     						
+
+//											bankData();
+						}else if(data.ResultValue == 2) {
+							parent.layer.open({
+								title: "提示",
+								content: '数据已存在',	zIndex: parent.layer.zIndex //重点1
+							});
+//											bankData();
+						} else {
+							parent.layer.open({
+								title: "提示",
+								content: '提交失败',	zIndex: parent.layer.zIndex //重点1
+							});
+						}
+					},
+						error: function() {
+							parent.layer.close(jiazaiIndex); 		
+							
+						}
+				});
+			})
+			
+			
+			//删除
+			$(".del1").click(function() {
+				get_name='2';
+				var type = $(this).data('type');
+				active1[type] ? active1[type].call(this) : '';
+			}) 
+			//入库验收详情操作	
+			var active1 = {
+				//删除
+				del : function(){
+					if(get_name == '2'){
+						var checkStatus = table.checkStatus('jobPower'),
+						data = checkStatus.data;
+					}else if(get_name == '1'){
+						var checkStatus = table.checkStatus('wareHouse'),
+						data = checkStatus.data;
+					}
+					if (data.length ==0){
+						parent.layer.open({
+							title: "提示",
+							content: '请选择产品',
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return;
+					}
+					if(data.length >0) {
+						var data_arr=[];
+						if(get_name == '2'){
+							for(var i=0;i<data.length;i++){
+								data_arr.push(data[i].employeesid)
+							}
+							znqx =  deleteUniqueObjArrayYuan(znqx,data_arr,1);
+							dataFun(znqx);
+						}else if(get_name == '1'){
+							for(var i=0;i<data.length;i++){
+								data_arr.push(data[i].id)
+							}
+							ckqx =  deleteUniqueObjArrayYuan(ckqx,data_arr,2);
+							huo_data(ckqx);
+						}
+						
+						
+					}
+				}		
+			};
+			$(".del2").click(function(){
+				get_name='1';
+				var type = $(this).data('type');
+				active1[type] ? active1[type].call(this) : '';
+			})
+			//正则判断
+			$(".basic_staffNum").change(function(){
+				var get_val=$(this).val();
+				get_val_length=get_val.replace(/[^\w\.\/]/ig,'').length;
+				if(get_val.length != get_val_length){
+					parent.layer.open({
+						title: "提示",
+						content: '请输入小写字母+数字组合',	zIndex: parent.layer.zIndex //重点1
+					});
+					$(this).val('');
+				}
+			})
+		});
+	</script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+</html>

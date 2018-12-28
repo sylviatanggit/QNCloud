@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>实盘</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+			<!-- DevExtreme themes -->
+
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
+		<link rel="stylesheet" type="text/css" href="../../../css/qk/dev_public.css" />
+	</head>
+
+
+	<body>
+		<div class="dev_public_content">
+			<div class="layui-tab">
+					<div class="find_conditions">
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="副条码、批号" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						<div class="btns">
+							
+						
+							<button class="layui-btn finishCheck" style="width: 80px;">保存</button>
+	
+		
+							<!--<button class="layui-btn safetyStockadd">新增</button>-->
+							<!--<button class="layui-btn moreAction">更多操作</button>
+							<ul class="action">
+								<li>
+									<a class="del" data-type="getCheckDel" lay-event='del'>批量删除</a>
+								</li>
+							</ul>-->
+						</div>
+					</div>
+			
+				
+					<div class="demo-container">
+						<div id="gridContainer"></div>
+
+						</div>
+
+			</div>
+		</div>
+	</body>
+	
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+
+	<script src="../../../plugins/layui/layui.js"></script>
+		<!-- DevExtreme library -->
+	<script src="../../../devexpresslibrary/js/dx.all.js.18.2.js"></script>
+	
+	<!-- 分页插件 -->
+	<script src="../../../devexpresslibrary/js/pagination/jquery.pagination.js"></script>
+	<script src="../../../devexpresslibrary/js/pagination/highlight.min.js"></script>
+	<script>
+		layui.use(['table', 'jquery','laypage'], function() {
+			var table = layui.table;
+			var laypage = layui.laypage;
+			var $ = layui.jquery;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			
+			var limit = 50;
+			var curpage = 1;
+			var count;		
+			var out_id = "";
+			var selectData= [];
+
+			function safetyData(jumpFlag) {
+				
+			var jiazaiIndex;
+			parent.layer.open({
+			  type: 3, 
+			  zIndex: parent.layer.zIndex, //重点1
+			  success: function(layero, index){
+			  		jiazaiIndex = index;
+	  			}
+			});
+				var seachContent = $(".seachContent").val();
+				var selectedArray = JSON.parse(sessionStorage.selectedArray);
+				var producename = selectedArray[0].producename;
+				var manufacturer = selectedArray[0].manufacturer;
+				var danwei = selectedArray[0].danwei;
+				var producenum = selectedArray[0].producenum;
+				var producemodel = selectedArray[0].producemodel;
+				out_id = selectedArray[0].out_id;
+				
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetStockProInfoByInventory?jsoncallback=?",  //获取已盘的
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'orderNum':sessionStorage.pandianDanHanid,
+						'database': localStorage.database,
+						'txtCondition': seachContent,
+						'stockarea':sessionStorage.areaid,
+						'goodsshelves_id': sessionStorage.inventorymaster_goodsshelves_id,
+						'producename': producename,
+						'manufacturer': manufacturer,
+						'danwei': danwei,
+						'producenum': producenum,
+						'producemodel': producemodel,
+						'out_id':out_id
+					},
+					success: function(res) {
+						parent.layer.close(jiazaiIndex);
+//						var safetyData = JSON.parse(res);
+						var data = JSON.parse(res)
+						safetyInfo(data);
+					
+			
+                        
+					}
+				});
+			}
+			
+			
+			safetyData(true);
+			
+			$(".find").click(function(){
+				safetyData();
+			})
+			
+			
+			// 根据可视区的高度判断
+         var viewHeight = $(window).height();
+        if(viewHeight == 855){
+           $('#gridContainer').css('height',694 + 'px'); //855*0.81
+        }else{
+           $('#gridContainer').css('height', viewHeight*0.88 + 'px');
+        }
+        
+        
+        
+	function safetyInfo(dataSource) {
+				
+        //展示已知数据
+       	//   Dev Extreme
+	   $(function () {
+		    var dataGrid = $("#gridContainer").dxDataGrid({
+			dataSource: dataSource,
+			allowColumnReordering: true,
+            showBorders: true,
+            keyExpr: "id",
+           columnChooser: {
+	            enabled: false,
+				mode: "dragAndDrop",
+	        },
+	        	editing: {
+					mode: 'cell',
+					allowUpdating: true,
+				},
+            headerFilter: {
+                visible: false
+            },
+            sorting: {
+                mode: "multiple"
+            },
+            filterRow: {
+                visible: false,
+            },
+			paging: {
+				pageSize: 500,
+            },
+			selection: {
+                mode: "multiple",
+            },
+			allowColumnResizing: true,
+			columnFixing: {
+				enabled: false
+			},
+			grouping: {
+	            contextMenuEnabled: false,
+	            expandMode: "rowClick"
+	        },
+	        groupPanel: {
+	            visible: false
+	        },
+			columns: [{
+				dataField: "producename",  
+                caption: "产品名称",width: 150,	allowEditing: false,cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}	
+			},
+			 {
+                dataField: "producenum",   cssClass:"style_show",width: 100,
+				caption: "编号",cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			}
+			,
+
+			{
+                dataField: "danwei",	allowEditing: false,	
+				caption: "规格",  width: 100,cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			}
+			,
+			{
+                dataField: "producemodel",   width: 100,	allowEditing: false,	
+				caption: "型号",cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			},
+			{
+                dataField: "producecode", width: 100,	allowEditing: false,	
+				caption: "主条码",cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			},
+       
+            {
+                dataField: "producesubbarcode",width: 150,	allowEditing: false,	
+				caption: "副条码",cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			},
+			{
+                dataField: "iots",  width: 100,	allowEditing: false,	
+				caption: "批号",cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			},
+       
+            {
+                dataField: "productiondate",dataType:'date',format: "yyyy-MM-dd",width: 90,	allowEditing: false,	
+				caption: "生产日期",cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.text + "</div>"))
+							.appendTo(container);
+					}
+			},
+       
+            {
+                dataField: "indate",dataType:'date',format: "yyyy-MM-dd",width: 90,	allowEditing: false,	
+				caption: "有效期",cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.text + "</div>"))
+							.appendTo(container);
+					}
+			},
+			{
+                dataField: "warehousename",   width: 120,	allowEditing: false,	
+				caption: "所在仓库",cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			},
+			{
+                dataField: "areaname",   width: 100,	allowEditing: false,	
+				caption: "货区",cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			},	{
+                dataField: "goodsshelves_name",   width: 100,	allowEditing: false,	
+				caption: "货架",cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			},{
+						dataField: "package",
+						width: 80,
+						caption: "单位/包装",	allowEditing: false,	
+						cellTemplate: function (container, options) {
+							$("<div>")
+								.append($("<div>" + options.data.produceunit + "</div>" + "</br>" + "<div>" + options.data.package + "</div>"))
+								.appendTo(container);
+						},
+			},
+					{
+						dataField: "producepropertyname",
+						width: 70,
+						caption: "产品种类",	allowEditing: false,	
+						allowEditing: false,
+						cellTemplate: function (container, options) {
+							$("<div>")
+								.append($("<div>" + options.value + "</div>"))
+								.appendTo(container);
+
+						}
+					}, {
+						dataField: "produceseries",
+						width: 120,
+						caption: "系列",	allowEditing: false,	
+						allowEditing: false,
+						cellTemplate: function (container, options) {
+							$("<div>")
+								.append($("<div>" + options.value + "</div>"))
+								.appendTo(container);
+						}
+					}, {
+						dataField: "produceusename",
+						width: 120,
+						caption: "通俗名称",	allowEditing: false,	
+						allowEditing: false,
+						cellTemplate: function (container, options) {
+							if (options.value == '' && options.value == null) {
+								$("<div>")
+									.append($("<div></div>"))
+									.appendTo(container);
+							} else {
+								$("<div>")
+									.append($("<div> " + options.text + "</div>"))
+									.appendTo(container);
+							}
+
+						}
+					}
+					, {
+						dataField: "producematerial",
+						width: 60,
+						caption: "材质",	allowEditing: false,	
+						allowEditing: false,
+						cellTemplate: function (container, options) {
+							if (options.value == '' && options.value == null) {
+								$("<div>")
+									.append($("<div></div>"))
+									.appendTo(container);
+							} else {
+								$("<div>")
+									.append($("<div> " + options.text + "</div>"))
+									.appendTo(container);
+							}
+
+						}
+					}, {
+						dataField: "producettypename",
+						width: 70,
+						caption: "产品属性",	allowEditing: false,	
+						allowEditing: false,
+					}, {
+						dataField: "manufacturer",
+						width: 150,
+						caption: "品牌/厂家",	allowEditing: false,	
+						allowEditing: false,
+						cellTemplate: function (container, options) {
+							var manufacturer = options.data.manufacturer;
+							var manufacturename = options.data.manufacturename;
+							if (manufacturer && manufacturename) {
+								$("<div>")
+									.append($("<div>" + manufacturer + "</div>" + "</br>" + "<div>" + manufacturename + "</div>"))
+									.appendTo(container);
+							} else if (!manufacturer && manufacturename) {
+								$("<div>")
+									.append($("<div>" + "</div>" + "</br>" + "<div>" + manufacturename + "</div>"))
+									.appendTo(container);
+							} else if (!manufacturename && manufacturer) {
+								$("<div>")
+									.append($("<div>" + manufacturer + "</div>" + "</br>" + "<div>" + "</div>"))
+									.appendTo(container);
+							} else {
+								$("<div>")
+									.append($("<div>" + "</div>" + "</br>" + "<div>" + "</div>"))
+									.appendTo(container);
+							}
+
+						}
+					}
+						, {
+						dataField: "regproducename",
+						width: 160,
+						caption: "注册证产品名称/注册证号",	allowEditing: false,	
+						allowEditing: false,
+						cellTemplate: function (container, options) {
+							var producename = options.data.regproducename;
+							var certificate = options.data.referencenum
+                            if(producename == null){
+								producename = '';
+							}
+							if(certificate == null){
+                               certificate = '';
+							}
+							var str = "<div> "+ producename +  "</div>"  + "</br>"  + "<div> "+  certificate + "</div>";
+
+								$("<div>")
+									.append($(str))
+									.appendTo(container);
+
+						}
+					}, {
+						dataField: "storagecondition",
+						width: 130,
+						caption: "存储方式／仓库类型",	allowEditing: false,	
+						allowEditing: false,
+						cellTemplate: function (container, options) {
+							$("<div>")
+								.append($("<div>" + options.data.storagecondition + "</div>" + "</br>" + "<div>" + options.data.storagewarehousename + "</div>"))
+								.appendTo(container);
+						}
+					}
+						, {
+						dataField: "conservationcategory",
+						width: 120,
+						caption: "养护要求/运输要求",	allowEditing: false,	
+						allowEditing: false,
+						cellTemplate: function (container, options) {
+							$("<div>")
+								.append($("<div>" + options.data.conservationcategoryname + "</div>" + "</br>" + "<div>" + options.data.transportationname + "</div>"))
+								.appendTo(container);
+						}
+					}, {
+						dataField: "safecount",
+						width: 80,
+						caption: "安全库存",	allowEditing: false,	
+						allowEditing: false,
+						cellTemplate: function (container, options) {
+							if (options.value == '' && options.value == null) {
+								$("<div>")
+									.append($("<div></div>"))
+									.appendTo(container);
+							} else {
+								$("<div>")
+									.append($("<div> " + options.text + "</div>"))
+									.appendTo(container);
+							}
+
+						}
+					}, {
+						dataField: "lowerlimit",
+						width: 90,
+						caption: "安全库存下限",	allowEditing: false,	
+						allowEditing: false,
+						cellTemplate: function (container, options) {
+							if (options.value == '' && options.value == null) {
+								$("<div>")
+									.append($("<div></div>"))
+									.appendTo(container);
+							} else {
+								$("<div>")
+									.append($("<div> " + options.text + "</div>"))
+									.appendTo(container);
+							}
+
+						}
+					},
+					{
+						dataField: "upperlimit",
+						width: 90,
+						caption: "安全库存上限",	allowEditing: false,	
+						allowEditing: false,
+						cellTemplate: function (container, options) {
+							if (options.value == '' && options.value == null) {
+								$("<div>")
+									.append($("<div></div>"))
+									.appendTo(container);
+							} else {
+								$("<div>")
+									.append($("<div> " + options.text + "</div>"))
+									.appendTo(container);
+							}
+						}
+					}, {
+					dataField: "productcertificate",
+					width: 140,
+					caption: "产品生产许可证编号",	allowEditing: false,	
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.text + "</div>"))
+							.appendTo(container);
+					}
+				},
+			{
+							dataField: "producecount",
+							width: 90,
+							fixed: true,
+							fixedPosition: 'right',cssClass:'realstockcount',
+							caption: " 本次盘亏数",
+				setCellValue: function (newData, value, currentRowData) { 
+						var usefulcount = currentRowData.usefulcount;
+						var shijivalue = value;
+						if(shijivalue > usefulcount){
+							 shijivalue = usefulcount
+						}
+						
+						newData.producecount = shijivalue;
+				}
+						},
+						{
+							dataField: "usefulcount",
+							width: 90,
+							fixed: true,	allowEditing: false,	
+							fixedPosition: 'right',cssClass:'usefulcount',
+							caption: "账面实库数",
+						},
+//						{
+//							dataField: "fxlock",
+//							width: 50,
+//							fixed: true,
+//							fixedPosition: 'right',cssClass:'fxlock',
+//							caption: "锁定",
+//						},{
+//							dataField: "warelock",
+//							width: 50,
+//							fixed: true,
+//							fixedPosition: 'right',cssClass:'warelock',
+//							caption: "调拨",
+//						},
+//						{
+//							dataField: "readycount",
+//							width: 50,	allowEditing: false,	
+//							fixed: true,
+//							fixedPosition: 'right',cssClass:'readycount',
+//							caption: "备货",
+//						},
+//						{
+//							dataField: "lendincount",
+//							width: 50,
+//							fixed: true,	allowEditing: false,	
+//							fixedPosition: 'right',cssClass:'lendincount',
+//							caption: "借入",
+//						},
+//						{
+//							dataField: "lendoutcount",
+//							width: 50,
+//							fixed: true,	allowEditing: false,	
+//							fixedPosition: 'right',cssClass:'lendoutcount',
+//							caption: "借出",
+//
+//						},
+						{
+							dataField: "referprice",
+							width: 90,
+							fixed: true,	allowEditing: false,	
+							fixedPosition: 'right',cssClass:'realcost',
+							caption: "未税成本",
+						},
+						{
+							dataField: "referpricetotal",
+							width: 100,
+							fixed: true,	allowEditing: false,	
+							fixedPosition: 'right',cssClass:'subtotal',
+							caption: "小计",
+							alignment: "right",
+							format: {
+								type: "fixedPoint",
+								precision: 3
+							},
+							customizeText: function (arg) {
+								return arg.valueText;
+							}
+						},
+			]
+            ,
+            onSelectionChanged:function(e){
+            	selectData = [];
+            	selectData =  e.selectedRowsData;
+            	
+                dataGrid.refresh();
+            },
+            
+    
+        summary: {
+        	
+						totalItems: [{
+							name: "SelectedRowsSummary",
+							showInColumn: "referpricetotal",
+							summaryType: "custom",
+							customizeText: function(data) {
+						
+								var data = data.value;
+		                        return data;
+               				 }
+						}, {
+							name: "SelectedRowsSummarry",
+							showInColumn: "lendoutcount",
+							summaryType: "custom",customizeText: function(data) {
+						
+								var data = data.value;
+		                        return data;
+               				 }
+						}, {
+							name: "SelectedRowsSummarrry",
+							showInColumn: "lendincount",
+							summaryType: "custom",customizeText: function(data) {
+						
+								var data = data.value;
+		                        return data;
+               				 }
+						},
+						{
+							name: "SelectedRowsSummarrrry",
+							showInColumn: "readycount",
+							summaryType: "custom",customizeText: function(data) {
+						
+								var data = data.value;
+		                        return data;
+               				 }
+						}, {
+							name: "SelectedRowsSummarrrrry",
+							showInColumn: "realstockcount",
+							summaryType: "custom",customizeText: function(data) {
+						
+								var data = data.value;
+		                        return data;
+               				 }
+						}, {
+							name: "SelectedRowsSummarrrrry",
+							showInColumn: "producecount",
+							summaryType: "custom",customizeText: function(data) {
+						
+								var data = data.value;
+		                        return data;
+               				 }
+						},{
+							name: "SelectedRowsSummarrrrry",
+							showInColumn: "usefulcount",
+							summaryType: "custom",customizeText: function(data) {
+						
+								var data = data.value;
+		                        return data;
+               				 }
+						},
+//						{
+//							name: "fxlock",
+//							showInColumn: "fxlock",
+//							summaryType: "custom",
+//						},{
+//							name: "warelock",
+//							showInColumn: "warelock",
+//							summaryType: "custom",
+//						}
+
+						],
+
+						calculateCustomSummary: function (options) {
+							
+							if (options.name === "SelectedRowsSummary") {
+
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								}
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										var num1 = parseFloat(options.totalValue);
+										var num2 = parseFloat(options.value.referpricetotal);
+										options.totalValue = (num1 + num2);
+
+										options.totalValue = Math.round(options.totalValue * 1000) / 1000;
+										options.totalValue = options.totalValue.toFixed(3);
+									}
+								}
+							};
+							if (options.name === "SelectedRowsSummarry") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										options.totalValue = options.totalValue + options.value.lendoutcount;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+
+									}
+								}
+							};
+							if (options.name === "SelectedRowsSummarrry") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										options.totalValue = options.totalValue + options.value.lendincount;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+
+									}
+								}
+							};
+							if (options.name === "SelectedRowsSummarrrry") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										options.totalValue = options.totalValue + options.value.readycount;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+									}
+								}
+							};
+							if (options.name === "SelectedRowsSummarrrrry") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										options.totalValue = options.totalValue + options.value.realstockcount;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+
+									}
+								}
+							};
+							if (options.name === "usefulcount") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										options.totalValue = options.totalValue + options.value.usefulcount;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+
+									}
+								}
+							};
+							if (options.name === "lockstockcount") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										options.totalValue = options.totalValue + options.value.fxlock;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+
+									}
+								}
+							};
+							if (options.name === "warelock") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										options.totalValue = options.totalValue + options.value.warelock;
+										
+
+									}
+								}
+							};
+
+
+						
+						}
+
+					
+        },
+   		onContentReady:function(e){
+	 		 var selectArr = []; //必须是唯一值
+	 		 
+	 			var inventoryLossDataInfo = JSON.parse(sessionStorage.inventoryLossDataInfo);
+
+			  $.each(inventoryLossDataInfo,function(i,v,arr){
+				selectArr.push(v.id);
+				   
+			  })
+		
+		  e.component.selectRows(selectArr, true);
+			  
+						// 权限判断
+						
+						if (localStorage.isshow == 1) {
+							if (localStorage.groupcompanyid == 0) {
+								if (localStorage.viewrealcost == 0) {
+									e.component.deleteColumn("未税成本");
+									e.component.deleteColumn("小计");
+								}
+							}
+						} else {
+							e.component.deleteColumn("未税成本");
+							e.component.deleteColumn("小计");
+						}
+                      			
+			
+		},
+       
+		}).dxDataGrid('instance');
+        
+	});
+	}
+	
+	
+			　$(document).on("focus",".dx-texteditor-input",function(){
+　
+		  $(this).select();
+　　});
+			
+	
+	
+		$(".finishCheck").click(function(){
+		
+				
+					if(selectData.length ==0){
+						parent.layer.open({
+							title: "提示",
+							content: '请选择产品!' ,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return;
+					}
+					
+							parent.layer.open({
+			  type: 3, 
+			  zIndex: parent.layer.zIndex, //重点1
+			  success: function(layero, index){
+			  		jiazaiIndex = index;
+	  			}
+			});
+
+//					if(sessionStorage.newData) {
+//						sessionStorage.removeItem('newData');
+//					}
+				
+					
+			
+					$.ajax({
+						type: "POST",
+						url: localStorage.serIp + "/WebSaveTempinventoryinandouttable",
+						async: true,
+						dataType: 'json',
+						crossDomain: true,
+						contentType:'application/json; charset=utf-8',
+						data:JSON.stringify({
+							"userId": localStorage.userId,
+							"userPw": localStorage.userPw,
+							'database': localStorage.database,
+							'groupCompanyId': localStorage.groupcompanyid,
+							'out_id':  out_id,
+							'inventorytype':0,
+							'ordernum':sessionStorage.pandianDanHanid,
+							'slave': JSON.stringify(selectData),
+						}),
+						success: function(res) {
+					    	parent.layer.close(jiazaiIndex);
+							var data = JSON.parse(res);
+							
+							if(data.ResultValue == "1"){
+//									sessionStorage.newData = JSON.stringify(selectData);
+					
+									parent.layer.open({
+										title: "提示",
+										content: '保存成功!',
+										zIndex: parent.layer.zIndex, //重点1,
+										success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+								  
+										},
+										end: function(){  
+				            			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+										parent.layer.close(index); //再执行关闭     
+				          			  }  
+									});
+									
+									
+
+									
+								}
+								
+								if(data.ResultValue == "0")
+								{
+								
+									parent.layer.open({
+										title: "提示",
+										content: "服务器提出一个问题!",
+										zIndex: parent.layer.zIndex ,//重点1,
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										
+										}
+									});
+								}
+							
+							
+							
+						}
+						,error: function(res) {
+							parent.layer.close(jiazaiIndex);
+							
+							parent.layer.open({
+								title: "提示",
+								content: '服务器异常!',
+									zIndex: parent.layer.zIndex //重点1
+					
+							});
+		
+						}
+					});
+	
+	
+				})
+
+		
+		});
+	</script>
+
+</html>

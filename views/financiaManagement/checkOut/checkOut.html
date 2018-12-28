@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>分销发票迁出</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.publicStyle {
+			font-family: "PingFang SC" !important;
+		
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		.content {
+		
+			padding-top: 8px;
+			border: 1px solid #ddd;
+			border-bottom: none;
+		}
+		
+		.btns button,
+		.find {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 90px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.find {
+			width: 76px;
+		}
+		
+		.layui-table td,
+		.layui-table th {
+			/*padding: 0 2.5vw !important;*/
+		}
+		.daishengqi,.shengqizhong,.daifuhe,
+		.daikaipiao,.yikaipiao,.daiShenghe{
+			padding: 0 28px !important;
+			border-top: 1px solid #CCCCCC;
+			border-bottom: none;
+			border-right: 1px solid #CCCCCC;
+			border-left: 1px solid #CCCCCC;
+		}
+		.daishengqi{
+			border-right: none !important;
+		}
+		
+		.layui-tab .layui-this {
+			z-index: 5;
+			border-top: 2px solid #2D89DD !important;
+			border-left: none !important;
+			border-right: none !important;
+		}
+		
+
+		.daikaipiao,.yikaipiao,.daiShenghe,.daifuhe{
+			border-left: none !important;
+		}
+		.layui-table-view{
+			border-width: 1px 0 !important;
+		}
+
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="publicStyle">
+			<div class="layui-tab">
+				<ul class="layui-tab-title">
+					<li class="layui-this daishengqi">待申请</li>
+					<li class="shengqizhong" style="border-right: 1px solid #CCCCCC !important">申请中</li>
+					<li class="daifuhe">待复核</li>
+
+					<li class="daikaipiao">待开票</li>
+					<li class="daiShenghe">待审核</li>
+					<li class="yikaipiao">已完成</li>
+				</ul>
+				<div class="content">
+
+				</div>
+
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+    <script src="../../../js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		layui.use(['table', 'jquery', 'element'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			$(function() {
+				$(".content").load("showDaiShengQi.html");
+			})
+			
+			//待申请
+			$(".daishengqi").click(function() {
+				location.reload()
+				$(".content").load("showDaiShengQi.html",function(){
+				});
+				
+				$(".daishengqi").addClass("layui-this");	
+				$(".shengqizhong").removeClass("layui-this");
+				$(".daikaipiao").removeClass("layui-this");
+				$(".yikaipiao").removeClass("layui-this");
+				$(".daifuhe").removeClass("layui-this");
+				$(".daiShenghe").removeClass("layui-this");
+			})
+			
+			
+			//申请中
+			$(".shengqizhong").click(function() {
+				$(".content").load("showShengQiZhong.html",function(){
+					
+				});
+				$(".daishengqi").css("border-right","0px");
+			
+				$(".shengqizhong").addClass("layui-this");
+				
+				$(".daishengqi").removeClass("layui-this");
+				$(".daikaipiao").removeClass("layui-this");
+				$(".yikaipiao").removeClass("layui-this");
+				$(".daifuhe").removeClass("layui-this");
+				$(".daiShenghe").removeClass("layui-this");
+				
+			})
+			
+			//待复核
+			$(".daifuhe").click(function() {
+				$(".content").load("showDaiFuHe.html",function(){
+			
+				});
+				$(".daishengqi").css("border-right","0px");
+			
+				$(".daifuhe").addClass("layui-this");
+				$(".shengqizhong").removeClass("layui-this");
+				$(".daishengqi").removeClass("layui-this");
+				$(".daikaipiao").removeClass("layui-this");
+				$(".yikaipiao").removeClass("layui-this");
+				$(".daiShenghe").removeClass("layui-this");
+				
+			})
+			
+			
+			//待开票
+			$(".daikaipiao").click(function() {
+				$(".content").load("showDaiKaiPiao.html",function(){
+					
+				})
+				$(".daikaipiao").addClass("layui-this");
+
+				$(".daishengqi").removeClass("layui-this");
+				$(".shengqizhong").removeClass("layui-this");			
+				$(".yikaipiao").removeClass("layui-this");
+				$(".daifuhe").removeClass("layui-this");
+				$(".daiShenghe").removeClass("layui-this");
+			})
+			
+			//待审核
+			$(".daiShenghe").click(function() {
+				$(".content").load("showDaiShengHe.html",function(){
+					
+				})
+				$(".daiShenghe").addClass("layui-this");
+				$(".daishengqi").removeClass("layui-this");
+				$(".shengqizhong").removeClass("layui-this");			
+				$(".yikaipiao").removeClass("layui-this");
+				$(".daifuhe").removeClass("layui-this");
+				$(".daikaipiao").removeClass("layui-this");
+
+			})
+			
+			
+			$(".yikaipiao").click(function() {
+				$(".content").load("showYiKaiPiao.html");
+				$(".yikaipiao").addClass("layui-this");
+
+				$(".daishengqi").removeClass("layui-this");
+				$(".shengqizhong").removeClass("layui-this");
+				$(".daikaipiao").removeClass("layui-this");
+				$(".daifuhe").removeClass("layui-this");
+				$(".daiShenghe").removeClass("layui-this");
+
+			})
+		});
+	</script>
+      
+</html>

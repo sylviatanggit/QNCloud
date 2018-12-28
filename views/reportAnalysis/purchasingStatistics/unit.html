@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title></title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+			<link rel="stylesheet" type="text/css" href="../../../easyui/themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../../../easyui/themes/icon.css" />
+		<script type="text/javascript" src="../../../easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="../../../easyui/jquery.easyui.min.js"></script>
+	</head>
+	<style type="text/css">
+		* {
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+		}
+		
+		.unitDocument {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin-top: 0px;
+		}
+		
+		.unitDocument .layui-table td,
+		.layui-table th {
+			font-size: 9pt !important;
+		}
+		
+		.layui-form-label {
+			line-height: 28px;
+			padding: 0 !important;
+			margin-right: 0px;
+		}
+		
+		.unitDocument_header .layui-btn {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px !important;
+		}
+		
+		.unitDocument_header {
+			margin-bottom: 20px;
+			margin-top: 10px;
+		}
+		
+		#tree11 {
+			float: left;
+			width: 18%;
+			border: 1px solid #CCCCCC;
+			margin-right: -1px;
+			border-right: none;
+			overflow: auto;
+			margin-top: 10px;
+		}
+
+		
+		#tree-view {
+			float: right;
+			width: 82%;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		.btns button {
+			width: 90px !important;
+		}
+		
+		label {
+			margin-left: 20px;
+		}
+				.group_header {
+			/*margin-top: -10px;*/
+			margin-bottom: 13px;
+		}
+		
+		.datagrid-header{
+			display: none !important;
+		}
+		
+		.panel-header, .panel-body{
+		     border: 0px solid #CCCCCC !important;
+		}
+		
+		.panel {
+			overflow-y: auto;
+		}
+		
+		.layui-table-body{
+			overflow-x: hidden;
+
+		}
+
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="unitDocument">
+			<div class="layui-tab">
+					<ul id="tree11">
+						<table id="tree" class="easyui-treegrid tree" data-options="" style="width: 100%;">
+						<thead>
+							<tr>
+								<th data-options="field:'name'"  style="width: 100%;"></th>
+							</tr>
+						</thead>
+					</table>
+					
+				</ul>
+		
+
+				<ul id="tree-view">
+					<table id="unitDocument" lay-filter="demo" style="display: block;"></table>
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script>
+		layui.use(['table', 'jquery', 'tree', 'laypage', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+	
+			var laypage = layui.laypage;	
+			
+			function dataFun() {
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetCompanyGroup?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						
+						
+						var getdata=[];
+						for (var i=0;i<desData.length;i++) {
+							desData[i]._parentid = desData[i].fatherid;
+							getdata.push(desData[i]);
+						}
+						unitTree(getdata);
+						
+						$(".unitDocument .datagrid-view .datagrid-body table").css("width", "100%");
+						$(".unitDocument .datagrid-view .datagrid-body div").css("width", "100%");
+					}
+				});
+
+			}
+			
+			
+			dataFun();
+			rightData("c1",1);
+
+			function unitTree(data) {
+				
+				var yijilumuData= [{
+					id : "1",
+					name : "全部往来单位",
+					_parentid:"",
+					children: data
+				}];
+				
+				
+				//右边树一级目录
+				$("#tree").treegrid({
+					data: yijilumuData,
+					method: 'get',
+					rownumbers: false,
+					idField: 'id',
+					treeField: 'name',
+					onClickRow: function(row) {
+						
+						if(row.children == 0) {
+							return false;
+						}
+
+						if(row.id ==1){
+							rightData("c1",row.id);
+							return;
+						}
+						
+						if(row.fatherid == 1){
+							if(!row.children){
+								getMuluXinXi(row);
+
+							}
+								rightData("c1",row.id);
+
+						}else{
+							if(!row.children){
+								getMuluXinXi(row);
+
+							}
+							rightData("c2",row.id);
+						}
+					
+					
+
+					}
+					
+			});
+
+			
+			}
+			
+			
+			
+			function rightData(findType,typeId) {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetInStoreReportData?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'type':  findType,
+						"typeId":typeId,
+						"beginTime" :sessionStorage.beginTime,
+						"endTime":sessionStorage.endTime,
+						'groupCompanyId': localStorage.groupcompanyid
+//						'txtCondition': seachContent
+					},
+					success: function(res) {
+						
+						var desData = JSON.parse(res);
+						dataInfo(desData);
+						
+						$("#tree11").css("height", $(".layui-form").height());
+
+
+					}
+				});
+
+			}
+	
+								
+			function getMuluXinXi(row){
+					
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp  +"/WebGetCompanyInfoByCompanyGroupID?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'id': row.id
+					},
+					success: function(res) {
+						var data = JSON.parse(res);		
+						if(data.length == 0) {
+							return false;
+						}
+						
+						
+						var getdata=[];
+						for (var i=0;i<data.length;i++) {
+							data[i]._parentid = data[i].fatherid;
+							getdata.push(data[i]);
+						}
+				
+						$('#tree').treegrid('append', {
+							parent: row.id, 
+							data: getdata
+						});
+					}
+				});
+			}
+			
+			function dataInfo(data) {
+				table.render({
+					elem: '#unitDocument',
+					data: data,
+					id: "idTest",
+					height: "full-130",
+					cols: [
+						[ //标题栏
+							 {
+								field: 'name',
+								title: '名称',
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+								minWidth: 250
+							},
+							{
+								field: 'companysid',
+								title: '简码',
+								minWidth: 100
+							},
+							{
+								field: 'companyaddress',
+								title: '地址',
+								minWidth: 100
+							},
+							{
+								field: 'companytel',
+								title: '联系电话',
+								minWidth: 100
+							}, {
+								field: 'sumcount',
+								title: '数量',
+								minWidth: 100
+
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					limits: [50,100],
+
+					even: true,
+					page: true, //是否显示分页
+
+					limit:50
+				});
+			}
+			
+			
+			
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				if(obj.event === 'detail') {
+					parent.tab.tabAdd({
+						icon: '',
+						id: 'c' + data.id,
+						title: '采购统计分析明细：' +data.name,
+						url: 'views/reportAnalysis/purchasingStatistics/purchasingStatisticsDetail.html'
+					});
+				}
+			});
+			
+		});
+	</script>
+	
+</html>

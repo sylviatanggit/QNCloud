@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>直销报价单</title>
+	<script src="./../../../js/jquery.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+	<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- DevExtreme themes -->
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+</head>
+<style type="text/css">
+	table thead td {
+		padding: 0;
+		border-left: 1px solid #CAD3DA;
+		background: #DFEBFB;
+	}
+
+	table tbody tr:nth-child(even) {
+		background: #E7EFF9;
+	}
+
+	.dx-datagrid-text-content {
+		color: grey;
+	}
+
+	.clearfix:after {
+		content: '.';
+		height: 0;
+		display: block;
+		clear: both;
+	}
+
+	.layui-laypage-limits {
+		font-size: 12px;
+		display: none;
+		float: left;
+		margin-top: 7px;
+	}
+
+	#lay-ignore {
+		height: 25px;
+		width: 60px;
+
+	}
+
+	#lay-ignore {
+		height: 25px;
+		width: 60px;
+
+	}
+
+	tbody tr:not(:last-child):hover {
+		background-color: rgba(137, 207, 240, .6)!important;
+	}
+
+	.dx-datagrid-rowsview .dx-selection.dx-row>td {
+		background-color: yellow!important;
+	}
+
+	colgroup>col:first-child {
+		width: 45px!important;
+	}
+
+	.dx-col-fixed:nth-child(1) {
+		width: 45px !important;
+	}
+
+	.M-box2 {
+		display: inline-block;
+		padding: 0 15px;
+		height: 28px;
+		color: #333;
+		font-size: 12px;
+		margin-top: 6px;
+	}
+
+	.M-box2 a {
+		margin-left: 15px;
+		padding: 0 15px;
+		text-decoration: none;
+		background-color: #ffffff;
+		color: #000000;
+	}
+
+	.M-box2 .active {
+		margin-left: 5px;
+		padding: 0 15px;
+		color: #ffffff;
+		width: 100%;
+		height: 100%;
+		background-color: #2D89DD;
+		border: 1px solid #e2e2e2;
+	}
+
+	.jump-ipt {
+		float: none;
+		margin-left: 5px;
+		margin-left: 11px;
+		width: 60px;
+		border: 1px solid #e6e6e6;
+		height: 20px!important;
+	}
+
+	.dx-data-row,
+	.dx-column-lines:not(:first-child)>td:nth-child(2) {
+		cursor: pointer;
+	}
+
+	.dx-widget {
+		font-size: 9pt!important;
+		line-height: 17px;
+	}
+
+	.option>.dx-selectbox {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.layui-input {
+		color: #000000;
+	}
+
+	.dx-column-lines>td:nth-child(2) {
+		color: #2D89DD;
+	}
+
+	.dx-data-row,
+	.dx-column-lines>td:nth-child(2) {
+		cursor: pointer;
+	}
+
+	.totalInfo {
+		width: 100px;
+		height: 20px;
+		float: left;
+		margin-top: 12px;
+	}
+
+	.fl {
+		float: left;
+	}
+
+	.fr {
+		float: right;
+	}
+
+	.directQuotation {
+		font-family: "PingFang SC" !important;
+		font-size: 9pt !important;
+		color: #232323 !important;
+		margin: 0 20px;
+		margin-top: 20px;
+	}
+
+	.btns {
+		margin-top: 18px;
+		float: right;
+	}
+
+	label {
+		padding: 0 !important;
+	}
+
+	.btns button,
+	.find,
+	.import {
+		padding: 0;
+		cursor: pointer;
+		border: none;
+		width: 76px;
+		height: 28px;
+		text-align: center;
+		line-height: 28px;
+		border-radius: 2px;
+		background-color: #2D89DD !important;
+		color: #FFFFFF;
+		margin-left: 8px;
+	}
+
+	.import {
+		position: fixed;
+		top: 20px;
+		right: 20px;
+	}
+
+	.btns button {
+		width: 90px;
+	}
+
+	.directQuotation_header {
+		margin-bottom: 8px;
+	}
+
+	.layui-form {
+		margin-bottom: 0;
+	}
+
+	.layui-laypage {
+		margin: 0;
+		position: absolute;
+		bottom: 0px;
+		left: 25px;
+		z-index: 5;
+		background-color: #FFFFFF;
+	}
+</style>
+
+<body>
+	<div class="directQuotation">
+		<div class="layui-tab">
+			<div class="directQuotation_header">
+				<div class="inputs">
+					<div class="layui-inline">
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="width: 240px;margin-left: 0;">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+					</div>
+					<div class="layui-inline">
+						<button class="layui-btn import" data-type="getImport">确认选择</button>
+					</div>
+				</div>
+
+			</div>
+			<table id="directQuotation" lay-filter="demo">
+				<div class="demo-container">
+					<div id="gridContainer"></div>
+				</div>
+			</table>
+			<div class="footer .clearfix">
+				<div class="totalInfo fl"></div>
+				<div class="M-box2 fl"></div>
+				<span class="layui-laypage-limits">
+					<select id="lay-ignore">
+						<option value="50" selected>50</option>
+						<option value="100">100</option>
+						<option value="200">200</option>
+					</select>
+					<span>条/页</span>
+				</span>
+			</div>
+		</div>
+</body>
+<!-- DevExtreme library -->
+<script src="../../../devexpresslibrary/js/dx.all.js" type="text/javascript"></script>
+<script src="../../../devexpresslibrary/js/pagination/jquery.pagination.js"></script>
+<script src="../../../devexpresslibrary/js/pagination/highlight.min.js"></script>
+<script type="text/javascript" src="../../../js/comboselect.js"></script>
+<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+<script src="../../../js/public.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../plugins/layui/layui.js"></script>
+<script>
+	layui.use(['table', 'jquery', 'laypage'], function () {
+		var table = layui.table;
+		var $ = layui.jquery;
+		var laypage = layui.laypage;
+		var currentPage = 1;
+		var totalInfo = '';
+		var limit = 50;
+		var count;
+
+		function directData(currentPage, limit, totalInfo) {
+
+			var bidnum = $(".seachContent").val();
+
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetContractPriceInfoByCompanyId?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'companyId': sessionStorage.companyID,
+					'groupCompanyId': localStorage.groupcompanyid,
+					'database': localStorage.database,
+					'num': limit,
+					'page': currentPage,
+					'txtCondition': bidnum
+
+				},
+				success: function (res) {
+					$('.totalInfo').children().remove();
+
+					var resdata = JSON.parse(res);
+					dataSource = JSON.parse(resdata.data);
+
+					totalInfo = resdata.count;
+
+					var totalInfoTag = '<span>' + '共' + totalInfo + '条' + '</span>';
+					$('.totalInfo').append(totalInfoTag);
+					firectInfo(dataSource, limit);
+					pagination(currentPage, limit, totalInfo);
+					$('.layui-laypage-limits').css('display', 'block');
+
+				}
+			});
+		}
+
+
+		directData(currentPage, limit, totalInfo);
+
+		function firectInfo(data) {
+			//展示已知数据
+			$(function () {
+				var dataGrid = $("#gridContainer").dxDataGrid({
+					dataSource: dataSource,
+					keyExpr: "bidnum",
+					allowColumnReordering: true,
+					showBorders: true,
+					paging: {
+						pageSize: 200,
+					},
+					sorting: {
+						mode: "multiple"
+					},
+					selection: {
+						mode: "multiple"
+					},
+					filterRow: {
+						visible: true,
+						applyFilter: "auto"
+					},
+					headerFilter: {
+						visible: true
+					},
+					allowColumnResizing: true,
+					columnFixing: {
+						enabled: false
+					},
+					columns: [{
+						dataField: "bidnum",
+						width: 160,
+						caption: "可交易商品编号",
+						fixed: true,
+					}
+					,
+					{
+						dataField: "manufactor",
+						width: 180,
+						caption: "品牌",
+					},
+					{
+						dataField: "name",
+						width: 120,
+						caption: "医用耗材名称",
+					},
+					{
+						dataField: "unitformat",
+						width: 100,
+						caption: "规格",
+					}, {
+						dataField: "produceunit",
+						width: 70,
+						caption: "型号",
+					}, {
+						dataField: "bidprice",
+						width: 70,
+						caption: "配送价",
+					}, {
+						dataField: "medicarenum",
+						width: 100,
+						caption: "医保编号",
+					}, {
+						dataField: "medicareprice",
+						width: 100,
+						caption: "医保单价",
+					}, {
+						dataField: "proportion",
+						width: 150,
+						caption: "医保报销比例",
+					}, {
+						dataField: "subfactroy",
+						width: 120,
+						caption: "经销企业",
+					}, {
+						dataField: "factroy",
+						width: 120,
+						caption: "生产企业",
+					}, {
+						dataField: "bidprojectnum",
+						width: 120,
+						caption: "项目商品编码",
+					},
+
+					{
+						dataField: 'contractprice_nomo',
+						caption: '备注',
+
+					}
+					]
+
+					,
+					onSelectionChanged: function (obj) {
+						$(".import").unbind();
+						var selectedRowsData = obj.selectedRowsData;
+						sessionStorage.direct2_data = JSON.stringify(selectedRowsData);
+						$(".import").dxButton({
+							onClick: function () {
+								if (selectedRowsData.length > 0) {
+									parent.layer.open({
+										title: "提示",
+										content: '选择成功',
+										end: function () {
+											var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+											parent.layer.close(index); //再执行关闭     
+										}
+									});
+								} else {
+									parent.layer.open({
+										title: "提示",
+										content: '请选择报价条目!',
+										zIndex: parent.layer.zIndex,
+									});
+
+								}
+
+
+							}
+						})
+						dataGrid.refresh();
+
+					},
+					summary: {
+						totalItems: [{
+							name: "SelectedRowsSummary",
+							showInColumn: "totalprice",
+							summaryType: "custom",
+						}
+							,
+						{
+							name: "SelectedRowsSummarry",
+							showInColumn: "totalmoney",
+							summaryType: "custom",
+						}
+						],
+						calculateCustomSummary: function (options) {
+							if (options.name === "SelectedRowsSummary") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.ordernum)) {
+										options.totalValue = options.totalValue + options.value.totalprice;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+									}
+								}
+							}
+
+							if (options.name === "SelectedRowsSummarry") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.ordernum)) {
+										options.totalValue = options.totalValue + options.value.totalmoney;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+									}
+								}
+							}
+
+						}
+
+					}
+				}).dxDataGrid('instance')
+			})
+
+		}
+
+
+		//分页
+		function pagination(currentPage, limit, totalInfo) {
+			$('.M-box2').empty();
+
+			if (totalInfo == 0) {
+				return;
+			}
+			$('.M-box2').pagination({
+				current: currentPage,
+				totalData: totalInfo,
+				showData: limit,
+				pageCount: Math.floor(totalInfo / limit),
+				mode: 'fixed',
+				isHide: true,
+				jump: true,
+				callback: function (api) {
+					currentPage = api.getCurrent();
+					directData(currentPage, limit, totalInfo);
+				}
+			});
+		}
+		// 获取当前页面渲染数量
+		$('#lay-ignore').change(function () {
+			limit = $(this).children('option:selected').val();
+			directData(currentPage, limit, totalInfo);
+		});
+
+
+		// 根据可视区的高度判断
+		var viewHeight = $(window).height();
+		if (viewHeight == 855) {
+			$('#gridContainer').css('height', 684 + 'px'); //855*0.76
+		} else {
+			$('#gridContainer').css('height', viewHeight * 0.85 + 'px');
+		}
+
+		$(".find").click(function () {
+			directData(currentPage, limit, totalInfo);
+		})
+
+		//查询回车事件
+		$(".seachContent").bind("keydown", function (e) {
+			var theEvent = e || window.event;
+			var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+			if (code == 13) {
+
+
+				directData(currentPage, limit, totalInfo);
+			}
+		});
+
+		$(".import").click(function () {
+			parent.layer.open({
+				title: "提示",
+				content: '请选择报价条目!',
+				zIndex: parent.layer.zIndex,
+			});
+		})
+
+
+	});
+</script>
+
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加报价单</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		#adddirect {
+			/*width: calc(100vw+17px);*/
+			font-size: 9pt;
+		}
+		
+		#adddirect legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		#adddirect label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		#adddirect input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		#adddirect select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+			/*border: 1px solid #DDDDDD !important;*/
+		}
+		
+		#adddirect textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+			/*border: 1px solid #ddd !important;*/
+		}
+		
+		#adddirect .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 5px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 1px;
+		}
+		
+		#adddirect button {
+			margin-left: 8px;
+			text-align: center;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		#adddirect {
+			margin-bottom: 120px;
+		}
+	</style>
+
+	<body>
+		<div id="adddirect">
+			<div class="layui-form-item layui-form-title">
+				<button class="layui-btn adddirect_submit">提交</button>
+			</div>
+			<div class="layui-form-item" style="margin-top: 60px;">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>合同编号：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input adddirect_midnum" type="text">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>合同名称：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required"  class="layui-input adddirect_midprice" type="text">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>合同开始时间：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input adddirect_num" type="text">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>合同结束时间：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input adddirect_price" type="text">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>往来单位：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input adddirect_unit unit" type="text">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>业务类型：</label>
+				<div class="layui-input-block">
+					<!--<input autocomplete="off" required="required" class="layui-input adddirect_name" type="text">-->
+					<select class="layui-input adddirect_name">
+						<option value="0">哈哈哈</option>
+						<option value="1">略略略</option>
+						<option value="2">啊啊啊</option>
+						<option value="3">嘿嘿嘿</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>归属部门：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input adddirect_bili" type="text">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>责任人：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input adddirect_type" type="text">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">备注：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input adddirect_notes" type="text">
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'layer', 'laydate'], function() {
+			var $ = layui.$, //重点处
+			layer = layui.layer;
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: '.adddirect_num',
+				value: new Date()
+			});
+			laydate.render({
+				elem: '.adddirect_price',
+				value: new Date()
+			});
+			$(".unit").click(function() {
+				if (sessionStorage.unitName) {
+					sessionStorage.removeItem(sessionStorage.unitName)
+				}
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">往來单位</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/public/unit/unitPublicList.html',
+					zIndex: parent.layer.zIndex, //重点1
+					success: function(layero, index) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						$(".import", paentIfarame).css("display", 'block');
+						$(".add", paentIfarame).css("display", 'none');
+						$(".moreAction", paentIfarame).css("display", 'none');
+					},
+					end: function() {
+						if(sessionStorage.unitData){
+							var data_x=JSON.parse(sessionStorage.unitData);
+							$(".unit").val(data_x.companyname);
+							$(".unit").attr('data-id',data_x.id);
+						}
+					}
+				});
+			});
+			//选择归属部门
+			$(".adddirect_bili").click(function() {
+				if (sessionStorage.staffDepartData) {
+					sessionStorage.removeItem(sessionStorage.staffDepartData)
+				}
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">往來单位</span>',
+					area: ['700px', '90%'],
+					offset: "rb",
+					content: 'views/public/staff/staffDepartPublicList.html',
+					zIndex: parent.layer.zIndex, //重点1
+					success: function(layero, index) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						$(".import", paentIfarame).css("display", 'block');
+						$(".add", paentIfarame).css("display", 'none');
+						$(".moreAction", paentIfarame).css("display", 'none');
+					},
+					end: function() {
+						if(sessionStorage.staffDepartData){
+							var data_x=JSON.parse(sessionStorage.staffDepartData);
+							$(".adddirect_bili").val(data_x.name);
+							$(".adddirect_bili").attr('data-id',data_x.id);
+						}
+					}
+				});
+			});
+		});
+	</script>
+
+</html>

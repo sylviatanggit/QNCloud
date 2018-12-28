@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewsport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+		<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+		<meta HTTP-EQUIV="expires" CONTENT="0">
+		<title>青囊云平台管理系统</title>
+		<link rel="stylesheet" href="./plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="./build/css/app.css" media="all">
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<script src="./plugins/layui/layui.js"></script>
+		<script src="./js/jquery.js"></script>
+
+	<script src="./js/public.js"></script>
+	<script src="./js/operateQuanxian.js"></script>
+
+	</head>
+	<style type="text/css">
+		.kit-theme {
+			height: calc(100vh) !important;
+			overflow: hidden;
+			/*margin-left: 5px;*/
+		}
+		
+		#container {
+			height: calc(100vh - 50px) !important;
+			overflow: hidden;
+		}
+		
+		.layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-nav-child dd.layui-this a, .layui-nav-tree .layui-this, .layui-nav-tree .layui-this>a, .layui-nav-tree .layui-this>a:hover {
+    		 background-color: #ACD7FF;
+   		 color: #fff;
+   		 }
+   		 
+   		
+   		 
+   		 .layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-nav-child dd.layui-this a, .layui-nav-tree .layui-this, 
+   		 .layui-nav-tree .layui-this>a, .layui-nav-tree .layui-this>a:visited {
+    		 background-color: transparent;
+   		 color: #fff;
+   		}
+   		 
+   		.showCompanyInfo{
+   			  position: absolute;
+		    left: 200px;
+		    top: 0;
+		    width: auto;
+		    height: 100%;
+		    line-height: 50px;
+		    text-align: center;
+		    color: #009688;
+		    font-size: 14px;
+		    color: #fff;
+   		} 
+   		
+   		.secondMulu{
+   			    /*background-color:#3ca4ea !important;*/
+   		}
+   		
+   		.layui-nav-item a{
+   			text-align: left
+   		}
+	</style>
+
+
+	<body class="kit-theme">
+		
+		
+		<div id="load-layout" style="position:fixed;width:100%;height:100%;top:0px;left:0px;opacity:0.4;background:#000;z-index: 9999999999999999999;display: none;">
+			<div id="" style="display: inline-block;margin-top: 25%;margin-left: 40%;">
+				<img src="plugins/layui/css/modules/layer/default/loading-2.gif" alt="" />
+				<span style="display: inline-block;color: white !important;">操作中。。。</span>
+			</div>
+		</div>
+		
+		
+		<div class="layui-layout layui-layout-admin kit-layout-admin">
+			<div class="layui-header">
+				<div class="layui-logo" style="color: #fff;">
+					<img src="image/qnyptst.png" height="30px"/>
+					<!--<a style="margin-left: 20px;cursor: pointer;color: #fff !important;">青囊云平台管理系统</a>--> 
+				</div>
+
+				<div class="showCompanyInfo" style="margin-left: 20px;">
+					欢迎您，<span class="companyName" style="font-size: 11pt;font-weight: bold"></span><span class="zhangtaoxinxi"></span>
+				</div>
+
+				<ul class="layui-nav layui-layout-right kit-nav">
+					<li class="layui-nav-item">
+						<!--<a href="javascript:;" id="warning"><img src="image/ic_bjcx.png" style="margin-right: 8px;margin-top: -8px;" />报警查询</a>-->
+						<a href="javascript:;">
+							<span style="position: absolute;top:16px;left:0px;background-image: url(image/help.png);height: 16px;width: 16px;display: inline-block;background-size: 100% 100%;"></span> 
+							<span  style="margin-left: 5px;">帮助中心</span>
+						</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a href="javascript:;">
+									咨询电话：025-84634980
+								</a>
+							</dd>
+							<dd>
+								<a href="javascript:;">帮助中心</a>
+							</dd>
+							
+							<dd>
+								<a href="javascript:;">版本号：<span id="qnversionId"></span> </a>
+							</dd>
+						</dl>
+					</li>
+					<li class="layui-nav-item">
+						<a href="javascript:;">
+							<!--<i class="layui-icon" style="font-size:20px;">&#xe612;</i> 管理员名称-->
+							<i style="position: absolute;top:16px;left:0px;margin-top: 1px;background-image: url(image/ic_gly.png);height: 18px;width: 18px;display: inline-block;background-size: 100% 100%;"></i>
+							<span class="employeeName" style="margin-left: 5px;">操作账号</span>
+						</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a href="javascript:;" class="userInfo">当前用户信息</a>
+							</dd>
+							<dd>
+								<a href="javascript:;" class="uploadPwd">修改密码</a>
+							</dd>
+							<dd>
+								<a href="javascript:;" class="loginOut">退出登录</a>
+							</dd>
+						</dl>
+					</li>
+				</ul>
+			</div>
+
+			<div class="layui-side layui-bg-black kit-side">
+
+				<div class="layui-side-scroll" style="width: 190px;">
+
+					<!--
+						<div class="kit-side-fold">
+							<i class="fa fa-navicon" aria-hidden="true"></i>
+						</div>
+					-->
+					
+					<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+					<ul class="layui-nav layui-nav-tree " lay-filter="kitNavbar" kit-navbar>
+						<li class="layui-nav-item systemNav" style="width: 200px;height: 38px;line-height: 38px;text-align: left;">
+							<a href="javascript:;" data-url="main.html" data-icon="" data-title="首页" data-id='-1' kit-target>
+									<i class="fa" style="background-image: url(image/menuIcon/shouye.png);"  aria-hidden="true"></i>
+									<span>首页</span>
+							</a>
+						</li>
+						
+						
+						<li class="layui-nav-item" id="myCompanyId">
+							<a href="javascript:;" >
+								<i class="fa fa-plug" style="background-image: url(image/menuIcon/本公司管理.png);" aria-hidden="true">								
+								</i><span> 我的企业</span>
+							</a>
+							
+							<dl class="layui-nav-child index_TwoNav">
+								<dd id="qiYeInfoId">
+									
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" onclick="companyManagement();" id="companyManagementId" kit-target data-options="{url:'views/basicdataProtect/companyManagement/companyManagement.html',icon:'',title:'企业信息',id:'10'}">
+										<!--<i class="layui-icon">&#xe60c;</i>-->
+
+										
+										<span>企业信息</span>
+									</a>
+								</dd>
+								<dd id="myStaffId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="staffmanagementId"  onclick="staffManagement();" data-url="views/basicdataProtect/staffManagement.html" data-icon="" data-title="我的员工" data-id='4' kit-target>
+										<span> 我的员工</span></a>
+								</dd>
+		
+							</dl>
+									
+					
+						</li>
+					
+					<li class="layui-nav-item ">
+							<a href="javascript:;"><i class="fa " style="background-image: url(image/menuIcon/往来单位管理.png);" aria-hidden="true"></i><span> 往来单位</span></a>
+							<dl class="layui-nav-child index_TwoNav">
+								<dd class="myCompany" id="myUnitId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;"  onclick="unitManager();"  id="unitId" kit-target data-options="{url:'views/basicdataProtect/unit/unit.html',icon:'',title:'往来单位信息',id:'12'}"><span> 往来单位管理</span></a>
+								</dd>
+						
+								<dd id="contractId">
+									<span class="layui-nav-bar1"></span>
+									
+									
+									<a href="javascript:;"   onclick="contractManager();"  id="mycontractId" kit-target data-options="{url:'views/basicdataProtect/contract/contract.html',icon:'',title:'购销合同管理',id:'102'}"><span> 购销合同管理</span></a>
+								</dd>
+						
+							
+								<dd id="gongHuoShouQuanId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;"  onclick="authorizationManager();"  id="myauthorizationId" kit-target data-options="{url:'views/basicdataProtect/authorization/authorization.html',icon:'',title:'供货授权书',id:'103'}"><span>授权书管理</span></a>
+								</dd>
+							</dl>
+							
+					
+					</li>
+						
+					<li class="layui-nav-item ">
+						
+							<a href="javascript:;"><i class="fa " style="background-image: url(image/menuIcon/产品管理.png);" aria-hidden="true"></i><span> 我的产品</span></a>
+							<dl class="layui-nav-child index_TwoNav">
+								<dd id="MyAllProductId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" onclick="myAllProductManager();"  id="myAllProductId" kit-target data-options="{url:'views/MyProduct/MyAllProduct/myAllProduct.html',icon:'',title:'我的产品注册证',id:'104'}"><span> 我的产品注册证</span></a>
+								</dd>
+								<dd id="MyAllGuiGeId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;"  onclick="MyAllGuiGeManager();"  id="myAllGuiGeId" kit-target data-options="{url:'views/MyProduct/MyAllGuiGe/myAllGuige.html',icon:'',title:'我的所有产品',id:'105'}"><span> 我的所有产品</span></a>
+								</dd>
+								
+								<dd id="GJZTID">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" onclick="toolManagementManager();"  id="toolManagementId"  data-url="views/MyProduct/ToolZuTao/toolManagement.html" data-icon="" data-title="工具组套管理" data-id='7' kit-target><span> 工具组套管理</span></a>
+								</dd>
+								
+								<dd id="CPZTID">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" onclick="operationManagement();"  id="operationManagementId" kit-target data-url="views/MyProduct/ProductZuTao/operationManagement.html" data-icon="" data-title="产品组套管理" data-id='8'><span> 产品组套管理</span></a>
+								</dd>
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" data-url="views/basicdataProtect/toolManagement.html" data-icon="" data-title="工具组套管理" data-id='7' kit-target><span> 工具组套管理</span></a>
+								</dd>-->
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-url="views/basicdataProtect/operationManagement.html" data-icon="" data-title="手术配货管理" data-id='8'><span> 手术配货管理</span></a>
+								</dd>-->
+						
+							</dl>
+							
+		
+				
+					</li>	
+					
+					<li class="layui-nav-item">
+							<a href="javascript:;"><i class="fa " style="background-image: url(image/menuIcon/采购管理.png);" aria-hidden="true"></i><span> 采购管理</span></a>
+							<dl class="layui-nav-child index_TwoNav">
+								<dd id="DHHYId">
+									<span class="layui-nav-bar1"></span>
+									<a id="orderContract" href="javascript:;"  onclick="purchasingManagement();"  kit-target data-options="{url:'views/purchasingManagement/orderContract/orderContract.html',icon:'',title:'订货合约',id:'13'}"><span> 订货合约</span></a>
+								</dd>
+								<dd id="RKYSId">
+									<span class="layui-nav-bar1"></span>
+									<a id="acceptanceCheck" href="javascript:;"  onclick="acceptanceCheck();"  kit-target data-options="{url:'views/purchasingManagement/acceptance/acceptanceCheck.html',icon:'',title:'入库验收',id:'14'}"><span> 入库验收</span></a>
+								</dd>
+								<dd id="CGTHId">
+									<span class="layui-nav-bar1"></span>
+									<a id="returnPurchase" href="javascript:;" onclick="purchaseReturn();" kit-target data-options="{url:'views/purchasingManagement/purchaseReturn/purchase.html',icon:'',title:'采购退货',id:'15'}"><span> 采购退货</span></a>
+								</dd>
+								<dd id="ZSRKId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" onclick="Totreasury();" id="TotreasuryId" kit-target data-options="{url:'views/purchasingManagement/presentTotreasury/Totreasury.html',icon:'',title:'赠送入库',id:'16'}"><span> 赠送入库</span></a>
+								</dd>
+							</dl>
+						</li>
+					
+					
+					<li class="layui-nav-item">
+							<a href="javascript:;" data-url="/views/form.html"><i class="fa" aria-hidden="true" style="background-image: url(image/menuIcon/销售管理.png);"></i><span> 直销管理</span></a>
+							<dl class="layui-nav-child index_TwoNav">
+
+								
+								<dd id="ZXBHSQId">
+									<span class="layui-nav-bar1"></span>
+									<a id="stockApplication" href="javascript:;"  onclick="stockApplication();" kit-target data-options="{url:'views/salesManagement/direct/direct.html',icon:'',title:'标准流程-备货申请',id:'17'}"><span> 标准流程-备货申请</span></a>
+								</dd>
+								<dd id="ZXSSBHId">
+									<span class="layui-nav-bar1"></span>
+									<a id="operationId" href="javascript:;" onclick="operationBH();" kit-target data-options="{url:'views/salesManagement/operation/operation.html',icon:'',title:'标准流程-手术备货',id:'18'}"><span> 标准流程-手术备货</span></a>
+								</dd>
+								<dd id="ZXQRQHId">
+									<span class="layui-nav-bar1"></span>
+									<a id="getQuHuoId" href="javascript:;" onclick="getQuHuo();" kit-target data-options="{url:'views/salesManagement/get.html',icon:'',title:'标准流程-确认取货',id:'19'}"><span> 标准流程-确认取货</span></a>
+								</dd>
+								<dd id="ZXSHQDId">
+									<span class="layui-nav-bar1"></span>
+									<a id="zxConsumeId" href="javascript:;" onclick="zxConsume();"  kit-target data-options="{url:'views/salesManagement/consume/consume.html',icon:'',title:'标准流程-实耗清点',id:'20'}"><span> 标准流程-实耗清点</span></a>
+								</dd>
+								
+								<dd id="ZXBKJSId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="settlementJSId" onclick="settlementJS();"  kit-target data-options="{url:'views/financiaManagement/settlement/settlement.html',icon:'',title:'快捷流程-备库结算',id:'42'}"><span> 快捷流程-备库结算</span></a>
+								</dd>
+								
+								<dd id="ZXKSJSId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;"  id="ZXKUJSShaoId" onclick="ZXKUJSShao();" kit-target data-options="{url:'views/salesManagement/ZXKUJS/settlement.html',icon:'',title:'快捷流程-备库实耗',id:'42CKJS'}"><span> 快捷流程-备库实耗</span></a>
+								</dd>
+								
+								
+								<dd id="ZXCPJSId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;"  id="showZhiXiaoProductId" onclick="showZhiXiaoProduct();" kit-target data-options="{url:'views/salesManagement/zhiXiaoProductSettment/showZhiXiaoProduct.html',icon:'',title:'其他流程-产品结算',id:'4242'}"><span> 其他流程-产品结算</span></a>
+								</dd>
+							</dl>
+						</li>
+						
+						<li class="layui-nav-item">
+							<a href="javascript:;" data-url="/views/form.html"><i class="fa" aria-hidden="true" style="background-image: url(image/menuIcon/销售管理.png);"></i><span> 分销管理</span></a>
+							<dl class="layui-nav-child index_TwoNav">
+						
+								<dd id="FXHYId">
+									<span class="layui-nav-bar1"></span>
+									<a id="distributionContact" onclick="distributionContact();"  href="javascript:;" kit-target data-options="{url:'views/salesManagement/contract/contract.html',icon:'',title:'分销合约',id:'21'}"><span>分销合约</span></a>
+								</dd>
+								<dd id="CKYCId">
+									<span class="layui-nav-bar1"></span>
+									<a id="outgoingVerification" onclick="outgoingVerification();"  href="javascript:;" kit-target data-options="{url:'views/salesManagement/outGoing/outGoing.html',icon:'',title:'出库验出',id:'22'}"><span> 出库验出</span></a>
+								</dd>
+								<dd id="FXTHId">
+									<span class="layui-nav-bar1"></span>
+									<a id="distributionReturn" onclick="distributionReturn();" href="javascript:;" kit-target data-options="{url:'views/salesManagement/return/return.html',icon:'',title:'分销退货',id:'23'}"><span> 分销退货</span></a>
+								</dd>
+								<dd id="ZSCKId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="ZSCKtreasuryId" onclick="ZSCKtreasury();" kit-target data-options="{url:'views/salesManagement/treasury/treasury.html',icon:'',title:'赠送出库',id:'24'}"><span> 赠送出库</span></a>
+								</dd>
+							</dl>
+						</li>
+						
+						<li class="layui-nav-item">
+							<a href="javascript:;" data-url="/views/form.html" data-name="form" kit-loader><i class="fa" style="background-image: url(image/menuIcon/借贷管理.png);" aria-hidden="true"></i><span> 借货管理</span></a>
+							<dl class="layui-nav-child index_TwoNav">
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/loanManagement/borrowIn/borrowIn.html',icon:'',title:'借货入库',id:'25'}"><span>借货入库</span></a>
+								</dd>-->
+								<dd id="JRGLId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="lendOutId" onclick="lendOut();" kit-target data-options="{url:'views/loanManagement/lendOut/lendOut.html',icon:'',title:'借入管理',id:'26'}"><span>借入管理</span></a>
+								</dd>
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/loanManagement/borrowOut/borrowOut.html',icon:'',title:'借货出库',id:'27'}"><span>借货出库</span></a>
+								</dd>-->
+								<dd id="JCGLId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="lendInId" onclick="lendIn();" kit-target data-options="{url:'views/loanManagement/lendIn/lendIn.html',icon:'',title:'借出管理',id:'28'}"><span> 借出管理</span></a>
+								</dd>
+							</dl>
+						</li>
+						
+										
+						<li class="layui-nav-item" id="SJManagerId">
+							<a href="javascript:;" data-url="/views/form.html" data-name="form" kit-loader><i class="fa" style="background-image: url(image/menuIcon/借贷管理.png);" aria-hidden="true"></i><span> 试剂管理</span></a>
+							<dl class="layui-nav-child index_TwoNav">
+						
+								<dd id="SJRKId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="RKManagerId" onclick="RKManager();"  kit-target data-options="{url:'views/reagentManagement/inboundManagement/inbound.html',icon:'',title:'试剂入库管理',id:'2626'}"><span>试剂入库管理</span></a>
+								</dd>
+						
+								<dd id="SJCKId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;"  id="CKManagerId" onclick="CKManager();" kit-target data-options="{url:'views/reagentManagement/outboundManagement/outbound.html',icon:'',title:'试剂出库管理',id:'2828'}"><span>试剂出库管理</span></a>
+								</dd>
+							</dl>
+						</li>
+						
+						
+						<li class="layui-nav-item">
+							<a href="javascript:;" data-url="/views/form.html" data-name="form" kit-loader><i class="fa" style="background-image: url(image/库存管理.png);" aria-hidden="true"></i><span> 库存管理</span></a>
+							<dl class="layui-nav-child index_TwoNav">
+									<dd id="CCKSHId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="stockInitId" onclick="stockInit();" kit-target data-url="views/systemManagement/stockInit.html" data-id='2' data-icon="" data-title="库存初始化">
+										<span> 库存初始化</span>
+									</a>			
+								</dd>
+								
+								<dd id="CCXXId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;"  id="stockInfoId" onclick="stockInfoFind();" kit-target data-options="{url:'views/stockManagement/stock.html',icon:'',title:'库存信息',id:'29'}"><span>库存信息查询</span></a>
+								</dd>
+							
+							
+								<dd id="CKGLId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="wareHouseSettingId" onclick="wareHouseSetting();" data-url="views/basicdataProtect/stock/houseManagement.html" data-icon="" data-title="仓库管理" data-id='3' kit-target><span> 仓库设置管理</span></a>
+								</dd>
+								<dd id="CKDBId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="wareHouseAllocationId" onclick="wareHouseallocation();" kit-target data-options="{url:'views/stockManagement/allocation/allocation.html',icon:'',title:'仓库调拨',id:'30'}"><span>仓库调拨</span></a>
+								</dd>
+								
+								<dd id="PYPKId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;"  id="profitAndlossId" onclick="profitAndloss();" data-url="views/stockManagement/ProfitAndLoss/profitAndloss.html" data-icon="" data-title="盘盈盘亏" data-id='300' kit-target><span> 盘盈盘亏</span></a>
+								</dd>
+								<dd id="BYBSId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="reportAndLosId" onclick="reportAndLos();" kit-target data-options="{url:'views/stockManagement/ReportAndLoss/reportAndLos.html',icon:'',title:'报溢报损',id:'3000'}"><span> 报溢报损</span></a>
+								</dd>
+								
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/stockManagement/overflow/overflow.html',icon:'',title:'盘盈单',id:'31'}"><span>盘盈单</span></a>
+								</dd>
+								<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/stockManagement/loss/loss.html',icon:'',title:'盘亏单',id:'32'}"><span> 盘亏单</span></a>
+								</dd>-->
+								<dd id="PDJLId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="inventoryHistoryId" onclick="inventoryHistory();" kit-target data-url="views/stockManagement/inventory/inventory.html" data-id='200' data-icon="" data-title="盘点记录">
+										<span>盘点记录查询</span>
+									</a>			
+								</dd>
+								<dd id="CCDZJYId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="stockSuggestionId" onclick="stockSuggestion();" kit-target data-options="{url:'views/stockManagement/suggestion.html',icon:'',title:'库存调整建议',id:'33'}"><span> 库存调整建议</span></a>
+								</dd>
+								<dd id="CKTZId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="stockAccountId" onclick="stockAccount();" kit-target data-options="{url:'views/stockManagement/account.html',icon:'',title:'仓库台帐记录',id:'34'}"><span> 仓库台帐记录</span></a>
+								</dd>
+								
+							
+								
+								
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/stockManagement/generalLedger.html',icon:'',title:'存货总账',id:'35'}"><span> 存货总账</span></a>
+								</dd>
+								<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/stockManagement/detailed.html',icon:'',title:'存货明细',id:'36'}"><span> 存货明细</span></a>
+								</dd>
+								<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/stockManagement/balance.html',icon:'',title:'存货收发结存表',id:'37'}"><span> 存货收发结存表</span></a>
+								</dd>-->
+							</dl>
+						</li>
+					
+						
+						<li class="layui-nav-item">
+							<a href="javascript:;" data-url="/views/form.html" data-name="form" kit-loader><i class="fa" style="background-image: url(image/menuIcon/财务管理.png);" aria-hidden="true"></i><span> 财务管理</span></a>
+							<dl class="layui-nav-child index_TwoNav">
+								<dd id="CGHJId">
+									<span class="layui-nav-bar1"></span>
+									<a id="pricePurchase" href="javascript:;" onclick="purchaseHeJia();" kit-target data-options="{url:'views/financiaManagement/purchase/purchase.html',icon:'',title:'采购核价',id:'39'}"><span>采购核价</span></a>
+								</dd>
+								<dd id="FXHJId">
+									<span class="layui-nav-bar1"></span>
+									<a id="distributionPrice" href="javascript:;"  onclick="distributionHeJia();" kit-target data-options="{url:'views/financiaManagement/distribution/distribution.html',icon:'',title:'分销核价',id:'40'}"><span>分销核价</span></a>
+								</dd>
+								<dd id="ZXHJId">
+									<span class="layui-nav-bar1"></span>
+									<a id="direcPrice" href="javascript:;"  onclick="directSellingHeJia();" kit-target data-options="{url:'views/financiaManagement/directSelling/directSelling.html',icon:'',title:'直销核价',id:'41'}"><span> 直销核价</span></a>
+								</dd>
+							
+								<dd id="SKDId">
+									<span class="layui-nav-bar1"></span>
+									<a id="returnReceipts" href="javascript:;"  onclick="salesReceipt();" kit-target data-options="{url:'views/financiaManagement/receipt/receipt.html',icon:'',title:'销售收款单',id:'43'}"><span> 销售收款单</span></a>
+								</dd>
+								<dd id="FKDId">
+									<span class="layui-nav-bar1"></span>
+									<a id="payment" href="javascript:;" onclick="pursePayment();" kit-target data-options="{url:'views/financiaManagement/payment/payment.html',icon:'',title:'采购付款单',id:'44'}"><span> 采购付款单</span></a>
+								</dd>
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/financiaManagement/income/income.html',icon:'',title:'一般收入单',id:'45'}"><span> 一般收入单(暂时不弄)</span></a>
+								</dd>
+								<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/financiaManagement/cost/cost.html',icon:'',title:'一般费用单',id:'46'}"><span> 一般费用单(暂时不弄)</span></a>
+								</dd>-->
+								<dd id="CGFPQRDId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target id="checkinId" onclick="checkin();" data-options="{url:'views/financiaManagement/checkIn/checkin.html',icon:'',title:'采购发票签入单',id:'47'}"><span> 采购发票签入单</span></a>
+								</dd>
+								<dd id="FXFPQKDId">
+									<span class="layui-nav-bar1"></span>
+									<a id="FXFPinvoiceOutId" href="javascript:;" onclick="FXFPinvoiceOut();" kit-target data-options="{url:'views/financiaManagement/checkOut/checkOut.html',icon:'',title:'分销发票签出单',id:'48'}"><span> 分销发票签出单</span></a>
+								</dd>
+								<dd id="ZXFPQCId">
+									<span class="layui-nav-bar1"></span>
+									<a id="ZXFPinvoiceOutId" href="javascript:;" onclick="ZXFPinvoiceOut();" kit-target data-options="{url:'views/financiaManagement/checkOutZX/checkOut.html',icon:'',title:'直销发票签出单',id:'248'}"><span> 直销发票签出单</span></a>
+								</dd>
+							</dl>
+						</li>
+				
+						<li class="layui-nav-item">
+							<a href="javascript:;" data-url="/views/form.html" data-name="form" kit-loader><i class="fa" style="background-image: url(image/menuIcon/报表分析.png);" aria-hidden="true"></i><span> 报表分析</span></a>
+							<dl class="layui-nav-child index_TwoNav">
+								<dd id="CFDZDId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="financeId" onclick="financeData();" kit-target data-options="{url:'views/reportAnalysis/finance/finance.html',icon:'',title:'财务对账单',id:'49'}"><span>财务对账单</span></a>
+								</dd>
+								<dd id="ZXDJCXId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="directDocumentId" onclick="directDocument();" kit-target data-options="{url:'views/reportAnalysis/directDocument/directDocument.html',icon:'',title:'直销单据查询',id:'50'}"><span>直销单据查询</span></a>
+								</dd>
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/reportAnalysis/cashBank.html',icon:'',title:'现金银行查询',id:'51'}"><span>现金银行查询</span></a>
+								</dd>-->
+								<dd id="ZJWLCXId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;"id="capitalId" onclick="capital();" kit-target data-options="{url:'views/reportAnalysis/capital/capital.html',icon:'',title:'资金往来查询',id:'52'}"><span> 资金往来查询</span></a>
+								</dd>
+								<dd id="SZMXCXId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="balancePaymentId" onclick="balancePayment();" kit-target data-options="{url:'views/reportAnalysis/balancePayment/balancePayment.html',icon:'',title:'收支明细查询',id:'53'}"><span> 收支明细查询</span></a>
+								</dd>
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/reportAnalysis/businessDocument/businessDocument.html',icon:'',title:'业务单据查询',id:'54'}"><span> 业务单据查询</span></a>
+								</dd>-->
+								<dd id="CPPHCXId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="productNumId" onclick="productNum();" kit-target data-options="{url:'views/reportAnalysis/proNum/productNum.html',icon:'',title:'产品批号查询',id:'55'}"><span> 产品批号查询</span></a>
+								</dd>
+								<dd id="CPDBCXId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;"  id="productProvocationId" onclick="productProvocation();" kit-target data-options="{url:'views/reportAnalysis/productProvocation.html',icon:'',title:'产品调拨查询',id:'56'}"><span> 产品调拨查询</span></a>
+								</dd>
+								<dd id="CGTJFXId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="purchasingStatisticsId" onclick="purchasingStatistics();" kit-target data-options="{url:'views/reportAnalysis/purchasingStatistics/purchasingStatistics.html',icon:'',title:'采购统计分析',id:'57'}"><span> 采购统计分析</span></a>
+								</dd>
+								<dd id="XSTJFXID">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="saleStatisticsId" onclick="saleStatistics();" kit-target data-options="{url:'views/reportAnalysis/saleStatistics/saleStatistics.html',icon:'',title:'销售统计分析',id:'58'}"><span> 销售统计分析</span></a>
+								</dd>
+									<dd id="LSCBFXId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="costLiShiFenxiId" onclick="costLiShiFenxi();" kit-target data-options="{url:'',icon:'',title:'历史成本分析',id:'5700'}"><span> 历史成本分析</span></a>
+								</dd>
+								<dd id="CPLXFXId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="productLiuXiangId" onclick="productLiuXiang();" kit-target data-options="{url:'',icon:'',title:'产品流向分析',id:'5800'}"><span> 产品流向分析</span></a>
+								</dd>
+								
+								<dd id="JHTJFXId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="borrowGoodsId" onclick="borrowGoods();" kit-target data-options="{url:'views/reportAnalysis/borrowGoods/borrowGoods.html',icon:'',title:'借货统计分析',id:'59'}"><span> 借货统计分析</span></a>
+								</dd>
+								<dd id="BYBSFXId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="ReportAndLossId" onclick="ReportAndLoss();" kit-target data-options="{url:'views/reportAnalysis/ReportAndLoss/ReportAndLoss.html',icon:'',title:'报溢报损分析',id:'60'}"><span> 报溢报损分析</span></a>
+								</dd>
+								
+									<dd id="SRCBJLId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;"  id="showIncomeCostRecordId" onclick="showIncomeCostRecord();" kit-target data-options="{url:'views/reportAnalysis/IncomeCostRecord/showCostAndhuizong.html',icon:'',title:'收入成本记录',id:'16666'}"><span> 收入成本记录</span></a>
+								</dd>
+								
+								
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/reportAnalysis/borrowIn/borrowIn.html',icon:'',title:'借货入库报表',id:'59'}"><span> 借货入库报表</span></a>
+								</dd>
+								<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/reportAnalysis/borrowOut/borrowOut.html',icon:'',title:'借货出库报表',id:'60'}"><span> 借货出库报表</span></a>
+								</dd>
+								<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/reportAnalysis/overflow/overflowList.html',icon:'',title:'报溢单统计',id:'61'}"><span> 报溢单统计</span></a>
+								</dd>
+								<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/reportAnalysis/loss/lossList.html',icon:'',title:'报损单统计',id:'62'}"><span> 报损单统计</span></a>
+								</dd>-->
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/reportAnalysis/summary/summary.html',icon:'',title:'报损单统计',id:'81'}"><span> 进销存汇总</span></a>
+								</dd>-->
+							</dl>
+						</li>
+						
+		
+						
+						<!--点击新增出现的tab页-->
+						<!--<li class="layui-nav-item" style="display: none;">
+							<a href="javascript:;" data-url="/views/form.html" data-name="form" kit-loader><i class="fa" style="background-image: url(image/menuIcon/质量管理.png);" aria-hidden="true"></i><span>报警查询</span></a>
+							<dl class="layui-nav-child index_TwoNav">
+								<dd>
+									<span class="layui-nav-bar1"></span>
+									<a id="safetyStock" href="javascript:;" kit-target data-options="{url:'views/warning/safetyStock.html',icon:'',title:'安全库存',id:'63'}"><span>安全库存</span></a>
+								</dd>
+								<dd>
+									<span class="layui-nav-bar1"></span>
+									<a id="proStopdate" href="javascript:;" kit-target data-options="{url:'views/warning/proStopdate.html',icon:'',title:'产品有效期',id:'64'}"><span>产品有效期</span></a>
+								</dd>
+								<dd>
+									<span class="layui-nav-bar1"></span>
+									<a id="proReg" href="javascript:;" kit-target data-options="{url:'views/warning/proReg.html',icon:'',title:'产品注册证',id:'65'}"><span>产品注册证</span></a>
+								</dd>
+								<dd>
+									<span class="layui-nav-bar1"></span>
+									<a id="warning_lendOut" href="javascript:;" kit-target data-options="{url:'views/warning/lendOut.html',icon:'',title:'借出',id:'66'}"><span>借出</span></a>
+								</dd>
+								<dd>
+									<span class="layui-nav-bar1"></span>
+									<a id="warning_borrowIn" href="javascript:;" kit-target data-options="{url:'views/warning/borrowIn.html',icon:'',title:'借入',id:'67'}"><span>借入</span></a>
+								</dd>
+								<dd>
+									<span class="layui-nav-bar1"></span>
+									<a id="businessLicense" href="javascript:;" kit-target data-options="{url:'views/warning/businessLicense.html',icon:'',title:'经营许可证',id:'68'}"><span>经营许可证</span></a>
+								</dd>
+							</dl>
+						</li>-->
+<!--		
+						<li class="layui-nav-item ">
+							<a href="javascript:;"><i class="fa" style="background-image: url(image/menuIcon/基础数据维护.png);" aria-hidden="true"></i><span> 基础数据维护</span></a>
+							<dl class="layui-nav-child index_TwoNav">
+						
+								<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="bank" kit-target data-url="views/basicdataProtect/bankManagement.html" data-icon="" data-title="银行账户管理" data-id='5'><span> 银行账户管理（移入企业信息）</span></a>
+								</dd>-->
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="express" kit-target data-url="views/basicdataProtect/expressManagement.html" data-icon="" data-title="快递公司管理" data-id='6'><span> 快递公司管理</span></a>
+								</dd>-->
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="productManagement" kit-target data-options="{url:'views/basicdataProtect/productManagement/productManagement.html',icon:'',title:'产品管理',id:'11'}"><span> 产品管理</span></a>
+								</dd>-->
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/basicdataProtect/directQuotation/directQuotation.html',icon:'',title:'直销报价单',id:'9'}"><span> 直销报价单（合并到合同管理）</span></a>
+								</dd>-->
+					
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="staffmanagement" data-url="views/basicdataProtect/staffManagement.html" data-icon="" data-title="员工管理" data-id='4' kit-target><span> 员工管理</span></a>
+								</dd>-->
+					
+								
+									<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-url="url:'views/auxiliary/printExpress.html" data-icon="" data-title="打印快递单" data-id='63'><span> 打印快递单</span></a>
+								</dd>-->
+					
+								
+<!--								
+							</dl>
+						</li>
+			-->
+					
+				
+						<li class="layui-nav-item">
+							<a href="javascript:;" data-url="/views/form.html" data-name="form" kit-loader><i class="fa" style="background-image: url(image/menuIcon/质量管理.png);" aria-hidden="true"></i><span> 质量管理</span></a>
+							<dl class="layui-nav-child index_TwoNav">
+								<!--<dd>
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" kit-target data-options="{url:'views/qualityManagement/productReview/productReview.html',icon:'',title:'产品首营审核',id:'90'}"><span>产品首营审核</span></a>
+								</dd>-->
+								<dd id="CFXJJLId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="storehouseInspectionRecordId" onclick="storehouseInspectionRecord();" kit-target data-options="{url:'views/qualityManagement/storehouseInspectionRecord/storehouseInspectionRecord.html',icon:'',title:'库房巡检记录',id:'91'}"><span>库房巡检记录</span></a>
+								</dd>
+								<dd id="CFWDJLId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="storehouseHumidityRecordId" onclick="storehouseHumidityRecord();" kit-target data-options="{url:'views/qualityManagement/temperatureRecord/storehouseHumidityRecord.html',icon:'',title:'库房温度记录',id:'92'}"><span>库房温度记录</span></a>
+								</dd>
+								<dd id="CPBYJLId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="productMaintenanceRecordId" onclick="productMaintenanceRecord();" kit-target data-options="{url:'views/qualityManagement/productMaintenanceRecord/productMaintenanceRecord.html',icon:'',title:'产品保养记录',id:'93'}"><span>产品保养记录</span></a>
+								</dd>
+								<dd id="CPXHJLId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="productDestructionRecordId" onclick="productDestructionRecord();" kit-target data-options="{url:'views/qualityManagement/productDestructionRecord/productDestructionRecord.html',icon:'',title:'产品销毁记录',id:'94'}"><span>产品销毁记录</span></a>
+								</dd>
+								<dd id="CPZHJLId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="productRecallsRecordId" onclick="productRecallsRecord();" kit-target data-options="{url:'views/qualityManagement/productRecallsRecord/productRecallsRecord.html',icon:'',title:'产品召回记录',id:'95'}"><span>产品召回记录</span></a>
+								</dd>
+								<dd id="YGJKDAId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="employeeHealthRecordsId" onclick="employeeHealthRecords();" kit-target data-options="{url:'views/qualityManagement/employeeHealthRecords/employeeHealthRecords.html',icon:'',title:'员工健康档案',id:'96'}"><span>员工健康档案</span></a>
+								</dd>
+								<dd id="YGBXJLId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="employeeTrainingRecordsId" onclick="employeeTrainingRecords();" kit-target data-options="{url:'views/qualityManagement/employeeTrainingRecords/employeeTrainingRecords.html',icon:'',title:'员工培训记录',id:'97'}"><span> 员工培训记录</span></a>
+								</dd>
+								<dd id="BLSJJCJLId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="eventMonitoringRecordsId" onclick="eventMonitoringRecords();" kit-target data-options="{url:'views/qualityManagement/eventMonitoringRecords/eventMonitoringRecords.html',icon:'',title:'不良事件监测记录',id:'98'}"><span> 不良事件监测记录</span></a>
+								</dd>
+								<dd id="SSSBWHJLId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="equipmentMaintenanceRecordsId" onclick="equipmentMaintenanceRecords();" kit-target data-options="{url:'views/qualityManagement/equipmentMaintenanceRecords/equipmentMaintenanceRecords.html',icon:'',title:'设施设备维护记录',id:'99'}"><span> 设施设备维护记录</span></a>
+								</dd>
+								<dd id="ZLTSJLId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="qualityComplaintRecordId" onclick="qualityComplaintRecord();" kit-target data-options="{url:'views/qualityManagement/qualityComplaintRecord/qualityComplaintRecord.html',icon:'',title:'质量投诉记录',id:'100'}"><span> 质量投诉记录</span></a>
+								</dd>
+							</dl>
+						</li>
+						<!--<li class="layui-nav-item">
+							<a href="javascript:;" data-url="/views/form.html" data-name="form" kit-loader><i class="fa" style="background-image: url(image/帮助.png);" aria-hidden="true"></i><span> 帮助</span></a>
+						</li>-->
+						
+							
+						<li class="layui-nav-item"  id="systemManagerId" style="display: none;">
+							<a class="" href="javascript:;"><i class="fa" style="background-image: url(image/menuIcon/系统管理.png);" aria-hidden="true"></i><span> 系统管理</span></a>
+							<dl class="layui-nav-child index_TwoNav">
+								<dd id="CZRZId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="logFindId" onclick="logFind();" data-url="views/systemManagement/logFind.html" data-icon="" data-title="操作日志查询" data-id='1' kit-target>
+										<span> 操作日志查询</span>
+									</a>
+								</dd>
+								<dd id="BFSJKId">
+									<span class="layui-nav-bar1"></span>
+							
+									<a href="javascript:;" id="backupAccountId" onclick="backupAccount();" lay-event="backupAccount" class="backupAccount">
+										<span> 备份账套数据库</span>
+									</a>
+								</dd>
+								
+								<dd id="DJBHSZId">
+									<span class="layui-nav-bar1"></span>
+									<a href="javascript:;" id="installBill" onclick="installBill();"><span> 单据编号设置</span></a>
+								</dd>
+								
+								<!--<dd id="XKZTBJCId">
+									<span class="layui-nav-bar1"></span>
+							
+									<a href="javascript:;" class="balancesNew" lay-event="balancesNew">
+										<span> 结存并新开账套</span>
+									</a>
+								</dd>
+								<dd id="XKZTId">
+									<span class="layui-nav-bar1"></span>
+								
+									<a class="newAccount" href="javascript:;">
+										<span> 新开账套</span>
+									</a>
+								</dd>
+								<dd id="JCKZId">
+									<span class="layui-nav-bar1"></span>
+								
+									<a class="startOpenaccount" href="javascript:;">
+										<span> 期初开账</span>
+									</a>
+								</dd>-->
+							</dl>
+						</li>
+		
+				
+					</ul>
+				</div>
+			</div>
+			<div class="layui-body" id="container">
+				<!-- 内容主体区域 -->
+				<div style="padding: 15px;">主体内容加载中,请稍等...</div>
+			</div>
+
+		</div>
+		<input type="hidden" value=""  id="checkGroupCompanyId"/>
+		<input type="hidden" value=""  id="checkUserId"/>
+		<input type="hidden" value=""  id="databaseId"/>
+		<script src="./js/gongneng.js"></script>
+		<script>
+			
+			
+			
+			
+			var message;
+			
+			
+			layui.config({
+				base: 'build/js/'
+			}).use(['app', 'message'], function() {
+				var app = layui.app,
+					$ = layui.jquery,
+					layer = layui.layer;
+				//将message设置为全局以便子页面调用
+				message = layui.message;
+				//主入口
+				app.set({
+					type: 'iframe'
+				}).init();
+			});
+			
+		
+		
+			layui.use(['element', "jquery", 'layer'], function() {
+				var element = layui.element;
+				var $ = layui.jquery,
+				layer = layui.layer;
+								
+				
+				$("#checkGroupCompanyId").val(localStorage.groupcompanyid);
+				$("#checkUserId").val(localStorage.userId);
+				$("#databaseId").val(localStorage.database);
+				
+				document.addEventListener("visibilitychange", function(e) {
+					
+				  	if(document.visibilityState=='hidden') { //状态判断
+				       
+				    }else {
+				    	if(localStorage.groupcompanyid != $("#checkGroupCompanyId").val() || localStorage.userId != $("#checkUserId").val()|| localStorage.database != $("#databaseId").val()){
+				    		location.href = 'login.html'
+				    	}
+				        
+				    }
+				});
+				
+				
+				//判断没有公司id跳到登录页面
+				if(localStorage.groupcompanyid == "" || localStorage.groupcompanyid == null || localStorage.groupcompanyid == undefined){
+					location.href = "login.html";
+					return;
+				}
+
+			
+				
+				
+				
+				
+	
+				
+				//影藏功能
+				if(localStorage.groupcompanyid  == 0){
+					$("#systemManagerId").css("display","inline-block");
+				}
+				
+				
+
+				$("#qnversionId").text(localStorage.qnversion);
+				$(".companyName").text(localStorage.companyname);
+				$(".zhangtaoxinxi").text("("+localStorage.database+")");
+			
+											
+								
+				$(".employeeName").text(localStorage.employeeName)
+				$(".myCompany").click(function(){
+					sessionStorage.companytype = "1"
+
+				})
+				//右边li颜色变化
+				$(".kit-side .layui-nav-tree .layui-nav-item").each(function() {
+					$(this).click(function() {
+						if($(this).hasClass("layui-nav-itemed")) {
+							$(this).siblings().removeClass("layui-nav-itemed");
+						}
+						$(".systemNav").removeClass("layui-this")
+					})
+				})
+				
+				
+				//右边li颜色变化
+				$(".systemNav").click(function() {
+					$(".kit-side .layui-nav-tree .layui-nav-item").removeClass("layui-nav-itemed");
+					$(".systemNav").addClass("layui-nav-itemed");
+				})
+				
+				//二级目录
+				$(".index_TwoNav dd").each(function() {
+					$(this).click(function() {
+						$(this).siblings().children('.layui-nav-bar1').css("display", "none");
+						$(this).children('.layui-nav-bar1').css("display", "block");
+						$(this).children('.layui-nav-bar1').css("float", "left");
+						
+						if($(this).hasClass("secondMulu")) {
+							$(this).siblings().removeClass("secondMulu");
+						}else{
+							$(this).addClass("secondMulu");
+						}
+						
+					});
+					
+					
+					$(this).mouseover(function(){
+					  $(this).css("background-color","#3e9ddc");
+					});
+										
+					$(this).mouseout(function(){
+					  $(this).css("background-color","transparent");
+					});
+				});
+	
+							
+				gongNengQieKuai();
+				
+				
+				$(".backupAccount").click(function() {
+					layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">备份账套数据</span>',
+						area: ['544px', '348px'],
+						content: 'views/systemManagement/backupAccount.html',
+						success: function(layero, index) {
+							layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							
+							
+							$(".backupAccount_footer .layui-layer-btn0", paentIfarame).click(function() {
+								
+								
+//								$('#load-layout').show();
+								var jiazaiIndex;
+								parent.layer.open({
+								  type: 3, 
+								  zIndex: parent.layer.zIndex, //重点1
+								  success: function(layero, index){
+								  		jiazaiIndex = index;
+						  			}
+								});
+													
+
+								$.ajax({
+									type: "get",
+									url: localStorage.serIp + "/WebBackupSql?jsoncallback=?",
+									async: true,
+									dataType: "jsonp",
+									data: {
+										"userId": localStorage.userId,
+										"userPw": localStorage.userPw,
+										'database': localStorage.database
+									},
+									success: function(res) {
+																		parent.layer.close(jiazaiIndex);
+
+//										$('#load-layout').hide();
+										var data = JSON.parse(res);
+										if(data.infoType == -1) {
+											parent.layer.open({
+												title: "提示",
+												content: '无权操作'
+											});
+										} else if(data.infoType == 0) {
+											parent.layer.open({
+												title: "提示",
+												content: '备份失败'
+											});
+										} else if(data.infoType == 1) {
+											parent.layer.open({
+												title: "提示",
+												content: '备份成功'
+											});
+										}
+									}
+											,
+									error: function(res) {
+										parent.layer.close(jiazaiIndex);
+											
+											parent.layer.open({
+												title: "提示",
+												content: '服务器异常!',
+													zIndex: parent.layer.zIndex //重点1
+									
+											});
+										
+								
+									}
+								});
+							})
+							$(".backupAccount_footer .layui-layer-btn1", paentIfarame).click(function() {
+								layer.close(index)
+							})
+						}
+					});
+				});
+				
+				
+				$(".balancesNew").click(function() {
+							if(!checkPermissionStatus("结存并新开账套-查看1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}
+				
+					
+					
+					layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">结存并新开账套</span>',
+						area: ['560px', '380px'],
+						content: 'views/systemManagement/balancesNew.html',
+						zIndex: layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+							layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$(".balancesNew_footer .layui-layer-btn1", paentIfarame).click(function() {
+								layer.close(index)
+							})
+						}
+					});
+				});
+				
+				
+				$(".basicInfoimport").click(function() {
+					layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">基础信息导入</span>',
+						area: ['600px', '450px'],
+						content: 'views/systemManagement/basicInfoimport.html',
+						zIndex: layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+							layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$(".stepone img", paentIfarame).click(function() {})
+						}
+					});
+				});
+				
+				
+				$(".templateDownload").click(function() {
+					layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">基础信息导入模板下载</span>',
+						area: ['544px', '348px'],
+						content: 'views/systemManagement/templateDownload.html',
+						success: function(layero, index) {
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$(".templateDownload_footer .layui-layer-btn0", paentIfarame).click(function() {
+								window.location.href = "model/import.zip";
+							})
+						}
+					});
+				});
+				
+				$(".startOpenaccount").click(function() {
+								if(!checkPermissionStatus("期初开账-查看1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}
+				
+				
+					layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">期初开账</span>',
+						area: ['544px', '380px'],
+						content: 'views/systemManagement/startOpenaccount.html',
+						zIndex: layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+							layer.setTop(layero); //
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$.ajax({
+								type: "get",
+								url: localStorage.serIp+"/WebOpenAccount?jsoncallback=?",
+								async: true,
+								dataType: "jsonp",
+								data: {
+									"userId": localStorage.userId,
+									"userPw": localStorage.userPw,
+									'database': localStorage.database
+								},
+								success: function(res) {
+									$(".balancesNew_footer_name span", paentIfarame).text(localStorage.database);
+									var data = JSON.parse(res);
+									if(data.infoType == 0) {
+										$(".state span", paentIfarame).text("未开帐")
+									} else {
+										$(".state span", paentIfarame).text("已开帐")
+									}
+								}
+							});
+						}
+					});
+				});
+				
+				
+				//新开账套
+				$(".newAccount").click(function() {
+					
+							if(!checkPermissionStatus("新开账套-查看1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}
+				
+					
+					layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">新开账套</span>',
+						area: ['560px', '380px'],
+						content: 'views/systemManagement/newAccount.html',
+						zIndex: layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+							layer.setTop(layero); //重点2
+							
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							
+							$(".newAccount_footer .layui-layer-btn1", paentIfarame).click(function() {
+								layer.close(index)
+							})
+						}
+					});
+				});
+				
+				//当前用户信息
+				$(".userInfo").click(function() {
+					layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">当前用户信息</span>',
+						area: ['544px', '300px'],
+						content: 'views/systemManagement/userInfo.html',
+						zIndex: layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+							layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$.ajax({
+								type: "get",
+								url: localStorage.serIp +"/WebGetEmployeeBySid?jsoncallback=?",
+								async: true,
+								dataType: "jsonp",
+								data: {
+									"userId": localStorage.userId,
+									"userPw": localStorage.userPw,
+									'database': localStorage.database
+								},
+								success: function(res) {
+									var data = JSON.parse(res);
+									$(".userInfo_code", paentIfarame).val(data[0].employeesid);
+									$(".userInfo_name", paentIfarame).val(data[0].employeename);
+									$(".userInfo_sex", paentIfarame).val(data[0].employeesex);
+									$(".userInfo_tel", paentIfarame).val(data[0].employeephone);
+									if(data[0].apporder == "SSS") {
+										$(".userInfo_power", paentIfarame).val("老板");
+									} else if(data[0].apporder == "SOO") {
+										$(".userInfo_power", paentIfarame).val("员工");
+									} else if(data[0].apporder == "S") {
+										$(".userInfo_power", paentIfarame).val("有权限");
+									} else if(data[0].apporder == "O") {
+										$(".userInfo_power", paentIfarame).val("无权限");
+									}
+									$(".userInfo_notes", paentIfarame).val(data[0].notes);
+								}
+							});
+						}
+					});
+				
+				});
+				
+				//修改密码
+				$(".uploadPwd").click(function() {
+					layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">修改密码</span>',
+						area: ['456px', '308px'],
+						content: 'views/systemManagement/uploadPwd.html',
+						zIndex: layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+
+						}
+					});
+				});
+				
+				//退出登录
+				$(".loginOut").click(function() {
+					localStorage.clear();
+					location.href = 'login.html'
+
+				});
+				
+				
+
+				
+				
+				
+				$("#installBill").click(function() {
+					
+						if(!checkPermissionStatus("单据编号设置-查看1")){
+				
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						
+						return false;
+					
+					}
+					
+					
+					layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">单据编号规则设置</span>',
+						area: ['1100px', '600px'],
+						content: 'views/basicdataProtect/installBill.html'
+//						zIndex: layer.zIndex //重点1
+//							,
+//						success: function(layero, index) {
+//							layer.setTop(layero); //重点2
+//						}
+					});
+				});
+				
+				
+				
+			});
+		</script>
+	</body>
+
+</html>

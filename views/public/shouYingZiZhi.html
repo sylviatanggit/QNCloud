@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>首营资质</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.staffmanagement {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 10px;
+		}
+		
+		.inputs {
+		}
+		
+		.btns button,
+		.find,
+		.import {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt;
+		}
+		
+		.btns {
+			width: 100%;
+			height: 100%;
+		}
+		
+		.btns button {
+			width: 90px;
+			float: right;
+			 margin-bottom: 10px;
+
+		}
+		
+		.layui-table-box, .layui-table-view{
+			    clear: both;
+		
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../css/same.css" />
+
+	<body>
+		<div class="staffmanagement">
+			<div class="layui-tab">
+				<div class="inputs">
+				
+					<div class="btns">
+						<button class="layui-btn save" data-type="save" >继续保存</button>
+					</div>
+				</div>
+				<table id="staffmanagement" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+
+
+			function staffInfo(data) {
+				//展示已知数据
+				table.render({
+					elem: '#staffmanagement',
+					data: data,
+					height: "full-60",
+					cellMinWidth: "1000",
+					id: 'idTest',
+					cols: [
+						[ //标题栏
+						{
+								field: '产品名称',
+								title: '产品名称',
+								width: 250
+							}, {
+								field: '规格型号',
+								title: '规格型号',
+								minWidth: 100,
+							}, {
+								field: '产品编号',
+								title: '产品编号',
+								minWidth: 100
+							}, {
+								field: '首营审核',
+								title: '首营审核',
+
+								minWidth: 150
+							}, {
+								field: '产品注册证审核',
+								title: '产品注册证审核',
+								minWidth: 150
+							}, {
+								field: '往来单位经营范围审核',
+								title: '往来单位经营范围审核',
+								style: "color:red;cursor:pointer",
+
+								minWidth: 150
+							}, {
+								field: '本公司经营范围审核',
+								title: '本公司经营范围审核',
+								style: "color:red;cursor:pointer",
+
+								minWidth: 150
+							}, {
+								field: '往来单位经营许可证有效期',
+								title: '往来单位经营许可证有效期',
+								style: "color:red;cursor:pointer",
+
+								minWidth: 150
+							}, {
+								field: '本公司经营许可证有效期',
+								title: '本公司经营许可证有效期',
+																style: "color:red;cursor:pointer",
+
+								minWidth: 150
+							}, {
+								field: '产品有效期审核',
+								title: '产品有效期审核',
+
+								minWidth: 150
+							}, 
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [50, 100, 200],
+					limit: 50 //每页默认显示的数量
+				});
+			}
+			
+		shouyingzizhiInfo();
+		function shouyingzizhiInfo(){
+			
+			var shouyingData =JSON.parse(sessionStorage.shouyingzizhiData);
+			staffInfo(shouyingData);
+			
+			$("[data-field=首营审核] div:gt(0)").each(function(i) {
+			 	if(shouyingData[i].首营审核 == '通过') {
+					$(this).html("<span style=\"color:#2D89DD\">"+shouyingData[i].首营审核+"</span>");
+				} else{
+					$(this).html("<span style=\"color:red\">"+shouyingData[i].首营审核+"</span>");
+
+				}
+				
+			})
+			
+			$("[data-field=产品注册证审核] div:gt(0)").each(function(i) {
+
+				if(shouyingData[i].产品注册证审核 == '通过') {
+					$(this).html("<span style=\"color:#2D89DD\">"+shouyingData[i].产品注册证审核+"</span>");
+				} else{
+					$(this).html("<span style=\"color:red\">"+shouyingData[i].产品注册证审核+"</span>");
+
+				}
+				
+			})
+			
+		$("[data-field=往来单位经营范围审核] div:gt(0)").each(function(i) {
+
+				if(shouyingData[i].往来单位经营范围审核 == '通过') {
+					$(this).html("<span style=\"color:#2D89DD\">"+shouyingData[i].往来单位经营范围审核+"</span>");
+				} else{
+					$(this).html("<span style=\"color:red\">"+shouyingData[i].往来单位经营范围审核+"</span>");
+
+				}
+				
+			})
+		
+		
+			$("[data-field=往来单位经营许可证有效期] div:gt(0)").each(function(i) {
+
+				if(shouyingData[i].往来单位经营许可证有效期 == '通过') {
+					$(this).html("<span style=\"color:#2D89DD\">"+shouyingData[i].往来单位经营许可证有效期+"</span>");
+				} else{
+					$(this).html("<span style=\"color:red\">"+shouyingData[i].往来单位经营许可证有效期+"</span>");
+
+				}
+				
+			})
+			
+			
+			
+			$("[data-field=本公司经营许可证有效期] div:gt(0)").each(function(i) {
+
+				if(shouyingData[i].本公司经营许可证有效期 == '通过') {
+					$(this).html("<span style=\"color:#2D89DD\">"+shouyingData[i].本公司经营许可证有效期+"</span>");
+				} else{
+					$(this).html("<span style=\"color:red\">"+shouyingData[i].本公司经营许可证有效期+"</span>");
+
+				}
+				
+			})
+		
+			$("[data-field=本公司经营范围审核] div:gt(0)").each(function(i) {
+
+				if(shouyingData[i].本公司经营范围审核 == '通过') {
+					$(this).html("<span style=\"color:#2D89DD\">"+shouyingData[i].本公司经营范围审核+"</span>");
+				} else{
+					$(this).html("<span style=\"color:red\">"+shouyingData[i].本公司经营范围审核+"</span>");
+
+				}
+				
+			})
+			
+			$("[data-field=产品有效期审核] div:gt(0)").each(function(i) {
+
+				if(shouyingData[i].产品有效期审核 == '通过') {
+					$(this).html("<span style=\"color:#2D89DD\">"+shouyingData[i].产品有效期审核+"</span>");
+				} else{
+					$(this).html("<span style=\"color:red\">"+shouyingData[i].产品有效期审核+"</span>");
+
+				}
+				
+			})
+			
+
+		}
+
+
+		});
+	</script>
+
+</html>

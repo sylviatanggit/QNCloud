@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title></title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.lendAndReturnDistinction {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 10px;
+		}
+		
+		.inputs {
+		}
+		
+		.btns button,
+		.find,
+		.import {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt;
+		}
+		
+		.btns {
+			width: 100%;
+			height: 100%;
+		}
+		
+		.btns button {
+			width: 100px;
+			float: right;
+			 margin-bottom: 10px;
+
+		}
+		
+		.layui-table-box, .layui-table-view{
+			    clear: both;
+		
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../css/same.css" />
+
+	<body>
+		<div class="lendAndReturnDistinction">
+			<div class="layui-tab">
+				<!--<div class="inputs">
+				
+					<div class="btns">
+						<button class="layui-btn finishDanJu" data-type="finishDanJu" style="padding: 0px;">完结并生产单据</button>
+						<button class="layui-btn save" data-type="save" >仅审核</button>
+
+					</div>
+				</div>-->
+				<table id="lendAndReturnDistinction" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+
+
+			function staffInfo(data) {
+				
+				table.render({
+					elem: '#lendAndReturnDistinction',
+					data: data,
+					height: "full-40",
+					cols: [
+						[ //标题栏			
+							{
+								field: '产品名称',
+								title: '产品名称',
+							}, {
+								field: '产品编号',
+								title: '产品编号',
+							}, {
+								field: '品牌信息',
+								title: '品牌信息',
+							}
+							, {
+								field: '数量',
+								title: '数量',
+							}, {
+								field: '副条码',
+								title: '副条码',
+							},{
+								field: '单价',
+								title: '单价',
+							},
+							{
+								field: '批号',
+								title: '批号',
+							},
+							{
+								field: '生产日期',
+								title: '生产日期',
+							},
+							{
+								field: '有效期',
+								title: '有效期',
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: true ,//是否显示分页
+					//						,
+					limits: [1000],
+					limit: 1000 //每页默认显示的数量
+				})
+			
+			}
+			
+		lendAndReturn();
+		
+		function lendAndReturn(){
+			
+			var systemNoInputProuctInfoData =JSON.parse(sessionStorage.systemNoInputProuctInfoData);
+			staffInfo(systemNoInputProuctInfoData);
+				
+
+		}
+
+
+		});
+	</script>
+
+</html>

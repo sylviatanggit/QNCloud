@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加往来单位</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+        <link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+        <link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+
+	</head>
+	<style type="text/css">
+		#addunit {
+			/*width: calc(100vw+17px);*/
+			font-size: 9pt;
+		}
+		
+		#addunit legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		.layui-input-inline {
+			width: 400px !important;
+		}
+		
+		#addunit .layui-form-item label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		#addunit .layui-form-item .layui-input-inline input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		#addunit .layui-form-item .layui-input-inline select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+			/*border: 1px solid #DDDDDD !important;*/
+		}
+		
+		#addunit .layui-form-item .layui-input-inline textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+			/*border: 1px solid #ddd !important;*/
+		}
+		
+		#addunit .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 10px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 0px;
+		}
+		
+		.addunit_submit,
+		.changeRange,
+		.addbankAccount,
+		.delbankAccount,
+		.addcontacts,
+		.delcontacts {
+			display: inline-block;
+			text-align: center;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 9pt !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+			margin-right: 20px;
+		}
+		
+		.delbankAccount,
+		.delcontacts {
+			margin-right: 12px;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		.layui-form {
+			margin: 0 20px;
+			margin-top: 40px;
+		}
+		
+		.layui-form-item {
+			margin-bottom: 0;
+		}
+		
+		.uploadImg {
+			margin-left: 15px;
+			position: relative;
+		}
+		
+		.removeImg {
+			cursor: pointer;
+			position: absolute;
+			/*top: 100px;*/
+			font-size: 20px !important;
+		}
+		
+		#test1 {
+			background-color: #2D89DD;
+			line-height: 28px;
+			height: 28px;
+			width: 90px;
+		}
+		
+		.layui-form-item .layui-form-checkbox[lay-skin=primary] {
+			margin-top: 0;
+		}
+		
+		.panel-body {
+			border-color: #DDDDDD
+		}
+	</style>
+	<!--<link rel="stylesheet" type="text/css" href="../../../css/same.css" />-->
+
+	<body>
+		<div id="addunit">
+			<div class="layui-form-item layui-form-title">
+				<button class="layui-btn addunit_submit" data-type="getCheckData" disabled="disabled">提交</button>
+			</div>
+			<div>
+					<div class="layui-form-item ">
+				<div class="layui-inline" style="margin-top: 40px;">
+						<label class="layui-form-label">所属分组：</label>
+						<!--<div class="layui-input-inline group">
+							<input autocomplete="off" class="layui-input company_group" type="text">
+						</div>-->
+						
+						<div class="layui-input-inline">
+								<select name="" class="layui-input company_group">
+									
+						</select>
+						</div>
+					</div>
+				</div>
+					
+				<fieldset class="layui-elem-field layui-field-title" >
+					<legend>基本信息</legend>
+				</fieldset>
+				<div class="layui-form-item ">
+					
+					<div class="layui-inline">
+						<label class="layui-form-label companyName" >公司全称：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input company_name" type="text" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')">
+						</div>
+					</div>
+					
+							
+			
+					<div class="layui-inline">
+						<label class="layui-form-label companyShortName">公司简码：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input company_shortName" type="text">
+						</div>
+					</div>
+					
+					
+					<div class="layui-inline" id="companynatureId">
+						<label class="layui-form-label">公司属性：</label>
+						<div class="layui-input-inline">
+							<select id="companynature" class="layui-input">
+								<option value="-1"></option>
+								<option value="1">医疗机构</option>
+								<option value="2">批发企业</option>
+								<option value="3">零售企业</option>
+								<option value="4">生产企业</option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="layui-inline" id="companypropertyId">
+						<label class="layui-form-label">公司类型：</label>
+						<div class="layui-input-inline">
+							<select id="companyproperty" class="layui-input">
+								<option value="-1"></option>
+								<option value="0">境内生产厂家</option>
+								<option value="1">境外生产厂家</option>
+								<option value="2">台湾厂家</option>
+								<option value="3">国内代理商</option>
+								<option value="4">港澳台代理商</option>
+								<option value="5">国外厂家国内分公司</option>
+								<option value="6">国外（地区）常驻代表处地址</option>
+							</select>
+						</div>
+					</div>
+					
+			
+					
+					<div class="layui-inline">
+						<label class="layui-form-label companyTel">公司电话：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input company_tel" type="text">
+						</div>
+					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label companyAddress">公司地址：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input company_address" type="text">
+						</div>
+					</div>
+					
+					<!--<div class="layui-inline">
+						<label class="layui-form-label">英文名称：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input company_engName" type="text">
+						</div>
+					</div>-->
+					
+					<!--<div class="layui-inline">
+						<label class="layui-form-label">E-mail：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input company_email" type="text">
+						</div>
+					</div>-->
+					
+						<!--<div class="layui-inline">
+						<label class="layui-form-label">网址：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input company_web" type="text">
+						</div>
+					</div>-->
+					
+					
+						<div class="layui-inline">
+						<label class="layui-form-label">所属部门：</label>
+						<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input employeedep" id="employeedep" type="text">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">备　　注：</label>
+						<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input company_notes" type="text">
+						</div>
+					</div>
+					
+					<p style="margin-left: 75px;">
+						<input type="checkbox"  class="isshowonapp" checked="checked"/> 是否在手机端上显示
+					</p>
+				</div>
+		
+			<div class="hospitalInfo"style="display: none;">
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+					<legend>扩展信息</legend>
+				</fieldset>
+				<div class="layui-form-item ">
+
+				<div class="layui-inline">
+					<label class="layui-form-label">医院性质：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitalnature" type="text">
+					</div>
+				</div>
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">医院等级：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitalgrade" type="text">
+					</div>
+				</div>
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">医院所属省市：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitalprovince" type="text">
+					</div>
+				</div>
+				
+					<div class="layui-inline">
+					<label class="layui-form-label">医院常用品牌：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitalusebrand" type="text">
+					</div>
+				</div>
+				
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">医院主任医生：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitaldoctor" type="text">
+					</div>
+				</div>
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">医院特点：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitalcharacteristic" type="text">
+					</div>
+				</div>
+				
+					<div class="layui-inline">
+					<label class="layui-form-label">医院账期：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitalaccountperiod" type="number">
+					</div>
+				</div>
+				
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">医院折扣：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitaldiscount" type="number">
+					</div>
+				</div>
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">向医院供货方式：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitalsupplymaterial" type="text">
+					</div>
+				</div>	
+			</div>		
+			</div>	<!--<div class="layui-form-item ">
+			
+					<div class="layui-inline">
+						<label class="layui-form-label">邮编：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input company_zip" type="text">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item ">
+					<div class="layui-inline">
+						<label class="layui-form-label">传真：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input company_fax" type="text">
+						</div>
+					</div>
+			
+				</div>
+				<div class="layui-form-item ">
+				</div>-->
+				
+			
+			</div>
+			<div class="companyInfo" style="width: 100%;display: none;">
+				<fieldset class="layui-elem-field layui-field-title">
+					<legend>首营审核</legend>
+				</fieldset>
+				<div class="layui-form-item ">
+					<div class="layui-inline">
+						<label class="layui-form-label">营业注册证号：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input unit_yyzc" type="text">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">许可证编号：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input unit_xkz" type="text">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item ">
+					<div class="layui-inline">
+						<label class="layui-form-label">发证日期：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input fzrq" type="text">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">有效期至：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input yxqz" type="text">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item ">
+					<div class="layui-inline">
+						<label class="layui-form-label">上传图片：</label>
+						<div class="layui-input-inline">
+							<div class="layui-upload">
+								<button type="button" class="layui-btn" id="test1">上传图片</button>
+								<blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+									预览图：
+									<div class="layui-upload-list" id="demo1"></div>
+								</blockquote>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-inline" style="margin-left: 80px;">
+					<button class="layui-btn changeRange" style="width: auto;">修改经营范围</button>
+				</div>
+				<!--<table id="com"></table>-->
+				<div id="demo1" style="margin-left: 80px;margin-bottom: 50px;margin-top: 10px;">
+					<table id="jyfw" class="easyui-treegrid tree1 jyfw" style="width:880px;height:300px" data-options="">
+						<thead>
+							<tr>
+								<th data-options="field:'name'" width="438">类别</th>
+								<th data-options="field:'date'" width="440">名称</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+		
+			<div>
+				<fieldset class="layui-elem-field layui-field-title">
+					<legend>银行账号</legend>
+				</fieldset>
+				<div class="layui-form-item bankAccount">
+					<button class="layui-btn addbankAccount">添加银行帐号</button>
+					<button class="layui-btn delbankAccount" data-type="getCheckDel">删除银行帐号</button>
+					<table id="bankAccount"></table>
+				</div>
+			</div>
+			<div>
+				<fieldset class="layui-elem-field layui-field-title">
+					<legend>联系人</legend>
+				</fieldset>
+				<div class="layui-form-item contacts">
+					<button class="layui-btn addcontacts">添加联系人</button>
+					<button class="layui-btn delcontacts">删除联系人</button>
+					<table id="contacts"></table>
+				</div>
+			</div>
+			
+		</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../../js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'tree','laydate'], function() {
+			var laydate = layui.laydate;
+			var $ = layui.jquery,
+				element = layui.element;
+			var table = layui.table;
+
+			//获取部门
+			getBuMen()
+			function getBuMen() {
+				var companytypeid=localStorage.groupcompanyid
+				if(sessionStorage.companytypeid){
+					companytypeid=sessionStorage.companytypeid;
+				}
+				$.ajax({
+					type: "get",
+					url:  localStorage.serIp  +"/WebGetEmployeegrouptable?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": companytypeid
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						data=data[0].children;
+						$('#employeedep').bComboSelect({
+							showField: 'name',
+							keyField: 'id',
+							data: data
+						});
+			
+					}
+				});
+			}
+			
+
+
+
+			
+		//公司分组
+		function company_group() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetCompanyGroup?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						var optionsStr = "";
+						for(var i=0;i<desData.length;i++){
+							var id= desData[i].id;
+							var name= desData[i].name;
+							
+							if(localStorage.groupcompanyid != 0){
+								
+								if(id != 2){
+									
+									optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+
+								}
+
+								
+							}else{
+								
+								optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+
+							}
+					
+						}
+						$(".company_group").append(optionsStr);
+						
+							
+						if(localStorage.groupcompanyid == "0" && (localStorage.allowCompanyCount - localStorage.currentompanyCount) <=0){
+							$(".company_group option[value='2']").remove();
+						}
+			
+					}
+				});
+
+			}
+				
+			 company_group();
+					
+
+			
+		
+		$(".company_group").change(function(){
+			$("input").val("")
+			switch($(".company_group").val())
+			{
+				case "5": 
+					hospitalInfoOprate();
+				break;
+				default:
+					companyInfoOprate();
+				break;
+			}
+		})
+		var checkcompany="";
+	
+		//公司名称失去焦点
+		$(".company_name").blur(function(){
+			var companyName=$(".company_name").val();
+			if(companyName == ""){
+				return;
+			}
+	
+			checkPanDuan(companyName);
+	
+		})
+		
+		var checkFlag = false;
+		function checkPanDuan(companyName){
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp+"/WebCheckCompanyIsRepect?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					'groupCompanyId': localStorage.groupcompanyid,
+					'companyName':companyName
+				},
+				success: function(res) {
+					var data = JSON.parse(res);
+					
+					$(".addunit_submit").removeAttr("disabled")
+					if(data.ResultValue == 1) {
+						
+						var ResultValue=JSON.parse(data.ResultItem);
+						if(ResultValue.length == 0){
+							return;
+						}
+						
+						parent.layer.confirm('是否确定调取信息?', {icon: 3, title:'提示',zIndex: parent.layer.zIndex}, function(index){
+							var all_data=JSON.parse(data.ResultItem)
+							if(all_data.length != 0){
+								$(".company_group").find("option[value="+all_data[0].companytype+"]").attr("selected",true)
+								$(".company_name").val(all_data[0].companyname)
+								$(".company_shortName").val(all_data[0].companysid)
+								$("#companynature").find("option[value="+all_data[0].companynature+"]").attr("selected",true)
+								$("#companyproperty").find("option[value="+all_data[0].companyproperty+"]").attr("selected",true)
+								$(".company_tel").val(all_data[0].companytel)
+								$(".company_address").val(all_data[0].companyaddress)
+								$(".employeedep").val(all_data[0].employeedepname)
+								$(".employeedep").attr('nameid',all_data[0].employeedep)
+								$("#employeedep").val(all_data[0].employeedep)
+								$(".company_notes").val(all_data[0].nomo)
+								//医院
+								$(".hospitalnature").val(all_data[0].hospitalnature)
+								$(".hospitalgrade").val(all_data[0].hospitalgrade)
+								$(".hospitalprovince").val(all_data[0].hospitalprovince)
+								$(".hospitalusebrand").val(all_data[0].hospitalusebrand)
+								$(".hospitaldoctor").val(all_data[0].hospitaldoctor)
+								$(".hospitalcharacteristic").val(all_data[0].hospitalcharacteristic)
+								$(".hospitalaccountperiod").val(all_data[0].hospitalaccountperiod)
+								$(".hospitaldiscount").val(all_data[0].hospitaldiscount)
+								$(".hospitalsupplymaterial").val(all_data[0].hospitalsupplymaterial)
+								checkcompany=all_data[0].id;
+								switch($(".company_group").val())
+								{
+									case "5": 
+										hospitalInfoOprate();
+										$(".company_group").attr("disabled",true)
+									break;
+									default:
+										companyInfoOprate();
+										$(".company_group").attr("disabled",true)
+									break;
+								}
+							}
+							
+						    parent.layer.close(index);
+						}
+						
+				
+					);
+						checkFlag = true;
+					}else if(data.ResultValue == 2) {
+						parent.layer.open({
+							title: "提示",
+							content: '公司已存在',
+							zIndex: parent.layer.zIndex, //重点1
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+								$(".company_name").val("")
+						}
+						});
+						checkFlag = true;
+					
+					} else if(data.ResultValue == 0){
+					
+					}
+				}
+			});
+			
+			return
+		}
+
+
+		
+			function addUnit(){
+				var  jiazaiIndex;
+				parent.layer.open({
+				  type: 3, zIndex: parent.layer.zIndex ,	//重点1
+				  success: function(layero, index){
+				  	jiazaiIndex = index;
+		  			}
+				});	
+				var company_name = $(".company_name").val();
+				//所属分组
+				var company_group = $(".company_group option:selected").val(); 
+				
+				
+				var company_notes = $(".company_notes").val()?$(".company_notes").val() : ""; 
+				var company_shortName = $(".company_shortName").val();
+				var company_tel = $(".company_tel").val();
+				var company_address = $(".company_address").val();
+				
+		
+				
+				var companynature =$('#companynature option:selected').val(); //公司属性
+				var companyproperty = $('#companyproperty  option:selected').val(); //公司类型
+				var employeedep = $("#employeedep").val()?$("#employeedep").val() : ""; //所属部门
+				var isshowonapp=$('.isshowonapp').is(':checked'); // 是否在手机端上显示
+				isshowonapp = isshowonapp==true?1:0;
+				
+				
+				
+				var hospitalnature = $(".hospitalnature").val()?$(".hospitalnature").val() : "";
+				var hospitalgrade = $(".hospitalgrade").val()?$(".hospitalgrade").val() : "";
+				var hospitalprovince = $(".hospitalprovince").val()?$(".hospitalprovince").val() : "";
+				var hospitalsupplymaterial = $(".hospitalsupplymaterial").val()?$(".hospitalsupplymaterial").val() : "";
+				var hospitalusebrand = $(".hospitalusebrand").val()?$(".hospitalusebrand").val() : "";
+				var hospitaldoctor = $(".hospitaldoctor").val()?$(".hospitaldoctor").val() : "";
+				var hospitalcharacteristic = $(".hospitalcharacteristic").val()?$(".hospitalcharacteristic").val() : "";
+				var hospitalaccountperiod = $(".hospitalaccountperiod").val()?$(".hospitalaccountperiod").val() : "";
+				var hospitaldiscount = $(".hospitaldiscount").val()?$(".hospitaldiscount").val() : "";
+				
+				
+
+				var slave = {
+					'companyName': '' + company_name + '',
+					'companySID': '' + company_shortName + '',
+					'companyTel': '' + company_tel + '',
+					'companyAddress': company_address,
+					'companytype': company_group,
+					'nomo': company_notes,
+					'hospitalnature': hospitalnature,
+					'hospitalgrade': hospitalgrade,
+					'hospitalprovince': hospitalprovince,
+					'hospitalsupplymaterial': '' + hospitalsupplymaterial + '',
+					'hospitalusebrand': '' + hospitalusebrand + '',
+					'hospitaldoctor': '' + hospitaldoctor + '',
+					'hospitalcharacteristic': '' + hospitalcharacteristic + '',
+					'hospitalaccountperiod': '' + hospitalaccountperiod + '',
+					'hospitaldiscount': '' + hospitaldiscount + '',
+					'isshowonapp': '' + isshowonapp+ '',
+					'companynature': '' + companynature+ '',
+					'companyproperty': '' + companyproperty  + '',
+					'employeedep': '' + employeedep + '',
+					'isdirecttraffic' : 1
+				};	
+					
+		
+				
+				$.ajax({
+					type: "post",
+					url: localStorage.serIp+"/WebAddCompany?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'slave': JSON.stringify(slave),
+						//往来单位id
+						'checkcompany':checkcompany
+//						'account':JSON.stringify(account_yzm),
+//						'contacts':JSON.stringify(contacts_yzm),
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						parent.layer.close(jiazaiIndex); //再执行关闭     	
+						if(data.ResultValue == 1) {
+							
+
+							parent.layer.open({
+								title: "提示",
+								content: '提交成功',zIndex: parent.layer.zIndex, //重点1
+
+							});
+							
+									
+							var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+							parent.layer.close(index); //再执行关闭     		
+							
+						} else {
+							parent.layer.open({
+								title: "提示",
+								content: '提交失败',								zIndex: parent.layer.zIndex, //重点1
+
+							});
+						}
+					},
+									error: function() {
+										parent.layer.close(jiazaiIndex); 		
+										
+									}
+				});
+			}
+			
+			$(".addunit_submit").click(function() {
+		
+			
+				var company_name = $(".company_name").val();
+				
+				if (company_name =="" || !company_name){
+					parent.layer.open({
+						title: "提示",
+						content: '公司全称不能为空!',
+						zIndex: parent.layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					return;
+				}
+				
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp+"/WebCheckCompanyIsRepect?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					'groupCompanyId': localStorage.groupcompanyid,
+					'companyName':company_name
+				},
+				success: function(res) {
+					var data = JSON.parse(res);
+					 if(data.ResultValue == 2) {
+				
+					}else{
+						addUnit();
+					}
+					
+					
+				}
+			});
+				
+		
+			})
+		});
+		
+	
+		
+			
+		function hospitalInfoOprate(){
+			
+			$(".companyName").text("医院全称：");
+			$(".companyShortName").text("医院简称：");
+			$(".companyTel").text("医院电话：");
+			$(".companyAddress").text("医院地址：");
+			
+			$("#companypropertyId").css("display","none");
+			$("#companynatureId").css("display","none");
+			
+			$(".companyInfo").css("display","none");
+			$(".hospitalInfo").css("display","inline-block");
+		}
+			
+				
+		function companyInfoOprate(){
+			
+				$(".companyName").text("公司全称：");
+				$(".companyShortName").text("公司简称：");
+				$(".companyTel").text("公司电话：");
+				$(".companyAddress").text("公司地址：");
+
+			$("#companypropertyId").css("display","inline-block");
+			$("#companynatureId").css("display","inline-block");
+				$(".companyInfo").css("display","none");
+				$(".hospitalInfo").css("display","none");
+		}
+		
+			
+	</script>
+	<script type="text/javascript" src="../../../easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="../../../easyui/jquery.easyui.min.js"></script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../js/comboselect.js"></script>
+    <script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+
+</html>

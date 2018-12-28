@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>操作日志查询</title>
+		<link rel="stylesheet" type="text/css" href="../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/demo.css" />
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+		<link href="../../css/font-awesome.min.css" rel="stylesheet">
+
+	</head>
+	<style type="text/css">
+		.layui-table-body {
+			width: calc(100% + 27px);
+		}
+		
+		.logFind {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.layui-tab {
+			margin: 0;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		label {
+			/*width: 50px !important;*/
+			padding: 0 !important;
+			margin-left: 20px;
+		}
+		
+		.btns button,
+		.find,
+		.import {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+		
+		.logFind_header {
+			margin-bottom: 8px;
+		}
+		
+		.layui-form {
+			margin-bottom: 0;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+			z-index: 5;
+			background-color: #FFFFFF;
+		}
+		
+		.layui-form table tbody tr td:nth-child(2) {
+			color: #2D89DD;
+			cursor: pointer;
+		}
+		
+		.cs_container {
+			width: 250px !important;
+		}
+		
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 5px !important;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../css/same.css" />
+
+	<body>
+		<div class="logFind">
+			<div class="layui-tab">
+				<div class="logFind_header">
+					<div class="inputs">
+						<div class="layui-inline">
+							<label class="layui-form-label" style="margin-left: 0px;">日志类型</label>
+							<div class="layui-input-inline">
+								<select name="" class="layui-input logFind_logType">
+									<option value="">全部</option>
+									<option value="W">警告日志</option>
+									<option value="I">信息日志</option>
+									<option value="E">错误日志</option>
+									<option value="A">操作日志</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">日期范围</label>
+							<div class="layui-input-inline">
+								<input autocomplete="off" id="logFinddate1" class="layui-input logFind_beginTime" type="text">
+							</div>
+							-
+							<div class="layui-input-inline">
+								<input autocomplete="off" id="logFinddate2" class="layui-input logFind_endTime" type="text" style="margin-left: 0;">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label" style="margin-right: 12px;">员工</label>
+							<div class="layui-input-inline">
+								<input autocomplete="off" class="layui-input logFind_staffName" type="text" id="logStaff" style="width: 250px;">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 10px;">查询</button>
+						</div>
+					</div>
+				</div>
+				<table id="logFind" lay-filter="logFind"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'laydate', 'laypage', 'layer'], function() {
+			var table = layui.table;
+			var laydate = layui.laydate;
+			var laypage = layui.laypage;
+			var layer = layui.layer;
+			var $ = layui.jquery;
+			var myDate = new Date();
+			var myYear = myDate.getFullYear();
+			var myMonth = myDate.getMonth() + 1;
+			var currentMothFirstDay = myDate.getFullYear() + '-' +  (myDate.getMonth() + 1) +"-" + '01'; //月初时间
+			var currentDate =  myDate.getFullYear() + '-' +(myDate.getMonth() + 1)  + '-'+  myDate.getDate(); //当前时间
+			laydate.render({
+				elem: '#logFinddate1', //指定元素/
+				value: currentMothFirstDay,
+			});
+			laydate.render({
+				elem: '#logFinddate2', //指定元素
+				value: myDate,
+				calendar: "true"
+				//				theme:'#2D89DD'
+			});
+			var limit = 50;
+			var curpage = 1;
+			var count;
+			
+			$(function() {
+				
+				staffList();
+				logData(true);
+				
+				function staffList() {
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp  + "/WebGetEmployeeDropDownList?jsoncallback=?",
+						async: true,
+						dataType: 'jsonp',
+						data: {
+							"userId": localStorage.userId,
+							"userPw": localStorage.userPw,
+							'database': localStorage.database,
+							'groupCompanyId': localStorage.groupcompanyid,
+						},
+						success: function(res) {
+							var data = JSON.parse(res);
+							$('#logStaff').bComboSelect({
+								showField: 'employeename',
+								keyField: 'employeesid',
+								data: data
+							});
+					
+						
+						}
+					});
+					
+					
+				}
+				
+			});
+
+			function logData(jumpFlag) {
+			var log_type;
+			var log_biginTime; 
+			var log_endTime;
+			var log_staffName;
+			log_biginTime = $('.logFind_beginTime').val() != "" ?  $('.logFind_beginTime').val() : currentMothFirstDay;
+			log_endTime = $('.logFind_endTime').val() != "" ? $('.logFind_endTime').val() : currentDate;				
+			log_type = $(".logFind_logType").val();
+			log_staffName = $(".logFind_staffName").val();
+			
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp +"/WebGetLogList?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'type': log_type,
+						'name': log_staffName,
+						'beginTime': log_biginTime,
+						'endTime': log_endTime,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'database': localStorage.database
+					},
+					success: function(res) {
+						var logData = JSON.parse(res);
+						var data = JSON.parse(logData.data);
+						count = logData.count;
+						logFind(data, limit);
+						$("[data-field=logtime] div:gt(1)").each(function(i) {
+							$(this).html($(this).text().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''))
+						});
+					if(jumpFlag){
+						log_pages();
+					}				
+					
+					}
+				});
+			}
+
+			function logFind(logdata, limit) {
+
+				table.render({
+					elem: '#logFind',
+					data: logdata,
+					height: "full-104",
+					cols: [
+						[ //标题栏
+							{
+								field: "LAY_TABLE_INDEX",
+								title: ' ',
+								width: 50,
+								align: "center",
+								sort: true
+							}, 
+							{
+								field: 'loginfo',
+								event: 'logFind',
+								title: '日志信息',
+							}, {
+								field: 'logtype',
+								title: '日志类型',
+							}, {
+								field: 'logtime',
+								title: '日志时间',
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					limit: limit
+				});
+			}
+			//分页
+			function log_pages() {
+				laypage.render({
+					elem: 'logFind', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						logData(false);
+					}
+				})
+			}
+
+			table.on('tool(logFind)', function(obj) {
+				var data = obj.data;
+				if(obj.event === 'logFind') {
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">日志信息</span>',
+						area: ['700px', '90%'],
+						offset: "rb",
+						content: 'views/systemManagement/logFinddetail.html',
+						zIndex: layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$(".logDetail_type", paentIfarame).val(data.logtype)
+							$(".logDetail_time", paentIfarame).val(data.logtime.replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''))
+							$(".logDetail_info", paentIfarame).val(data.loginfo)
+						}
+					});
+				}
+			});
+			
+			
+			$(".find").click(function() {
+				logData(true);
+			})
+			
+			$(".logFind_logType").change(function() {
+				logData(true);
+			})
+		});
+
+		
+	</script>
+	<script src="../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../js/b.comboselect.js"></script>
+
+</html>

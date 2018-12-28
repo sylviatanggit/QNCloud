@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>手术配货管理</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+		<!-- DevExtreme themes -->
+		<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+		<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
+	</head>
+	<style type="text/css">
+		.operationManagement {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.operationManagement_header button {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.operationManagement_header {
+			margin-bottom: 8px;
+		}
+		
+		.operationadd {
+			margin-left: 0px;
+		}
+		
+		.btns button,
+		.find {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+		.layui-form {
+			margin-bottom: 0;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+			z-index: 5;
+			background-color: #FFFFFF;
+		}
+	</style>
+	<body>
+		<div class="operationManagement">
+			<div class="layui-tab">
+				<div class="operationManagement_header">
+					<div class="inputs">
+					<div class="layui-inline" id="fengongsiId" style="margin-right: 20px;">
+							<label class="layui-form-label" style="margin-left: 0px;padding: 0!important;">所属公司</label>
+							<div class="layui-input-inline">
+								<select name="" class="layui-input companytypeid" style="width: 200px;">
+									<option value="-1">全部</option>
+									
+								</select>
+							</div>
+					</div>
+					
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						<div class="btns">
+							<button class="layui-btn operationadd">新增</button>
+							<button class="layui-btn moreAction">更多操作</button>
+							<ul class="action">
+								<li>
+									<a class="del" data-type="copyData" lay-event='copy'>复制组套</a>
+								</li>
+								
+								<li>
+									<a class="del" data-type="getCheckDel" lay-event='del'>批量删除</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<table id="operationManagement" lay-filter="demo">
+					<div id="gridContainer"></div>
+				</table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<!-- DevExtreme library -->
+    <script src="../../../devexpresslibrary/js/dx.all.js"></script>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script src="../../../js/public.js"></script>
+
+	<script>
+		layui.use(['table', 'jquery','laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laypage = layui.laypage;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			var limit = 50;
+			var curpage = 1;
+			var count;
+			
+			
+						
+			if(localStorage.groupcompanyid != "0"){
+				$("#fengongsiId").css("display","none");
+					operationData(true);
+			}else{
+					dataFun();
+			}
+
+
+			//获取公司信息
+			function dataFun() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetAllGroupCompany?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						var optionsStr = "";
+						for(var i=0;i<desData.length;i++){
+							var id= desData[i].myg_companyid;
+							var name= desData[i].companyname;
+							
+						
+								optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+
+						
+							
+						}
+						$(".companytypeid").append(optionsStr);
+							operationData(true);
+					}
+				});
+
+			}
+			
+			
+			$(".companytypeid").change(function(){
+
+				operationData(true);
+			})
+			
+			
+			function operationData(jumpFlag) {
+				var seachContent = $(".seachContent").val()
+				
+				var companytypeid = "";
+				if(localStorage.groupcompanyid == "0"){
+					companytypeid = $('.companytypeid option:selected').val() ;
+				}else{
+					companytypeid = localStorage.groupcompanyid;
+				}
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetPrepareProducttemplateInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'groupCompanyId': companytypeid,
+						'database': localStorage.database,
+						'txtCondition':seachContent
+					},
+					success: function(res) {
+						var operationData = JSON.parse(res);
+						var data = JSON.parse(operationData.data);
+						count = operationData.count;
+						operationInfo(data, limit);
+						
+						if (jumpFlag) {
+							operation_pages();
+						}
+					}
+				});
+			}
+            
+			var viewHeight = $(window).height();
+		$('#gridContainer').css('height', viewHeight * 0.88 + 'px');
+			function operationInfo(data,limit) {
+				//展示已知数据
+			    var dataGrid = $("#gridContainer").dxDataGrid({
+				dataSource: data,
+				showBorders: true,
+				keyExpr: "id",
+				columnChooser: {
+					enabled: false,
+					mode: "dragAndDrop",
+				},
+				headerFilter: {
+					visible: false
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				filterRow: {
+					visible: false,
+				},
+				selection: {
+					mode: "multiple",
+				},
+				paging: {
+					pageSize: 20000000,
+				},
+				allowColumnResizing: true,
+				columnFixing: {
+					enabled: false
+				},
+				grouping: {
+					contextMenuEnabled: false,
+					expandMode: "rowClick"
+				},
+				groupPanel: {
+					visible: false
+				},
+				columns: [
+				{
+					dataField: "name",
+					caption: "手术配货产品组套类型",
+				    cellTemplate:function(container,options){
+						$("<div>")
+								.append($("<div style='color: #2D89DD'> " + options.value + "</div>"))
+								.appendTo(container);
+					}
+				}, {
+					dataField: "owncompanyname",
+					caption: "所属公司",
+				}, {
+					dataField: 'producecount',
+					caption:'产品数量',
+					cellTemplate:function(container,options){
+						var str;
+						if(options.value == 0){
+							str = "无产品数量"
+						}else{
+							str = options.value + '个产品'
+						}
+						$("<div>")
+								.append($("<div style='color: #2D89DD'> " + str + "</div>"))
+								.appendTo(container);
+					}
+				},{
+                    dataField: 'creatorname',
+					caption:'创建人',
+				},{
+					dataField: 'createtime',
+					caption:'创建时间',
+				},{
+					dataField: 'nomo',
+					caption:'备注',
+				}
+				],
+				onSelectionChanged: function (e) {
+					selectedArray = [];
+					selectedArray = e.selectedRowsData;
+				},
+				onCellClick:function(e){
+                  var data = e.data;
+				  if (e.columnIndex == 1 && e.rowType != "header") {
+					if(!checkPermissionStatus("产品组套管理-保存1")){
+					
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: parent.layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return
+					
+				}
+				sessionStorage.operationId = data.id;
+                    			
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">产品组套</span>',
+						area: ['700px', '90%'],
+						offset: "rb",
+						content: 'views/MyProduct/ProductZuTao/operationadd.html',
+						zIndex: parent.layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+					
+							$('.peihuoType', paentIfarame).val(data.name);
+							$('.notes', paentIfarame).val(data.nomo);
+		
+						}
+						,
+						end:function(){
+							if(sessionStorage.operationId){
+								sessionStorage.removeItem("operationId");
+							}
+							
+							operationData(true);
+						}
+					});
+                 
+				  };
+                
+				  if (e.columnIndex == 3 && e.rowType != "header") {
+					if(!checkPermissionStatus("产品组套管理-保存1")){
+					
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: parent.layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return
+					
+				};
+                sessionStorage.operationId = data.id;
+					var id=data.id;
+
+                    	parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: "手术配货类型【" + data.name + "】 ",
+						area: ['85%', "90%"],
+						offset: "rb",
+						content: 'views/MyProduct/ProductZuTao/ZuTaoProductList.html',
+						zIndex: parent.layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+					
+				
+		
+						}
+						,
+						end:function(){
+							if(sessionStorage.operationId){
+								sessionStorage.removeItem("operationId");
+							}
+							operationData(true);
+						}
+					});
+
+
+
+				  }
+
+				},
+				onContentReady: function (e) {
+
+
+				}
+			}).dxDataGrid('instance');
+				
+			}
+			var selectedArray = [];
+			//分页
+			function operation_pages() {
+				laypage.render({
+					elem: 'operationManagement', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj,first) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						if(!first){
+							operationData(false);
+						}
+						
+					}
+				})
+			}
+			
+			
+			operationData(true);
+	
+			//点击新增
+			$(".operationadd").click(function() {
+						
+						
+					if(!checkPermissionStatus("产品组套管理-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}
+					
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">产品组套</span>',
+					area: ['700px', '90%'],
+					content: 'views/MyProduct/ProductZuTao/operationadd.html',
+					offset: "rb",
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					},
+					end:function(){
+						operationData(true)
+					}
+				});
+			});
+			
+			
+			//点击删除
+			var $ = layui.$,
+			active = {
+				getCheckDel: function() { //获取选中数据
+						
+					if(!checkPermissionStatus("产品组套管理-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}
+					
+					var checkStatus = table.checkStatus('operationManagement');
+					var	data1 = checkStatus.data;
+							
+					if(selectedArray.length == 0){
+						parent.layer.open({
+							title: "提示",
+							zIndex: parent.layer.zIndex, //重点1,
+							content: '请选择要删除的数据！'
+						
+						});
+						
+						return;
+					}
+					
+					
+					var idstr = "";
+					// 11,12
+				    for(var i=0;i<selectedArray.length;i++) { 
+			      		idstr += selectedArray[i].id;
+			      		if((i+1)!=selectedArray.length){
+			      			idstr += ",";
+			      		}
+					} 
+					parent.layer.confirm('确定删除记录？', {
+						icon: 3,
+						title: '删除'
+					}, function(index) {
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp+"/WebDeletePrepareProducttemplate?jsoncallback=?",
+							async: true,
+							dataType: 'jsonp',
+							data: {
+								"userId": localStorage.userId,
+								"userPw": localStorage.userPw,
+								"database": localStorage.database,
+								"id": idstr
+							},
+							success: function(res) {
+								var data = JSON.parse(res);
+								var num1=0;
+								var num2=0;
+								for(var i=0;i<data.length;i++){
+									var panduan=data[i].ResultValue;
+									if(panduan == 1){
+										++num1;
+									}else{
+										++num2;
+									}
+								}
+								parent.layer.open({
+									title: "提示",
+									content: num1+'个成功 ，'+num2+'个失败'
+								});
+								operationData(true);
+							}
+						});
+						parent.layer.close(index);
+					});
+				}
+				,
+				copyData:function(){
+								
+					if(!checkPermissionStatus("产品组套管理-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}
+								
+					var checkStatus = table.checkStatus('operationManagement');
+					var data1 = checkStatus.data;
+					if(selectedArray.length ==0){
+							parent.layer.open({
+								title: "提示",
+								zIndex: parent.layer.zIndex, //重点1,
+								content: '请选择要复制的组套！'
+							
+							});
+							
+							return;
+					}
+					
+					if(selectedArray.length > 1){
+							parent.layer.open({
+								title: "提示",
+								zIndex: parent.layer.zIndex, //重点1,
+								content: '只能选择一个组套复制！'
+							
+							});
+							
+							return;
+					}
+					
+					
+					parent.layer.confirm('复制组套是高级操作，确认复制吗？', {
+						icon: 3,
+						title: '删除'
+					}, function(index) {
+						
+										var  jiazaiIndex;
+					parent.layer.open({
+					  type: 3, zIndex: parent.layer.zIndex ,	//重点1
+					  success: function(layero, index){
+					  	jiazaiIndex = index;
+			  			}
+					});
+						
+						
+						
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp+"/WebPrepareProducttemplateCopyMasterAndSlave?jsoncallback=?",
+							async: true,
+							dataType: 'jsonp',
+							data: {
+								"userId": localStorage.userId,
+								"userPw": localStorage.userPw,
+								"database": localStorage.database,
+								"masterid":  selectedArray[0].id
+							},
+							success: function(res) {
+															parent.layer.close(jiazaiIndex);
+
+								var data = JSON.parse(res);
+								
+								if(data.ResultValue == "1"){
+										parent.layer.open({
+											title: "提示",
+											zIndex: parent.layer.zIndex, //重点1,
+											content: '复制成功！'
+										
+										});
+										
+										operationData(true);
+								}else{
+									parent.layer.open({
+										title: "提示",
+										zIndex: parent.layer.zIndex, //重点1,
+										content: '服务器提出一个问题！'
+									
+									});
+								}	
+								
+							}
+						,error: function(res) {
+							parent.layer.close(jiazaiIndex);
+						}
+						});
+					});
+					
+				}
+			};
+			$('.del').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+			//查询
+			$(".find").click(function() {
+				
+				operationData(true);
+			})
+			//查询回车事件
+			$(".seachContent").bind("keydown",function(e){
+			　　  var theEvent = e || window.event;
+			　　  var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+			　　   if (code == 13) {
+
+					operationData(true);
+			　　  }
+			});
+		});
+	</script>
+
+</html>

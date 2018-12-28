@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>往来单位分组</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link rel="stylesheet" type="text/css" href="../../../easyui/themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../../../easyui/themes/icon.css" />
+		<script type="text/javascript" src="../../../easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="../../../easyui/jquery.easyui.min.js"></script>
+	</head>
+	<style type="text/css">
+		.group {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+	
+		
+		.group .layui-table td,
+		.layui-table th {
+			font-size: 9pt !important;
+		}
+		
+		.group_header button {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 22px;
+			text-align: center;
+			line-height: 22px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		
+		.group_header {
+			/*margin-top: -10px;*/
+			margin-bottom: 13px;
+		}
+		
+		.datagrid-header{
+			display: none !important;
+		}
+		
+		.panel-header, .panel-body{
+		     border: 0px solid #CCCCCC !important;
+		}
+		
+		.panel {
+			overflow-y: auto;
+		}
+		
+		.layui-table-body{
+			overflow-x: hidden;
+
+		}
+		
+		#tree11 {
+			float: left;
+			width: 18%;
+			border: 1px solid #CCCCCC;
+			margin-right: -1px;
+			border-right: none;
+			overflow: auto;
+			margin-top: 10px;
+		}
+
+		
+		#tree-view {
+			float: right;
+			width: 82%;
+		}
+		
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="group">
+			<div class="layui-tab">
+				<ul id="tree11">
+					<table id="tree" class="easyui-treegrid tree" data-options=""  style="width: 100%;">
+						<thead>
+							<tr>
+								<th data-options="field:'name'"  style="width: 100%;"></th>
+							</tr>
+						</thead>
+					</table>
+				</ul>
+				
+				<ul id="tree-view">
+					<table id="staff" lay-filter="demo" style="display: block;"></table>
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script>
+		layui.use(['table', 'layer','element'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var layer = layui.layer;
+
+			var rows;
+			rightData("e1",1);
+			getstaffDep();
+			
+			
+			function getstaffDep(){
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetEmployeegrouptable?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid
+
+					},
+					success: function(res) {
+						var staffData = JSON.parse(res);
+						staffDepTree(staffData);
+					}
+				});
+				
+			}
+			
+			
+				
+			function staffDepTree(data){
+		
+				$("#tree").treegrid({
+					data: data,
+					idField: 'id',
+					treeField: 'name',
+					onClickRow: function(row) {
+						var typeid = row.id;
+					
+						
+						if(row.id == 1 || row._parentId ==1 ){
+							
+							rightData("e1",typeid)
+						}else{
+							rightData("e2",typeid)
+						}
+						
+						if(row.children) {
+							return false;
+						}
+						
+//						 getMuluXinXi(row);
+							
+					}
+				});
+
+			}
+			
+			
+			function getMuluXinXi(row){
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp  +"/WebGetChildTypeByFatherID?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'fatherid': row.id
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						
+						if(data.length == 0) {
+							return false;
+						}
+						$('#tree').treegrid('append', {
+							parent: row.id, 
+							data: data
+						});
+					}
+				});
+			}
+			
+			
+		function rightData(findType,typeId) {
+				
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetInStoreReportData?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"beginTime" :sessionStorage.beginTime,
+						"endTime":sessionStorage.endTime,
+						'type':  findType,
+						"typeId":typeId,
+						'groupCompanyId': localStorage.groupcompanyid
+//						'txtCondition': seachContent
+					},
+					success: function(res) {
+						
+						var desData = JSON.parse(res);
+						staffData(desData);
+						
+						$("#tree11").css("height", $(".layui-form").height());
+						$(".group .datagrid-view .datagrid-body table").css("width", "100%");
+						$(".group .datagrid-view .datagrid-body div").css("width", "100%");
+
+
+					}
+				});
+
+			}
+						
+						
+			
+			
+			function staffData(desData){
+				table.render({
+				elem: '#staff',
+				data: desData,
+				height: "full-140",
+				cols: [
+					[ //标题栏
+						{
+							field: 'name',
+							title: '员工姓名',
+									event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+						}, {
+							field: 'groupname',
+							title: '所属部门',
+						},
+						{
+							field: 'sumcount',
+							title: '采购笔数',
+						}, {
+							field: 'totalprice',
+							title: '金额',
+						}
+					]
+				],
+				skin: 'row' //表格风格
+					,
+				even: true,
+				page: true //是否显示分页
+					,
+				limits: [50,100],
+				limit: 50 //每页默认显示的数量
+			});
+
+		}
+			
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				if(obj.event === 'detail') {
+					parent.tab.tabAdd({
+						icon: '',
+						id: 'e' + data.agent,
+						title: '采购统计分析明细：' +data.name,
+						url: 'views/reportAnalysis/purchasingStatistics/staffStatisticsDetail.html'
+					});
+				}
+			});
+	});
+
+	</script>
+
+</html>

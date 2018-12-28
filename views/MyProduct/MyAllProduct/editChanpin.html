@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>编辑产品</title>
+
+		<!--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/2.3.2/css/bootstrap.min.css" />-->
+<!--		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+-->		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+			<link rel="stylesheet" type="text/css" href="../../../css/public_style.css" />
+
+	</head>
+	<style type="text/css">
+		::-webkit-scrollbar {
+			width: 0px;
+			height: 1px;
+		}
+		
+		::-webkit-scrollbar-thumb {
+			border-radius: 5px;
+			-webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+			background: rgba(0, 0, 0, 0.2);
+		}
+		*{
+			font-size: 9pt;
+		}
+		.editChanpin {
+			margin-left: 10px;
+		}
+		
+		.editChanpin label {
+			width: 100px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		.editChanpin input {
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		.editChanpin select {
+			width: 400px !important;
+			height: 28px !important;
+			display: block;
+		}
+		
+		legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		.editChanpin #content .layui-form-item b {
+			color: red !important;
+			font-size: 12px !important;
+		}
+		
+		.editChanpin .layui-form-title {
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			position: fixed;
+			line-height: 32px;
+			top: 6px;
+			right: 20px;
+		}
+		
+		.editChanpin .layui-form-title button {
+			width: 90px;
+			height: 32px;
+			line-height: 32px;
+			font-family: "PingFang";
+			font-size: 9pt;
+			color: #FFFFFF !important;
+			background-color: #2D89DD;
+		}
+		
+		input,
+		textarea,
+		select {
+			/*border: none;*/
+			/*border: 1px solid #888 !important;*/
+			font-size: 9pt;
+		}
+		
+		.editChanpin .addChangjia {
+			display: inline-block;
+			color: #FFFFFF !important;
+			float: right;
+			margin-right: 100px;
+			border-radius: 2px;
+			padding: 0 15px;
+			line-height: 30px;
+			background-color: #007DDB;
+		}
+		
+		.guanlian {
+			display: inline-block;
+			color: #FFFFFF !important;
+			float: right;
+			margin-top: -20px;
+			margin-right: 120px;
+			padding: 0 15px;
+			line-height: 30px;
+			background-color: #007DDB;
+			font-size: 9pt !important;
+			cursor: pointer
+		}
+		
+		#xinzheng,
+		#laozheng {
+			margin-left: 50px;
+		}
+		
+		#xinzheng p,
+		#laozheng p {
+			font-size: 9pt !important;
+			margin-top: 10px;
+		}
+		
+		#xinzheng a,
+		#laozheng a {
+			color: #357BEA !important;
+			font-size: 9pt !important;
+		}
+		
+		#xinzheng a:hover,
+		#laozheng a:hover {
+			cursor: pointer;
+			color: #FF9600 !important;
+		}
+		
+		#chooseImg>input {
+			display: none;
+		}
+		
+		#chooseImg img {
+			width: 154px;
+			height: 98px;
+		}
+		
+		#upload .photoadd,
+		#upload .photobtn {
+			border: none;
+			height: 30px;
+			line-height: 30px;
+			color: white;
+		}
+		
+		.uploadImg3 {
+			margin-left: 15px;
+			margin-top: 10px;
+			position: relative;
+		}
+		
+		.removeImg3 {
+			cursor: pointer;
+			position: absolute;
+			font-size: 20px !important;
+		}
+		
+		.uploadImg4 {
+			margin-left: 15px;
+			position: relative;
+		}
+		
+		.removeImg4 {
+			cursor: pointer;
+			position: absolute;
+			font-size: 20px !important;
+		}
+		#test3,#test4{
+			background-color: #007DDB;
+			line-height: 28px;
+			height: 28px;
+			width: 78px;
+		}
+		.editChanpin textarea{
+			padding: 8px 8px !important;
+		}
+		
+		.removeImg6 {
+			cursor: pointer;
+			position: absolute;
+			top: 0px;
+			right: 0px;
+			font-size: 20px !important;
+		}
+	
+	</style>
+
+	<body>
+		<div class="editChanpin">
+			<div class="layui-form" action="" style="margin-bottom: 120px;">
+				<div class="layui-form-item layui-form-title ">
+					<button class="layui-btn submit" lay-filter="demo1">提交</button>
+				</div>
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 35px;">
+					<legend>产品信息</legend>
+				</fieldset>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>产品类型：</label>
+							<div class="layui-input-block">
+
+								<select class="xzcp_typeId layui-input" lay-verify="required" disabled="disabled" style="display: block;">
+									<option selected="selected" value="1">医疗器械</option>
+									<option value="2">试剂</option>
+									<option value="3">药品</option>
+									<option value="4">其他</option>
+									<option value="5">化妆品</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>产品名称：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_name layui-input" required="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>注册证号：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_regNum layui-input" name="" lay-verify="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>注册时间：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_regTime layui-input" id="xinzheng_regtime" name="" lay-verify="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>失效时间：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_regFailtime layui-input" id="xinzheng_regfailtime" name="" lay-verify="required" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						
+						
+						
+								
+						<div class="layui-form-item">
+							<label class="layui-form-label">新证信息：</label>
+							<div class="layui-input-inline" style="margin-left: 0px;">
+								<input class="newregid layui-input" style="margin-left: 0px;" id="newregid" name="" lay-verify="required" autocomplete="off" class="layui-input" type="text" value=""  disabled="disabled">　　
+							</div>
+							<span style="color:rgb(0, 102, 204) !important;display: inline-block;cursor: pointer;"   id="select_newProduct">选新证</span>
+							<span style="color:rgb(0, 102, 204) !important;display: none;cursor: pointer;margin-left: 10px;"   id="cancel_newProduct">取消</span>
+
+							</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">老证信息：</label>
+							<div class="layui-input-block ">
+								<input class="oldregid layui-input" id="oldregid" name="" lay-verify="required" class="layui-input" type="text" value="" disabled="disabled">
+							</div>
+						</div>
+						
+						
+						
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">过延受理号：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_regOvernum layui-input" name="" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>企业名称：</label>
+							<div class="layui-input-block ">
+								<input class="manufacturename layui-input" required="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>品　　牌：</label>
+							<div class="layui-input-block ">
+								<input class="brand layui-input" required="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">注册地址：</label>
+							<div class="layui-input-block ">
+								<input class="zhuce_address layui-input" required="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">产　　地：</label>
+							<div class="layui-input-block ">
+								<input class="shengchang_address layui-input" required="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+							</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">产地类型：</label>
+							<div class="layui-input-block">
+
+								<select class="originplacetype layui-input" lay-verify="required"  style="display: block;">
+									<option selected="selected" value="1">国产</option>
+									<option value="0">进口</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">是否冷链：</label>
+							<div class="layui-input-block">
+
+								<select class="iscoldchain layui-input" lay-verify="required"  style="display: block;">
+									<option selected="selected" value="0">不需要</option>
+									<option value="1">需要</option>
+								</select>
+							</div>
+						</div>
+						
+										
+						<div class="layui-form-item">
+							<label class="layui-form-label">延期开始时间：</label>
+							<div class="layui-input-block ">
+								<input class="delaybegintime layui-input" id="delaybegintime" name="" lay-verify="required" autocomplete="off"type="text" value="">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">延期结束时间：</label>
+							<div class="layui-input-block ">
+								<input class="delayendtime layui-input" id="delayendtime" name="" lay-verify="required" type="text" value="">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">产品生产许可证编号：</label>
+							<div class="layui-input-block ">
+								<input class="productcertificate layui-input" id="productcertificate" name="" lay-verify="required" type="text" value="">
+							</div>
+						</div>
+		
+<!--			
+						<div class="layui-form-item">
+							<label class="layui-form-label">注册证照片：</label>
+							<div class="layui-input-block">
+								<div class="layui-upload">
+									<button type="button" class="photoBtn layui-btn" id="test5">图片上传</button>
+									<blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+										预览图：
+										<div class="layui-upload-list" id="demo5"></div>
+									</blockquote>
+								</div>
+							</div>
+						</div>-->
+						
+						
+						
+						<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+							<legend>扩展信息</legend>
+						</fieldset>
+						<div class="layui-form-item">
+							<label class="layui-form-label">注册证照片：</label>
+							<div class="layui-input-block">
+								<div class="layui-upload">
+									<button type="button" class="photoBtn layui-btn" id="zhucezhengUpload" style="background: #007DDB;">图片上传</button>
+									<blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+										预览图：
+										<div class="layui-upload-list" id="zhucezhengPreview"></div>
+									</blockquote>
+								</div>
+							</div>
+						</div>
+						
+										
+			
+					
+					
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;display: none;">*</b>产品性能结构：</label>
+							<div class="layui-input-block">
+								<textarea class="xzcp_power layui-input" lay-verify="required" name="" rows="" cols="" style="width: 400px;height: 80px;" ></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;display: none;">*</b>产品适用范围：</label>
+							<div class="layui-input-block">
+								<textarea class="xzcp_range layui-input" lay-verify="required" name="" rows="" cols="" style="width: 400px;height: 80px;"></textarea>
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">产品标准：</label>
+							<div class="layui-input-block">
+								<textarea class="xzcp_standards layui-input" name="" rows="" cols="" style="width: 400px;height: 80px;"></textarea>
+							</div>
+						</div>
+						
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;display: none;">*</b>产品禁忌症：</label>
+							<div class="layui-input-block">
+								<textarea class="contraindications layui-input" lay-verify="required" name="" rows="" cols="" style="width: 400px;height: 80px;"></textarea>
+							</div>
+						</div>
+						
+
+						<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+							<legend>其他信息</legend>
+						</fieldset>
+						<div class="layui-form-item">
+							<label class="layui-form-label">代理人：</label>
+							<div class="layui-input-block">
+								<input class="xzcp_agent layui-input" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">售后服务：</label>
+							<div class="layui-input-block">
+								<input class="xzcp_service layui-input" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">备　　注：</label>
+							<div class="layui-input-block">
+								<textarea class="xzcp_notes layui-input" name="" rows="" cols="" style="width: 400px;height: 80px;"></textarea>
+							</div>
+						</div>
+						
+				<!--<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+					<legend>老证信息</legend>
+				</fieldset>
+				<div class="layui-form-item">
+					<div id="laozheng">
+
+					</div>
+				</div>
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+					<legend>新证信息</legend>
+				</fieldset>
+				<div class="layui-form-item">
+					<li class="guanlian">关联新证</li>
+					<div id="xinzheng">
+
+					</div>
+
+				</div>-->
+				
+				
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'layer', 'laydate'], function() {
+
+			var $ = layui.$,
+			layer = layui.layer;
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: '#xinzheng_regtime'
+			});
+			laydate.render({
+				elem: '#xinzheng_regfailtime'
+			});
+		
+			laydate.render({
+				elem: '.delaybegintime'
+			});
+			laydate.render({
+				elem: '.delayendtime'
+			});
+			
+			
+			
+			$("#select_newProduct").click(function(){
+				
+				if(sessionStorage.regGuanlianData){
+					sessionStorage.removeItem("regGuanlianData")
+				}
+				
+					
+				var regfailtime = $('#xinzheng_regfailtime').val();
+				var oldregid = $('#oldregid').attr('data-id');
+				
+				sessionStorage.oldregid = oldregid;
+				sessionStorage.regfailtime = regfailtime;
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">关联新证</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/MyProduct/MyAllProduct/relatedNewregList.html',
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero, index) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+					},
+					end: function() {
+						if(sessionStorage.regGuanlianData){
+							var data_x=JSON.parse(sessionStorage.regGuanlianData);
+							$("#newregid").val(data_x[2]+ "("+data_x[1]+")");
+							$("#newregid").attr('data-id',data_x[0]);
+							
+							$("#cancel_newProduct").css("display","inline-block");
+						}
+						
+					
+						if(sessionStorage.oldregid){
+							sessionStorage.removeItem("oldregid")
+						}
+						
+						if(sessionStorage.regfailtime){
+							sessionStorage.removeItem("regfailtime")
+						}
+				
+					}
+				});
+			
+			})
+			
+			
+			//取消关联
+			$("#cancel_newProduct").click(function(){
+				
+				
+				
+				var newregid = $('#newregid').attr('data-id');
+//				var oldregid = $('#oldregid').attr('data-id');
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebCancekCorrelationRegiCertPro",
+					async: true,
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'newregid': newregid,
+						"regid" : sessionStorage.regid
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						if(data.ResultValue == 1) {
+							
+							parent.layer.open({
+								title: "提示",
+								content: '取消成功',
+								zIndex: parent.layer.zIndex, //重点1
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							
+							$("#newregid").val("");
+							$('#newregid').attr('data-id',"0");
+							$("#cancel_newProduct").css("display","none")
+						} else {
+							parent.layer.open({
+								title: "提示",
+								content: '取消失败',zIndex: parent.layer.zIndex //重点1
+							});
+						}
+					}
+				});
+			
+			
+				
+			})
+		
+//			var zhucezhengImg = [];
+//			if(sessionStorage.zhucezhengImgUpload && sessionStorage.zhucezhengImgUpload != '[]'){
+//				var zhucezhengImgUpload = sessionStorage.zhucezhengImgUpload;
+//				 zhucezhengImgUpload = JSON.parse(zhucezhengImgUpload);
+//
+//				var imgStr ="";
+//				$('#zhucezhengPreview').empty();
+//				for(var i=0;i<zhucezhengImgUpload.length;i++){
+//					zhucezhengImg.push({
+//						imgUrl: zhucezhengImgUpload[i].imgUrl
+//					})
+//						
+//					 imgStr += '<div style="display: inline-block;width: auto;margin-left: 15px;margin-top: 10px;position: relative;"> <img src="' + zhucezhengImgUpload[i] + '"  class="layui-upload-img uploadImg6 arrDel6" width="120px"height="100px"><span class="removeImg6">X</span></div>';
+//					
+//				}
+//		
+//				$('#zhucezhengPreview').append(imgStr);
+//			}
+			var file1;
+			//注册证图片上传
+			layui.use('upload', function() {
+				var $ = layui.jquery,
+				upload = layui.upload;
+				
+
+				upload.render({
+					elem: '#zhucezhengUpload',
+					url: localStorage.serIp+'/WebUploadPhoto',
+					multiple: true,
+					before: function(obj) {
+
+						obj.preview(function(index, file, result) {
+					
+						});
+						
+					},
+					done: function(res) {
+
+						if(res.status == "0") {
+							layui.use(['jquery', 'layer'], function() {
+								var $ = layui.$ //重点处
+									,
+									layer = layui.layer;
+								parent.layer.open({
+									content: '上传失败',zIndex: parent.layer.zIndex //重点1
+								});
+							})
+						
+							
+							return;
+						}
+						
+						if(res.status == "1") {
+							layui.use(['jquery', 'layer'], function() {
+									var $ = layui.$ //重点处
+										,
+										layer = layui.layer;
+									parent.layer.open({
+										content: '上传成功',zIndex: parent.layer.zIndex //重点1
+									});
+								})
+							var imgs = res.Img.replace("\\/g", "\/"); 
+							
+							$('#zhucezhengPreview').append('<div style="display: inline-block;width: auto;margin-left: 15px;margin-top: 10px;position: relative;" class="zhucezhengUploadimg"> <img src="/' +imgs + '" class="layui-upload-img uploadImg6 arrDel6" width="120px"height="100px"><span class="removeImg6">X</span></div>')
+
+//							zhucezhengImg.push({
+//								imgUrl: res.Img
+//							});
+//							sessionStorage.zhucezhengImgUpload = JSON.stringify(zhucezhengImg)
+							
+							return;
+						}
+						
+		
+					}
+				})
+			});
+
+
+
+			$(document).delegate('.editChanpin #zhucezhengPreview .removeImg6', 'click', function() {
+//				var arri = $(this).index();
+//				$(".removeImg6").eq(arri).remove();
+				$(this).prev().remove();
+				$(this).remove();
+		
+			})
+					
+		})
+	</script>
+
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>	
+
+</html>

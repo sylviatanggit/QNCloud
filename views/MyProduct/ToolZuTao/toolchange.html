@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>工具组套详情</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.tooladd {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 10px;
+			margin-top: 20px;
+		}
+		
+		.layui-table tr:nth-child(odd) {
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(even) {
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(odd) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.btns button {
+			margin-left: 10px;
+			margin-bottom: 12px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.layui-form-item .layui-input-inline,
+		.layui-form-item input,
+		.layui-form-item label {
+			line-height: 28px !important;
+			height: 28px !important;
+			min-height: 28px !important;
+		}
+		
+		.layui-input-inline {
+			width: 205px !important;
+		}
+		
+		.layui-form-item label {
+			padding: 0 10px !important;
+			width: 50px;
+		}
+		
+		.layui-form-item {
+			margin-bottom: 0;
+		}
+	</style>
+
+	<body>
+		<div class="tooladd">
+			<div class="layui-tab">
+				<div class="btns">
+					<button style="margin-left: 4px;" class="st_save">保存</button>
+					<button class="addTool">添加工具</button>
+					<button class="del">删除工具</button>
+				</div>
+				<div class="inputs">
+					<div class="layui-form-item" style="margin-bottom: 5px;">
+						<div class="layui-inline">
+							<label class="layui-form-label">组套名称</label>
+							<div class="layui-input-inline">
+								<input autocomplete="off" class="layui-input zt_name" type="text">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">计量单位</label>
+							<div class="layui-input-inline">
+								<input autocomplete="off" class="layui-input zt_unit" type="text">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">备注</label>
+							<div class="layui-input-inline">
+								<input style="width: 505px;" autocomplete="off" class="layui-input zt_nomo" type="text">
+							</div>
+						</div>
+					</div>
+				</div>
+				<table id="tooladd" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script src="../../../js/public.js"></script>
+	<script>
+		layui.use(['table', 'jquery'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var toolData =[];
+			$(".addTool").click(function() {
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">产品列表</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/public/product/productPublicList.html',
+
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					},
+					end:function(){
+						var data1=JSON.parse(sessionStorage.newData);
+						if(sessionStorage.newData != ""){
+							for(var i=0;i<data1.length;i++){
+								data1[i]["producecount"]=1;
+								toolData.push(data1[i]);
+							}
+							toolData = uniqueArray(toolData,"id");
+							tooladdDetail(toolData);
+							sessionStorage.newData="";
+						}
+					}
+				});
+			})
+			table.on('checkbox(demo)', function(obj) {
+			});
+			function tooladdData() {
+				var zu_id=$('.st_save').attr("zu_id");
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetToolProduceInfoById?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'id': zu_id
+					},
+					success: function(res) {
+//						console.log(res)
+						toolData = JSON.parse(res);
+//						console.log(toolData)
+						tooladdDetail(toolData);
+						$("[data-field=producecount] div:gt(0)").each(function(i) {
+								$(this).html("1");
+						});
+						
+					}
+				});
+
+			}
+			tooladdData()
+			function tooladdDetail(data){
+				//展示已知数据
+				table.render({
+					elem: '#tooladd',
+					data: data,
+					height: "full-160",
+					cols: [
+						[ //标题栏
+						
+							{
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							},
+							{
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 95,
+							}, {
+								field: 'manufacturer',
+								title: '品牌',
+								minWidth: 60
+							}, {
+								field: 'danwei',
+								title: '规格',
+								minWidth: 60
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 60
+							}, {
+								field: 'producenum',
+								title: '编号',
+								minWidth: 60
+							}, {
+								field: 'producecode',
+								title: '主条码',
+								minWidth: 60
+							}, {
+								field: 'produceunit',
+								title: '单位',
+								minWidth: 60
+							}, {
+								field: 'producecount',
+								title: '数量',
+								minWidth: 60,
+								edit: 'text'
+							}, {
+								field: 'package',
+								title: '包装',
+								minWidth: 60
+							}, {
+								field: 'storagecondition',
+								title: '条件',
+								minWidth: 60
+							}, {
+								field: 'produceusename',
+								title: '通俗名称',
+								minWidth: 60
+							}, {
+								field: 'produceseries',
+								title: '系列',
+								minWidth: 60
+							}, {
+								field: 'producematerial',
+								title: '材质',
+								minWidth: 60
+							}, {
+								field: 'registrationcertificatename',
+								title: '注册证号',
+								minWidth: 100
+							},
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [1000],
+					limit: 1000 //每页默认显示的数量
+				});
+				if(data != ""){
+					for(var k=0;k<data.length;k++){
+						$(".tooladd tbody tr:eq("+k+")").attr("id_1",data[k].id)
+					}
+					$(".st_save").attr("length",data.length)
+				}
+			}
+			//点击删除
+			$(".del").click(function(){
+				//获取删除的id
+				var tr_del_length=$(".tooladd tbody .layui-form-checked").length;
+				var tr_del=[];
+				for(var i=0;i<tr_del_length;i++){
+					var trdel=$(".tooladd tbody .layui-form-checked:eq("+i+")").parent().parent().parent().attr("id_1");
+					tr_del.push(trdel);
+				}
+				$(".tooladd tbody .layui-form-checked").parent().parent().parent().remove();
+				var tr_length=$(".tooladd tbody tr").length;
+				$(".st_save").attr("length",tr_length)
+				
+				toolData=deleteUniqueObjArray(toolData, tr_del);
+			})
+		});
+	</script>
+
+</html>

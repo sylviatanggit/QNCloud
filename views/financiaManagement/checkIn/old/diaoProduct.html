@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>发票迁入调产品</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/qk/custom_style.css">
+
+	</head>
+		<style type="text/css">
+			
+			.leftStock .layui-laypage{
+				margin: 0px;
+				position: absolute;
+				bottom: 5px !important;
+				left: 25px;
+			}
+			
+			.rightStock .layui-laypage{
+				margin: 0px;
+				position: absolute;
+				bottom: 5px !important;
+				left: 52%;
+			}
+			
+			.layui-table-fixed .layui-table-body tbody .layui-table-cell {
+			    height: auto !important;
+			}
+		</style>
+	
+
+	<body>
+		<div class="panel-content">
+			<div class="layui-tab">
+				
+				<div class="panel_header">
+					
+					<div class="inputs">
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input autocomplete="off" placeholder="单号、产品名称" class="layui-input seachContent" type="text" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						
+						
+						<div class="btns">
+							<button class="layui-btn finishCheck" style="width: 80px;">选择</button>
+	
+						</div>
+						
+						
+						<!--<div class="btns">
+							<button class="layui-btn moreAction">更多操作</button>
+							<ul class="action" style="right: 0;">
+								<li>
+									<a class="jianjishijian stockExport" data-type="stockExport" >收票</a>
+								</li>
+								
+						
+							</ul>
+						</div>-->
+						
+					</div>
+
+				</div>
+				
+				
+				<div style="width: 100%;height: 100%;">
+					<div style="width: 49%;float: left;" class="leftStock">
+						<table id="leftStockId" lay-filter="leftStock"></table>
+					</div>
+					
+					<div style="width: 49%;float: right;" class="rightStock">
+						<table id="rightStockId" lay-filter="rightStock"></table>
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+			<script src="../../../js/public.js"></script>
+
+	<script>
+		var  jiazaiIndex;
+		var targetstockid = "";
+		var orderNum = "";
+		layui.use(['table', 'jquery', 'laydate', 'laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laypage = layui.laypage;
+
+
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			
+			var limit1 = 50;
+			var curpage1 = 1;
+			var count1 = 0;
+			
+			var productData =[];
+			var selectData=[];
+			
+			table.on('checkbox(leftStock)', function(obj){
+				
+				if(obj.type =="all"){ //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+					
+					if(obj.checked){
+					
+						 var checkStatus = table.checkStatus('leftStockId') ,
+						 productData = checkStatus.data;
+						 
+						 
+						for(var j = 0; j < productData.length; j++) {
+							 delete productData[j]["LAY_CHECKED"];
+							 
+				
+							productData[j].hxproducecount = productData[j].leavecount;
+							productData[j].hxprice = productData[j].unitprice;
+							productData[j].hxtotalprice = eval(productData[j].hxprice) * eval(productData[j].hxproducecount);
+
+							selectData.push(productData[j]);
+							
+							selectData = selectProductUniqueArrayByziDuan(selectData)
+						}	
+						
+					}else{
+						
+						var productData= [];
+						
+						var tabeData = $(".leftStock .layui-form .layui-table-body table tbody tr");
+						
+						for(var i=0;i<tabeData.length;i++){
+							var productInfo = {};
+							var  targetstockid= $(".leftStock .layui-table-box tbody tr:eq("+i+")").attr("targetstockid");
+							var  stockarea= $(".leftStock .layui-table-box tbody tr:eq("+i+")").attr("stockarea");
+							var  produceid =$(".leftStock .layui-table-box tbody tr:eq("+i+")").attr("produceid");
+							var  jsnum =$(".leftStock .layui-table-box tbody tr:eq("+i+")").attr("jsnum");
+
+							
+							productInfo.targetstockid = targetstockid;
+							productInfo.stockarea = stockarea;
+							productInfo.produceid = produceid;
+							productInfo.jsnum = jsnum;
+
+							
+							productData.push(productInfo)
+							
+						}
+	
+						
+						selectData = deleteProductUniqueArray(selectData,productData);
+							
+					
+					}
+					
+				}else{
+					var data = obj.data;
+				
+					 delete data["LAY_CHECKED"];
+					 
+					 
+					if(obj.checked){
+ 						
+ 						data.hxproducecount = data.leavecount;
+ 						data.hxprice = data.unitprice;
+ 						data.hxtotalprice = eval(data.hxproducecount) * eval(data.hxprice);
+ 						
+						selectData.push(data)
+				
+					}else{
+						selectData = deleteProductjosnobjectByKeyFPQR(selectData,data)
+					}
+				}
+				
+			
+				rightStockData(selectData);
+				
+				
+			});
+	
+
+			function leftStock(jumpFlag) {
+				var seachContent = $(".seachContent").val();
+		
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetNotInvoiceInSettleMentProInfo",
+					async: true,
+					dataType: 'json',
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit1,
+						'page': curpage1,
+						'areaid':$('.areaid').val(),
+						'database': localStorage.database,
+						'txtCondition': seachContent,
+						'companyId': sessionStorage.unit_id
+
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						count1 = desData.count;
+						var data = JSON.parse(desData.data)
+						
+						leftStockData(data);
+						
+						var saveProductData =[];	
+						for(var i=0;i<data.length;i++){
+							$(".leftStock .layui-table-box tbody tr:eq("+i+")").attr("stockarea",data[i].stockarea);
+							$(".leftStock .layui-table-box tbody tr:eq("+i+")").attr("targetstockid",data[i].targetstockid);
+							$(".leftStock .layui-table-box tbody tr:eq("+i+")").attr("produceid",data[i].produceid);
+							$(".leftStock .layui-table-box .layui-table-body tbody tr:eq("+i+")").attr("jsnum",data[i].jsnum);
+							if(sessionStorage.saveProductData && sessionStorage.saveProductData!= "[]" && typeof(sessionStorage.saveProductData) != "undefined") {
+								saveProductData = JSON.parse(sessionStorage.saveProductData);
+								for(var j=0;j<saveProductData.length;j++){
+									
+									
+									if((data[i].produceid == saveProductData[j].produceid) && (data[i].jsnum == saveProductData[j].jsnum)){
+										$(".leftStock .layui-table-box tbody tr:eq("+i+") td:eq(0) .layui-table-cell div").attr("class","layui-unselect layui-form-checkbox layui-form-checked");
+										$(".leftStock .layui-table-box tbody tr:eq("+i+") td:eq(0) .layui-table-cell input").attr("checked","cheked");
+										
+//										selectData.push(saveProductData[j])
+									
+	
+									}
+									
+								}
+							}
+									
+						}	
+						selectData = saveProductData;
+						rightStockData(saveProductData)
+						if(jumpFlag) {
+							leftStockData_pages();
+						}
+					}
+				});
+
+			}
+
+							
+			table.on('sort(leftStock)', function(obj){
+			
+				
+				$(".leftStock [data-field=instocount]").css("background-color","#d3ecc6");
+				$(".leftStock [data-field=billingcount]").css("background-color","#d3ecc6");
+				$(".leftStock [data-field=unitprice]").css("background-color","#d3ecc6");
+				$(".leftStock [data-field=totalprice]").css("background-color","#d3ecc6");	
+				
+				  
+				
+		});
+				
+				
+											
+			table.on('sort(rightStock)', function(obj){
+										
+				$(".rightStock [data-field=hxproducecount]").css("background-color","#ffc8c8");
+				$(".rightStock [data-field=hxprice]").css("background-color","#ffc8c8");
+				$(".rightStock [data-field=hxtotalprice]").css("background-color","#ffc8c8");	
+
+			});
+			
+			
+			leftStock(true);
+
+			function leftStockData(data) {
+				//展示已知数据
+				table.render({
+					elem: '#leftStockId',
+					data: data,
+					height: "full-105",
+					cols: [
+						[ //标题栏
+							{
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							},{
+								field: 'jsnum',
+								title: '结算单号',
+								minWidth: 170,
+//								sort: true
+							},{
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 150, 
+//								sort: true
+							}, 
+							{
+								field: 'danwei',
+								title: '规格',
+								minWidth: 100,
+//								sort: true
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 100, 
+//								sort: true
+							},
+						
+							{
+								field: 'manufacturer',
+								title: '品牌',
+								minWidth: 80, 
+//								sort: true
+							}, {
+								field: 'warehousename',
+								title: '仓库',
+								minWidth: 150
+							}, {
+								field: 'areaname',
+								title: '货区',
+								minWidth: 150
+							}
+							,
+							 {
+								field: 'instocount',
+								title: '入库数量',
+//								edit: 'text',
+								minWidth: 78,	fixed: 'right',
+							}, {
+								field: 'billingcount',
+								title: '已销数量',
+//								edit: 'text',
+								minWidth: 78,	fixed: 'right',
+							},{
+								field: 'unitprice',
+								title: '暂估单价',
+								minWidth: 78,	fixed: 'right',
+							},{
+								field: 'totalprice',
+								title: '暂估金额',
+								minWidth: 78,	fixed: 'right',
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true
+						,
+					limit: limit1 //每页默认显示的数量
+				});
+				
+				$(".leftStock [data-field=instocount]").css("background-color","#d3ecc6");
+				$(".leftStock [data-field=billingcount]").css("background-color","#d3ecc6");
+				$(".leftStock [data-field=unitprice]").css("background-color","#d3ecc6");
+				$(".leftStock [data-field=totalprice]").css("background-color","#d3ecc6");			
+				
+			}
+			
+			//分页
+			function leftStockData_pages() {
+				
+				laypage.render({
+					elem: 'leftStockId', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100],
+					limit: limit1,
+					curr: curpage1,
+					group: 2,
+					groups: 1,
+					count: count1, //数据总数，从服务端得到
+					jump: function(obj,first) {
+
+						curpage1 = obj.curr;
+						limit1 = obj.limit;
+						if(!first){
+							leftStock(false);
+						}
+						
+					}
+				})
+			}
+			
+					
+			var limit2 = 100;
+			var curpage2 = 1;
+			var count2 = 0;
+			rightStockData(null)
+			
+			function rightStockData(data) {
+				//展示已知数据
+				table.render({
+					elem: '#rightStockId',
+					data: data,
+					height: "full-105",
+					cols: [
+						[ //标题栏
+//							{
+//								checkbox: true,
+//								LAY_CHECKED: false,
+//								align: "center",
+//								width: 40,
+//							},
+							{
+								field: 'jsnum',
+								title: '结算单号',
+								minWidth: 170, sort: true
+							},{
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 150, sort: true
+							}, 
+							{
+								field: 'danwei',
+								title: '规格',
+								minWidth: 150, sort: true
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 120, sort: true
+							}, {
+								field: 'iots',
+								title: '批号',
+								edit: 'text',
+								minWidth: 100, sort: true
+							},
+						
+							{
+								field: 'manufacturer',
+								title: '品牌',
+								minWidth: 100, sort: true
+							}, {
+								field: 'warehousename',
+								title: '仓库',
+								minWidth: 150
+							}, {
+								field: 'areaname',
+								title: '货区',
+								minWidth: 150
+							}
+							,
+							 {
+								field: 'hxproducecount',
+								title: '核销数量',
+//								edit: 'text',
+								minWidth: 78,	fixed: 'right',
+							},{
+								field: 'hxprice',
+								title: '核销单价',
+//								edit: 'text',
+								minWidth: 78,	fixed: 'right',
+							},{
+								field: 'hxtotalprice',
+								title: '核销金额',
+								minWidth: 78,	fixed: 'right',
+							}
+
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: false //是否显示分页
+						,
+					limits: [100,200],
+					limit: 100000 //每页默认显示的数量
+				});
+				
+				
+				$(".rightStock [data-field=hxproducecount]").css("background-color","#ffc8c8");
+				$(".rightStock [data-field=hxprice]").css("background-color","#ffc8c8");
+				$(".rightStock [data-field=hxtotalprice]").css("background-color","#ffc8c8");	
+			}
+			
+			
+	
+			
+			$(".find").click(function(){
+				leftStock(true);
+			})
+			
+			
+								
+			$("body").keydown(function(event) {
+					if(event.keyCode == "13") { //keyCode=13是回车键
+						$('.find').click();
+					}
+			});
+	
+
+			$('.jianjishijian').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+			
+						
+			$(".finishCheck").click(function(){
+		
+				
+				
+					if(selectData.length ==0){
+						parent.layer.open({
+							title: "提示",
+							content: '请选择产品!' ,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return;
+					}
+
+					if(sessionStorage.FPHXdata) {
+							sessionStorage.removeItem('FPHXdata');
+					}
+					sessionStorage.FPHXdata = JSON.stringify(selectData);
+					
+					parent.layer.open({
+						title: "提示",
+						content: '选择成功',
+						zIndex: parent.layer.zIndex, //重点1,
+						success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+				  
+						},
+						end: function(){  
+            			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+						parent.layer.close(index); //再执行关闭     
+          			  }  
+					});
+					
+				
+	
+				})
+			
+	
+	});
+	</script>
+
+</html>
+
+	

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>产品分组</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link rel="stylesheet" type="text/css" href="../../../easyui/themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../../../easyui/themes/icon.css" />
+		<script type="text/javascript" src="../../../easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="../../../easyui/jquery.easyui.min.js"></script>
+	</head>
+	<style type="text/css">
+		.group {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		.layui-tab {
+			margin-top: 14px;
+		}
+		
+		.group .layui-table td,
+		.layui-table th {
+			font-size: 9pt !important;
+		}
+		
+		.group_header button {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 22px;
+			text-align: center;
+			line-height: 22px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.layui-table tr:nth-child(odd) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(odd) {
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(even) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-table td,
+		.layui-table th {
+			padding: 0 3.5vw !important;
+		}
+		
+		.group_header {
+			/*margin-top: -10px;*/
+			margin-bottom: 13px;
+		}
+		
+		.group .datagrid-view .table{
+			width: 100% !important;
+		}
+		
+		.datagrid-header-inner{
+			width: 100% !important;
+		}
+		
+		.datagrid-header{
+			display: none !important;
+		}
+	</style>
+
+	<body>
+		<div class="group">
+			<div class="layui-tab">
+				<div class="group_header">
+					<button class="layui-btn groupadd" style="margin-left: 20px;">新增</button>
+					<button class="layui-btn groupchange">修改</button>
+					<button class="layui-btn groupdel">删除</button>
+		
+				</div>
+				<div id="demo2" style="margin-left:20px ;">
+					<table id="tree" class="easyui-treegrid tree" style="width:300px;height:600px;" data-options="">
+						<thead>
+							<tr>
+								<th data-options="field:'name'" width="278">所有产品</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'layer','element'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var layer = layui.layer;
+
+			var rows,deep;
+			stockData();
+			
+
+			
+			
+			function stockData() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp  +"/WebGetChildTypeByFatherID?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+//						'groupCompanyId': localStorage.groupcompanyid,
+						'fatherid': "1",
+
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						
+						
+						var yijilumuData= [{
+							id : "1",
+							name : "所有产品",
+							_parentid:"",
+							children: desData
+						}];
+						
+						//右边树一级目录
+						$("#tree").treegrid({
+							data: yijilumuData,
+							method: 'get',
+							rownumbers: false,
+							idField: 'id',
+							treeField: 'name',
+							onClickRow: function(row) {
+								typeid = row.id;
+								rows = row;		 deep = row.deep;
+								if(row.children) {
+									return false;
+								}
+								
+							
+								 getMuluXinXi(row);
+
+							}
+							
+					});
+						$(".group .datagrid-view .datagrid-body table").css("width", "100%");
+						$(".group .datagrid-view .datagrid-body div").css("width", "100%");
+						
+					}
+				});
+
+			}
+			
+			
+			function getMuluXinXi(row){
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp  +"/WebGetChildTypeByFatherID?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'fatherid': row.id
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						
+						if(data.length == 0) {
+							return false;
+						}
+						$('#tree').treegrid('append', {
+							parent: row.id, 
+							data: data
+						});
+					}
+				});
+			}
+				
+
+			//添加分组
+			$('.groupadd').click(function() {
+				if(!rows){
+				
+					parent.layer.open({
+						content: "请选择节点",
+						zIndex: parent.layer.zIndex //重点1
+							,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					})
+					return;
+				}
+						
+				if(deep =="3"){
+					parent.layer.open({
+						content: "目录级别不能超过三级!",
+						zIndex: parent.layer.zIndex //重点1					
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					})
+										
+					return;
+				}
+				
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">新增分组</span>',
+					area: ['360px', '200px'],
+					content: 'views/public/product/groupadd.html',
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero, index) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+					
+						$(".fatherGroup", paentIfarame).val(rows.name);
+						
+							
+						
+						$(".addGoods_true", paentIfarame).click(function() {
+							
+							var sonGroup = $(".sonGroup", paentIfarame).val();
+							var fatherid = "";
+							
+							fatherid = rows.id;
+							
+							var master={
+								'typename':sonGroup,
+								'fatherid':fatherid,
+							}
+							
+							$.ajax({
+								type: "post",
+								url: localStorage.serIp+"/WebAddProduceTypeTable",
+								async: true,
+								dataType: 'json',
+								contentType:'application/json; charset=utf-8',
+								crossDomain:true,
+								data: JSON.stringify({
+									'userId': localStorage.userId,
+									'userPw': localStorage.userPw,
+									'database': localStorage.database,
+//									"groupCompanyId": localStorage.groupcompanyid,
+									'master':JSON.stringify(master)
+								}),
+								success: function(res) {
+									var data = JSON.parse(res);
+									
+									if(data.ResultValue == 0) {
+										parent.layer.open({
+											title: "提示",
+											content: '添加失败',
+											zIndex: parent.layer.zIndex //重点1
+												,
+											success: function(layero) {
+												parent.layer.setTop(layero); //重点2
+											},			
+										});
+									}else if(data.ResultValue == 2){
+										parent.layer.open({
+											title: "提示",
+											content: '已存在',
+											zIndex: parent.layer.zIndex //重点1
+												,
+											success: function(layero) {
+												parent.layer.setTop(layero); //重点2
+											},			
+										});									
+							
+									}else{
+										parent.layer.open({
+											title: "提示",
+											content: '添加成功',
+											zIndex: parent.layer.zIndex //重点1
+											,
+											success: function(layero) {
+												parent.layer.setTop(layero); //重点2
+												var retrundata = [];
+												retrundata.push({
+													"id" : data.ResultValue,
+													"name" :sonGroup
+												})
+												
+												$('#tree').treegrid('append', {
+													parent: fatherid, // the node has a 'id' value that defined through 'idField' property
+													data: retrundata
+												});
+												
+											},
+										});
+									}
+								}
+							});
+							parent.layer.close(index);
+						});
+					}
+				});
+			});
+			
+			
+			
+			//修改分组
+			$('.groupchange').click(function() {
+
+				
+				if(!rows){
+				
+					parent.layer.open({
+						content: "请选择节点",
+						zIndex: parent.layer.zIndex //重点1
+							,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					})
+					return;
+				}
+				
+				
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">修改分组</span>',
+					area: ['360px', '200px'],
+					content: 'views/public/product/groupedit.html',
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero, index) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						
+				
+						$(".fatherGroup", paentIfarame).val(rows.name);
+						
+							
+						
+						$(".addGoods_true", paentIfarame).click(function() {
+							
+							var sonGroup = $(".sonGroup", paentIfarame).val();					
+				
+							
+							var master={
+								'typename':sonGroup,
+								'fatherid':rows._parentId
+							}
+							
+							$.ajax({
+								type: "post",
+								url: localStorage.serIp+"/WebUpdateProducetype",
+								async: true,
+								dataType: 'json',
+								contentType:'application/json; charset=utf-8',
+								crossDomain:true,
+								data: JSON.stringify({
+									'userId': localStorage.userId,
+									'userPw': localStorage.userPw,
+									'database': localStorage.database,
+//									"groupCompanyId": localStorage.groupcompanyid,
+									'master':JSON.stringify(master),
+									"id" : rows.id
+								}),
+								success: function(res) {
+									var data = JSON.parse(res);
+									
+									if(data.ResultValue == 0) {
+										parent.layer.open({
+											title: "提示",
+											content: '修改失败',
+											zIndex: parent.layer.zIndex //重点1
+												,
+											success: function(layero) {
+												parent.layer.setTop(layero); //重点2
+											},			
+										});
+									}else if(data.ResultValue == 2){
+										parent.layer.open({
+											title: "提示",
+											content: '已存在',
+											zIndex: parent.layer.zIndex //重点1
+												,
+											success: function(layero) {
+												parent.layer.setTop(layero); //重点2
+											},			
+										});									
+							
+									}else{
+										parent.layer.open({
+											title: "提示",
+											content: '修改成功',
+											zIndex: parent.layer.zIndex //重点1
+											,
+											success: function(layero) {
+												parent.layer.setTop(layero); //重点2
+										
+												
+												$('#tree').treegrid('update', {
+													id: rows.id,
+													row: {
+														name: sonGroup,
+													}
+												});
+												
+											},
+										});
+									}
+								}
+							});
+							parent.layer.close(index);
+						});
+					}
+				});
+			});
+			
+		
+			
+			//删除分组
+			$('.groupdel').click(function() {
+
+				
+				if(!rows){
+				
+					parent.layer.open({
+						content: "请选择节点",
+					zIndex: parent.layer.zIndex //重点1
+							,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					})
+					return;
+				}
+				
+				var fatherid =rows.id;	
+							
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebDeleteProduceTypeByID?jsoncallback=?",
+					async: true,
+					dataType: "jsonp",
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"id" : fatherid
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						
+						if(data[0].ResultValue == 0) {
+							parent.layer.open({
+								title: "提示",
+								content: '删除失败!',
+								zIndex: parent.layer.zIndex //重点1
+									,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								},			
+							});
+							return;
+						}
+						
+						if(data[0].ResultValue == 2){
+							parent.layer.open({
+								title: "提示",
+								content: '该分组下有产品!不能删除!',
+								zIndex: parent.layer.zIndex //重点1
+									,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								},			
+							});									
+							return;
+						}
+						
+						if(data[0].ResultValue == 3){
+							parent.layer.open({
+								title: "提示",
+								content: '禁止删除!',
+								zIndex: parent.layer.zIndex //重点1
+									,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								},			
+							});									
+							return;
+						}
+						
+						
+						if(data[0].ResultValue == 1){
+							parent.layer.open({
+								title: "提示",
+								content: '删除成功!',
+								zIndex: parent.layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+							
+									
+									$('#tree').treegrid('remove', fatherid);
+									
+								},
+							});
+						}
+					}
+				});
+				
+			});
+	});
+
+	</script>
+
+</html>

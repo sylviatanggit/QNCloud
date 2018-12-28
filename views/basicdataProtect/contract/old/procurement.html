@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>销售合同</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.productNum {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		label {
+			padding: 0 !important;
+			margin-left: 20px;
+		}
+		
+		.btns button,
+		.find,
+		.import {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+		
+		.productNum_header {
+			margin-bottom: 8px;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+		}
+		.cleardata,.clearywy{
+			cursor: pointer;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="outChuwaitList">
+			<div class="inputs" style="margin-bottom: 9px !important;">
+				
+					<div class="layui-inline" id="fengongsiId" style="margin-right: 10px;margin-top: 18px;margin-left: 10px;">
+							<label class="layui-form-label" style="margin-left: 0px;">所属公司</label>
+							<div class="layui-input-inline">
+								<select name="" class="layui-input companytypeid" style="width: 200px;">
+									<option value="-1">全部</option>
+									
+								</select>
+							</div>
+					</div>
+					
+					
+				<div class="layui-inline" style="margin-top: 18px;">
+					<div class="layui-input-inline">
+						<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 14px;width: 240px;">
+					</div>
+				</div>
+				<div class="layui-inline" style="margin-top: 18px;">
+					<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+				</div>
+				<div class="btns" style="margin-top: 18px;margin-right: 20px;position: relative;">
+					<button class="layui-btn addOutgoing">新增</button>
+					<button class="layui-btn moreAction" style="margin-right: 20px;">更多操作</button>
+					<ul class="action">
+						<li>
+							<a class="del" data-type="getCheckDel" lay-event='del'>批量删除</a>
+						</li>
+					</ul>
+					
+				</div>
+			</div>
+			<div class="houselistflag">
+				<table id="houselist" lay-filter="demo"></table>
+			</div>
+			<div class="Nohouselistflag">
+				<table id="Nohouselist" lay-filter="demo1"></table>
+			</div>
+		</div>
+
+	</body>
+	<script src="../../../js/public.js"></script>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'laydate', 'laypage'], function() {
+			
+				
+			//公共设置结束
+			//页面刷新获取数据	
+			var num=50;
+			var page=1;
+			var off = true;
+			var count;
+			var table = layui.table;
+			var laydate = layui.laydate;
+			var laypage = layui.laypage;
+			var $ = layui.jquery;
+			var myDate = new Date();
+			var currentMothFirstDay = myDate.getFullYear() + '-' +  (myDate.getMonth() + 1) +"-" + '01';
+			var currentDate =  myDate.getFullYear() + '-' +(myDate.getMonth() + 1)  + '-'+  myDate.getDate();
+			laydate.render({
+				elem: '#outGoingdate1',
+				value: currentMothFirstDay
+			});
+			laydate.render({
+				elem: '#outGoingdate2',
+				value: currentDate
+			});
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			
+					
+			 if(localStorage.groupcompanyid != "0"){
+				$("#fengongsiId").css("display","none");
+			getList()
+			}else{
+					dataFun1();
+			}
+    
+    		//获取公司信息
+			function dataFun1() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetAllGroupCompany?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						var optionsStr = "";
+						for(var i=0;i<desData.length;i++){
+							var id= desData[i].myg_companyid;
+							var name= desData[i].companyname;
+	
+							optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+
+							
+						}
+						$(".companytypeid").append(optionsStr);
+						getList()
+						
+					}
+				});
+
+			}	
+			
+    
+	
+			
+	
+			function getList() {
+				var seachContent=$(".seachContent").val();
+				var companytypeid = "";
+				if(localStorage.groupcompanyid == "0"){
+					companytypeid = $('.companytypeid option:selected').val();
+				}else{
+					companytypeid = localStorage.groupcompanyid;
+				}
+				
+						var jiazaiIndex;
+			parent.layer.open({
+			  type: 3, 
+			  zIndex: parent.layer.zIndex, //重点1
+			  success: function(layero, index){
+			  		jiazaiIndex = index;
+	  			}
+			});
+				$.ajax({
+					type: "post",
+					url: localStorage.serIp  +"/WebGetContractInfo?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': companytypeid,
+						'page':page,
+						'num':num,
+						'type':1,
+						'txtCondition':seachContent
+					},
+					success: function(res) {
+												parent.layer.close(jiazaiIndex);
+
+						var data = JSON.parse(res);
+						count=data.count;
+						data=JSON.parse(data.data)
+				
+						for(var i=0;i<data.length;i++){
+							data[i]['contract_begin_time']=data[i].contract_begin_time;
+							data[i]['contract_end_time']=data[i].contract_end_time;
+						}
+						houseList(data, num);
+						
+						$("[data-field=contract_end_time] div:gt(0)").each(function(i) {
+							var str = "";var worning = "";
+							if(data[i].contract_islong == '1'){
+								str = "长期"
+							}else{
+								str = data[i].contract_end_time;
+								
+								var myDate = new Date();
+	
+								var currentDate =  myDate.getFullYear() + '-' +(myDate.getMonth() + 1)  + '-'+  myDate.getDate();
+								
+								var  days = diffDay(str,currentDate)
+								
+								if(days < 0){
+									worning  = "<span style='color: red''>已过期</span>";
+								}
+								
+								if(days > 0 && days < 30){
+									worning  = "<span style='color: #FFAB39''>即将到期</span>";
+								}
+								
+								
+							}
+						
+						$(this).html(data[i].contract_begin_time + " - " + str + " "+worning);
+							
+					})
+						
+						
+					$("[data-field=productcount] div:gt(0)").each(function(i) {
+						var  str = "";
+						if(data[i].productcount =="0"){
+							str = "无产品";
+						}else{
+							str = data[i].productcount + "个产品"
+						}
+						$(this).html(str);
+							
+					})
+					
+					
+						
+					$("[data-field=contract_status] div:gt(0)").each(function(i) {
+			
+						switch(data[i].contract_status) 
+						{
+							case 0:				
+								
+								$(this).html("执行中");
+							  break;
+							case 1:  				
+								$(this).html("<span style='color:red'>完成</span>");
+							  break;
+						
+						}
+							
+							
+							
+					})
+					
+								
+					$("[data-field=contract_backmonth] div:gt(0)").each(function(i) {
+						var  str = "";
+						str =data[i].contract_backmonth  + "个月";
+					
+						$(this).html(str);
+							
+					})
+					
+											
+						if(off) {
+							off = false;
+							nohouseList_pages()
+						}
+					}
+												,
+					error: function(res) {
+						parent.layer.close(jiazaiIndex);
+							
+							parent.layer.open({
+								title: "提示",
+								content: '服务器异常!',
+									zIndex: parent.layer.zIndex //重点1
+					
+							});
+						
+				
+					}
+				});
+			}
+
+		
+			$(".companytypeid").change(function() {
+								off = true;
+
+				getList();
+			})
+			
+			
+			function houseList(data, limit) {
+				//展示已知数据
+				table.render({
+					elem: '#houselist',
+					data: data,
+					height: "full-170",
+					cols: [
+					[ //标题栏
+						 {
+							checkbox: true,
+								LAY_CHECKED: false,
+							align: "center",
+							width: 40,
+						}, {
+							field: 'contract_num',
+							title: '合同编号',
+//							event: "detail1",
+//							style: "cursor:pointer;color:#2d89DD",
+							minWidth: 100,
+						},
+						{
+							field: 'contract_name',
+							title: '合同名称',
+							minWidth: 100,
+						}, {
+							field: 'contract_end_time',
+							title: '合同日期',
+							width: 200
+						}, {
+							field: 'contract_backmonth',
+							title: '合同账期',
+							minWidth: 100
+						}, {
+							field: 'contract_companyname',
+							title: '往来单位',
+							minWidth: 100
+						}
+						, {
+							field: 'owncompany',
+							title: '签约公司',
+							minWidth: 100
+						}, {
+							field: 'contract_business_typename',
+							title: '业务类型',
+							minWidth: 80
+						}, {
+							field: 'directorname',
+							title: '负责人',
+							width: 100
+						}, {
+							field: 'productcount',
+							title: '包含产品',
+							event: "detail",
+							style: "cursor:pointer;color:#2d89DD",
+							width: 80
+						},{
+							field: 'contract_nomo',
+							title: '备注',
+							minWidth: 80,
+						}
+						,{
+							field: 'contract_status',
+							title: '合同状态',
+							event: "disableFlag",
+							style:"color:#2D89DD;cursor:pointer",
+							minWidth: 80,
+						}
+					]
+				],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					limit: limit //每页默认显示的数量
+				});
+			}
+			//查询
+			$(".seachContent").keydown(function(event) {
+				if(event.keyCode == "13") { //keyCode=13是回车键
+					$('.find').click();
+				}
+			});
+			$('.find').click(function() {
+				seachContent=$(".seachContent").val();
+				getList()
+			})
+			//往来单位
+			$(".unit").click(function() {
+				if (sessionStorage.unitData) {
+					sessionStorage.removeItem('unitData')
+				}
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">往来单位</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/public/unit/unitPublicList.html',
+					zIndex: parent.layer.zIndex, //重点1,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+					},
+					cancel: function() {
+					},
+				end: function(){  
+             	  	if(sessionStorage.unitData) {
+						if(sessionStorage.unitData.length>0 && sessionStorage.unitData!= "[]"){
+
+						var unitData = JSON.parse(sessionStorage.unitData);
+					
+						$(".unit").val(unitData.companyname);
+						$(".unit").attr('data-id',unitData.id);
+							
+						} else {
+							layer.closeAll();
+						}
+					}
+					}
+				});
+			});
+		//分页
+		function houseList_pages() {
+			laypage.render({
+				elem: 'houselist', //注意，这里的 test1 是 ID，不用加 # 号
+				layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+				limits: [50, 100],
+				limit: num,
+				curr: page,
+				group: 2,
+				count: count, //数据总数，从服务端得到
+				jump: function(obj,first) {
+					page = obj.curr;
+					num = obj.limit;
+					if(!first){
+						houseData(false);
+					}
+					
+				}
+			})
+		}
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				if(obj.event === 'detail') {
+					sessionStorage.contract_id=data.contract_id;
+					sessionStorage.contract_name=data.contract_name;
+					sessionStorage.contractType=1;
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">采购合同【'+data.contract_name+'】</span>',
+						area: ['85%', '90%'],
+						offset: "rb",
+						content: 'views/basicdataProtect/contract/productList.html',
+						zIndex: parent.layer.zIndex, //重点1,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							
+							$(".editGuige_seach_btn",paentIfarame).attr("name",1)
+						},
+						end: function() {
+							if(sessionStorage.contract_id){
+								sessionStorage.removeItem("contract_id");
+							}
+							
+							if(sessionStorage.contract_name){
+								sessionStorage.removeItem("contract_name");
+							}
+							
+							
+								if(sessionStorage.contractType){
+								sessionStorage.removeItem("contractType");
+							}
+							getList();
+						}
+					});
+				}
+				if(obj.event === 'detail1') {
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">采购合同</span>',
+						area: ['700px', '90%'],
+						offset: "rb",
+						content: 'views/basicdataProtect/contract/waitchange.html',
+						zIndex: parent.layer.zIndex, //重点1,
+						success: function(layero,index) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$('.adddirect_midnum',paentIfarame).val(data.contract_num);
+							$('.adddirect_midprice',paentIfarame).val(data.contract_name);
+							$('.adddirect_num',paentIfarame).val(data.contract_begin_time);
+							$('.adddirect_price',paentIfarame).val(data.contract_end_time);
+							$('.adddirect_notes',paentIfarame).val(data.contract_nomo);
+							$('.unit',paentIfarame).val(data.contract_companyname);
+							$('.unit',paentIfarame).attr("data-id",data.contract_companyid);
+							$('.adddirect_name',paentIfarame).find("option[value="+data.contract_business_type+"]").attr("selected",true);
+							$('.adddirect_bili',paentIfarame).attr('data-id',data.contract_department);
+							$('.adddirect_bili',paentIfarame).val(data.contract_departmentname);
+							$('.adddirect_type',paentIfarame).val(data.contract_director);
+							$(".adddirect_submit",paentIfarame).click(function() {
+								//弹出层转圈圈的那个
+								parent.layer.open({
+								  type: 3, 
+								  zIndex: parent.layer.zIndex, //重点1
+								  success: function(layero, index){
+								  		jiazaiIndex = index;
+										}
+								});
+								var contract_num = $('.adddirect_midnum',paentIfarame).val();
+								var contract_name = $('.adddirect_midprice',paentIfarame).val();
+								var adddirect_midprice = $('.adddirect_midprice',paentIfarame).val();
+								var contract_begin_time = $('.adddirect_num',paentIfarame).val();
+								var contract_end_time = $('.adddirect_price',paentIfarame).val();
+								var contract_nomo = $('.adddirect_notes',paentIfarame).val();
+								var contract_companyid = $('.unit',paentIfarame).attr("data-id");
+								var contract_g_companyid = localStorage.groupcompanyid;
+								var contract_business_type = $('.adddirect_name',paentIfarame).val();
+								var contract_department = $('.adddirect_bili',paentIfarame).attr('data-id');
+								var contract_director=$('.adddirect_type',paentIfarame).val();
+								var master = {
+									'contract_type': 0,
+									'contract_num': contract_num,
+									'contract_name': contract_name,
+									'contract_begin_time': contract_begin_time,
+									'contract_end_time': contract_end_time != "" ? contract_end_time : null,
+									'contract_nomo': contract_nomo,
+									'contract_companyid': contract_companyid,
+									'contract_g_companyid': contract_g_companyid,
+									'contract_business_type': contract_business_type,
+									'contract_department': contract_department,
+									'contract_director': contract_director,
+									'contract_g_companyid': localStorage.groupcompanyid
+								};
+								if($('.adddirect_midnum').val() == '' || $('.adddirect_midprice').val() == '' || $('.contract_companyid').val() == '') {
+									parent.layer.open({
+										title: "提示",
+										zIndex: parent.layer.zIndex, //重点1,
+										content: '请将信息填写完整！！！'
+									});
+									return false;
+								}
+								$.ajax({
+									type: "POST",
+									url: localStorage.serIp+"/WebUpdateContractInfo",
+									async: true,
+									dataType: 'json',
+									crossDomain: true,
+									contentType:'application/json; charset=utf-8',
+									data:JSON.stringify({
+										"id":data.contract_id,
+										"userId": localStorage.userId,
+										"userPw": localStorage.userPw,
+										'database': localStorage.database,
+										'master': JSON.stringify(master)
+									}),
+									success: function(res) {
+										parent.layer.close(jiazaiIndex);
+										var data = JSON.parse(res);
+										if(data.ResultValue == 1) {
+											parent.layer.open({
+												title: "提示",
+												content: '提交成功！！！',
+												zIndex: parent.layer.zIndex, //重点1,
+												end: function(){  
+													parent.layer.close(index); 
+												} 
+											});
+											getList()
+										} else {
+											parent.layer.open({
+												title: "提示",
+												zIndex: parent.layer.zIndex, //重点1,
+												content: '提交失败！！！'
+											});
+										}
+									}
+								});
+							})
+						},
+						cancel: function() {
+						},
+						end: function(){  
+		             	  	if(sessionStorage.unitData) {
+								if(sessionStorage.unitData.length>0 && sessionStorage.unitData!= "[]"){
+								var unitData = JSON.parse(sessionStorage.unitData);
+								$(".unit").val(unitData.companyname);
+								$(".unit").attr('data-id',unitData.id);
+								} else {
+									layer.closeAll();
+								}
+							}
+						}
+					});
+				}
+			
+				
+				if(obj.event === 'disableFlag') {
+							if(!checkPermissionStatus("购销合同管理-保存1")){
+					
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return
+				
+				}
+					
+					
+					var contract_status = data.contract_status; //0执行中，1完成
+				
+				
+					var id = data.contract_id;
+					if(contract_status == 0){
+						contract_status =1;
+					
+					}else{
+						contract_status =0;
+
+					}
+				
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp+"/WebChangeContractStatus?jsoncallback=?",
+						dataType: "jsonp",
+						async: true,
+						data: {
+							'userId': localStorage.userId,
+							'userPw': localStorage.userPw,
+							'database': localStorage.database,
+							'status': contract_status,
+							"id" : id
+						},
+						success: function(res) {
+							var res = JSON.parse(res);
+
+						
+							if(res.ResultValue == '1') {
+								parent.layer.open({
+									title: "提示",
+									content: '成功！',zIndex: parent.layer.zIndex //重点1
+								});
+								
+								getList();			
+						
+							}
+							
+							if(res.ResultValue == '0')
+							{
+								parent.layer.open({
+									title: "提示",
+									content: '失败！',zIndex: parent.layer.zIndex //重点1
+								});
+							}
+		
+						if(res.ResultValue == '3')
+							{
+								parent.layer.open({
+									title: "提示",
+									content: '库存表已经使用!',zIndex: parent.layer.zIndex //重点1
+								});
+							}
+							
+			
+						}
+					});
+				
+				
+				}
+			});
+			//分页
+			function nohouseList_pages() {
+				laypage.render({
+					elem: 'Nohouselist', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: num,
+					curr: page,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						page = obj.curr;
+						num = obj.limit;
+						getList()
+					}
+				})
+			}
+			//新增
+		    $(".addOutgoing").click(function() {
+		    	
+		    			if(!checkPermissionStatus("购销合同管理-保存1")){
+					
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return
+				
+				}
+					
+					
+					
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">新增采购合同</span>',
+					area: ['700px', '90%'],
+					offset: "rb",
+					content: 'views/basicdataProtect/contract/completeadd.html',
+					zIndex: parent.layer.zIndex, //重点1,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+					},
+					end: function() {
+													off = true;
+
+						getList();
+					}
+				});
+		    });
+		    //点击删除
+		    $(".del").click(function(){
+		    	var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+		    })
+			var $ = layui.$,
+			active = {
+				getCheckDel: function() { //获取选中数据
+					
+							if(!checkPermissionStatus("购销合同管理-保存1")){
+					
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return
+				
+				}
+					
+					
+					
+					var checkStatus = table.checkStatus('houselist'),
+						data1 = checkStatus.data;
+					var idstr = "";
+	
+					
+					if(data1.length == 0){
+						parent.layer.open({
+							title: "提示",
+							zIndex: parent.layer.zIndex, //重点1,
+							content: '请选择要删除的数据!'
+						});
+						return;
+					}
+					
+					if(data1.contract_candelete == 0){
+						
+						parent.layer.open({
+							title: "提示",
+							zIndex: parent.layer.zIndex, //重点1,
+							content: '请选择要删除的数据!'
+						});
+						return;
+						
+					}
+					
+				    for(var i=0;i<data1.length;i++) { 
+			      		idstr += data1[i].contract_id;
+			      		if((i+1)!=data1.length){
+			      			idstr += ",";
+			      		}
+					} 
+					parent.layer.confirm('确定删除记录？', {
+						icon: 3,
+						zIndex: parent.layer.zIndex ,//重点1
+						title: '删除'
+					}, function(index) {
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp+"/WebDeleteContractInfo?jsoncallback=?",
+							async: true,
+							dataType: 'jsonp',
+							data: {
+								"userId": localStorage.userId,
+								"userPw": localStorage.userPw,
+								"database": localStorage.database,
+								"id": idstr
+							},
+							success: function(res) {
+								var data = JSON.parse(res);
+								var num1=0;
+								var num2=0;
+								for(var i=0;i<data.length;i++){
+									var panduan=data[i].ResultValue;
+									if(panduan == 1){
+										++num1;
+									}else{
+										++num2;
+									}
+								}
+								parent.layer.open({
+									title: "提示",
+									zIndex: parent.layer.zIndex, //重点1,
+									content: num1+'个成功 ，'+num2+'个失败'
+								});
+								getList();
+							}
+						});
+						parent.layer.close(index);
+					});
+				}
+			};
+		});
+	</script>
+	
+
+</html>

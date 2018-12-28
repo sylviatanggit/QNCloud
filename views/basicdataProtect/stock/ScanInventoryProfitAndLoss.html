@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>盘盈盘亏</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/qk/custom_style.css">
+
+		<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+		<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
+		
+	</head>
+	<style>
+		
+.style_show{
+	color: #2D89DD;
+}
+
+	
+		
+		.inputs button {
+				    padding: 0;
+				    cursor: pointer;
+				    border: none;
+				    width: 90px;
+				    height: 30px!important;
+				    text-align: center;
+				    line-height: 30px !important;
+				    border-radius: 2px;
+				    background-color: #2D89DD;
+				    color: #FFFFFF;
+				    margin-left: 8px;
+				}
+				
+					.dx-datagrid-content .dx-datagrid-table .dx-row .dx-command-select{
+			padding: 0;
+			width: 45px; 
+			min-width: 45px; 
+			max-width: 45px;
+	}
+		
+	.dx-datagrid-table .dx-row .dx-command-select{
+			width: 45px; 
+			min-width: 45px; 
+			max-width: 45px;
+	}
+	
+.panel-content .layui-laypage {
+    position: absolute;
+    bottom: 0px;
+    left: 0px !important;
+    margin: 0px;
+}
+
+  	div.cs_result_area div.pagination li {
+		margin: 0 5px !important;
+	}
+
+	    
+	.dx-datagrid-rowsview .dx-selection.dx-row>td {
+		background-color: yellow!important;
+	}
+	
+	
+		.detail {
+			position: absolute;
+			top: 30%;
+			float: right;
+			width: 58px;
+			text-align: center;
+			padding: 3px 3px;
+			line-height: 20px;
+			right: 0px;
+			font-size: 9pt;
+			border-top-left-radius: 5px;
+			border-bottom-left-radius: 5px;
+			background-color: #2D89DD;
+			color: white;
+			cursor: pointer;
+			z-index: 9;
+		}
+		
+		.order {
+			width: 90%;
+			height: 97%;
+			border: 1px solid #CCCCCC;
+			position: absolute;
+			bottom: 0px;
+			right: 0px;
+			z-index: 99999999999;
+			background-color: #FFFFFF;
+			display: none;
+		}
+		
+    
+	</style>
+	
+
+	<body>
+		<div class="panel-content" id="profitLossIid">
+			<div class="layui-tab">
+				
+				
+				
+				<div class="panel_header">
+					
+					<div class="inputs" style="text-align: right;">
+							
+						<!--<div style="display: inline-block;height: auto;margin-bottom: 0px;width: 82%;">
+							<div class="layui-inline" style="width: 100%;text-align: center;">
+								
+								
+							</div>
+							
+						</div>-->
+						
+						<!--<div class="btns">-->
+							<button class="layui-btn exceport" style="width: 90px;margin: 0px auto;padding: 0px;">导出明细</button>
+							<button class="layui-btn finishCheck" style="width: 100px;margin: 0px auto;padding: 0px;">生成单据</button>
+							<!--<ul class="action" style="right: 0;">
+								<li>
+									<a class="jianjishijian" data-type="stockExport" >完成判断生成单据</a>
+								</li>
+								
+								<li>
+									<a class="jianjishijian modelup" data-type="shipanImport">实盘导入</a>
+								</li>
+								
+								<input type="file" id="modelup" style="display: none;"/>
+
+							
+							</ul>-->
+						<!--</div>-->
+						
+					</div>
+
+				</div>
+				
+				
+				<div style="width: 100%;height: 100%;margin: 0px;">
+					
+					<div style="width: 100%;height: 50%;" class="inventoryProfit">
+						<div style="height: 33px;">
+							<div style="float: left;height: 33px;text-align: center;vertical-align: middle;line-height: 33px;">
+								已盘盈数:<span style="display: inline-block;font-size: 12pt;" class="yipanProfitTotal">0</span>/盘盈总数:
+								<span style="display: inline-block;;font-size: 12pt;" class="panProfitTotal">0</span>
+							</div>
+					
+							
+						</div>
+						
+						<div>
+							
+									<div id="gridContainer1"></div>
+							
+									<div id="gridContainer1footerPageId" style="position: relative;height: 35px;"></div>
+
+						</div>
+					</div>
+					
+					
+				
+					<div style="width: 100%;height: 50%;margin-top: 0px;" class="inventoryLoss">
+						<div style="height: 33px;">
+							<div style="float: left;height: 33px;text-align: center;vertical-align: middle;line-height: 33px;">
+								<!--<span style="display: inline-block;margin-right: 15px;">盘亏</span>-->
+								已亏盘数:<span style="display: inline-block;font-size: 12pt;" class="yipanLossTotal">0</span>/盘亏总数:
+								<span style="display: inline-block;;font-size: 12pt;" class="panLossTotal">0</span>
+							</div>
+							
+						
+							
+						</div>
+						
+						<div>
+							
+									<div id="gridContainer2"></div>
+							
+								<div id="footerPageId" style="position: relative;height: 35px;"></div>
+						
+						</div>
+					</div>
+					</div>
+				</div>
+				
+				
+				
+			</div>
+		</div>
+		<input type="hidden" value="" class="pandianDanHanid"/>
+<br />
+
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+					<!-- 分页插件 -->
+					
+	<script src="../../../js/public.js"></script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script src="../../../devexpresslibrary/js/dx.all.js.18.2.js"></script>
+
+	<script src="../../../devexpresslibrary/js/pagination/jquery.pagination.js"></script>
+	<script src="../../../devexpresslibrary/js/pagination/highlight.min.js"></script>
+	<script>
+		var  jiazaiIndex;
+		var targetstockid = "";
+		var areaid = "";
+		layui.use(['table', 'jquery', 'laydate', 'laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laypage = layui.laypage;
+
+			
+			var myDate = new Date();
+
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			
+			$('.moreAction1').hover(function() {
+				$(".action1").show();
+			}, function() {
+				$(".action1").hide();
+			});
+			$('.action1').hover(function() {
+				$(".action1").show();
+			}, function() {
+				$(".action1").hide();
+			});
+			
+	
+		
+			
+			var profitData = [];var lossData = [];
+
+				var jiazaiIndex;
+			parent.layer.open({
+			  type: 3, 
+			  zIndex: parent.layer.zIndex, //重点1
+			  success: function(layero, index){
+			  		jiazaiIndex = index;
+	  			}
+			});
+			
+			function initData(){
+	
+				
+				$.ajax({
+					type: "get",
+					url:  localStorage.serIp  +"/WebGetProfitAndLossesCount?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'orderNum':sessionStorage.pandianDanHanid,
+
+					},
+					success: function(res) {
+						parent.layer.close(jiazaiIndex);
+		
+						var data = JSON.parse(res);
+						
+				
+						$(".panLossTotal").text(data.lossescount);
+						$(".yipanLossTotal").text(data.lossescount);
+						
+						$(".yipanProfitTotal").text(data.profitcount);
+						$(".panProfitTotal").text(data.profitcount);
+
+									
+					},
+					error: function(res) {
+							parent.layer.close(jiazaiIndex);
+							
+							parent.layer.open({
+								title: "提示",
+								content: '服务器异常!',
+									zIndex: parent.layer.zIndex //重点1
+					
+							});
+					}
+				});
+			}
+			
+			initData();
+			
+			
+			var limit1 = 50;
+			var curpage1 = 1;
+			var count1 = 0;
+			
+			var limit2 = 50;
+			var curpage2 = 1;
+			var count2 = 0;
+
+				
+			function inventoryProfit(jumpFlag) {
+				var seachContent = $(".seachContent").val();
+							
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetInventoryProfit?jsoncallback=?",
+					dataType: 'json',
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'txtCondition': seachContent,
+						'num' : limit1,
+						'page':curpage1,
+						'orderNum' : sessionStorage.pandianDanHanid
+
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+				
+						count1 = desData.count;
+						
+						var data =  JSON.parse(desData.data);
+						profitData  = data;
+						
+					
+						
+						inventoryProfitData(data);
+						
+						
+										
+						if(jumpFlag) {
+							inventoryProfitpublic_pages();
+						}
+						
+					
+					}
+				});
+
+			}
+			
+	
+				inventoryProfit(true);
+				inventoryLoss(true);
+			
+			
+			
+				//分页
+			function inventoryProfitpublic_pages() {
+				laypage.render({
+					elem: 'gridContainer1footerPageId', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100],
+					limit: limit1,
+					curr: curpage1,
+					group: 2,
+					count: count1, //数据总数，从服务端得到
+					jump: function(obj,first) {
+						curpage1 = obj.curr;
+						limit1 = obj.limit;
+						
+						if(!first){
+							inventoryProfit(false);
+
+						}
+					}
+				})
+			}
+			
+
+
+				 // 根据可视区的高度判断
+			 var viewHeight = $(window).height();
+			if (viewHeight == 855) {
+				$('#gridContainer1').css('height', 282 + 'px'); //855*0.81
+				$('#gridContainer2').css('height', 282 + 'px'); //855*0.81
+
+			} else {
+				$('#gridContainer1').css('height', viewHeight * 0.34 + 'px');
+				$('#gridContainer2').css('height', viewHeight * 0.34 + 'px');
+			}
+			
+
+	function inventoryProfitData(data) {
+		 	var inventoryProfitDataStore = new DevExpress.data.ArrayStore({
+		        data: data
+		    });
+		    
+
+			
+		 ProfitProductDataGrid = $("#gridContainer1").dxDataGrid({
+			dataSource: data,
+			allowColumnReordering: true,
+		
+			showBorders: true,
+            keyExpr: "id",
+            editing: {
+					mode:'cell',
+					allowUpdating: true,
+			},
+           columnChooser: {
+	            enabled: false,
+				mode: "dragAndDrop",
+			},
+			cacheEnabled:true,
+            headerFilter: {
+                visible: false
+            },
+            sorting: {
+                mode: "multiple"//none
+            },
+            filterRow: {
+                visible: false,
+            },
+			paging: {
+				pageSize: 200,
+            },
+			selection: {
+                mode: "multiple",
+            },
+			allowColumnResizing: true,
+			columnFixing: {
+				enabled: false
+			},
+			grouping: {
+	            contextMenuEnabled: false,
+	            expandMode: "rowClick"
+	        },   
+	        groupPanel: {
+	            visible: false
+			},
+			columns: [{
+				dataField: "producename",
+                caption: "产品名称",
+				allowEditing: false,	
+				cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+                
+			},{
+				dataField: "manufacturer",
+                caption: "品牌",width: 80,
+				allowEditing: false,cssClass:"style_show",
+                	cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			}
+			,{
+				dataField: "producenum",
+                caption: "产品编号",	allowEditing: false,	cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+                
+			},{
+				dataField: "producecode",width: 120,
+                caption: "主条码",	allowEditing: false,	cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+                
+			},
+			{
+                dataField: "producesubbarcode",allowEditing: false,width: 150,
+				caption: "副条码",	cellTemplate:function(container,options){
+					if(options.value == null || options.value == ''){
+							$("<div>")
+							.append($("<div></div>"))
+							.appendTo(container);
+						}else{
+							$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+						}
+					}
+             
+			},
+			{
+                dataField: "iots",allowEditing: false,width: 100,
+				caption: "批号",	cellTemplate:function(container,options){
+						if(options.value == null || options.value == ''){
+							$("<div>")
+							.append($("<div></div>"))
+							.appendTo(container);
+						}else{
+							$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+						}
+					}
+			}
+			,
+			{
+                dataField: 'productiondate',
+                width: 90,
+				caption: "生产日期",
+				format: "yyyy-MM-dd",allowEditing: false,
+				dataType: "date",	cellTemplate:function(container,options){
+						if(options.value == null || options.value == ''){
+							$("<div>")
+							.append($("<div></div>"))
+							.appendTo(container);
+						}else{
+								container.append("<div>" + options.text + "</div>")
+						}
+					}
+			},
+			{
+                dataField: "indate",
+                width: 90,
+				caption: "有效期",
+				format: "yyyy-MM-dd",allowEditing: false,
+				dataType: "date",	cellTemplate:function(container,options){
+						if(options.value == null || options.value == ''){
+							$("<div>")
+							.append($("<div></div>"))
+							.appendTo(container);
+						}else{
+								container.append("<div>" + options.text + "</div>")
+						}
+					}
+			},	{
+                dataField: "danwei",
+				caption: "产品规格",	allowEditing: false,	cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			},
+			{
+                dataField: "producemodel",
+				caption: "型号",	allowEditing: false,	cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			},
+//			{
+//              dataField: "realcost",
+//				fixed: true,cssClass:"style_show",
+//				fixedPosition: 'right',
+//				format: {
+//						type: "fixedPoint",
+//						precision: 3
+//					},
+//              width: 100,
+//				caption: "含税成本价",alignment:"center"
+//			},
+			{
+                dataField: "producecount",
+				fixed: true,cssClass:"style_show",
+				fixedPosition: 'right',	allowEditing: false,	
+                width: 100,	dataType: "number",	validationRules: [{
+						type: "pattern",
+						pattern: /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/,
+						message: "数量必须为正"
+					}],
+				caption: "实盘数",alignment:"center",	cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			}
+//			,
+//			{
+//              dataField: "totalcost",
+//				fixed: true,
+//				fixedPosition: 'right',cssClass:"style_show",
+//				format: {
+//						type: "fixedPoint",
+//						precision: 2
+//					},
+//              width: 100,
+//				caption: "小计",alignment:"center",	allowEditing: false,
+//				calculateCellValue: function(rowData) {
+//		           
+//		                return rowData.realcost * rowData.producecount;
+//		          }
+//			}
+			],
+			summary: {
+            totalItems: [{
+                    column: "producecount",
+					summaryType: "sum",	
+					customizeText: function(data) {
+						
+						var data = data.value;
+					
+                        return data;
+                }
+				
+              }
+			,{
+                    column: "totalcost",
+					summaryType: "sum",	 precision :2,valueFormat:"fixedPoint",
+					customizeText: function(data) {
+                        return Math.round(data.value * 100 ) / 100;
+                }
+				
+              },
+				
+			]  ,
+	               calculateCustomSummary: function (options) {},
+		},
+
+			onSelectionChanged:function(e){
+			
+				
+            }
+
+		}).dxDataGrid('instance');
+	    
+		
+			
+		}
+
+			
+		
+			
+			
+						
+		　$(document).on("focus",".dx-texteditor-input",function(){
+　
+		  $(this).select();
+　　});
+	
+
+			function inventoryLoss(jumpFlag) {
+				var seachContent = $(".seachContent").val();
+							
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetInventoryLosses?jsoncallback=?",
+					dataType: 'json',
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'txtCondition': seachContent,		
+						'num' : limit2,
+						'page':curpage2,
+						'orderNum' : sessionStorage.pandianDanHanid
+
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						
+						count2 = desData.count;
+						
+						var data =  JSON.parse(desData.data);
+
+						
+						
+						lossData = data;
+						inventoryLossData(data);
+						
+						
+								
+						if(jumpFlag) {
+							public_pages();
+						}
+						
+						
+					}
+				});
+
+			}
+			
+		
+			
+	function inventoryLossData(data) {
+				
+			var inventoryLossDataStore = new DevExpress.data.ArrayStore({
+		        data: data
+		    });
+		    
+	   
+			
+		 inventoryLossDataGrid = $("#gridContainer2").dxDataGrid({
+			dataSource: data,
+			allowColumnReordering: true,	
+
+			showBorders: true,
+            keyExpr: "id",
+           columnChooser: {
+	            enabled: false,
+				mode: "dragAndDrop",
+			},
+			cacheEnabled:true,
+            headerFilter: {
+                visible: false
+            },
+            sorting: {
+                mode: "multiple"//none
+            },
+            filterRow: {
+                visible: false,
+            },
+			paging: {
+				pageSize: 200,
+            },
+			selection: {
+                mode: "multiple",
+            },
+			allowColumnResizing: true,
+			columnFixing: {
+				enabled: false
+			},
+			grouping: {
+	            contextMenuEnabled: false,
+	            expandMode: "rowClick"
+	        },   
+	        groupPanel: {
+	            visible: false
+			},
+			columns: [{
+				dataField: "producename",
+                caption: "产品名称",
+				cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+                
+			},{
+				dataField: "manufacturer",
+                caption: "品牌",width: 80,cssClass:"style_show",
+					cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+                
+			}
+			,{
+				dataField: "producenum",
+                caption: "产品编号",	cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+                
+			},{
+				dataField: "producecode",width: 120,
+                caption: "主条码",	cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+                
+			},
+			{
+                dataField: "producesubbarcode",width: 150,
+				caption: "副条码",	cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+             
+			},
+			{
+                dataField: "iots",width: 100,
+				caption: "批号",	cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			}
+			,
+			{
+                dataField: 'productiondate',
+                width: 90,
+				caption: "生产日期",
+				format: "yyyy-MM-dd",
+				dataType: "date"
+				,	cellTemplate:function(container,options){
+						if(options.value == null || options.value == ''){
+							$("<div>")
+							.append($("<div></div>"))
+							.appendTo(container);
+						}else{
+								container.append("<div>" + options.text + "</div>")
+						}
+					}
+			},
+			{
+                dataField: "indate",
+                width: 90,
+				caption: "有效期",
+				format: "yyyy-MM-dd",
+				dataType: "date",	cellTemplate:function(container,options){
+						if(options.value == null || options.value == ''){
+							$("<div>")
+							.append($("<div></div>"))
+							.appendTo(container);
+						}else{
+								container.append("<div>" + options.text + "</div>")
+						}
+					}
+			},	{
+                dataField: "danwei",
+            
+				caption: "产品规格",	cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			},
+			{
+                dataField: "producemodel",
+              
+				caption: "型号",	cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			},
+//			{
+//              dataField: "realstockcount",
+//				fixed: true,
+//				fixedPosition: 'right',
+//              width: 100,
+//				caption: "账存数",alignment:"center",
+//			},
+			{
+                dataField: "producecount",
+				fixed: true,
+				fixedPosition: 'right',cssClass:"style_show",
+                width: 100,
+				caption: "实盘数",alignment:"center",	cellTemplate:function(container,options){
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+			},
+//			{
+//              dataField: "chayicount",
+//				fixed: true,
+//				fixedPosition: 'right',
+//              width: 100,
+//				caption: "差异数",alignment:"center",
+//			}
+			],
+			summary: {
+            totalItems: [{
+                    column: "producecount",
+					summaryType: "sum",	customizeText: function(data) {
+						
+						var data = data.value;
+					
+                        return data;
+                }
+				
+              }
+
+			]
+		},
+			onSelectionChanged:function(e){
+			
+				
+            }
+		
+
+		}).dxDataGrid('instance');
+	
+		
+			
+		
+			}
+
+		
+		
+		
+		
+				//分页
+			function public_pages() {
+				laypage.render({
+					elem: 'footerPageId', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100],
+					limit: limit2,
+					curr: curpage2,
+					group: 2,
+					count: count2, //数据总数，从服务端得到
+					jump: function(obj,first) {
+						curpage2 = obj.curr;
+						limit2 = obj.limit;
+						
+						if(!first){
+							inventoryLoss(false);
+
+						}
+					}
+				})
+			}
+			
+			
+			$(".find").click(function(){
+					inventoryProfit(true);
+					inventoryLoss(true);
+			})
+			
+			
+								
+			$("body").keydown(function(event) {
+					if(event.keyCode == "13") { //keyCode=13是回车键
+						$('.find').click();
+	
+					}
+			});
+			
+		
+		 
+
+			
+			
+			
+			//完结并生成新单据
+			
+			$(".finishCheck").click(function(){
+				
+
+				
+				
+				
+											saveAndExamine();
+		
+			
+			
+			});
+			
+			
+				//导出全部
+		$(".exceport").click(function(){
+					    
+		
+				parent.layer.confirm('确定导出全部吗？', {
+					icon: 3,
+					zIndex: parent.layer.zIndex ,//重点1
+					title: '导出全部'
+				}, function(index) {
+					
+				parent.layer.open({
+				  type: 3, 
+				  zIndex: parent.layer.zIndex, //重点1,
+				  success: function(layero, index){
+				  		jiazaiIndex = index;
+					}
+				});
+				
+				var seachContent = $(".seachContent").val();
+			
+		
+				var timestamp=new Date().getTime();
+
+				$.ajax({
+					type: "get",
+					url: localStorage.serImportIp + "/WebExportInventoryDetail?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'database': localStorage.database,
+						'txtCondition': seachContent,
+						'orderNum':sessionStorage.pandianDanHanid,
+						'filename':"盘点明细"+timestamp+".xls"
+					},
+					success: function(res) {
+						parent.layer.close(jiazaiIndex);
+			
+						var res = JSON.parse(res);
+						if(res.ResultValue == '0') {
+							
+							parent.layer.open({
+								title: "提示",
+								content: '导出失败！',zIndex: parent.layer.zIndex //重点1
+							});
+							
+							
+						
+								
+					
+						}else{
+							
+							var downurl =  "\\"+res.ResultValue
+							while(true){
+								var isExists=0;
+								$.ajax({
+									url:downurl,
+									async:false,
+									type:'HEAD',
+									error:function(){
+									isExists=0;
+									
+									},
+									success:function(){
+									isExists=1;
+									
+									}
+								});
+								
+								
+								if(isExists == 1){
+									parent.layer.close(jiazaiIndex);
+									window.location.href = downurl;	
+			
+									break;
+								}
+						
+								
+							}
+							
+							parent.layer.open({
+								title: "提示",
+								content: '导出成功！',zIndex: parent.layer.zIndex //重点1
+									,
+								success: function(layero,index) {
+								parent.layer.setTop(layero); //重点2
+//									window.location.href = url;	
+							
+								},
+								
+							});
+							
+								
+						}
+						
+					},
+					error: function(res) {
+						parent.layer.close(jiazaiIndex);
+						
+					}
+				});
+					
+				});
+			})
+		
+		
+		
+			/*
+			 * 生成单据
+			 * @param: inSlave  盘盈
+			 * @param: outSlave 盘亏
+			 */
+			function saveAndExamine(){
+		
+					parent.layer.confirm('请仔细确认盘点信息！确定结束盘点并生成单据？', {
+							icon: 3,zIndex: parent.layer.zIndex //重点1
+								,
+							title: '提示'
+					}, function(index11) {
+						
+						parent.layer.close(index11);
+				var jiazaiIndex;
+				parent.layer.open({
+				  type: 3, 
+				  zIndex: parent.layer.zIndex, //重点1
+				  success: function(layero, index){
+				  		jiazaiIndex = index;
+		  			}
+				});
+				
+//				$.each(profitData,function(i,v,arr){	
+//						v.qs = 1;
+//						
+//				 })
+						
+				var  mylossData = [];
+				
+				var  profitData = [];
+				
+				$.ajax({
+					type: "POST",
+					url:  localStorage.serIp  +"/WebEndInventory",
+					async: true,
+					dataType: 'json',
+					crossDomain: true,
+					contentType:'application/json; charset=utf-8',
+					data:JSON.stringify({
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'orderNum': sessionStorage.pandianDanHanid,
+						'inSlave': JSON.stringify(profitData),
+						'outSlave':JSON.stringify(mylossData)
+					}),
+					success: function(res) {
+						parent.layer.close(jiazaiIndex);
+						
+						var data = JSON.parse(res);
+						
+						if(data[0].ResultValue == "1"){
+							
+								
+							var result = "盘点成功";
+							parent.layer.open({
+								title: "提示",
+								content: result,
+								zIndex: parent.layer.zIndex ,//重点1,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+					
+										
+								},
+									end: function(){  
+			            			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+									parent.layer.close(index); //再执行关闭     
+			          			  } 
+								 
+							});
+						
+									
+							
+						}
+						if(data[0].ResultValue == "0")
+						{
+							result = "盘点失败";
+							parent.layer.open({
+								title: "提示",
+								content: result,
+								zIndex: parent.layer.zIndex ,//重点1,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								
+								}
+							});
+						}
+						
+						if(data[0].ResultValue == "2")
+						{
+								parent.layer.open({
+								title: "提示",
+								content: data[0].ResultItem,
+								zIndex: parent.layer.zIndex //重点1
+								
+							});
+						}	
+										
+						},
+						error: function(res) {
+							parent.layer.close(jiazaiIndex);
+							
+							parent.layer.open({
+								title: "提示",
+								content: '服务器异常!',
+									zIndex: parent.layer.zIndex //重点1
+					
+							});
+						}
+				});
+				
+		
+					},
+					 function(index11) {
+					 	
+						parent.layer.close(index11);
+					
+	
+					}
+					);
+					
+						
+			
+			}
+		
+		
+		
+		
+		});
+		
+		
+		
+	</script>
+<script>
+		function scanCodeInStoreData(data){
+
+			scanCodeInStore(data)
+	
+		}
+</script>
+</html>

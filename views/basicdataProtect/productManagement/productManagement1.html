@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>青囊</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+
+	</head>
+	<style type="text/css">
+		.index_content .layui-tab .layui-tab-title {
+			border-bottom: 1px solid #CCCCCC;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.index_content .layui-tab .layui-tab-title li {
+			padding: 0px 28px !important;
+		}
+		
+		.index_content .layui-this {
+			border-bottom: 3px solid #FFFFFF;
+			z-index: 5;
+			border-top: 2px solid #2D89DD;
+		}
+		
+		
+		span._yellow {
+			background-color: #F8B551 !important;
+		}
+		
+		span._red {
+			background-color: #FF0000 !important;
+		}
+		
+		span._yellowOld {
+			background-color: #F19149 !important;
+		}
+		
+		
+	</style>
+	<body>
+		<div class="index_content" style="position: relative;">
+			<div class="layui-tab">
+				<ul class="layui-tab-title">
+					<li class="chanpin layui-this">所有产品</li>
+					<li class="guige">所有规格</li>
+				</ul>
+				<div class="layui-tab-content contentL">
+				</div>
+
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'layer', 'table', 'laypage'], function() {
+			var $ = layui.jquery; //重点处
+			var layer = layui.layer;
+			var table = layui.table;
+			$(function() {
+				$(".contentL").load("chanpin.html")
+			})
+			$(".chanpin").click(function() {
+//				alert(123)
+				$(".contentL").load("chanpin.html");
+				$(".chanpin").addClass("layui-this");
+				$(".guige").removeClass("layui-this");
+			})
+			$(".guige").click(function() {
+				$(".contentL").load("guige.html")
+				$(".chanpin").removeClass("layui-this");
+				$(".guige").addClass("layui-this");
+			})
+		});
+	</script>
+</html>

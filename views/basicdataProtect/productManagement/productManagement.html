@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>青囊</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+
+	</head>
+	<style type="text/css">
+		* {
+			font-size: 9pt;
+		}
+		
+		.index_content {
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		.layui-tab{
+			margin: 0 !important;
+		}
+		.index_content .layui-tab .layui-tab-title {
+			border-bottom: 1px solid #CCCCCC;
+			/*padding: 8px 0 !important;*/
+			padding-bottom: 0 !important;
+		}
+		
+		.index_content .layui-tab .layui-tab-title li {
+			padding: 0px 28px !important;
+			border: 1px solid #ddd;
+			border-bottom: none;
+		}
+		
+		.index_content .layui-this {
+			/*border-bottom: 3px solid #FFFFFF;*/
+			z-index: 5;
+			border-top: 2px solid #2D89DD !important;
+			border-left: none !important;
+			border-right: none !important;
+		}
+		.index_content_header_chanpin,
+		.index_content_header_guige_seach 
+		{
+			margin-bottom: 8px;
+		}
+		.index_content_header_chanpin .index_content_header_seach .layui-input,
+		.index_content_header_guige_seach .layui-input {
+			height: 28px !important;
+			line-height: 28px !important;
+			width: 240px;
+		}
+		
+		.index_content_header_chanpin .index_content_header_seach .layui-btn,
+		.index_content_header_guige_seach .layui-btn {
+			width: 76px !important;
+			line-height: 28px !important;
+			height: 28px !important;
+			background-color: #2D89DD !important;
+		}
+		
+		.index_content_header_chanpin .index_content_header_btn,
+		.index_content_header_guige_btn {
+			margin-top: -28px;
+			margin-right: 20px;
+		}
+		.index_content_header_guige_btn{
+			margin-top: -42px;
+		}
+		.index_content_header_btn .layui-btn,
+		.index_content_header_guige_btn .layui-btn {
+			line-height: 28px !important;
+			height: 28px !important;
+			background-color: #2D89DD !important;
+		}
+		
+		.index_content_header_btn .gengduocaozuo,
+		.index_content_header_guige_btn .layui-btn {
+			background-color: #FFFFFF !important;
+			border: 1px solid #2D89DD;
+			color: #2D89DD;
+			cursor: pointer;
+			width: 90px;
+			line-height: 28px;
+			text-align: center;
+		}
+		.index_content_header_btn .gengduocaozuo:hover,
+		.index_content_header_guige_btn .layui-btn:hover{
+			background: #FFFFFF !important;
+			color: #2D89DD !important;
+			border-bottom: none;
+		}
+		.index_content_header_btn ul,
+		.index_content_header_guige_btn ul {
+			position: absolute;
+			right: 0px;
+			z-index: 10;
+			border: 1px solid #2D89DD;
+			cursor: pointer;
+		}
+		
+		.index_content_header_btn ul li,
+		.index_content_header_guige_btn ul li {
+			width: 88px;
+			line-height: 28px;
+			text-align: center;
+			background: #FFFFFF !important;
+		}
+		.index_content_header_btn ul:hover,
+		.index_content_header_guige_btn ul hover{
+			border-top: none;
+		}
+		tbody .layui-table-cell {
+			font-family: "PingFang" !important;
+			font-size: 9pt !important;
+		}
+		
+		thead tr {
+			height: 28px !important;
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table-fixed-r {
+			display: none !important;
+		}
+		
+		.layui-table td,
+		.layui-table th {
+			font-size: 9pt;
+			/*padding: 0 1.45vw !important;*/
+		}
+		
+		.layui-table tr:nth-child(odd) {
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(even) {
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(odd) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.index_content_header_btn ul li,
+		.index_content_header_guige_btn ul li {
+			width: 88px;
+			background-color: #FFFFFF;
+			height: 28px;
+			line-height: 28px;
+			text-align: center;
+		}
+		
+		.index_content_header_btn ul li {
+			width: 88px;
+		}
+		
+		.index_content_header_btn ul li a,
+		.index_content_header_guige_btn ul li a {
+			font-size: 9pt;
+			color: #357BEA;
+		}
+		
+		.layui-table th {
+			font-size: 9pt !important;
+		}
+		
+		.layui-table-body .layui-table-main table {
+			min-height: 1000px !important;
+		}
+		
+		.layui-table-body {
+			width: calc(100% + 27px);
+		}
+		
+		#index_content_guige .layui-form,
+		.layui-border-box,
+		.layui-table-view {
+			/*height: calc(100vh - 200px) !important;
+			overflow-y: scroll !important;*/
+			border: none !important;
+		}
+		
+		span._yellow {
+			background-color: #F8B551 !important;
+		}
+		
+		span._red {
+			background-color: #FF0000 !important;
+		}
+		
+		span._yellowOld {
+			background-color: #F19149 !important;
+		}
+		
+		#index_content_chanpin .layui-laypage {
+			position: absolute;
+			bottom: -5px;
+			left: 5px;
+			z-index: 10;
+		}
+		
+		#index_content_guige .layui-laypage {
+			position: absolute;
+			bottom: -5px;
+			z-index: 10;
+			left: 5px;
+		}
+		
+		.chanpin_caozuo,
+		.guige_caozuo {
+			cursor: pointer;
+		}
+		
+		.chanpin .layui-table-view .layui-table-body table tbody tr td:nth-child(3) div.layui-table-cell {
+			color: #357BEA !important;
+		}
+		
+		.layui-tab-content {
+			padding: 0 !important;
+			padding-top: 18px !important;
+			padding-bottom: 28px !important;
+		}
+		
+		.layui-table-cell {
+			height: auto !important;
+		}
+		
+		.contentL {
+			border: 1px solid #ddd;
+			box-sizing: border-box;
+			border-top: none;
+			overflow: hidden !important;
+		}
+		.layui-table-header{
+			box-sizing: border-box;
+			border-top: 1px solid #ddd !important;
+			border-bottom: none;
+		}
+		.layui-laypage a, .layui-laypage span{
+			margin-bottom: 0 !important;
+		}
+	</style>
+	<!--<link rel="stylesheet" type="text/css" href="aaa.css"/>-->
+
+	<body>
+		<div class="index_content" style="position: relative;">
+			<div class="layui-tab">
+				<ul class="layui-tab-title">
+					<li class="chanpin layui-this" style="border-right: none;">所有产品</li>
+					<li class="guige" style="border-left: none;">所有规格</li>
+				</ul>
+				<div class="layui-tab-content contentL">
+
+				</div>
+
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'layer', 'table', 'laypage'], function() {
+			var $ = layui.$ //重点处
+			layer = layui.layer;
+			$(function() {
+				$(".contentL").load("chanpin.html")
+			})
+			$(".chanpin").click(function() {
+				//				alert(123)
+				$(".contentL").load("chanpin.html");
+				$(".chanpin").addClass("layui-this");
+				$(".guige").removeClass("layui-this");
+			})
+			$(".guige").click(function() {
+				$(".contentL").load("guige.html")
+				$(".chanpin").removeClass("layui-this");
+				$(".guige").addClass("layui-this");
+			})
+		})
+	</script>
+
+</html>

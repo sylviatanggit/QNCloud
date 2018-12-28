@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>盘亏单</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+	</head>
+	<style type="text/css">
+		.loss {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		label {
+			padding: 0 !important;
+			margin-left: 15px;
+		}
+		
+		.btns button,
+		.find {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px;
+		}
+		
+		.btns button {
+			width: 90px
+		}
+		
+		.loss_header {
+			margin-bottom: 8px;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+			z-index: 5;
+		}
+		
+		.cs_container {
+			width: 250px !important;
+		}
+		
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 5px !important;
+		}
+		
+			.layui-inline{
+			margin-top: 10px;
+		}
+		
+		.layui-form-label{
+			margin-left: 0px;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="loss">
+			<div class="layui-tab">
+				<div class="loss_header">
+					<div class="inputs"  style="margin-left: 10px;margin-bottom: 8px;margin-right: 10px;">
+						
+							<div style="width: 100%;height: auto;">	
+						<div class="layui-inline" id="fengongsiId" style="margin-right:15px;">
+							<label class="layui-form-label" style="margin-left: 0px;">所属公司</label>
+							<div class="layui-input-inline">
+								<select name="" class="layui-input companytypeid" style="width: 200px;">
+									<option value="-1">全部</option>
+									
+								</select>
+							</div>
+						</div>
+			
+						<div class="layui-inline" style="width: 296px;margin-right:15px;">
+							<label class="layui-form-label" style="margin-left:0px;margin-right: 10px;">业务员</label>
+							<div id="append_sale">
+								<input autocomplete="off" class="layui-input salesman" id="salesman" type="text" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+						</div>
+						<div class="layui-inline" style="margin-right:15px;">
+							<label class="layui-form-label">日期范围</label>
+							<div class="layui-input-inline">
+								<input autocomplete="off" id="lossdate1" class="layui-input" type="text">
+							</div>
+							-
+							<div class="layui-input-inline" style="margin-right:15px;">
+								<input autocomplete="off" id="lossdate2" class="layui-input" type="text" style="margin-left: 0;">
+							</div>
+						</div>
+			
+						</div>
+					
+				<div style="width: 100%;height: auto;margin-top: 8px;">	
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input autocomplete="off" placeholder="请输入关键字" class="layui-input seachContent" type="text" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						
+						<div class="btns" style="margin-top: 10px;">
+														<button class="layui-btn moreAction" style="margin-right: 0px;">更多操作</button>
+
+							<ul class="action" style="margin-right: 10px;">
+								<li>
+									<a class="export" data-type="combineExport">合并导出</a>
+								</li>
+								<li>
+							<a class="allExport" data-type="allExport">导出全部</a>
+						</li>
+							</ul>
+						</div>
+						
+						
+
+					</div>
+	</div>
+				</div>
+				<table id="loss" lay-filter="demo">
+					<div id="gridContainer"></div>
+				</table>
+			</div>
+		</div>
+	</body>
+
+
+	<script>
+		layui.use(['table', 'jquery', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			var laypage = layui.laypage;
+			var myDate = new Date();
+			var currentMothFirstDay = getCurrentMothFirstDay();
+			var currentDate =  myDate.getFullYear() + '-' +(myDate.getMonth() + 1)  + '-'+  myDate.getDate();
+			
+			
+			laydate.render({
+				elem: '#lossdate1',
+				value:currentMothFirstDay
+			});
+			laydate.render({
+				elem: '#lossdate2',
+				value:  new Date()
+			});
+			var groupcompanyid=localStorage.groupcompanyid;
+			
+		
+			var limit = 50;
+			var curpage = 1;
+			var count;
+	
+			function staffList() {
+				$.ajax({
+					type: "post",
+					url: localStorage.serIp  +"/WebGetEmployeeDropDownList?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': groupcompanyid
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+
+						//							}
+						$('#salesman').bComboSelect({
+							showField: 'employeename',
+							keyField: 'employeesid',
+							data: data
+						});
+
+					}
+				});
+			}
+			staffList()
+			$(".state,.salesman").change(function() {
+				lossData(true);
+			})
+			$(".companytypeid").change(function() {
+				
+				lossData(true);
+				//业务员跟这变
+				groupcompanyid=$(".companytypeid").val();
+				groupcompanyid=groupcompanyid==-1?'':groupcompanyid;
+				var bandstr = '<input autocomplete="off" class="layui-input salesman" id="salesman" type="text" style="width: 250px;height: 28px;line-height: 28px;">';
+				$("#append_sale").empty().append(bandstr);
+				staffList();
+			
+			})
+			
+			
+			if(localStorage.groupcompanyid != "0"){
+				$("#fengongsiId").css("display","none");
+					lossData(true);
+			}else{
+					dataFun1();
+			}
+			
+			//获取公司信息
+			function dataFun1() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetAllGroupCompany?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						var optionsStr = "";
+						for(var i=0;i<desData.length;i++){
+							var id= desData[i].myg_companyid;
+							var name= desData[i].companyname;
+							
+							
+							if(id == localStorage.groupcompanyid){
+								optionsStr+= "<option value='"+id+"' selected='selected'>"+name+"</option>";
+
+							}else{
+								optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+
+							}
+							
+						
+							
+						}
+						$(".companytypeid").append(optionsStr);
+						
+							lossData(true);
+					}
+				});
+
+			}	
+		
+			
+			function lossData(jumpFlag) {
+				
+				var seachContent = $(".seachContent").val();
+				
+				var salesman = $("#salesman").val();
+				
+				
+				var unit = $(".unit").attr('data-id');			
+				var beginTime = $('#lossdate1').val() !='' ? $('#lossdate1').val() :currentMothFirstDay;
+				var endTime = $('#lossdate2').val() != '' ? $('#lossdate2').val() : currentDate;
+				if(localStorage.groupcompanyid == "0"){
+					companytypeid = $('.companytypeid option:selected').val();
+				}else{
+					companytypeid = localStorage.groupcompanyid;
+				}
+				$.ajax({
+					type: "get",
+					url:localStorage.serIp  + "/WebGetOutstockrecoverInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'groupCompanyId':companytypeid,
+						'database': localStorage.database,
+						'orderNum': seachContent,
+						'agentId': salesman,
+						'beginTime': beginTime,
+						'endTime': endTime,
+						"checkState": 1,
+						'orderState': -1,
+						'orderType': 7
+					},
+					success: function(res) {
+						var lossData = JSON.parse(res);
+						var data = JSON.parse(lossData.data);
+						
+						count = lossData.count;
+						
+						lossInfo(data, limit);
+						
+
+				
+						
+						if(jumpFlag) {
+							loss_pages();
+						}
+					}
+				});
+			}
+
+		var viewHeight = $(window).height();
+			 $('#gridContainer').css('height', viewHeight*0.7 + 'px');
+
+
+		function lossInfo(data, limit) {
+			$(function () {
+			var dataGrid = $("#gridContainer").dxDataGrid({
+				dataSource: data,
+				allowColumnReordering: true,
+				showBorders: true,
+				keyExpr: "ordernum",
+				columnChooser: {
+					enabled: false,
+					mode: "dragAndDrop",
+				},
+				headerFilter: {
+					visible: false
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				filterRow: {
+					visible: false,
+				},
+				paging: {
+					pageSize: 200,
+				},
+				selection: {
+					mode: "multiple",
+				},
+				allowColumnResizing: true,
+				columnFixing: {
+					enabled: false
+				},
+				grouping: {
+					contextMenuEnabled: false,
+					expandMode: "rowClick"
+				},
+				groupPanel: {
+					visible: false
+				},
+				columns: [{
+					dataField: "ordernum",
+					caption: "盘亏单号",
+					width: 160,
+					fixed: true,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div style='color:#2D89DD'> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}
+					,
+				{
+					dataField: "statesname",
+					width: 70,
+					caption: "操作状态",
+				},
+				{
+					dataField: "typeof",
+					width: 70,
+					caption: "单据类型",
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + '盘亏出库' + "</div>"))
+							.appendTo(container);
+					}
+				}
+					, {
+					dataField: "owncompanyname",
+					width: 160,
+					caption: "所属公司",
+				},
+				{
+					dataField: "warehousename",
+					width: 100,
+					caption: "盘亏仓库",
+				}, {
+					dataField: "areaname",
+					width: 100,
+					caption: "盘亏货区",
+				}, {
+					dataField: "goodsshelves_name",
+					width: 100,
+					caption: "盘亏货架",
+				}, {
+					dataField: "agentname",
+					width: 100,
+					caption: "业务员",
+				}, { 
+					dataField: "outstockdate",
+					width: 100,
+					dataType: "date",
+					format: "yyyy-MM-dd",
+					caption: "出库日期",
+				},
+				{
+					dataField: "operatorname",
+					width: 60,
+					caption: "制单人",
+					alignment: "right",
+				}
+					, {
+					dataField: "actiondate",
+					width: 90,
+					dataType: "date",
+					format: "yyyy-MM-dd",
+					caption: "制单日期",
+
+				}, {
+					dataField: "checkername",
+					width: 60,
+					caption: "审核人",
+
+				}, {
+					dataField: "checkdate",
+					width: 90,
+					dataType: "date",
+					format: "yyyy-MM-dd",
+					caption: "审核日期",
+				}
+					, {
+					dataField: "checkstatename",
+					width: 80,
+					caption: "审核状态",
+				}, {
+					dataField: "lastnum",
+					width: 160,
+					caption: "关联单号",
+				}, {
+					dataField: "mynum",
+					width: 160,
+					caption: "自定义单号",
+				}, {
+					dataField: "nomo",
+					width: 180,
+					caption: "备注"
+				}]
+				,
+					onSelectionChanged: function (e) {
+						produceidArray = [];
+						$.each(e.selectedRowKeys, function (currentValue, v, array) {
+							produceidArray.push("'" + v + "'");
+						})
+					
+					},
+				// 点击单号修改功能
+				onCellClick: function (e) {
+					var data = e.data
+					if (e.columnIndex == 1 && e.rowType == 'data') {
+						
+					parent.tab.tabAdd({
+						icon: '',
+						id:  'PKDDDH'+data.lastnum,
+						title: data.ordernum + '盘亏单',
+						url: 'views/stockManagement/ProfitAndLoss/detailPanLoss.html'
+
+					});
+					}
+				},
+			}).dxDataGrid('instance');
+
+		});
+			}
+      
+	  var produceidArray = [];
+	
+			//分页
+			function loss_pages() {
+			
+				laypage.render({
+					elem: 'loss', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						
+						curpage = obj.curr;
+						limit = obj.limit;
+						if (!first) {
+							lossData(false);
+				}
+						
+					}
+				})
+			}
+			
+			
+		
+			$(".find").click(function() {
+	
+				lossData(true);
+				
+			})
+			
+			$("body").keydown(function(event) {
+				if(event.keyCode == "13") { //keyCode=13是回车键
+					$('.find').click();
+				}
+			});
+			
+			var $ = layui.$,
+				active = {
+					combineExport: function() { //合并导出
+						
+						
+				if(!checkPermissionStatus("盘盈盘亏-导出1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}
+						
+						var checkStatus = table.checkStatus('PKTable'),
+							data1 = checkStatus.data;
+							
+							
+						var idstr = "";
+						if(produceidArray.length == 0){
+							parent.layer.open({
+								title: "提示",
+								zIndex: parent.layer.zIndex, //重点1,
+								content: '请选择要导出的单据!'
+							});
+							return;
+						}
+						
+	
+						
+						
+						
+				
+					     	
+				       idstr = produceidArray.join(',');
+				
+						parent.layer.confirm('确定导出吗？', {
+							icon: 3,
+							zIndex: parent.layer.zIndex ,//重点1
+							title: '合并导出'
+						}, function(index) {
+							
+							combineExport("PK",idstr)
+						});
+					}
+				};
+
+
+			$('.export').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+			
+			
+			//点击新增
+			$(".lossadd").click(function() {
+				var  num  = randomString();
+				parent.tab.tabAdd({
+					icon: '',
+					id: 'xindan' + num,
+					title: '新增盘亏单',
+					url: 'views/stockManagement/ProfitAndLoss/detailPanLoss.html'
+				});
+				
+			});
+			
+			
+					//导出全部
+			$(".allExport").click(function(){
+				
+				if(!checkPermissionStatus("盘盈盘亏-导出1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+				}
+				
+				
+					    
+				parent.layer.confirm('确定导出全部吗？', {
+					icon: 3,
+					zIndex: parent.layer.zIndex ,//重点1
+					title: '导出全部'
+				}, function(index) {
+					
+				parent.layer.open({
+				  type: 3, 
+				  zIndex: parent.layer.zIndex, //重点1,
+				  success: function(layero, index){
+				  		jiazaiIndex = index;
+					}
+				});
+				
+				var seachContent = $(".seachContent").val();
+				
+				var salesman = $("#salesman").val();
+				
+				
+				var unit = $(".unit").attr('data-id');			
+				var beginTime = $('#lossdate1').val() !='' ? $('#lossdate1').val() :currentMothFirstDay;
+				var endTime = $('#lossdate2').val() != '' ? $('#lossdate2').val() : currentDate;
+				if(localStorage.groupcompanyid == "0"){
+					companytypeid = $('.companytypeid option:selected').val();
+				}else{
+					companytypeid = localStorage.groupcompanyid;
+				}
+				var timestamp=new Date().getTime();
+
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp + "/WebGetOutstockrecoverExportInfo?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'groupCompanyId':companytypeid,
+						'database': localStorage.database,
+						'orderNum': seachContent,
+						'agentId': salesman,
+						'beginTime': beginTime,
+						'endTime': endTime,
+						"checkState": 1,
+						'orderState': -1,
+						'orderType': 7,
+						'filename':"盘亏"+timestamp+".xls"
+					},
+					success: function(res) {
+						parent.layer.close(jiazaiIndex);
+			
+						var res = JSON.parse(res);
+						if(res.ResultValue == '0') {
+							
+							parent.layer.open({
+								title: "提示",
+								content: '导出失败！',zIndex: parent.layer.zIndex //重点1
+							});
+							
+							
+						
+								
+					
+						}else{
+							
+							var url = "\\"+res.ResultValue
+							while(true){
+								var isExists=0;
+								$.ajax({
+									url:url,
+									async:false,
+									type:'HEAD',
+									error:function(){
+									isExists=0;
+									
+									},
+									success:function(){
+									isExists=1;
+									
+									}
+								});
+								
+								
+								if(isExists == 1){
+									parent.layer.close(jiazaiIndex);
+									window.location.href = url;	
+			
+									break;
+								}
+						
+								
+							}
+							
+							parent.layer.open({
+								title: "提示",
+								content: '导出成功！',zIndex: parent.layer.zIndex //重点1
+									,
+								success: function(layero,index) {
+								parent.layer.setTop(layero); //重点2
+//									window.location.href = url;	
+							
+								},
+								
+							});
+							
+								
+						}
+						
+					},
+					error: function(res) {
+						parent.layer.close(jiazaiIndex);
+						
+					}
+				});
+					
+				});
+			})
+			
+			
+		});
+	</script>
+	
+
+</html>

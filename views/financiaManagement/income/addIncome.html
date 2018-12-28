@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>一般收入单</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	</head>
+	<style type="text/css">
+		.addIncome {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.layui-input-block,
+		.layui-input-block input,
+		.layui-input-block label,
+		.layui-input-block select {
+			line-height: 28px !important;
+			height: 28px !important;
+			min-height: 28px !important;
+		}
+		
+		.layui-form-label {
+			line-height: 28px !important;
+		}
+		
+		.layui-input-block input,
+		.layui-input-block select {
+			width: 150px;
+		}
+		
+		.layui-input-inline input,
+		.layui-input-inline select {
+			width: 250px;
+		}
+		
+		.layui-input-inline select {
+			cursor: pointer;
+		}
+		
+		.layui-input-inline option {
+			cursor: pointer;
+		}
+		
+		.addIncome .layui-table td,
+		.layui-table th {
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+		}
+		
+		.btns {
+			margin-bottom: 12px;
+			position: absolute;
+			right: 20px;
+			top: 114px;
+		}
+		
+		.addIncome_header1_two {
+			margin-bottom: 12px;
+		}
+		
+		.find,
+		.btns button {
+			cursor: pointer;
+			border: none;
+			width: 90px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.addIncome_header1 {
+			padding-bottom: 40px;
+			border-bottom: 1px solid #F2F2F2;
+		}
+		
+		.addIncome_header1 ul {
+			float: right;
+		}
+		
+		.addIncome_header1 ul li {
+			margin-left: 8px;
+			margin-top: -50px;
+			display: inline-block;
+			width: 150px;
+		}
+		
+		.addIncome_header1 ul li label {
+			display: block;
+			padding: 0 !important;
+			text-align: left;
+			margin-bottom: 4px;
+		}
+		
+		.addIncome_header1 .layui-input-block {
+			margin-left: 0px !important;
+		}
+		
+		.addIncome_header1_two {
+			margin-left: 0px;
+			margin-top: 12px;
+		}
+		
+		.addIncome_header1_two .layui-form-item {
+			display: inline-block !important;
+			margin-bottom: 10px !important;
+		}
+		
+		.addIncome_header1_two .layui-form-item label {
+			margin-left: 12px;
+			display: block;
+			padding: 0 !important;
+			text-align: left;
+			margin-bottom: 4px;
+		}
+		
+		textarea {
+			margin-left: 12px;
+		}
+		
+		.layui-form-item .layui-input-inline {
+			width: 250px;
+		}
+		
+		.two_inputs {
+			padding-top: 12px;
+			background-color: #EFF5FF;
+			margin-top: 50px;
+			padding-bottom: 5px;
+		}
+		
+		.action {
+			right: 0;
+		}
+		
+		.reason,
+		.notes {
+			padding-top: 10px;
+			min-height: 100px !important;
+		}
+		
+		.cs_container,
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 5px !important;
+		}
+		
+		.ysh,
+		.dsh {
+			left: 150px;
+		}
+	</style>
+
+	<body>
+		<div class="addIncome">
+			<div class="layui-tab">
+				<div class="addIncome_header1">
+					<p style="color: #232323 !important;font-size: 24px !important;margin-top: 30px;">一般收入单<img class="dsh" src="../../../image/dsh.png" alt="" /> <img class="ysh" src="../../../image/ysh.png" alt="" /></p>
+					<ul>
+						<li>
+							<label class="layui-form-label">收入日期</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" placeholder="请选择日期" autocomplete="off" id="addIncomeDate" class="layui-input income_date" type="text">
+							</div>
+						</li>
+						<li>
+							<label class="layui-form-label">收入单号</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off" placeholder="请输入单号" class="layui-input income_ordernum" type="text">
+							</div>
+						</li>
+						<li>
+							<label class="layui-form-label">自定义单号</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input" type="text">
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="addIncome_header1_two">
+					<div class="btns">
+						<button class="layui-btn">新单</button>
+						<button class="layui-btn preserve">保存</button>
+						<button class="layui-btn moreAction">更多操作</button>
+						<ul class="action">
+							<li>
+								<a class="del" data-type="getCheckDel" lay-event='del'>打印</a>
+							</li>
+							<li>
+								<a class="abolish">作废</a>
+							</li>
+							<li>
+								<a class="del" data-type="getCheckDel" lay-event='del'>审核</a>
+							</li>
+							<li>
+								<a class="del" data-type="getCheckDel" lay-event='del'>反审核</a>
+							</li>
+						</ul>
+					</div>
+					<div class="two_inputs">
+						<div class="layui-form-item">
+							<label class="layui-form-label">收入账号</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input account" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">收入时间</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input time" type="text" id="incomeDate">
+							</div>
+						</div>
+						<br />
+						<div class="layui-form-item">
+							<label class="layui-form-label" style="margin-right: 12px;">收入目标</label>
+							<div class="layui-input-inline">
+								<input id="salesman" data-id='' autocomplete="off" class="layui-input target" type="text" style="width: 250px;">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label" style="margin-left: 0;">收入金额</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input money" type="text">
+							</div>
+						</div>
+						<br />
+						<div class="layui-form-item">
+							<label class="layui-form-label">收入原因</label>
+							<div class="layui-input-inline reason">
+								<textarea name="title" lay-verify="title" autocomplete="off" class="layui-input cause" type="text" style="width: 345px;height: 100px"></textarea>
+							</div>
+						</div>
+						<br />
+						<div class="layui-form-item notes">
+							<label class="layui-form-label">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注</label>
+							<div class="layui-input-inline">
+								<textarea name="title" lay-verify="title" autocomplete="off" class="layui-input nomo" type="text" style="width: 345px;height: 100px;"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+
+			laydate.render({
+				elem: "#addIncomeDate"
+			})
+			laydate.render({
+				elem: "#incomeDate"
+			});
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			var data1 = JSON.parse(sessionStorage.incomeData)
+
+			function staffList() {
+				$.ajax({
+					type: "get",
+					url: "http://192.168.0.196:11525/ByuWCFService/WebGetEmployeeDropDownList?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': localStorage.groupcompanyid
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						$('#salesman').bComboSelect({
+							showField: 'employeename',
+							keyField: 'employeesid',
+							data: data
+						});
+					}
+				});
+			}
+			staffList();
+			$(".account").click(function() {
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">银行账户</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/basicdataProtect/bankManagement.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero, index) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						$(".import", paentIfarame).css("display", 'block');
+						$(".bankadd", paentIfarame).css("display", 'none');
+						$(".moreAction", paentIfarame).css("display", 'none');
+
+					},
+					cancel: function() {
+						$(".account").val(sessionStorage.bankName);
+						$(".account").attr('data-id', sessionStorage.bankId);
+					}
+				});
+			});
+			$(".income_date").val(data1.paydate);
+			$(".income_ordernum").val(data1.ordernum);
+			$(".account").val(data1.bankname);
+			$(".account").attr('data-id',data1.bankid);
+			$(".time").val(data1.paydate);
+			$(".target").val(data1.paytargetname);
+			$(".target").attr('data-id', data1.paytarget)
+			$(".money").val(data1.money);
+			$(".cause").val(data1.cause);
+			$(".nomo").val(data1.nomo);
+			$(".preserve").click(function() {
+				var bankid = $(".account").attr('data-id');
+				var money = $('.money').val();
+				var cause = $(".cause").val();
+				var paydate = $(".time").val();
+				if($("#salesman").val()) {
+					var paytarget = $("#salesman").val();
+				} else {
+					var paytarget = $(".target").attr('data-id');
+				}
+
+				//				var agent = $("#salesman").val();
+				var nomo = $('.nomo').val();
+				var master = {
+					'bankid': bankid,
+					'money': money,
+					'cause': cause,
+					'agent': 'admin',
+					'paydate': paydate,
+					'paytarget': paytarget,
+					'type': 1,
+					'nomo': '' + nomo + ''
+				};
+				if(bankid == '') {
+					parent.layer.open({
+						title: "提示",
+						content: '请填写收入账户'
+					});
+					return false;
+				} else if(money == '') {
+					parent.layer.open({
+						title: "提示",
+						content: '请填写金额'
+					});
+					return false;
+				} else if(paytarget == '') {
+					parent.layer.open({
+						title: "提示",
+						content: '请填写收入目标'
+					});
+					return false;
+				} else if(paydate == '') {
+					parent.layer.open({
+						title: "提示",
+						content: '请填写收入时间'
+					});
+					return false;
+				}
+				$.ajax({
+					type: "get",
+					url: "http://192.168.0.196:11525/ByuWCFService/WebUpdateExpensesTable?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'master': JSON.stringify(master),
+						'orderNum': $(".income_ordernum").val()
+					},
+					success: function(res) {
+						var data = JSON.parse(res.substring(1));
+					}
+				});
+
+			});
+			$(".abolish").click(function() {
+				$.ajax({
+					type: "get",
+					url: "http://192.168.0.196:11525/ByuWCFService/WebCanceExpenses?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': $(".income_ordernum").val()
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						if(data == 1) {
+							parent.layer.open({
+								title: "提示",
+								content: '作废成功'
+							});
+						} else {
+							parent.layer.open({
+								title: "提示",
+								content: '作废失败'
+							});
+						}
+					}
+				});
+			});
+		});
+	</script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+
+</html>

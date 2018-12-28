@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加分组</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.addGoods {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 8px;
+		}
+		
+		.layui-table tr:nth-child(odd) {
+			background-color: #FFFFFF !important;
+		}
+		.layui-table tbody tr:nth-child(odd) {
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(even) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-form-item .layui-input-inline,
+		.layui-form-item input,
+		.layui-form-item label {
+			line-height: 22px !important;
+			height: 22px !important;
+			min-height: 22px !important;
+		}
+		
+		.layui-form-item textarea,
+		.layui-form-item input {
+			width: 230px;
+		}
+		
+		.layui-form-item label {
+			padding: 0 10px !important;
+		}
+		.layui-form-label{
+			width: 60px;
+		}
+		.layui-table-cell {
+			padding: 0 !important;
+		}
+		
+		.layui-table td,
+		.layui-table th {
+			padding: 0 2.9vw !important;
+		}
+		
+		.addGoods_true1 {
+			border: none;
+			float: right;
+			/*width: 76px;*/
+			height: 22px;
+			margin-right: 25px;
+			line-height: 22px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-top: 20px;
+		}
+		
+		.layui-form-item	
+		{
+			margin-bottom: 0 !important;
+		}
+		@media screen and (max-width: 450px){
+			.layui-form-item .layui-inline{
+				margin-bottom: 0;
+			}
+			.layui-form-item .layui-input-inline{
+				margin: 0 0 10px 90px;
+			}
+		}
+		
+	</style>
+
+	<body>
+		<div class="addGoods">
+			<div class="layui-form-item" style="margin-top: 25px;">
+				<div class="layui-inline">
+					<label class="layui-form-label">父级部门</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input fatherGroup1" disabled="disabled" type="text">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">部门名称</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input sonGroup1" type="text">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<button class="layui-btn addGoods_true1">保存</button>
+				</div>
+			</div>
+
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'element'], function() {
+
+			var $ = layui.jquery,
+				element = layui.element;
+			var table = layui.table;
+			
+		});
+	</script>
+
+</html>

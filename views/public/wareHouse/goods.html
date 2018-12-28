@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>货区列表</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.goodsManagement {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.goodsManagement_header button {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.layui-table td,
+		.layui-table th {
+			/*padding: 0 3.5vw !important;*/
+		}
+		
+		.goodsManagement_header {
+			margin-bottom: 8px;
+		}
+		
+		.btns button,
+		.find {
+			margin-left: 5px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt;
+		}
+		.layui-btn+.layui-btn{
+			margin-left: 0px;
+		}
+		.btns {
+			float: right;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="goodsManagement">
+			<div class="layui-tab">
+				<div class="goodsManagement_header">
+					<div class="inputs">
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" autocomplete="off" class="layui-input" type="text" placeholder="请输入关键字" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+					</div>
+				</div>
+				<table id="goodsManagement" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			function goodData() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetGoodsareaByWarehouseId?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'warehouseId': sessionStorage.warehouseId
+					},
+					success: function(res) {
+						//						console.log(res)
+						var data = JSON.parse(res);
+						console.log(data)
+						goods (data)
+					}
+				});
+			}
+			goodData ()
+			//展示已知数据
+			function goods (data) {
+				table.render({
+				elem: '#goodsManagement',
+				data: data,
+				height: "full-78",
+				cols: [
+					[ //标题栏
+						{
+							checkbox: true,
+							LAY_CHECKED: false,
+							align: "center",
+							width: 40,
+						}, {
+							field: 'areaid',
+							title: '货区编号',
+							minWidth: 300
+						},
+						{
+							field: 'areaname',
+							title: '货区名称',
+//							event: "goods",
+							minWidth: 300
+						},
+						{
+							field: 'nomo',
+							title: '备注',
+							minWidth: 300
+						},
+					]
+				],
+				skin: 'row' //表格风格
+					,
+				even: true,
+				page: true //是否显示分页
+					,
+				limits: [10, 20, 30, 40, 50],
+				limit: 10 //每页默认显示的数量
+			});
+			}
+			table.on('tool(demo)', function(obj) {
+				var value = obj.value //得到修改后的值
+					,
+					data = obj.data //得到所在行所有键值
+					,
+					field = obj.field; //得到字段
+//				if(obj.event === 'goods') {
+//					parent.layer.open({
+//						type: 2 //此处以iframe举例
+//							,
+//						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">货区列表</span>',
+//						area: ['85%', '90%'],
+//						offset:"rb",
+//						content: 'views/basicdataProtect/goods/goods.html',
+//						zIndex: layer.zIndex //重点1
+//							,
+//						success: function(layero) {
+//							layer.setTop(layero); //重点2
+//						}
+//					});
+//				}
+		});
+		});
+	</script>
+
+</html>
+						
+					 

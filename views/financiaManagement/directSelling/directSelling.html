@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>直销核价</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.directSellingManagement {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		.content {
+			/*padding: 0 20px;*/
+			padding-top: 8px;
+			border: 1px solid #ddd;
+			border-bottom: none;
+		}
+		
+		.btns button,
+		.find {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 90px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.find {
+			width: 76px;
+		}
+		.wait,
+		.complete{
+			padding: 0 28px !important;
+			border: 1px solid #CCCCCC;
+			border-bottom: none;
+		}
+		.wait{
+			border-right: none !important;
+		}
+		
+		.layui-tab .layui-this {
+			z-index: 5;
+			border-top: 2px solid #2D89DD !important;
+			border-left: none !important;
+			border-right: none !important;
+		}
+		.complete{
+			border-left: none !important;
+		}
+		.layui-table-view{
+			border-width: 1px 0px !important;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="directSellingManagement">
+			<div class="layui-tab">
+				<ul class="layui-tab-title">
+					<li class="layui-this wait">待办列表</li>
+					<li class="complete">已完成列表</li>
+				</ul>
+				<div class="content">
+
+				</div>
+
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'element'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			$(function() {
+				$(".content").load("wait.html");
+			})
+			$(".wait").click(function() {
+				$(".content").load("wait.html",function(){
+					window.location.reload();
+				});
+				$(".wait").addClass("layui-this");
+				$(".complete").removeClass("layui-this");
+			})
+			$(".complete").click(function() {
+				$(".content").load("complete.html",function(){
+					$(".complete").unbind();
+				})
+				$(".wait").removeClass("layui-this");
+				$(".complete").addClass("layui-this");
+			})
+		});
+	</script>
+</html>

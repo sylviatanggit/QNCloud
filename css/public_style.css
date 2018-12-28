@@ -1,0 +1,253 @@
+.layui-table td,
+.layui-table th {
+	font-size: 9pt !important;
+}
+
+.layui-form-label {
+	line-height: 28px !important;
+	padding-top: 0px !important;
+}
+
+.layui-input-inline input,
+.layui-input-inline select {
+	width: 150px;
+}
+
+	.cs_container_open .cs_input,
+		.cs_result_area {
+			border-radius: 2px !important;
+
+		}
+.layui-form-item .layui-input-inline{
+	width: auto !important;
+}
+.layui-input-inline select {
+	cursor: pointer;
+}
+
+.layui-input-inline option {
+	cursor: pointer;
+}
+
+.moreAction {
+	background: #FFFFFF !important;
+	border: 1px solid #2D89DD !important;
+	color: #2D89DD !important;
+}
+
+.moreAction:hover {
+	border-bottom: none !important;
+}
+
+.action {
+	background-color: #CCCCCC;
+	position: absolute;
+	right: 20px;
+	z-index: 10;
+	border: 1px solid #2D89DD;
+	display: none;
+}
+
+.action li {
+	margin-left: 0 !important;
+}
+
+.action li a {
+	display: block;
+	color: #357BEA;
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background-color: #FFFFFF;
+	box-shadow: 2px;
+}
+
+.action li a {
+	color: #232323;
+}
+
+.action:hover {
+	border-top: none;
+}
+
+.action li a:hover {
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background: #ACD7FF;
+}
+
+.layui-input-inline,
+.layui-input-inline input,
+.layui-input-inline label,
+.layui-input-inline select {
+	line-height: 28px !important;
+	height: 28px !important;
+	min-height: 28px !important;
+}
+
+.layui-input-inline input,
+.layui-input-inline select {
+	margin-left: 10px;
+}
+
+.layui-input-inline select {
+	border-radius: 2px;
+}
+
+.layui-table thead tr {
+	background-color: #EFF5FF !important;
+}
+
+
+.layui-table tbody tr:nth-child(even) {
+	background-color: #EFF5FF;
+}
+
+.layui-table tbody tr:nth-child(odd) {
+	background-color: #FFFFFF;
+}
+.layui-table-tool {
+	border-width: 0;
+}
+
+.content {
+	border-top: none;
+}
+
+.layui-tab {
+	margin: 0;
+}
+
+.layui-table-cell .layui-table-link {
+	display: block;
+	width: 100%;
+}
+
+.dsh,.yzf,
+.ysh {
+	display: none;
+	position: absolute;
+	height: 50px;
+	top: 20px;
+	left: 150px;
+}
+
+.layui-input-block {
+	display: inline-block;
+	margin: 0px !important; 
+}
+
+.layui-input-block input,
+.layui-input-block select {
+	width: 170px;
+}
+	
+		
+.header1 ul {
+	float: right;
+}
+
+.header1 ul li {
+	margin-left: 12px;
+	margin-top: -50px;
+	display: inline-block;
+	width: 170px;
+}
+
+.header1 {
+	padding-bottom: 40px;
+	border-bottom: 1px solid #F2F2F2;
+}
+	
+
+.header1 ul li label {
+		display: block;
+		padding: 0 !important;
+		text-align: left;
+		margin-bottom: 4px;
+}
+	
+.header1 .layui-input-block {
+	margin-left: 0px !important;
+}
+
+.header2 {
+		margin-left: 0px;
+		margin-top: 12px;
+	}
+	
+.header2 .layui-form-item {
+	display: inline-block !important;
+	margin-bottom: 0 !important;
+}
+
+.header2 .layui-form-item label {
+	margin-left: 12px;
+	display: block;
+	padding: 0 !important;
+	text-align: left;
+	margin-bottom: 4px;
+}
+
+.lendoutcount{
+	  background: #cae1ec;
+}
+
+.lendincount{
+	  background: #d3ecc6;
+}
+
+
+.readycount{
+	  background: #fee9d0 !important;
+}
+
+.realstockcount{
+	  background: #ffc8c8;
+}
+
+.usefulcount{
+	  background: #ffffc0;
+}
+
+
+.fxlock{
+	  background: #e1d5c2;
+}
+.warelock{
+		background-color: rgb(250,224,243) !important;
+}
+
+
+.realcost{
+	  background: #dacfda !important;
+}
+
+
+.subtotal{
+	  background: #c9f2f1 !important;
+}
+
+	/**
+ * 表头背景色
+ */
+.dx-datagrid-headers.dx-datagrid-nowrap {
+	background-color: #E7EFF9 ;
+}
+td.dx-cell-focus-disabled.dx-datagrid-drag-action {
+	background-color: #E7EFF9 ;
+}
+tr.dx-row.dx-column-lines.dx-header-row {
+	background-color: #E7EFF9;
+}
+	
+.style_show{
+	color: #2D89DD !important;
+}
+
+table{
+	font-size: 9pt;
+}

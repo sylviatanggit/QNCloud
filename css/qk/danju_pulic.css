@@ -1,0 +1,334 @@
+.layui-table td,
+.layui-table th {
+	font-size: 9pt !important;
+}
+
+.style_show{
+	color: #2D89DD !important;
+}
+
+
+.layui-form-label {
+	width: 48px !important;
+	line-height: 28px !important;
+	padding: 0px 10px 0px 0px!important;
+}
+
+	.header1 label{
+		width: auto !important; 
+	}
+
+.layui-inline{
+	font-size: 9pt;
+	margin: 0px 0px 10px 15px;
+}
+tr.dx-row.dx-column-lines.dx-header-row {
+	background-color: #E7EFF9;
+}
+		colgroup>col:first-child {
+	width: 40px!important;
+	border-right:0.2px !important;
+}
+
+.dx-col-fixed:nth-child(1) {
+	width: 45px!important;
+	
+}
+tbody tr:not(:last-child):hover {
+	background-color: rgba(137, 207, 240, .6) !important;
+}
+table tbody tr:nth-child(even) {
+	background: #EFF5FF;
+}
+
+.dx-datagrid-rowsview .dx-selection.dx-row>td {
+	background-color: yellow !important;
+}
+
+ .layui-table td,
+.layui-table th {
+	font-size: 9pt !important;
+}
+.layui-input-inline input,
+.layui-input-inline select {
+	width: 150px;
+}
+
+	.cs_container_open .cs_input,
+		.cs_result_area {
+			border-radius: 2px !important;
+
+		}
+.layui-form-item .layui-input-inline{
+	width: auto !important;
+}
+.layui-input-inline select {
+	cursor: pointer;
+}
+
+.layui-input-inline option {
+	cursor: pointer;
+}
+
+.moreAction {
+	background: #FFFFFF !important;
+	border: 1px solid #2D89DD !important;
+	color: #2D89DD !important;
+}
+
+.cs_container input{
+	font-size: 9pt;
+}
+
+.moreAction:hover {
+	border-bottom: none !important;
+}
+
+.action {
+	background-color: #CCCCCC;
+	position: absolute;
+	right: 20px;
+	z-index: 10;
+	border: 1px solid #2D89DD;
+	display: none;
+}
+
+.action li {
+	margin-left: 0 !important;
+}
+
+.action li a {
+	display: block;
+	color: #357BEA;
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background-color: #FFFFFF;
+	box-shadow: 2px;
+}
+
+.action li a {
+	color: #232323;
+}
+
+.action:hover {
+	border-top: none;
+}
+
+.action li a:hover {
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background: #ACD7FF;
+}
+
+.layui-input-inline,
+.layui-input-inline input,
+.layui-input-inline label,
+.layui-input-inline select {
+	line-height: 28px !important;
+	height: 28px !important;
+	min-height: 28px !important;
+}
+input, label,
+ select {
+	line-height: 28px !important;
+	height: 28px !important;
+	min-height: 28px !important;
+}
+
+.cs_container{
+	line-height: 28px !important;
+	height: 28px !important;
+	font-size:9pt  !important;
+}
+
+.cs_input{
+	background-color: white;
+    font-size: 9pt;
+    vertical-align: middle;
+    display: block;
+    box-sizing: border-box;
+    border-radius: 2px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(221, 221, 221);
+}
+
+.cs_container input{
+		font-size: 9pt !important;
+}
+
+.selectKung{
+	width: 308px !important;
+}
+
+.selectKung input{
+	width: 250px !important;
+	line-height: 28px !important;
+	height: 28px !important;
+}
+.layui-input-inline select {
+	border-radius: 2px;
+}
+
+.layui-table thead tr {
+	background-color: #EFF5FF !important;
+}
+
+
+.layui-table tbody tr:nth-child(even) {
+	background-color: #EFF5FF;
+}
+
+.layui-table tbody tr:nth-child(odd) {
+	background-color: #FFFFFF;
+}
+.layui-table-tool {
+	border-width: 0;
+}
+
+.content {
+	border-top: none;
+}
+
+.layui-tab {
+	margin: 0;
+}
+
+.layui-table-cell .layui-table-link {
+	display: block;
+	width: 100%;
+}
+
+.dsh,.yzf,
+.ysh,.yiqianshou,.yibohui {
+	display: none;
+	position: absolute;
+	height: 50px;
+	top: 20px;
+	left: 150px;
+}
+
+.layui-input-block {
+	display: inline-block;
+	margin: 0px !important; 
+}
+
+.layui-input-block input,
+.layui-input-block select {
+	width: 170px;
+}
+	
+		
+.header1 ul {
+	float: right;
+}
+
+.header1 ul li {
+	margin-left: 12px;
+	margin-top: -50px;
+	display: inline-block;
+	width: 170px;
+}
+
+.header1 {
+	padding-bottom: 40px;
+	border-bottom: 1px solid #F2F2F2;
+}
+	
+
+.header1 ul li label {
+		display: block;
+		padding: 0 !important;
+		text-align: left;
+		margin-bottom: 4px;
+}
+	
+.header1 .layui-input-block {
+	margin-left: 0px !important;
+}
+
+.header2 {
+		margin-left: 0px;
+		margin-top: 12px;
+	}
+	
+.header2 .layui-form-item {
+	display: inline-block !important;
+	margin-bottom: 0 !important;
+}
+
+.header2 .layui-form-item label {
+	margin-left: 12px;
+	display: block;
+	padding: 0 !important;
+	text-align: left;
+	margin-bottom: 4px;
+}
+
+
+/*-------------------------------*/
+
+  
+  	.dx-datagrid-content .dx-datagrid-table .dx-row .dx-command-select{
+			padding: 0;
+			width: 45px; 
+			min-width: 45px; 
+			max-width: 45px;
+	}
+		
+	.dx-datagrid-table .dx-row .dx-command-select{
+			width: 45px; 
+			min-width: 45px; 
+			max-width: 45px;
+	}
+	
+	table{
+			font-size: 9pt !important;
+		}
+
+
+.lendoutcount{
+	  background: #cae1ec;
+}
+
+.lendincount{
+	  background: #d3ecc6;
+}
+
+
+.readycount{
+	  background: #fee9d0;
+}
+
+.realstockcount{
+	  background: #ffc8c8;
+}
+
+.usefulcount{
+	  background: #ffffc0;
+}
+
+
+.fxlock{
+	  background: #e1d5c2;
+}
+.warelock{
+		background-color: rgb(250,224,243) !important;
+}
+
+
+.realcost{
+	  background: #dacfda;
+}
+
+
+.subtotal{
+	  background: #c9f2f1;
+}
+
+
+

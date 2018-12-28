@@ -1,0 +1,596 @@
+@CHARSET "UTF-8";
+*{
+    padding: 0px;
+    margin: 0px;
+    font-family: "PingFang SC";
+	font-size: 9pt;
+}
+
+table thead td {
+    padding: 0;
+    border-left: 1px solid #CAD3DA;
+    background: #DFEBFB;
+ 
+}
+
+
+table tbody tr:nth-child(even) {
+    background: #E7EFF9;
+}
+
+/**
+ * button按钮样式
+ */
+.dx-button .dx-button-content {
+    padding: 0px !important;
+}
+.dx-button-content {
+    line-height: 28px !important;
+}
+
+
+.chayi_show{
+	color: red !important;
+}
+
+
+.style_show{
+	color: #2D89DD !important;
+}
+
+.dev_public_content {
+	font-family: "PingFang SC" !important;
+	/*font-size: 12px !important;*/
+	font-size: 9pt !important;
+	color: #232323 !important;
+	margin: 0 20px;			padding-top: 20px;
+
+}
+	
+	select {
+    border: 1px solid #ddd;
+}
+
+.dev_public_content .moreAction {
+	background: #FFFFFF !important;
+	border: 1px solid #2D89DD !important;
+	color: #2D89DD !important;
+}
+
+.dev_public_content .moreAction:hover {
+	border-bottom: none !important;
+}
+
+
+.dev_public_content .moreAction1 {
+	background: #FFFFFF !important;
+	border: 1px solid #2D89DD !important;
+	color: #2D89DD !important;
+}
+
+.dev_public_content .moreAction1:hover {
+	border-bottom: none !important;
+}
+
+
+
+
+.dev_public_content .action li a {
+	display: block;
+	color: #232323;
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background-color: #FFFFFF;
+	box-shadow: 2px;
+}
+
+.dev_public_content .action1 li a {
+	display: block;
+	color: #232323;
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background-color: #FFFFFF;
+	box-shadow: 2px;
+}
+
+
+.dev_public_content .action li a:hover {
+	border-top: none;
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background: #ACD7FF;
+}
+
+.dev_public_content .action1 li a:hover {
+	border-top: none;
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background: #ACD7FF;
+}
+
+.find_conditions .btns {
+	float: right;
+	display: inline-block;
+	position: relative;
+}
+
+.find_conditions .btns button,
+.import {
+	padding: 0;
+	cursor: pointer;
+	border: none;
+	width: 90px;
+	height: 28px;
+	text-align: center;
+	line-height: 28px;
+	border-radius: 2px;
+	background-color: #2D89DD;
+	color: #FFFFFF;
+	margin-left: 8px;
+}
+
+.layui-tab {
+    text-align: left !important;
+    margin: 0px !important;
+}
+
+.layui-input-inline, .layui-input-inline input, .layui-input-inline label, .layui-input-inline select {
+    line-height: 28px !important;
+    height: 28px !important;
+    min-height: 28px !important;
+}
+
+.find_conditions{
+	padding-bottom: 10px;
+		
+
+}	
+
+.layui-form-label {
+    line-height: 28px !important;
+}
+
+.layui-laypage {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 0px;
+    margin: 0px !important;
+   padding-top: 10px !important;
+}
+
+.layui-laypage a, .layui-laypage span {
+   margin-bottom: 0px !important;
+}
+
+
+	tbody tr:not(:last-child):hover{
+	background-color: rgba(137, 207, 240,.6)!important;
+}
+
+.cs_container,
+.cs_container_open .cs_input,
+.cs_result_area {
+	width: 250px !important;
+}
+
+.cs_container input{
+	font-size: 9pt !important;
+	padding-left: 10px !important;
+}
+
+div.cs_result_area div.pagination li {
+	margin: 0 5px !important;
+}
+
+
+		
+.clearfix:after {
+      content: '.';
+      height: 0;
+      display: block;
+      clear: both;
+  }
+  
+  	.dx-datagrid-content .dx-datagrid-table .dx-row .dx-command-select{
+			padding: 0;
+			width: 45px; 
+			min-width: 45px; 
+			max-width: 45px;
+	}
+		
+	.dx-datagrid-table .dx-row .dx-command-select{
+			width: 45px; 
+			min-width: 45px; 
+			max-width: 45px;
+	}
+	
+	table{
+		font-size: 9pt;
+	}
+ 
+	#lay-ignore {
+      height: 25px;
+      width: 60px;
+    
+    }
+     #lay-ignore {
+      height: 25px;
+      width: 60px;
+     
+	}
+	tbody tr:not(:last-child):hover{
+	background-color: rgba(137, 207, 240,.6)!important;
+}
+
+.dx-datagrid-rowsview .dx-selection.dx-row > td{
+	background-color: yellow!important;
+}
+
+
+  .layui-laypage-limits {
+      font-size: 12px;
+      display: none;
+      margin-top: 15px;
+  }
+
+	.dx-data-row,.dx-column-lines:not(:first-child) > td:nth-child(2) {
+		cursor: pointer;
+	 }
+	 .dx-widget {
+            font-size: 9pt!important;
+            line-height: 17px;
+        }
+        .option>.dx-selectbox {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .layui-input{
+            color: #000000;
+		  }
+		  /*.dx-column-lines>td:nth-child(2) {
+        color: #2D89DD;
+	}
+	.dx-data-row,.dx-column-lines > td:nth-child(2) {
+		cursor: pointer;
+	 }*/
+
+	.fl{
+		float: left;
+	}
+	.fr{
+		float: right;
+	}
+	
+	/**
+	 *  表头颜色不变需设置属性
+	 */
+  .dx-datagrid-text-content {
+        color: grey; 
+    }
+
+
+
+label {
+    padding: 0 !important;
+    margin-left: 0px;
+}
+
+.btns button,
+.find,
+.import {
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    width: 76px;
+    height: 28px;
+    text-align: center;
+    line-height: 28px;
+    border-radius: 2px;
+    background-color: #2D89DD;
+    color: #FFFFFF;
+    margin-left: 8px;
+    font-size: 9pt;
+}
+
+
+.lendoutcount{
+	  background: #cae1ec;
+}
+
+.lendincount{
+	  background: #d3ecc6;
+}
+
+
+.readycount{
+	  background: #fee9d0;
+}
+
+.realstockcount{
+	  background: #ffc8c8;
+}
+
+.usefulcount{
+	  background: #ffffc0;
+}
+
+
+.fxlock{
+	  background: #e1d5c2;
+}
+.warelock{
+		background-color: rgb(250,224,243) !important;
+}
+
+
+.realcost{
+	  background: #dacfda;
+}
+
+
+.subtotal{
+	  background: #c9f2f1;
+}
+
+
+.layui-table td,
+.layui-table th {
+	font-size: 9pt !important;
+}
+
+.layui-form-label {
+	line-height: 28px !important;
+}
+
+.layui-input-inline input,
+.layui-input-inline select {
+	width: 150px;
+}
+
+.cs_container_open .cs_input,
+	.cs_result_area {
+			border-radius: 2px !important;
+
+	}
+	
+	.cs_container{
+	line-height: 28px !important;
+	height: 28px !important;
+	font-size:9pt  !important;
+}
+
+.cs_container input{
+	font-size:9pt  !important;
+}
+		
+		
+.layui-input-inline select {
+	cursor: pointer;
+}
+
+.layui-input-inline option {
+	cursor: pointer;
+}
+
+.moreAction {
+	background: #FFFFFF !important;
+	border: 1px solid #2D89DD !important;
+	color: #2D89DD !important;
+}
+
+.moreAction:hover {
+	border-bottom: none !important;
+}
+
+.action {
+	background-color: #CCCCCC;
+	position: absolute;
+	right: 20px;
+	z-index: 10;
+	border: 1px solid #2D89DD;
+	display: none;
+}
+
+.action li {
+	margin-left: 0 !important;
+}
+
+.action li a {
+	display: block;
+	color: #357BEA;
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background-color: #FFFFFF;
+	box-shadow: 2px;
+}
+
+.action li a {
+	color: #232323;
+}
+
+.action:hover {
+	border-top: none;
+}
+
+.action li a:hover {
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background: #ACD7FF;
+}
+
+.layui-input-inline,
+.layui-input-inline input,
+.layui-input-inline label,
+.layui-input-inline select {
+	line-height: 28px !important;
+	height: 28px !important;
+	min-height: 28px !important;
+}
+
+.layui-input-inline input,
+.layui-input-inline select {
+	margin-left: 0px !important;
+}
+
+
+
+.layui-input-inline select {
+	border-radius: 2px;
+}
+
+.layui-table thead tr {
+	background-color: #EFF5FF !important;
+}
+
+
+.layui-table tbody tr:nth-child(even) {
+	background-color: #EFF5FF;
+}
+
+.layui-table tbody tr:nth-child(odd) {
+	background-color: #FFFFFF;
+}
+
+.layui-table-tool {
+	border-width: 0;
+}
+
+.content {
+	border-top: none;
+}
+
+.layui-tab {
+	margin: 0;
+}
+
+.layui-table-cell .layui-table-link {
+	display: block;
+	width: 100%;
+}
+
+.dsh,.yzf,
+.ysh {
+	display: none;
+	position: absolute;
+	height: 50px;
+	top: 20px;
+	left: 150px;
+}
+
+
+.layui-input-block input,
+.layui-input-block select {
+	width: 170px;
+}
+	
+		
+.header1 ul {
+	float: right;
+}
+
+.header1 ul li {
+	margin-left: 12px;
+	margin-top: -50px;
+	display: inline-block;
+	width: 170px;
+}
+
+.header1 {
+	padding-bottom: 40px;
+	border-bottom: 1px solid #F2F2F2;
+}
+	
+
+.header1 ul li label {
+		display: block;
+		padding: 0 !important;
+		text-align: left;
+		margin-bottom: 4px;
+}
+	
+.header1 .layui-input-block {
+	margin-left: 0px !important;
+}
+
+.header2 {
+		margin-left: 0px;
+		margin-top: 12px;
+	}
+	
+.header2 .layui-form-item {
+	display: inline-block !important;
+	margin-bottom: 0 !important;
+}
+
+.header2 .layui-form-item label {
+	margin-left: 12px;
+	display: block;
+	padding: 0 !important;
+	text-align: left;
+	margin-bottom: 4px;
+}
+
+.lendoutcount{
+	  background: #cae1ec;
+}
+
+.lendincount{
+	  background: #d3ecc6;
+}
+
+
+.readycount{
+	  background: #fee9d0;
+}
+
+.realstockcount{
+	  background: #ffc8c8;
+}
+
+.usefulcount{
+	  background: #ffffc0;
+}
+
+
+.fxlock{
+	  background: #e1d5c2;
+}
+.warelock{
+		background-color: rgb(250,224,243) !important;
+}
+
+
+.realcost{
+	  background: #dacfda;
+}
+
+
+.subtotal{
+	  background: #c9f2f1;
+}
+
+
+/**
+ * 表头背景色
+ */
+.dx-datagrid-headers.dx-datagrid-nowrap {
+	background-color: #E7EFF9 !important;
+}
+td.dx-cell-focus-disabled.dx-datagrid-drag-action {
+	background-color: #E7EFF9 !important;
+}
+tr.dx-row.dx-column-lines.dx-header-row {
+	background-color: #E7EFF9 !important;
+}

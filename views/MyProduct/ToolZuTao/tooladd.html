@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>工具组套信息</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		#addbank {
+			/*width: calc(100vw+17px);*/
+			font-size: 9pt;
+		}
+		
+		#addbank legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		#addbank label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		#addbank input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		#addbank select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+			/*border: 1px solid #DDDDDD !important;*/
+		}
+		
+		#addbank textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+			/*border: 1px solid #ddd !important;*/
+		}
+		
+		#addbank .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 5px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 1px;
+		}
+		
+		#addbank button {
+			margin-left: 8px;
+			text-align: center;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		#addbank {
+			margin-bottom: 120px;
+		}
+	</style>
+
+	<body>
+		<div id="addbank">
+			<div class="layui-form-item layui-form-title">
+				<button class="layui-btn addProductZuTao_submit">提交</button>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>工具组套</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>组套名称：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input peihuoType" type="text">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">计量单位：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input zt_unit" type="text">
+
+				</div>
+			</div>
+	
+			<div class="layui-form-item">
+				<label class="layui-form-label">备注：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input notes" type="text">
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'layer'], function() {
+			var $ = layui.$, //重点处
+				layer = layui.layer;
+				
+				
+			$(".peihuoType").blur(function(){
+				if($(".peihuoType").val().indexOf("_") != -1){
+					layer.tips('不能存在下划线!',".peihuoType");
+					$(".peihuoType").val($(".peihuoType").val().replace(/_/g,''));
+				}
+			})
+					
+					
+			//点击新增
+			$(".addProductZuTao_submit").click(function(){
+				var url = "";
+				var notes = $('.notes').val();
+				var peihuoType = $('.peihuoType').val();
+				if(peihuoType ==""){
+					
+					parent.layer.open({
+						title: "提示",
+						content: '组套名称不能为空!',
+						zIndex: parent.layer.zIndex, //重点1
+						end: function(){  
+              			} 
+			
+					});
+					
+					return
+						
+				}
+				
+							var jiazaiIndex;
+				parent.layer.open({
+				  type: 3, 
+				  zIndex: parent.layer.zIndex, //重点1
+				  success: function(layero, index){
+				  		jiazaiIndex = index;
+		  			}
+				});
+				
+				var unit = $('.zt_unit').val();
+
+				var master = {
+					'name': '' + peihuoType + '',
+					'nomo': '' + notes + '',
+					'unit': '' + unit + '',
+				};	
+				var toolId= "";
+
+				if(sessionStorage.toolId && typeof(sessionStorage.toolId) != "undefined" && sessionStorage.toolId != null && sessionStorage.toolId != ""){
+					url = "WebUpdateToolTable"
+					
+					toolId = sessionStorage.toolId;
+				}else{
+					url = "WebAddToolTable"
+				}
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/"+url+"?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'master': JSON.stringify(master),
+						'id':toolId,
+						
+					},
+					success: function(res) {
+																		parent.layer.close(jiazaiIndex);
+
+						var data = JSON.parse(res);
+						if(data.ResultValue == 1) {
+							parent.layer.open({
+								title: "提示",
+								content: '提交成功',
+																zIndex: parent.layer.zIndex, //重点1
+								end: function(){  
+	                    			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+									parent.layer.close(index); //再执行关闭     
+	                  			} 
+							});
+						} 
+						if(data.ResultValue == 2){
+							parent.layer.open({
+								title: "提示",
+								content: '组套名称已存在!',
+																zIndex: parent.layer.zIndex, //重点1
+
+							});
+						}
+						if(data.ResultValue == 0){
+							parent.layer.open({
+								title: "提示",
+								content: '提交失败',
+																zIndex: parent.layer.zIndex, //重点1
+
+							});
+						}
+					}
+					,
+					error:function(){
+																								parent.layer.close(jiazaiIndex);
+
+					}
+				});
+			
+			})
+		});
+	</script>
+
+</html>

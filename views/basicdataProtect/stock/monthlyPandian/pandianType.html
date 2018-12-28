@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>盘点方式</title>
+
+		<link rel="stylesheet" href="../../../../plugins/layui/css/layui.css">
+
+	</head>
+		<style type="text/css">
+			
+			.leftStock .layui-laypage{
+				margin: 0px;
+				position: absolute;
+				bottom: 5px !important;
+				left: 25px;
+			}
+			
+			.rightStock .layui-laypage{
+				margin: 0px;
+				position: absolute;
+				bottom: 5px !important;
+				left: 52%;
+			}
+			
+		.layui-table-fixed .layui-table-body tbody .layui-table-cell {
+			    height: auto;
+			}
+			
+			
+			.startUpload {
+				    padding: 0;
+				    cursor: pointer;
+				    border: none;
+				    width: 65px;
+				    height: 28px;
+				    text-align: center;
+				    line-height: 28px;
+				    border-radius: 2px;
+				    background-color: #2D89DD;
+				    color: #FFFFFF;
+				    margin-left: 8px;
+				}
+				
+				.layui-inline{
+					margin-top: 10px;
+				}
+				
+				.layui-inline input{
+					width: 250px;
+					height: 30px;
+				}
+				
+				.layui-inline select{
+					height: 30px;
+				
+				}
+				
+				
+				.cs_container,
+				.cs_container_open .cs_input,
+				.cs_result_area {
+					width: 250px !important;
+				}
+				
+				div.cs_result_area div.pagination li {
+					margin: 0 4px !important;
+				}
+				
+	
+		</style>
+	
+
+	<body>
+		<div class="panel-content" style="margin: 20px 2%;font-size: 9pt;">
+			<div class="layui-tab">
+				
+		
+				
+							<div class="layui-inline" style="margin-right: 0px;display: block;margin-left: 30px;">
+								<label class="layui-form-label" style="margin-left: 0px;padding: 0px;margin-right: 10px;height: 30px;line-height: 30px;vertical-align: middle;">请选择盘点方式</label>
+								<div class="layui-input-inline" style="margin-top: 5px;">
+									<select name="" class="layui-input pandianWay" style="width: 200px;">
+										<option value="1">手工盘点</option>
+										<option value="0">扫码盘点</option>
+										<option value="2">快速盘点</option>
+												
+									</select>
+								</div>
+						</div>
+						
+						
+							<div class="layui-inline" style="display: block;text-align: center;margin-top: 20px;">
+									<button class="startUpload configInfo">确　认</button>
+
+								
+							</div>
+						
+				
+			</div>
+		</div>
+	</body>
+	<script src="../../../../plugins/layui/layui.js"></script>
+
+	<script>
+
+
+	layui.use(['table', 'jquery', 'laydate', 'laypage','upload'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;upload = layui.upload;
+			var laypage = layui.laypage;
+	
+
+
+//		$(".inventorymaster_lasttype").val(sessionStorage.pandianWay).attr("disabled","disabled");
+
+
+	
+	});
+	</script>
+
+</html>

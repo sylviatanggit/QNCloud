@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+			<title>警告查询</title>
+			<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+		</head>
+	</head>
+	<style type="text/css">
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: "PingFang SC" !important;
+		}
+		
+		.layui-tab-title {
+			padding-left: 20px;
+		}
+		
+		.layui-table td,
+		.layui-table th {
+			font-size: 12px !important;
+		}
+		
+		.layui-form-item {
+			margin-left: 80px;
+			margin-bottom: 0 !important;
+			margin-top: 20px;
+		}
+		
+		.layui-form-item .layui-form-label {
+			line-height: 22px !important;
+			height: 22px !important;
+			width: 180px;
+		}
+		
+		.layui-input {
+			margin-top: 10px;
+			line-height: 22px !important;
+			height: 22px !important;
+			display: inline-block !important;
+		}
+		
+		.layui-input-block {
+			font-size: 12px !important;
+			margin-left: 30px !important;
+			display: inline-block !important;
+			width: 200px;
+		}
+		
+		.title {
+			font-size: 12px;
+			margin-top: 30px;
+			margin-left: 30px;
+			margin-bottom: 40px;
+		}
+		
+		.baocun {
+			line-height: 22px !important;
+			height: 22px !important;
+			background-color: #2299DD;
+			margin-left: 240px;
+		}
+		
+		.layui-table tr:nth-child(odd) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(odd) {
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(even) {
+			background-color: #FFFFFF !important;
+		}
+	</style>
+
+	<body>
+		<div class="warning_body">
+			<div class="layui-tab layui-tab-card">
+				<ul class="layui-tab-title">
+					<li class="layui-this">安全库存</li>
+					<li>产品有效期</li>
+					<li>产品注册证</li>
+					<li>借出</li>
+					<li>借入</li>
+					<li>经营许可证</li>
+					<li>设置</li>
+				</ul>
+				<div class="layui-tab-content" style="height: 480px;">
+					<div class="layui-tab-item layui-show">
+						<table id="safe"></table>
+					</div>
+					<div class="layui-tab-item">
+						<table id="term"></table>
+					</div>
+					<div class="layui-tab-item">
+						<table id="proReg"></table>
+					</div>
+					<div class="layui-tab-item">
+						<table id="lend"></table>
+					</div>
+					<div class="layui-tab-item">
+						<table id="borrow"></table>
+					</div>
+					<div class="layui-tab-item">
+						<table id="managementReg"></table>
+					</div>
+					<div class="layui-tab-item">
+						<div class="title">请设置报警触发条件</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">产品有效期即将到期天数</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">产品注册证即将到期天数</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">经营许可证即将到期天数</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">借入已借天数</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">借出已借天数</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<button class="layui-btn baocun">保存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use('element', function() {
+			var $ = layui.jquery,
+				element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+		});
+		layui.use('table', function() {
+			var table = layui.table;
+			var data = [{
+					"index": "1",
+					"name": "杜甫",
+					"pinpai": "品牌",
+					"xinghao": "型号",
+					"bianhao": "编号",
+					"num": "数量",
+					"tiaozheng": "116"
+				},
+				{
+					"index": "1",
+					"name": "杜甫",
+					"pinpai": "品牌",
+					"xinghao": "型号",
+					"bianhao": "编号",
+					"num": "数量",
+					"tiaozheng": "116"
+				},
+				{
+					"index": "1",
+					"name": "杜甫",
+					"pinpai": "品牌",
+					"xinghao": "型号",
+					"bianhao": "编号",
+					"num": "数量",
+					"tiaozheng": "116"
+				},
+				{
+					"index": "1",
+					"name": "杜甫",
+					"pinpai": "品牌",
+					"xinghao": "型号",
+					"bianhao": "编号",
+					"num": "数量",
+					"tiaozheng": "116"
+				}
+			]
+			table.render({
+				elem: '#safe',
+				data: data,
+				cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增					
+				cols: [
+					[{
+							field: 'index',
+							width: 40,
+							title: '序号'
+						}, {
+							field: 'name',
+							width: 130,
+							title: '用户名称'
+						}, {
+							field: 'pinpai',
+							width: 70,
+							title: '品牌',
+						}, {
+							field: 'guige',
+							width: 70,
+							title: '规格'
+						}, {
+							field: 'xinghao',
+							title: '型号',
+							width: '100',
+							minWidth: 100
+						}, {
+							field: 'bianhao',
+							title: '编号',
+							width: '100',
+							minWidth: 100
+						} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
+						, {
+							field: 'num',
+							title: '实库数量',
+							width: 120,
+						}, {
+							field: 'tiaozheng',
+							title: '建议调整数量',
+							width: 290
+						}
+					]
+				]
+			});
+			var data1 = [{
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, ]
+			table.render({
+				elem: '#term',
+				data: data1,
+				cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增					
+				cols: [
+					[{
+						field: 'index',
+						width: 40,
+						title: '序号'
+					}, {
+						field: 'num',
+						width: 260,
+						title: '单号'
+					}, {
+						field: 'danwei',
+						width: 260,
+						title: '往来单位',
+					}, {
+						field: 'time',
+						width: 210,
+						title: '借出时间'
+					}, {
+						field: 'daytime',
+						width: 160,
+						title: '已借天数'
+					}]
+				]
+			});
+			var data2 = [{
+				"index": "1",
+				"num": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"time": "123",
+				"daytime": "123"
+			}, ]
+			table.render({
+				elem: '#proReg',
+				data: data1,
+				cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增					
+				cols: [
+					[{
+						field: 'index',
+						width: 40,
+						title: '序号'
+					}, {
+						field: 'num',
+						width: 430,
+						title: '单号'
+					}, {
+						field: 'time',
+						width: 300,
+						title: '注册证有效期'
+					}, {
+						field: 'daytime',
+						width: 160,
+						title: '即将到期天数'
+					}]
+				]
+			});
+			//借出
+			var data3 = [{
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, ]
+			table.render({
+				elem: '#lend',
+				data: data3,
+				cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增					
+				cols: [
+					[{
+						field: 'index',
+						width: 40,
+						title: '序号'
+					}, {
+						field: 'num',
+						width: 260,
+						title: '单号'
+					}, {
+						field: 'danwei',
+						width: 260,
+						title: '往来单位',
+					}, {
+						field: 'time',
+						width: 210,
+						title: '借出时间'
+					}, {
+						field: 'daytime',
+						width: 160,
+						title: '已借天数'
+					}]
+				]
+			});
+			//借入
+			var data4 = [{
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, {
+				"index": "1",
+				"num": "123",
+				"danwei": "123",
+				"time": "123",
+				"daytime": "123"
+			}, ]
+			table.render({
+				elem: '#borrow',
+				data: data4,
+				cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增					
+				cols: [
+					[{
+						field: 'index',
+						width: 40,
+						title: '序号'
+					}, {
+						field: 'num',
+						width: 260,
+						title: '单号'
+					}, {
+						field: 'danwei',
+						width: 260,
+						title: '往来单位',
+					}, {
+						field: 'time',
+						width: 210,
+						title: '借入时间'
+					}, {
+						field: 'daytime',
+						width: 160,
+						title: '已借天数'
+					}]
+				]
+			});
+			//经营许可证
+			var data4 = [{
+				"index": "1",
+				"name": "123",
+				"time": "123",
+				"daytime": "123",
+			}, {
+				"index": "1",
+				"name": "123",
+				"time": "123",
+				"daytime": "123",
+			}, {
+				"index": "1",
+				"name": "123",
+				"time": "123",
+				"daytime": "123",
+			}, {
+				"index": "1",
+				"name": "123",
+				"time": "123",
+				"daytime": "123",
+			}, {
+				"index": "1",
+				"name": "123",
+				"time": "123",
+				"daytime": "123",
+			}, {
+				"index": "1",
+				"name": "123",
+				"time": "123",
+				"daytime": "123",
+			}, {
+				"index": "1",
+				"name": "123",
+				"time": "123",
+				"daytime": "123",
+			}]
+			table.render({
+				elem: '#managementReg',
+				data: data4,
+				cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增					
+				cols: [
+					[{
+						field: 'index',
+						width: 40,
+						title: '序号'
+					}, {
+						field: 'name',
+						width: 430,
+						title: '单号'
+					}, {
+						field: 'time',
+						width: 300,
+						title: '经营许可证有效期',
+					}, {
+						field: 'daytime',
+						width: 160,
+						title: '即将到期天数'
+					}]
+				]
+			});
+
+		});
+	</script>
+
+</html>

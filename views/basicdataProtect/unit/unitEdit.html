@@ -1,0 +1,2186 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加往来单位</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+        <link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+        <link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+		
+
+	</head>
+	<style type="text/css">
+		#addunit {
+			/*width: calc(100vw+17px);*/
+			font-size: 9pt;
+		}
+		
+		#addunit legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		.layui-input-inline {
+			width: 400px !important;
+		}
+		
+		#addunit .layui-form-item label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+			line-height: 20px !important;
+		}
+		
+		#addunit .layui-form-item .layui-input-inline input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		#addunit .layui-form-item .layui-input-inline select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+			/*border: 1px solid #DDDDDD !important;*/
+		}
+		
+		#addunit .layui-form-item .layui-input-inline textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+			/*border: 1px solid #ddd !important;*/
+		}
+		
+		#addunit .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 10px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 0px;
+		}
+		
+		.addunit_submit,.shenghe,.print,
+		.changeRange,
+		.addbankAccount,
+		.delbankAccount,
+		.addcontacts,
+		.delcontacts {
+			display: inline-block;
+			text-align: center;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 9pt !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+			margin-right: 17px;
+		}
+		
+		.delbankAccount,
+		.delcontacts {
+			margin-right: 12px;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		.layui-form {
+			/*margin: 0 10px;*/
+			margin-top: 10px;
+		}
+		
+		.layui-form-item {
+			margin-bottom: 0;
+		}
+		
+		.uploadImg {
+			margin-left: 15px;
+			position: relative;
+		}
+		
+		.removeImg {
+			cursor: pointer;
+			position: absolute;
+			/*top: 100px;*/
+			font-size: 20px !important;
+		}
+		
+		#test1 {
+			background-color: #2D89DD;
+			line-height: 28px;
+			height: 28px;
+			width: 90px;
+		}
+		
+		.layui-form-item .layui-form-checkbox[lay-skin=primary] {
+			margin-top: 0;
+		}
+		
+		.panel-body {
+			border-color: #DDDDDD
+		}
+		
+			.shuju_div{
+			border: 1px solid #ddd;
+		}
+		
+	/*开始*/
+		.qyxx{
+			font-size: 14px;
+			color: #232323;
+			margin-top: 28px;
+			margin-left: 8px;
+		}
+		.btns button{
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt;
+		}
+	
+		.help{
+			height: 1px;
+		}
+		.yinghangzhanghu,.lianxi,.zhengjian{
+			float: left;
+			width: 100px;
+			display: inline-block;
+		}
+	
+	
+		.fr{
+			float: right;
+			margin-top: 28px;
+
+		}
+		.gsjc{
+			margin-left: 12px;
+		}
+		.gsjc_input{
+			font-size: 9pt !important;
+    		width: 400px !important;
+   			height: 28px !important;
+   			background: #EFF5FF;
+		}
+		
+	
+		.gsqc{
+			margin-top: 20px;
+		}
+		.gsqc_div{
+			margin-left: 20px;
+    		margin-top: 5px;
+		}
+		.gsqc1{
+			margin-top: 2px;
+		}
+		.nomo{
+			width: 880px !important;
+		}
+		.tab_layui{
+			box-shadow:none;
+		}
+		.tab_ul{
+			width: 188px;
+		}
+		hr{
+			margin-top: 44px;
+		}
+		.shuju_div{
+			border: 1px solid #ddd;
+		}
+		.add{
+			margin-top: 12px;
+		}
+		.tab_qk{
+			margin-top: 28px;
+			height: 29px;
+			border: 1px solid #ddd;
+			border-bottom: none;
+			width: 350px;
+			cursor: pointer;
+		}
+		.qyzj{
+			background: #ACD8FF;
+		}
+		.tab_qk div{
+			padding: 5px 8px;
+			
+		}
+		.hidden{
+			display: none;
+		}
+		
+		.layui-laypage{
+			margin: 0px;
+		}
+		.bitian{
+			color: red;
+		}
+		.cs_result_area{
+			margin-left: 10px !important;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css"/>
+
+	<body>
+		<div id="addunit">
+			<div class="layui-form-item layui-form-title oprateType">
+				<button class="layui-btn print" style="margin-left: 10px;display: none;">打印</button>
+				<button class="layui-btn shenghe" data-type="getCheckData">审核</button>
+				<button class="layui-btn addunit_submit" data-type="getCheckData">提交</button>
+			</div>
+			<div>
+					<div class="layui-form-item ">
+				<div class="layui-inline" style="margin-top: 40px;">
+						<label class="layui-form-label"><span class="bitian">*</span>所属分组：</label>
+						<!--<div class="layui-input-inline group">
+							<input autocomplete="off" class="layui-input company_group" type="text">
+						</div>-->
+						
+						<div class="layui-input-inline">
+								<select disabled name="" class="layui-input company_group" id="company_groupId">
+									
+						</select>
+						</div>
+					</div>
+				</div>
+					
+				<fieldset class="layui-elem-field layui-field-title" >
+					<legend>基本信息</legend>
+				</fieldset>
+				<div class="layui-form-item ">
+					
+					<div class="layui-inline">
+						<label class="layui-form-label companyName" >公司全称：</label>
+						<div class="layui-input-inline">
+							<input disabled autocomplete="off" class="layui-input company_name" type="text" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')">
+						</div>
+					</div>
+					
+							
+			
+					<div class="layui-inline">
+						<label class="layui-form-label companyShortName">公司简码：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input company_shortName" type="text" disabled="disabled">
+						</div>
+					</div>
+					
+					
+					<div class="layui-inline" id="companynatureId">
+						<label class="layui-form-label">公司属性：</label>
+						<div class="layui-input-inline">
+							<select id="companynature" class="layui-input">
+								<option value="-1"></option>
+								<option value="1">医疗机构</option>
+								<option value="2">批发企业</option>
+								<option value="3">零售企业</option>
+								<option value="4">生产企业</option>
+
+							</select>
+						</div>
+					</div>
+					
+					<div class="layui-inline" id="companypropertyId">
+						<label class="layui-form-label">公司类型：</label>
+						<div class="layui-input-inline">
+							<select id="companyproperty" class="layui-input">
+								<option value="-1"></option>
+								<option value="0">境内生产厂家</option>
+								<option value="1">境外生产厂家</option>
+								<option value="2">台湾厂家</option>
+								<option value="3">国内代理商</option>
+								<option value="4">港澳台代理商</option>
+								<option value="5">国外厂家国内分公司</option>
+								<option value="6">国外（地区）常驻代表处地址</option>
+							</select>
+						</div>
+					</div>
+					
+			
+					
+					<div class="layui-inline">
+						<label class="layui-form-label companyTel">公司电话：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input company_tel" type="text">
+						</div>
+					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label companyAddress">公司地址：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input company_address" type="text">
+						</div>
+					</div>
+				
+					
+						<div class="layui-inline">
+						<label class="layui-form-label">所属部门：</label>
+						<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input employeedep" id="employeedep" type="text" style="margin-left: 10px !important;">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">备　　注：</label>
+						<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input company_notes" type="text">
+						</div>
+					</div>
+					
+					<p style="margin-left: 75px;">
+						<input type="checkbox"  class="isshowonapp" checked="checked"/> 是否在手机端上显示
+					</p>
+					
+				
+
+			</div>
+			
+				<div class="hospitalInfo"style="display: none;">
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+					<legend>扩展信息</legend>
+				</fieldset>
+				<div class="layui-form-item ">
+
+				<div class="layui-inline">
+					<label class="layui-form-label">医院性质：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitalnature" type="text">
+					</div>
+				</div>
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">医院等级：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitalgrade" type="text">
+					</div>
+				</div>
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">医院所属省市：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitalprovince" type="text">
+					</div>
+				</div>
+				
+					<div class="layui-inline">
+					<label class="layui-form-label">医院常用品牌：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitalusebrand" type="text">
+					</div>
+				</div>
+				
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">医院主任医生：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitaldoctor" type="text">
+					</div>
+				</div>
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">医院特点：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitalcharacteristic" type="text">
+					</div>
+				</div>
+				
+					<div class="layui-inline">
+					<label class="layui-form-label">医院账期：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitalaccountperiod" type="number">
+					</div>
+				</div>
+				
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">医院折扣：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitaldiscount" type="number">
+					</div>
+				</div>
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">向医院供货方式：</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input hospitalsupplymaterial" type="text">
+					</div>
+				</div>	
+			</div>		
+			</div>
+
+				<hr />
+			<div class="companyInfo" style="width: 99%;margin-left: 1%;">
+				
+				<div class="tab_qk" style="font-size: 14px;">
+					<div class="zhengjian qyzj fl" style="border-right: 1px solid #ddd;" name="1">企业证件信息</div>
+					<div class="yinghangzhanghu" style="border-right: 1px solid #ddd;" name="2">银行账户管理</div>
+					<div class="lianxi" name="3">联系人管理</div>
+				</div>
+				
+				<div class="layui-tab shuju_div" id="tab1">
+					<div class="inputs">
+						<div class="btns" style="margin-right: 20px;">
+							<button class="layui-btn add fr del" data-type="zhengjianDel" lay-event='del'>删除</button>
+							<button class="layui-btn add fr zhengjianAdd">新增</button>
+						</div>
+					</div>
+					<div style="clear: both;"></div>
+					<table id="companyZhengjianId" lay-filter="demo1"></table>
+				</div>
+				
+				<div class="layui-tab shuju_div hidden" id="tab2" >
+					<div class="inputs">
+						<div class="btns"  style="margin-right: 20px;">
+							<button class="layui-btn add fr del" data-type="bankDel" lay-event='del'>删除</button>
+							<button class="layui-btn add fr bankadd">新增</button>
+						</div>
+					</div>
+					<div style="clear: both;"></div>
+					<table id="bankZhangHuId" lay-filter="demo2"></table>
+				</div>
+				
+				<div class="layui-tab shuju_div hidden" id="tab3">
+					<div class="inputs">
+						<div class="btns"  style="margin-right: 20px;">
+							<button class="layui-btn add fr del" data-type="lianxirenDel" lay-event='del'>删除</button>
+							<button class="layui-btn add fr lianxirenAdd">新增</button>
+						</div>
+					</div>
+					<div style="clear: both;"></div>
+					<table id="lianxirebId" lay-filter="demo3"></table>
+				</div>
+				
+			
+			</div>
+		</div>
+		
+		
+				<iframe src="" frameborder="0" id="pdfContainer" name="pdfContainer" style="display: none;"></iframe>
+
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../../js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element','laydate'], function() {
+			var laydate = layui.laydate;
+			var $ = layui.jquery,
+				element = layui.element;
+			var th_width=[];
+			var table = layui.table;
+	
+				if(!checkPermissionStatus("往来单位管理-保存1")){
+				
+					$(".addunit_submit").remove();
+				}				
+			
+			
+				if(!checkPermissionStatus("往来单位管理-审核1")){
+							$(".shenghe").remove();
+				
+					}
+				
+				
+			if(sessionStorage.auditstate == "0"){
+				$(".print").remove();		
+			}
+			
+			
+				//打印单据
+			$(".print").click(function () {
+				if (!checkPermissionStatus("往来单位管理-审核1")) {
+
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: parent.layer.zIndex //重点1
+						,
+						success: function (layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return;
+
+				}
+
+				unitPrintWay("UNIT", sessionStorage.unit_id,'首营单位审批表','A4');
+			})
+			
+			$(".shenghe").click(function(){
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">结论</span>',
+						area: ['450px', '300px'],
+						content: 'views/basicdataProtect/unit/rejectnomo.html',
+						zIndex: parent.layer.zIndex, //重点1
+						success: function(layero, index11) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						
+							$(".bohui", paentIfarame).click(function() {
+								var rejectnomo = $(".rejectnomo", paentIfarame).val();
+								
+
+								parent.layer.confirm('确认审核吗？', {
+										icon: 3,	zIndex: parent.layer.zIndex, //重点1
+										title: '提示'
+								}, function(index) {
+											
+										var jiazaiIndex;
+										parent.layer.open({
+										  type: 3, 
+										  zIndex: parent.layer.zIndex, //重点1
+										  success: function(layero, index){
+										  		jiazaiIndex = index;
+								  			}
+										});
+										
+										$.ajax({
+											type: "get",
+											url:  localStorage.serIp  +"/WebAuditCompanyInfo?jsoncallback=?",
+											dataType: "jsonp",
+											async: true,
+											data: {
+												'userId': localStorage.userId,
+												'userPw': localStorage.userPw,
+												'database': localStorage.database,
+												'auditstate': "1",
+												'conclusion' : rejectnomo,
+												'companyid':sessionStorage.unit_id 
+											},
+											success: function(res) {
+													parent.layer.close(jiazaiIndex);
+
+												var data = JSON.parse(res);
+												if(data.ResultValue == "1"){
+										
+													parent.layer.open({
+														title: "提示",
+														content: "审核通过!",
+														zIndex: parent.layer.zIndex ,//重点1,
+														success: function(layero) {
+															parent.layer.setTop(layero); //重点2
+															parent.layer.close(index11); //再执行关闭   
+															
+															var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+																parent.layer.close(index); //再执行关闭    
+														}
+													});
+											
+												}
+												
+												if(data.ResultValue == "2"){
+										
+													parent.layer.open({
+														title: "提示",
+														content: "服务器异常!",
+														zIndex: parent.layer.zIndex ,//重点1,
+														success: function(layero) {
+															parent.layer.setTop(layero); //重点2
+															parent.layer.close(index11); //再执行关闭   
+														}
+													});
+											
+												}
+												
+												
+												
+												if(data.ResultValue == "0")
+												{
+													
+												parent.layer.open({
+														title: "提示",
+														content: "服务器提出一个问题!",
+														zIndex: parent.layer.zIndex ,//重点1,
+														success: function(layero) {
+															parent.layer.setTop(layero); //重点2
+						
+														}
+													});
+					
+												}
+				
+											
+											}
+										
+															,
+												error: function(res) {
+													parent.layer.close(jiazaiIndex);
+														
+														parent.layer.open({
+															title: "提示",
+															content: '服务器异常!',
+																zIndex: parent.layer.zIndex //重点1
+												
+														});
+													
+											
+												}
+										});
+											
+								}
+								
+								);
+	
+				
+		
+									
+							})
+						}
+					});
+							
+				
+			})
+			
+			
+			
+			//切换
+			$(".tab_qk div").click(function(){
+				
+				$(".tab_qk div").removeClass("qyzj");
+				
+				$(this).addClass("qyzj");
+				
+				var name=$(this).attr("name");
+				
+				switch(name)
+				{
+		
+					case "1":
+						$("#tab1").show();
+						$("#tab2").hide();
+						$("#tab3").hide();
+						
+					break;
+					
+					case "2":
+						$("#tab1").hide();
+						$("#tab2").show();
+						$("#tab3").hide();
+					break;
+					
+					case "3":
+						$("#tab1").hide();
+						$("#tab2").hide();
+						$("#tab3").show();
+					break;
+				}
+			
+			})
+			
+
+			
+
+			
+
+			//获取用户账户
+			function companyAccountinfo() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetCompanyAccountInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'companyid': sessionStorage.unit_id
+					},
+					success: function(res) {
+						var data_yh = JSON.parse(res);
+
+						getCompanyAccountinfo(data_yh)
+					}
+				});
+			}
+			
+			companyAccountinfo();
+			
+			function getCompanyAccountinfo(data){
+				table.render({
+					elem: '#bankZhangHuId',
+					data: data,
+					height: "full-400",
+					id:"bankZhangHu",
+					cols: [
+						[ {
+							checkbox: true,
+							LAY_CHECKED: false,
+							align: "center",
+							width: "3%"
+						}, {
+							field: 'accountnum',
+							title: '银行帐号',
+							event: 'detail',
+							style: "color:#2D89DD;cursor:pointer",
+//							edit: 'text',
+							minWidth: 80
+						}, {
+							field: 'accountname',
+							title: '开户名',
+//							edit: 'text',
+							minWidth: 80
+						}, {
+							field: 'bankofdeposit',
+							title: '开户行',
+//							edit: 'text',
+							minWidth: 80
+						}, {
+							field: 'nomo',
+							title: '备注',
+//							edit: 'text',
+							minWidth: 80
+						}]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: false //是否显示分页
+						,
+					limits: [50],
+					limit: 50000//每页默认显示的数量
+				});
+				
+			}
+					
+					
+			//获取联系人
+			function companyContacts() {
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetCompanyContract?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'companyid': sessionStorage.unit_id
+					},
+					success: function(res) {
+						var data_lxr = JSON.parse(res);
+					
+						getCompanyContacts(data_lxr)
+					}
+				});
+			}
+			companyContacts();
+
+	
+			function getCompanyContacts(data1){
+				table.render({
+					elem: '#lianxirebId',
+					data: data1,
+					height: "full-400",
+					id:'lianxireb',
+					
+					cols: [
+						[{
+							checkbox: true,
+							LAY_CHECKED: false,
+							align: "center",
+							width: "3%",
+						}, {
+							field: 'linkman',
+							minWidth: 73,
+							title: '姓名',
+								event: 'detail',
+								style: "color:#2D89DD;cursor:pointer",
+						}, {
+							field: 'post',
+							minWidth: 73,
+							title: '职位'
+						}, {
+							field: 'phone',
+							minWidth: 73,
+							title: '手机号码'
+						}, {
+							field: 'tel',
+							minWidth: 73,
+							title: '家庭电话'
+						}, {
+							field: 'companytel',
+							minWidth: 73,
+							title: '公司电话'
+						}, {
+							field: 'email',
+							minWidth: 73,
+							title: '电子邮件'
+						}, {
+							field: 'nomo',
+							minWidth: 73,
+							title: '备注'
+						}, ]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: false //是否显示分页
+						,
+					limits: [50],
+					limit: 5000 //每页默认显示的数量
+				});
+				
+			}
+	
+			
+			//获取企业证件数据
+			function companyData() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetCertificatesInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'companyid': sessionStorage.unit_id
+					
+					},
+					success: function(res) {
+						var companyData = JSON.parse(res);
+						count=companyData.count;
+						companyData=JSON.parse(companyData.data);
+						for(var i=0;i<companyData.length;i++){
+							companyData[i].certificates_islong=companyData[i].certificates_islong==0?'否':'是';
+							
+							if(companyData[i].certificates_begin_time){
+								companyData[i].certificates_begin_time=companyData[i].certificates_begin_time.slice(0,10);
+							}
+							if(companyData[i].certificates_end_time){
+								companyData[i].certificates_end_time=companyData[i].certificates_end_time.slice(0,10);
+							}
+							
+							
+						}
+						
+						zhengjianInfo(companyData);
+					
+				
+							
+					$("#tab1 [data-field=certificates_num] div:gt(0)").each(function(i) {
+							if(companyData[i].certificates_type == 5){ //销售人员备案授权
+									var certificates_num=companyData[i].certificates_num;
+									var changeCompany_model = certificates_num.substring(0,certificates_num.indexOf("|"));
+									$(this).html(changeCompany_model)
+							}	
+							
+							if(companyData[i].certificates_type == 6){ //质量保证协议书
+								
+									$(this).html("")
+							}	
+							
+							if(companyData[i].certificates_type  == 0 || companyData[i].certificates_type  == 3 || companyData[i].certificates_type  == 4){
+									$(this).html(companyData[i].certificates_num)
+							}
+							
+						
+							if(companyData[i].certificates_type  == 1){
+								$(this).html(companyData[i].certificates_regnum)
+							}	
+							
+							if(companyData[i].certificates_type == 2){
+							
+								$(this).html(companyData[i].certificates_code)
+							}	
+				
+								
+				
+					})
+					
+					$("#tab1 [data-field=zhuijia] div:gt(0)").each(function(i) {
+						$(this).html("追加")
+							
+					})
+					
+					$("#tab1 [data-field=certificates_time] div:gt(0)").each(function(i) {
+						var str = "";var worning = "";
+						if(companyData[i].certificates_islong == '是'){
+							str = "长期"
+						}else{
+							str = companyData[i].certificates_end_time;
+							
+							var myDate = new Date();
+
+							var currentDate =  myDate.getFullYear() + '-' +(myDate.getMonth() + 1)  + '-'+  myDate.getDate();
+							
+							var  days = diffDay(str,currentDate)
+							
+							if(days < 0){
+								worning  = "<span style='color: red''>已过期</span>";
+							}
+							
+							if(days > 0 && days < companyData[i].zhucezheng){
+								worning  = "<span style='color: #FFAB39''>即将到期</span>";
+							}
+							
+							
+						}
+						
+						$(this).html(companyData[i].certificates_begin_time + " - " + str + " "+worning);
+							
+					})
+
+					},
+					error: function() {
+					}
+				});
+			}
+		
+			//证件信息
+			companyData();
+			function zhengjianInfo(data) {
+				
+				//展示已知数据
+				table.render({
+					elem: '#companyZhengjianId',
+					data: data,
+					height: "full-400",
+					id:'companyZhengjianId',
+					cols: [
+						[ //标题栏
+							{
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: "3%"
+							},{
+								field: 'certificates_type_name',
+								title: '证件类型',
+								event: 'detail1',
+								style: "color:#2D89DD;cursor:pointer",
+								width: "30%"
+							}, {
+								field: 'certificates_num',
+								title: '登记号/证号/社会统一信用代码/身份证号',
+								width:"30%"
+							}, {
+								field: 'certificates_time',
+								title: '时间',
+								width: "20%"
+							},
+							{
+								field: 'zhuijia',
+								title: '操作',
+								event: 'zhuijiaoprate',
+								style: "color:#2D89DD;cursor:pointer",
+								width: "16%"
+							},
+
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					limits: [1000],
+					limit: 1000 //每页默认显示的数量
+				});
+			}
+			
+		
+			
+//			switch(sessionStorage.companyGroupId)
+//			{
+//			
+//				case "5": 
+//					hospitalInfoOprate();
+//				break;
+//				default:
+//					companyInfoOprate();
+//				break;
+//			}
+//				
+		
+			$(function(){
+			//公司分组
+			function company_group() {
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp+"/WebGetCompanyGroup?jsoncallback=?",
+						dataType: "jsonp",
+						async: true,
+						data: {
+							'userId': localStorage.userId,
+							'userPw': localStorage.userPw,
+							'database': localStorage.database,
+						},
+						success: function(res) {
+							var desData = JSON.parse(res);
+							var optionsStr = "";
+							for(var i=0;i<desData.length;i++){
+								var id= desData[i].id;
+								var name= desData[i].name;
+								
+								if(id == sessionStorage.companyGroupId){
+									optionsStr+= "<option value='"+id+"' selected='selected'>"+name+"</option>";
+	
+								}else{
+									optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+	
+								}
+	
+								
+							}
+							$(".company_group").append(optionsStr);
+							
+							if(localStorage.groupcompanyid != "0"){
+								$("#company_groupId option[value='2']").remove();
+							}
+							
+									
+				
+			
+						}
+					});
+	
+				}
+					
+				company_group();
+			})
+
+				 
+						
+			$(".company_group").change(function(){
+				
+					$("input").val("")
+					switch($(".company_group").val())
+					{
+						case "5": 
+							hospitalInfoOprate();
+						break;
+						default:
+						
+						
+							companyInfoOprate();
+						break;
+					}
+			
+			}) 
+	
+			//添加联系人
+			$(".lianxirenAdd").click(function() {
+				
+				if(!checkPermissionStatus("往来单位管理-保存1")){
+					
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return
+				
+				}
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">新增联系人</span>',
+					area: ['700px', '90%'],
+					offset: "rb",
+					content: 'views/basicdataProtect/unit/addcontacts.html',
+												zIndex: parent.layer.zIndex, //重点1
+
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+					},
+					end: function() {
+//						companyContacts();
+						location.reload();
+					}
+				});
+			
+			
+			});
+			
+			
+			//新增证件
+			$(".zhengjianAdd").click(function() {
+					if(!checkPermissionStatus("往来单位管理-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+					
+				}
+						
+				sessionStorage.jyfwTreeData="";
+				sessionStorage.jyfData="";
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">企业证件信息</span>',
+					area: ['700px', '90%'],
+					offset: "rb",
+					content: 'views/basicdataProtect/unit/addCompanyZhengJian.html',
+												zIndex: parent.layer.zIndex, //重点1
+
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+//						$(".addcompany_submit",paentIfarame).attr("name_id",certificates_companyid)
+					},
+					end: function() {
+//						sessionStorage.add_sess="";
+						companyData();
+					}
+				});
+			})
+			
+			
+			//新增银行账户管理
+			$('.bankadd').on('click', function() {
+				if(!checkPermissionStatus("往来单位管理-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+					
+				}
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">新增用户账户</span>',
+					area: ['700px', '90%'],
+					offset: "rb",
+					content: 'views/basicdataProtect/unit/addbankAccount.html',
+													zIndex: parent.layer.zIndex, //重点1
+
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+					},
+					end: function() {
+						companyAccountinfo();
+					}
+				});
+			
+			});
+			
+			
+			
+	
+			
+			//企业证件信息修改
+			table.on('tool(demo1)', function(obj) {
+				if(!checkPermissionStatus("往来单位管理-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+					
+				}
+				var data = obj.data;
+				
+				//企业证件
+				if(obj.event === 'detail1') {
+					sessionStorage.jyfwTreeData="";
+					sessionStorage.jyfData="";
+					var id = data.certificates_id;
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">企业证件详情</span>',
+						area: ['700px', '90%'],
+						offset: "rb",
+						content: 'views/basicdataProtect/unit/editCompanyZhengjian.html',
+						zIndex: parent.layer.zIndex //重点1
+							,
+						success: function(layero, index11) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$("#choose_type",paentIfarame).find("option[value="+data.certificates_type+"]").attr("selected","true");
+							$("#choose_type",paentIfarame).attr("disabled","disabled");
+
+								var certificates_num;
+								switch (data.certificates_type){
+									case 0 :
+									$("#zhengjianhao",paentIfarame).css("display","inline-block");
+				
+									$(".change_name",paentIfarame).text("证号：");
+									$(".hidden_div",paentIfarame).show();
+									$(".imagesInfo",paentIfarame).css("display","inline-block"); 
+									$("#authorized_regions",paentIfarame).css("display","none");
+									$("#myname",paentIfarame).css("display","none");
+									certificates_num=data.certificates_num;
+									$(".changeCompany_model",paentIfarame).val(certificates_num);
+									break;
+									case 1 :
+									$("#zhengjianhao",paentIfarame).css("display","inline-block");
+				
+									$(".change_name",paentIfarame).text("登记号：");
+									$(".hidden_div",paentIfarame).hide();
+									$(".imagesInfo",paentIfarame).css("display","inline-block");
+									$("#authorized_regions",paentIfarame).css("display","none");
+									$("#myname",paentIfarame).css("display","none");
+									certificates_num=data.certificates_regnum;
+									$(".changeCompany_model",paentIfarame).val(certificates_num);
+									break;
+									case 2 :
+									$("#zhengjianhao",paentIfarame).css("display","inline-block");
+				
+									$(".change_name",paentIfarame).text("统一社会信用代码：");
+									$(".hidden_div",paentIfarame).hide();
+									$(".imagesInfo",paentIfarame).css("display","inline-block");
+									$("#authorized_regions",paentIfarame).css("display","none");
+									$("#myname",paentIfarame).css("display","none");
+									certificates_num=data.certificates_code;
+									$(".changeCompany_model",paentIfarame).val(certificates_num);
+									break;
+									case 3:
+									$("#zhengjianhao",paentIfarame).css("display","inline-block");
+				
+									$(".change_name",paentIfarame).text("证号：");
+									$(".hidden_div",paentIfarame).show();
+									$(".imagesInfo",paentIfarame).css("display","inline-block");
+									$("#authorized_regions",paentIfarame).css("display","none");
+									$("#myname",paentIfarame).css("display","none");
+									certificates_num=data.certificates_num;
+									$(".changeCompany_model",paentIfarame).val(certificates_num);
+									break;
+									case 4 :
+									$("#zhengjianhao",paentIfarame).css("display","inline-block");
+				
+									$(".change_name",paentIfarame).text("备案号："); 
+									$(".hidden_div",paentIfarame).show();
+									$(".imagesInfo",paentIfarame).css("display","inline-block");
+									$("#authorized_regions",paentIfarame).css("display","none");
+									$("#myname",paentIfarame).css("display","none");
+									certificates_num=data.certificates_num;
+									$(".changeCompany_model",paentIfarame).val(certificates_num);
+									break;
+									case 5 :
+									$("#zhengjianhao",paentIfarame).css("display","inline-block");
+									$(".change_name",paentIfarame).text("身份证号：");
+									$(".hidden_div",paentIfarame).hide();
+									$("#authorized_regions",paentIfarame).css("display","inline-block");
+									$("#myname",paentIfarame).css("display","inline-block");
+									certificates_num=data.certificates_num;
+									var changeCompany_model = certificates_num.substring(0,certificates_num.indexOf("|"));
+									var myname = certificates_num.substring((certificates_num.indexOf("|")+1),certificates_num.length);
+									$(".changeCompany_model",paentIfarame).val(changeCompany_model);
+									$(".myname",paentIfarame).val(myname);
+									$(".authorized_regions",paentIfarame).val(data.authorized_regions);
+									break;
+									case 6 :
+									$("#zhengjianhao",paentIfarame).css("display","none");			
+									$(".hidden_div",paentIfarame).hide();
+									$("#authorized_regions",paentIfarame).css("display","none");
+									$("#myname",paentIfarame).css("display","none");
+									break;
+								}
+								
+
+						
+							$(".changeCompany_startDate",paentIfarame).val(data.certificates_begin_time)
+							$(".changeCompany_stopDate",paentIfarame).val(data.certificates_end_time)
+							
+							if(data.certificates_islong=='是'){
+								$(".login",paentIfarame).prop("checked",true)
+							}	
+							$('.addcompany_submit',paentIfarame).attr("name_id",id);
+							
+//							//存放经营范围
+							if(data.jyfwname != ""){
+								sessionStorage.jyfwTreeData=data.jyfwname;
+								sessionStorage.jyfData=data.jyfwname;
+							}
+							
+							
+							var productimgpath =[];
+							var imgStr = "";
+							if(data.certificates_imgpath != null && data.certificates_imgpath !=""){
+								productimgpath = data.certificates_imgpath.split(",");
+							}
+						
+							if(productimgpath != "[]" && productimgpath.length !=0){
+								$('#demo2',paentIfarame).empty();
+
+								for(var j=0;j< productimgpath.length;j++){
+
+									 imgStr += '<img src="' + productimgpath[j] + '" class="layui-upload-img uploadImg" style="width:120px;height:140px;"><span class="removeImg">X</span>';
+
+								}
+						
+								$('#demo2',paentIfarame).append(imgStr);
+	
+							}
+							
+							
+							//点击保存
+							$(".addcompany_submit",paentIfarame).click(function(){
+								var certificates_begin_time=$(".changeCompany_startDate",paentIfarame).val();
+								if(certificates_begin_time == "" || certificates_begin_time ==null) {
+									parent.layer.open({
+										title: "提示",
+										content: '开始时间不能为空!',
+										zIndex: parent.layer.zIndex //重点1
+										,
+									});
+									return;
+								}	
+								var certificates_end_time = null;var certificates_islong;
+								if($(".login",paentIfarame).is(":checked")){
+									
+									certificates_end_time = null;
+									certificates_islong=1
+									
+									
+								}else{
+									certificates_islong=0
+									certificates_end_time=$(".changeCompany_stopDate",paentIfarame).val();
+									
+									if(certificates_end_time == "" || certificates_end_time ==null) {
+										parent.layer.open({
+											title: "提示",
+											content: '结束时间不能为空!',
+											zIndex: parent.layer.zIndex //重点1
+											,
+										});
+										return;
+									}	
+									
+								}
+								
+								var  jiazaiIndex;
+								parent.layer.open({
+								  type: 3, zIndex: parent.layer.zIndex ,	//重点1
+								  success: function(layero, index){
+								  	jiazaiIndex = index;
+						  			}
+								});
+				
+					
+							
+								//公司经营范围
+								var jyfw = "";
+								if(sessionStorage.jyfwTreeData != undefined && sessionStorage.jyfwTreeData){
+									var jyfw = JSON.parse(sessionStorage.jyfwTreeData);
+								}
+								var jyfw1="";
+								for(var i=0;i<jyfw.length;i++){
+									//第一遍循环分类查找
+									if(jyfw[i].children != null){
+										var panduan=jyfw[i].children.length;
+										if(panduan != 0){
+											//第二遍循环查找每个children
+											for(var j=0;j<panduan;j++){
+												var lei=jyfw[i].children[j]._parentId;
+												var bianhao=jyfw[i].children[j].name.slice(2,4);
+												var ping=lei+bianhao;
+												jyfw1+=ping+';';
+											}
+										}
+									}
+								}
+								//获取图片路径
+								var img_num=$('#demo2 img',paentIfarame);
+								var get_src='';
+								for(var i=0;i<img_num.length;i++){
+//									get_src+=$('#demo2 img:eq('+i+')',paentIfarame).attr('alt');
+									get_src += img_num[i].src;
+
+									if((i+1) != img_num.length){
+										
+										get_src+=',';
+									}
+								}
+								var certificates_type=$("#choose_type",paentIfarame).val();
+								var code=$(".changeCompany_model",paentIfarame).val();
+								
+								var authorized_regions=$('.authorized_regions',paentIfarame).val();
+				
+				
+								var certificates_regnum = "";//登记号
+								var certificates_num = "";//证件号
+								var certificates_code= "";//统一社会信用代码
+								
+								
+								if(certificates_type == "5"){
+									var myname=$(".myname",paentIfarame).val();
+									certificates_num = code + "|" + myname;
+								}
+								
+								if(certificates_type == "0" || certificates_type == "3" ||certificates_type == "4"){
+									certificates_num = code ;
+								}
+								
+								if(certificates_type == "1" ){
+									certificates_regnum = code ;
+								}	
+								
+								if(certificates_type == "2"){
+									certificates_code = code ;
+								}	
+								
+							
+								
+								
+								var master={
+									'certificates_companyid':sessionStorage.unit_id ,/*公司表id*/
+									'certificates_company_type': 1,/*公司类别0 表示本公司 1表示往来单位*/
+									'certificates_begin_time':certificates_begin_time ,/*证件开始时间*/
+									'certificates_end_time':certificates_end_time ,/*证件结束时间*/
+									'certificates_islong':certificates_islong ,/*是否长期，0不是，1是*/
+									'certificates_jyfw':jyfw1 ,/*公司经营范围*/
+									'certificates_imgpath':get_src,/*证件图片*/
+									'certificates_code':certificates_code, //统一社会信用代码
+									'certificates_regnum' : certificates_regnum, //登记号
+									'certificates_num' : certificates_num,//证件号
+									'certificates_type':certificates_type, /*证件种类0医疗器械生产许可证，1第一类医疗器械生产企业备案（无经营范围项），2营业执照（三证合一）（无经营范围项），3医疗器械经营许可证，4第二类医疗器械经营备案凭证*/
+									'authorized_regions' : authorized_regions
+
+								}
+								$.ajax({
+									type: "post",
+									url: localStorage.serIp+"/WebUpdateCertificates",
+									async: true,
+									dataType: 'json',
+									crossDomain: true,
+									contentType:'application/json; charset=utf-8',
+									data: JSON.stringify({
+										"userId": localStorage.userId,
+										"userPw": localStorage.userPw,
+										'database': localStorage.database,
+										'id':data.certificates_id,
+										'master': JSON.stringify(master),
+										'groupcompanyid':localStorage.groupcompanyid
+									}),
+									success: function(res) {
+										var data = JSON.parse(res);
+											parent.layer.close(jiazaiIndex); 
+										if(data.ResultValue == 1) {
+											
+										
+
+											parent.layer.open({
+												title: "提示",
+												content: '修改成功',
+												zIndex: parent.layer.zIndex //重点1
+												,
+											});
+											
+											companyData();
+											
+											parent.layer.close(index11); //再执行关闭     
+										} else {
+											parent.layer.open({
+												title: "提示",
+												content: '提交失败',
+												zIndex: parent.layer.zIndex
+											});
+										}
+									},
+										end: function(res) {
+																	parent.layer.close(jiazaiIndex); 
+					
+										}
+								});
+							})
+						},
+						end:function(){
+//							companyData();
+location.reload();
+							sessionStorage.jyfwTreeData="";
+							sessionStorage.jyfData="";
+						}
+					});
+				}
+				
+				//追加
+				if(obj.event === 'zhuijiaoprate'){
+					
+					
+					sessionStorage.jyfwTreeData="";
+					sessionStorage.jyfData="";
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">企业证件信息</span>',
+						area: ['700px', '90%'],
+						offset: "rb",
+						content: 'views/basicdataProtect/unit/addCompanyZhengJian.html',
+						zIndex: parent.layer.zIndex //重点1
+							,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							
+							$("#choose_type",paentIfarame).find("option[value="+data.certificates_type+"]").attr("selected","true");
+							$("#choose_type",paentIfarame).attr("disabled","disabled");
+
+							
+						},
+						end: function() {
+//							sessionStorage.add_sess="";
+//								companyData();
+location.reload();
+						}
+					});
+			
+				}
+			
+			});
+			
+			
+			//银行账户信息修改
+			table.on('tool(demo2)', function(obj) {
+			if(!checkPermissionStatus("往来单位管理-保存1")){
+				
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+					
+				}
+			
+			
+				var data = obj.data;
+			
+				//企业证件
+				if(obj.event === 'detail') {
+					var id = data.id;
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">银行账户详情</span>',
+						area: ['700px', '90%'],
+						offset: "rb",
+						content: 'views/basicdataProtect/unit/editbankAccount.html',
+						zIndex: parent.layer.zIndex //重点1
+							,
+						success: function(layero, index11) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						
+
+						
+							$(".addbank_bank",paentIfarame).val(data.bankofdeposit)
+							$(".addbank_name",paentIfarame).val(data.accountname)
+							$(".addbank_account",paentIfarame).val(data.accountnum)
+							$(".addbank_notes",paentIfarame).val(data.nomo)
+
+	
+							
+							//点击保存
+							$(".addbank_submit",paentIfarame).click(function(){
+								var addbank_bank=$(".addbank_bank",paentIfarame).val();
+								if(addbank_bank == "" || addbank_bank ==null) {
+										parent.layer.open({
+										title: "提示",
+										content: '开户行不能为空!',
+										zIndex: parent.layer.zIndex, //重点1
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+									
+									return;
+								}	
+								
+								var addbank_name=$(".addbank_name",paentIfarame).val();
+								if(addbank_name == "" || addbank_name ==null) {
+									parent.layer.open({
+										title: "提示",
+										content: '开户名不能为空!',
+										zIndex: parent.layer.zIndex, //重点1
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+									
+									return;
+								}	
+					
+					
+							
+								var addbank_account=$(".addbank_account",paentIfarame).val();
+								if(addbank_account == "" || addbank_account ==null) {
+									parent.layer.open({
+										title: "提示",
+										content: '开户账号不能为空',
+										zIndex: parent.layer.zIndex, //重点1
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+									return;		
+								}	
+								
+								
+									
+								var  jiazaiIndex;
+								parent.layer.open({
+								  type: 3,  zIndex: parent.layer.zIndex ,
+								  success: function(layero, index){
+								  	jiazaiIndex = index;
+						  			}
+								});
+						
+								var addbank_notes=$(".addbank_notes",paentIfarame).val();
+
+									var master = {
+										'bankofdeposit': '' + addbank_bank + '',
+										'accountname': '' + addbank_name + '',
+										'accountnum': '' + addbank_account + '',
+										'nomo': '' + addbank_notes + '',
+										"companyid" :data.companyid 
+									};
+									
+									$.ajax({
+									type: "post",
+									url: localStorage.serIp+"/WebUpdateCompanyAccount",
+									async: true,
+									dataType: 'json',
+									crossDomain: true,
+									contentType:'application/json; charset=utf-8',
+									data: JSON.stringify({
+										"userId": localStorage.userId,
+										"userPw": localStorage.userPw,
+										'database': localStorage.database,
+										'master': JSON.stringify(master),
+										'id':id
+									}),
+									success: function(res) {
+										var data = JSON.parse(res);
+										if(data.ResultValue == 1) {
+											
+											parent.layer.close(jiazaiIndex); 
+
+											parent.layer.open({
+												title: "提示",
+												content: '修改成功',
+												zIndex: parent.layer.zIndex //重点1
+												,
+											});
+											
+//											companyAccountinfo();	
+location.reload();
+													
+											parent.layer.close(index11); //再执行关闭    
+											
+											
+										} else {
+											parent.layer.open({
+												title: "提示",
+												content: '提交失败',
+												zIndex: parent.layer.zIndex
+											});
+										}
+									}
+								});
+							})
+						},
+						end:function(){
+						
+						}
+					});
+				}
+				
+			
+			
+			});
+			
+			
+			//联系人信息修改
+			table.on('tool(demo3)', function(obj) {
+				if(!checkPermissionStatus("往来单位管理-保存1")){
+		
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: parent.layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							return
+						
+				}
+				var data = obj.data;
+				if(obj.event === 'detail') {
+					var id = data.id;
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">联系人详情</span>',
+						area: ['700px', '90%'],
+						offset: "rb",
+						content: 'views/basicdataProtect/unit/editcontacts.html',
+						zIndex: parent.layer.zIndex //重点1
+							,
+						success: function(layero, index11) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						
+
+						
+							$(".linkman",paentIfarame).val(data.linkman)
+							$(".post",paentIfarame).val(data.post)
+							$(".phone",paentIfarame).val(data.phone)
+							$(".tel",paentIfarame).val(data.tel)
+							$(".companytel",paentIfarame).val(data.companytel)
+							$(".email",paentIfarame).val(data.email)
+							$(".nomo",paentIfarame).val(data.nomo)
+	
+							
+							//点击保存
+							$(".editContacts_submit",paentIfarame).click(function(){
+									var linkman = $('.linkman',paentIfarame).val();
+									if(linkman == ""){
+										parent.layer.open({
+												title: "提示",
+												content: '联系人不能为空!',
+												zIndex: parent.layer.zIndex, //重点1
+												success: function(layero) {
+													parent.layer.setTop(layero); //重点2
+												}
+											});
+											
+											return;
+												
+									}
+					
+									var post = $('.post',paentIfarame).val();
+									if(post == ""){
+										parent.layer.open({
+												title: "提示",
+												content: '职位不能为空!',
+												zIndex: parent.layer.zIndex, //重点1
+												success: function(layero) {
+													parent.layer.setTop(layero); //重点2
+												}
+											});
+											
+											return;
+												
+									}
+									
+									var phone = $('.phone',paentIfarame).val();
+									if(phone == ""){
+										parent.layer.open({
+												title: "提示",
+												content: '手机号不能为空',
+												zIndex: parent.layer.zIndex, //重点1
+												success: function(layero) {
+													parent.layer.setTop(layero); //重点2
+												}
+											});
+											return;		
+									}
+									
+									
+										
+									var  jiazaiIndex;
+									parent.layer.open({
+									  type: 3,  zIndex: parent.layer.zIndex ,
+									  success: function(layero, index){
+									  	jiazaiIndex = index;
+							  			}
+									});
+								
+								
+									var tel = $('.tel',paentIfarame).val();
+									var companytel = $('.companytel',paentIfarame).val();
+									var email = $('.email',paentIfarame).val();
+									var nomo = $('.nomo',paentIfarame).val();
+									var master = {
+										'linkman': '' + linkman + '',
+										'phone': '' + phone+ '',
+										'tel': '' + tel + '',
+										'post': '' + post + '',
+										'companytel': '' + companytel + '',
+										'email': '' + email + '',
+										'nomo': '' + nomo + '',
+										"companyid" :sessionStorage.unit_id 
+									};
+									
+									$.ajax({
+										type: "post",
+										url: localStorage.serIp+"/WebUpdateCompanyContract",
+										async: true,
+										crossDomain: true,
+										contentType:'application/json; charset=utf-8',
+										data:  JSON.stringify({
+											"userId": localStorage.userId,
+											"userPw": localStorage.userPw,
+											'database': localStorage.database,
+											'master': JSON.stringify(master),
+											'id' : id
+										}),
+										success: function(res) {
+											var data = JSON.parse(res);
+											if(data.ResultValue == 1) {
+												
+												parent.layer.close(jiazaiIndex); 
+
+												parent.layer.open({
+													title: "提示",
+													content: '修改成功',
+													zIndex: parent.layer.zIndex, //重点1
+													success: function(layero) {
+														parent.layer.setTop(layero); //重点2
+													}
+												});
+												
+//												companyContacts();
+location.reload();
+												
+												parent.layer.close(index11); //再执行关闭     
+											} else {
+												parent.layer.open({
+													title: "提示",
+													content: '修改失败',								zIndex: parent.layer.zIndex, //重点1
+
+												});
+											}
+										}
+									});
+								})
+						},
+						end:function(){
+						
+						}
+					});
+				}
+				
+				})
+			
+			
+			$('.del').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+			
+			//点击删除
+			var $ = layui.$,
+			active = {
+				//删除证件
+				zhengjianDel: function() {
+								if(!checkPermissionStatus("往来单位管理-保存1")){
+					
+										parent.layer.open({
+											title: "提示",
+											content: localStorage.jurisdictionTips,
+											zIndex: parent.layer.zIndex //重点1
+											,
+											success: function(layero) {
+												parent.layer.setTop(layero); //重点2
+											}
+										});
+										return
+									
+								}
+					var idstr = "";
+			
+						var checkStatus = table.checkStatus('companyZhengjianId'),
+						data1 = checkStatus.data;
+						for(var i=0;i<data1.length;i++) { 
+				      		idstr += data1[i].certificates_id;
+				      		if((i+1)!=data1.length){
+				      			idstr += ",";
+				      		}
+						} 
+					
+					parent.layer.confirm('确定删除记录？', {
+						icon: 3,
+						title: '删除',zIndex: parent.layer.zIndex //重点1
+					}, function(index) {
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp+"/WebDeleteCertificates?jsoncallback=?",
+							async: true,
+							dataType: 'jsonp',
+							data: {            
+								"userId": localStorage.userId,
+								"userPw": localStorage.userPw,
+								"database": localStorage.database,
+								"id": idstr
+							},
+							success: function(res) {
+								var data = JSON.parse(res);
+								var num1=0;
+								var num2=0;
+								for(var i=0;i<data.length;i++){
+									var panduan=data[i].ResultValue;
+									if(panduan == 1){
+										++num1;
+									}else{
+										++num2;
+									}
+								}
+								parent.layer.open({
+									title: "提示",
+									content: num1+'个成功 ，'+num2+'个失败',zIndex: parent.layer.zIndex, //重点1
+								});
+								companyData();
+								parent.layer.close(index);
+							}
+						});
+					
+					});
+				},
+				//删除银行账户
+				bankDel: function() {
+							if(!checkPermissionStatus("往来单位管理-保存1")){
+					
+										parent.layer.open({
+											title: "提示",
+											content: localStorage.jurisdictionTips,
+											zIndex: parent.layer.zIndex //重点1
+											,
+											success: function(layero) {
+												parent.layer.setTop(layero); //重点2
+											}
+										});
+										return
+									
+								}
+					var idstr = "";
+			
+						var checkStatus = table.checkStatus('bankZhangHu'),
+						data1 = checkStatus.data;
+						for(var i=0;i<data1.length;i++) { 
+				      		idstr += data1[i].id;
+				      		if((i+1)!=data1.length){
+				      			idstr += ",";
+				      		}
+						} 
+					
+					parent.layer.confirm('确定删除记录？', {
+						icon: 3,
+						title: '删除',zIndex: parent.layer.zIndex //重点1
+					}, function(index) {
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp+"/WebDeleteCompanyAccount?jsoncallback=?",
+							async: true,
+							dataType: 'jsonp',
+							data: {            
+								"userId": localStorage.userId,
+								"userPw": localStorage.userPw,
+								"database": localStorage.database,
+								"id": idstr
+							},
+							success: function(res) {
+								var data = JSON.parse(res);
+								var num1=0;
+								var num2=0;
+								for(var i=0;i<data.length;i++){
+									var panduan=data[i].ResultValue;
+									if(panduan == 1){
+										++num1;
+									}else{
+										++num2;
+									}
+								}
+								parent.layer.open({
+									title: "提示",
+									content: num1+'个成功 ，'+num2+'个失败',zIndex: parent.layer.zIndex, //重点1
+								});
+								 companyAccountinfo();
+								 parent.layer.close(index);
+								 	
+							}
+						});
+					
+					});
+				},
+				//删除联系人管理
+				lianxirenDel: function() {
+					
+							if(!checkPermissionStatus("往来单位管理-保存1")){
+					
+										parent.layer.open({
+											title: "提示",
+											content: localStorage.jurisdictionTips,
+											zIndex: parent.layer.zIndex //重点1
+											,
+											success: function(layero) {
+												parent.layer.setTop(layero); //重点2
+											}
+										});
+										return
+									
+								}
+					var idstr = "";
+			
+						var checkStatus = table.checkStatus('lianxireb'),
+						data1 = checkStatus.data;
+						for(var i=0;i<data1.length;i++) { 
+				      		idstr += data1[i].id;
+				      		if((i+1)!=data1.length){
+				      			idstr += ",";
+				      		}
+						} 
+					
+					parent.layer.confirm('确定删除记录？', {
+						icon: 3,
+						title: '删除'
+					}, function(index) {
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp+"/WebDeleteCompanyContract?jsoncallback=?",
+							async: true,
+							dataType: 'jsonp',
+							data: {            
+								"userId": localStorage.userId,
+								"userPw": localStorage.userPw,
+								"database": localStorage.database,
+								"id": idstr
+							},
+							success: function(res) {
+								var data = JSON.parse(res);
+								var num1=0;
+								var num2=0;
+								for(var i=0;i<data.length;i++){
+									var panduan=data[i].ResultValue;
+									if(panduan == 1){
+										++num1;
+									}else{
+										++num2;
+									}
+								}
+								parent.layer.open({
+									title: "提示",
+									content: num1+'个成功 ，'+num2+'个失败',zIndex: parent.layer.zIndex, //重点1
+								});
+								companyContacts();
+									parent.layer.close(index);
+							}
+						});
+					});
+				}
+			};
+			
+			
+					
+			//获取部门
+			getBuMen()
+			function getBuMen() {
+				var companytypeid=localStorage.groupcompanyid
+				if(sessionStorage.companytypeid){
+					companytypeid=sessionStorage.companytypeid;
+				}
+				$.ajax({
+					type: "get",
+					url:  localStorage.serIp  +"/WebGetEmployeegrouptable?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": companytypeid
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						data=data[0].children;
+						$('#employeedep').bComboSelect({
+							showField: 'name',
+							keyField: 'id',
+							data: data
+						});
+						$("#employeedep").val($(".employeedep").attr("nameid"))
+					}
+				});
+			}
+			
+		});
+		
+
+			
+		
+		function hospitalInfoOprate(){
+			
+			$(".companyName").text("医院全称：");
+			$(".companyShortName").text("医院简称：");
+			$(".companyTel").text("医院电话：");
+			$(".companyAddress").text("医院地址：");
+			
+			$(".companyInfo").css("display","none");
+			$(".hospitalInfo").css("display","inline-block");
+		}
+		
+		function companyInfoOprate(){
+			
+				$(".companyName").text("公司全称：");
+				$(".companyShortName").text("公司简称：");
+				$(".companyTel").text("公司电话：");
+				$(".companyAddress").text("公司地址：");
+
+			$("#companypropertyId").css("display","inline-block");
+			$("#companynatureId").css("display","inline-block");
+				$(".companyInfo").css("display","inline-block");
+				$(".hospitalInfo").css("display","none");
+		}
+		
+		
+
+	</script>
+	<script type="text/javascript" src="../../../easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="../../../easyui/jquery.easyui.min.js"></script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../js/comboselect.js"></script>
+    <script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+
+</html>

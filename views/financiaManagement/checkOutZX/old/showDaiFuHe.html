@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>直销发票申请中</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+		</head>
+		<style type="text/css">
+		.purchase {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		.btns {
+			float: right;
+			margin-top: 18px;
+		}
+		
+		label {
+			padding: 0 !important;
+			margin-left: 0px;
+		}
+		
+		.btns button,
+		.find,
+		.import {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px;
+			font-size: 9pt;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+		
+		.purchase_header {
+			/*margin-top: -10px;*/
+			margin-bottom: 8px;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+		}
+		
+		
+		
+		.cs_container,
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 5px !important;
+		}
+		
+			
+	
+		.layui-inline{
+			margin-top: 10px;
+			margin-right: 15px;
+		}
+		
+		.layui-inline .layui-form-label{
+			padding-left: 0px;margin-left: 0px;
+		}
+		</style>
+		<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+		
+		<body>
+		<div class="purchase">
+			<div class="layui-tab">
+				<div class="purchase_header">
+					<div class="inputs"  style="margin-left: 14px;margin-bottom: 8px;">
+					<div style="width: 100%;height: auto;">	
+			
+					
+						<!--<div class="layui-inline" style="margin-right: 15px;;width: 308px;">
+							<label class="layui-form-label" style="margin-right: 10px;">往来单位</label>
+							<div id="append_group">
+								<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" class="layui-input unit" type="text" id="unit" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+			
+						</div>-->
+						<!--<div class="layui-inline" style="margin-right: 15px;width: 320px;">
+							<label class="layui-form-label" style="margin-right: 10px;">业务员</label>
+							<div id="append_sale">
+								<input autocomplete="off" class="layui-input salesman" id="salesman" type="text" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+						</div>-->
+				
+			</div>
+			<div style="width: 100%;height: auto;position: relative;">
+						<div class="layui-inline" id="fengongsiId"  style="margin-right: 15px;">
+							<label class="layui-form-label" style="margin-left: 0px;">所属公司</label>
+							<div class="layui-input-inline">
+								<select name="" class="layui-input companytypeid" style="width: 200px;">
+									<option value="-1">全部</option>
+									
+								</select>
+							</div>
+					</div>
+					
+				<!--<div class="layui-inline" style="margin-right: 15px;">
+					<label class="layui-form-label">日期范围</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" id="date1" class="layui-input" type="text">
+					</div>
+					-
+					<div class="layui-input-inline">
+						<input autocomplete="off" id="date2" class="layui-input" type="text" style="margin-left: 0;">
+					</div>
+				</div>-->
+				<div class="layui-inline" style="margin-left: 0px;">
+					<label class="layui-form-label">单据状态</label>
+					<div class="layui-input-inline">
+						<select name="" class="layui-input applystate">
+							<option value="1">待复核</option>
+							<option value="2">已复核</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline" style="margin-right: 10px;">
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 0px;width: 240px;">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<button class="layui-btn find" style="margin-left: 0px;">查询</button>
+				</div>
+				<!--<div class="btns" style="margin-top: 8px;">
+					<button class="layui-btn moreAction" style="margin-right: 20px;">更多操作</button>
+					<ul class="action">
+					
+						<li>
+							<a class="addDianJiEvent" data-type="yijianshenghe" lay-event='yijianshenghe'>一建审核</a>
+						</li>
+					</ul>
+				</div>-->
+			</div>	</div>
+			<table id="ZXDFHTable" lay-filter="demo"></table>
+		</div>
+	</body>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			var laypage = layui.laypage;
+			var laydate = layui.laydate;
+			var myDate = new Date();
+			
+			var currentMothFirstDay = getCurrentMothFirstDay();
+			var currentDate =  myDate.getFullYear() + '-' +(myDate.getMonth() + 1)  + '-'+  myDate.getDate();
+			
+			
+//			laydate.render({
+//				elem: '#date1',
+//				value: currentMothFirstDay
+//			});
+//			
+//			laydate.render({
+//				elem: '#date2',
+//				value: new Date()
+//			});
+			
+			
+			var limit = 50;
+			var curpage = 1;
+			var count;
+		
+			getunit(7);
+			var groupcompanyid=localStorage.groupcompanyid;
+		
+			//所属公司
+			if(localStorage.groupcompanyid != "0"){
+				$("#fengongsiId").css("display","none");
+				completeData(true)
+			}else{
+				dataFun1();
+			}
+			//获取公司信息
+			function dataFun1() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetAllGroupCompany?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						var optionsStr = "";
+						for(var i=0;i<desData.length;i++){
+							var id= desData[i].myg_companyid;
+							var name= desData[i].companyname;
+							if(id == localStorage.groupcompanyid){
+								optionsStr+= "<option value='"+id+"' selected='selected'>"+name+"</option>";
+							}else{
+								optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+							}
+						}
+						$(".companytypeid").append(optionsStr);
+						completeData(true)
+					}
+				});
+			
+			}
+			//3
+			$(".companytypeid").change(function() {
+				$('.unit').val("");
+				$("#unit").val("");
+				completeData(true)
+				//业务员跟这变
+				groupcompanyid=$(".companytypeid").val();
+				groupcompanyid=groupcompanyid==-1?'':groupcompanyid;
+//				var bandstr = '<input autocomplete="off" class="layui-input salesman" id="salesman" type="text" style="width: 250px;height: 28px;line-height: 28px;">';
+//				$("#append_sale").empty().append(bandstr);
+//				staffList();
+//				$(".salesman").change(function() {
+//					$(".find").click();
+//				})
+				//往来单位跟这变
+//				var append_group = '<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,"")" class="layui-input unit" type="text" id="unit" style="width: 250px;height: 28px;line-height: 28px;">';
+//				$("#append_group").empty().append(append_group);
+//				getunitByConfident(5,groupcompanyid);
+		
+			})
+			function staffList() {
+				$.ajax({
+					type: "post",
+					url: localStorage.serIp +"/WebGetEmployeeDropDownList?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': groupcompanyid
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						$('#salesman').bComboSelect({
+							showField: 'employeename',
+							keyField: 'employeesid',
+							data: data
+						});
+
+					}
+				});
+			}
+			staffList();
+
+	
+			function completeData(jumpFlag) {
+								
+				var  unit = $('#unit').val();
+				var agentId = $("#salesman").val();
+				var orderNum = $(".seachContent").val();
+				var state = $('.state').val();
+
+//				var beginTime = $('#date1').val() !='' ? $('#date1').val() :currentMothFirstDay;
+//				var endTime = $('#date2').val() != '' ? $('#date2').val() : currentDate;
+				var companytypeid = "";
+				if(localStorage.groupcompanyid == "0"){
+					companytypeid = $('.companytypeid option:selected').val();
+				}else{
+					companytypeid = localStorage.groupcompanyid;
+				}
+				var applystate = $(".applystate").val();
+	
+						var jiazaiIndex;
+			parent.layer.open({
+			  type: 3, 
+			  zIndex: parent.layer.zIndex, //重点1
+			  success: function(layero, index){
+			  		jiazaiIndex = index;
+	  			}
+			});
+	
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp +"/WebGetInvoiceApplyList?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'txtCondition': orderNum,
+						'agentId': agentId,
+						'companyid': unit,
+//						'beginTime': beginTime,
+//						'endTime': endTime,
+						'database': localStorage.database,
+						'groupCompanyId': companytypeid,'applystate':applystate,
+						'invoicetype': 2 //直销发票
+
+					},
+					success: function(res) {
+												parent.layer.close(jiazaiIndex);
+
+						var initData = JSON.parse(res);
+						var data = JSON.parse(initData.data);
+						count = initData.count;
+						complete(data, limit);
+			
+				
+						if(jumpFlag) {
+							complete_pages();
+						}
+					}
+												,
+					error: function(res) {
+						parent.layer.close(jiazaiIndex);
+							
+							parent.layer.open({
+								title: "提示",
+								content: '服务器异常!',
+									zIndex: parent.layer.zIndex //重点1
+					
+							});
+						
+				
+					}
+				});
+
+			}
+		
+			function complete(data, limit) {
+				table.render({
+					elem: '#ZXDFHTable',
+					data: data,
+					id: "order",
+					cols: [
+						[ //标题栏
+							 {
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							},
+							 {
+								field: 'ordernum',
+								title: '申请单号',
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+								minWidth: 150
+							}, {
+								field: 'companyname',
+								title: '往来单位',
+								minWidth: 150
+							},	{
+								field: 'conordernum',
+								title: '关联进项票申请单号',
+								width: 120
+							},{
+								field: 'conapplystatename',
+								title: '关联进项票审批状态',
+								width: 120
+							},
+							{
+								field: 'applyname',
+								title: '申请人',
+								width: 80
+							},	
+							{
+								field: 'applydate',
+								title: '申请时间',
+								width: 100
+							},	
+							{
+								field: 'inseltotalprice',
+								title: '采购入库金额',
+								width: 100
+							},	
+//							{
+//								field: 'totalcostprice',
+//								title: '不含税金额',
+//								width: 100
+//							},
+//							{
+//								field: 'tax',
+//								title: '税额',
+//								width: 100
+//							}, 
+							{
+								field: 'totalprice',
+								title: '医院收费金额',
+								width: 100
+							},	{
+								field: 'taxpercentage',
+								title: '税率',
+								minWidth: 100
+							},	{
+								field: 'outtickettypename',
+								title: '税种',
+								minWidth: 100
+							}
+//							,
+//							{
+//								field: 'checker',
+//								title: '复核人',
+//								width: 100
+//							}, {
+//								field: 'checkdate',
+//								title: '复核时间',
+//								width: 100
+//							}
+//							, {
+//								field: 'producecount',
+//								title: '产品数量',
+//								width: 100
+//							}
+							, {
+								field: 'mono',
+								title: '备注',
+								minWidth: 100
+							},
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-170",
+					even: true,
+					limit: limit //每页默认显示的数量
+				});
+			}
+			
+			//分页
+			function complete_pages() {
+				laypage.render({
+					elem: 'ZXDFHTable', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj,first) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						if(!first){
+							completeData(false);
+						}
+						
+					}
+				})
+			}
+			$(".find").click(function() {
+				completeData(true);
+			})
+			
+			
+				
+						
+		$(".applystate").change(function() {
+				completeData(true);
+		})
+		
+		
+			
+			$("body").keydown(function(event) {
+				if(event.keyCode == "13") { //keyCode=13是回车键
+					$('.find').click();
+				}
+			});
+		
+		
+			$(".addDianJiEvent").click(function() {
+			var type = $(this).data('type');
+			active[type] ? active[type].call(this) : '';
+		}) 
+			
+			
+			
+	var active = {
+
+		//一建审核
+		yijianshenghe: function(){
+			var checkStatus = table.checkStatus('order'),
+			 data = checkStatus.data;
+			
+			if (data.length ==0){
+				parent.layer.open({
+					title: "提示",
+					content: '请选择单号!',
+					zIndex: layer.zIndex //重点1
+					,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					}
+				});
+		
+				return;
+			}
+    		
+    		var invoiceorderList ="";
+    
+			for(var i=0;i<data.length;i++){
+	
+				
+				invoiceorderList += "'" + data[i].ordernum+ "'";
+				if((i+1)!=data.length){
+			      	invoiceorderList += ",";
+			     }
+			}
+		
+					
+	
+			
+				var jiazaiIndex;
+				parent.layer.open({
+				  	type: 3, 
+				  	zIndex: parent.layer.zIndex, //重点1
+				  	success: function(layero, index){
+				  		jiazaiIndex = index;
+		  			}
+				});
+				
+						
+				$.ajax({
+					type: "get",
+					url:  localStorage.serIp  + "/WebBatchAgreeInvoiceApply?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data:{
+							"userId": localStorage.userId,
+							"userPw": localStorage.userPw,
+							'database': localStorage.database,
+							'applyOrdernumList': invoiceorderList
+						},
+					success: function(res) {
+						parent.layer.close(jiazaiIndex);
+
+						var res = JSON.parse(res);
+						
+						if(res.ResultValue == '1') {
+							
+							parent.layer.open({
+								title: "提示",
+								content: '一键审核成功！',zIndex: parent.layer.zIndex //重点1
+							});
+						
+								
+							completeData(true);
+						
+						}else{
+							
+							parent.layer.open({
+								title: "提示",
+								content: '服务器提出一个问题！',zIndex: parent.layer.zIndex //重点1
+							});
+						
+							
+						}
+	
+					}
+					,error:function(){
+						parent.layer.close(jiazaiIndex);
+
+					}
+				});
+			}
+			
+		
+	};
+			
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				if(obj.event === 'detail') {
+					parent.tab.tabAdd({
+						icon: '',
+						id:"FPDFHY"+ data.ordernum,
+						title: data.ordernum + '发票申请',
+						url: 'views/financiaManagement/checkOutZX/detailFuHeZhong.html'
+					});
+				}
+			});
+			
+			
+		});
+	</script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+
+</html>

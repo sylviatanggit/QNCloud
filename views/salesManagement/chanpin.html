@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>仓库管理</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+		<!-- DevExtreme themes -->
+	<link rel="stylesheet" href="../../devexpresslibrary/css/dx.common.css">
+	<link rel="stylesheet" href="../../devexpresslibrary/css/dx.light.css">
+	</head>
+	<style type="text/css">
+		.chanpinManagement {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.chanpinManagement_header button {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+
+		
+		.chanpinManagement_header {
+			margin-bottom: 8px;
+		}
+		
+		.btns button,
+		.find {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+		
+		.layui-btn+.layui-btn {
+			margin-left: 0px;
+		}
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+		
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../css/same.css" />
+
+	<body>
+		<div class="chanpinManagement">
+			<div class="layui-tab">
+				<div class="chanpinManagement_header">
+					<div class="inputs">
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input autocomplete="off" class="layui-input" type="text" placeholder="请输入关键字" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+				
+					</div>
+				</div>
+				<div id="gridContainer"></div>
+				<table id="chanpinManagement" lay-filter="demo">
+				</table>
+			</div>
+		</div>
+	</body>
+	<script src="../../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../devexpresslibrary/js/dx.all.js"></script>
+	<script src="../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery','laypage'], function() {
+			var laypage = layui.laypage;
+			var table = layui.table;
+			var limit = 50;
+			var curpage = 1;
+			var count;
+			var $ = layui.jquery;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+
+			function chanpinData(jumpFlag) {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetDirectsellingSlaveTableByOrderNum?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': sessionStorage.orderNum
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						count = data.length;
+						chanpinDetail(data);
+						if(jumpFlag) {
+							order_pages();
+						}
+					}
+				});
+			}
+			chanpinData(true);
+			var viewHeight = $(window).height();
+		$('#gridContainer').css('height', viewHeight * 0.87 + 'px');
+		var selectedArray = [];
+			function chanpinDetail(data){
+			$(function () {
+				var dataGrid = $("#gridContainer").dxDataGrid({
+					dataSource: data,
+					//allowColumnReordering: true,
+					showBorders: true,
+					// keyExpr: "ordernum",
+					columnChooser: {
+						enabled: false,
+						mode: "dragAndDrop",
+					},
+					headerFilter: {
+						visible: false
+					},
+					sorting: {
+						mode: "none"//none
+					},
+					filterRow: {
+						visible: false,
+					},
+					paging: {
+						pageSize: 200,
+					},
+					selection: {
+						mode: 'multiple',
+					},
+					allowColumnResizing: true,
+					columnFixing: {
+						enabled: false
+					},
+					grouping: {
+						contextMenuEnabled: false,
+						expandMode: "rowClick"
+					},
+					groupPanel: {
+						visible: false
+					},
+					columns: [{
+						dataField: "producename",
+						caption: "产品名称",
+						width: 160,
+						//fixed: true,
+						
+					}
+						,{
+						dataField: "manufacturer",
+						width: 100,
+						caption: "厂家",
+					},
+					{
+						dataField: "danwei",
+						width: 100,
+						caption: "规格",
+						
+					},	{
+						dataField: "producemodel",
+						width: 100,
+						caption: "型号",
+						
+					},
+					{
+						dataField: "producenum",
+						width: 100,
+						caption: "产品编号",
+					
+					}
+						,
+					{
+						dataField: "producecode",
+						width: 160,
+						caption: "主条码",
+
+					},	{
+						dataField: "producesubbarcode",
+						width: 160,
+						caption: "副条码",
+
+					}, {
+						dataField: "produceunit",
+						width: 80,
+						caption: "单位",
+						
+					}, {
+						dataField: "producecount",
+						width: 80,
+						caption: "数量",
+						
+					},{
+						dataField: "iots",
+						width: 100,
+						caption: "批号",
+					},{
+						dataField: "productiondate",
+						width: 100,
+						caption: "生产日期",
+					},{
+						dataField: "indate",
+						width: 100,
+						caption: "有效期",
+					},{
+						dataField: "areaname",
+						width: 100,
+						caption: "货区",
+					},{
+						dataField: "qs",
+						width: 100,
+						caption: "合格",
+						alignment:'left',
+						cellTemplate: function (container, options) {
+							if (options.value == 1) {
+								$("<div>")
+									.append($("<div> " + '合格' + "</div>"))
+									.appendTo(container);
+							} else {
+								$("<div>")
+									.append($("<div> " + "不合格" + "</div>"))
+									.appendTo(container);
+							}
+						}
+					},{
+						dataField: "package",
+						width: 100,
+						caption: "包装",
+					},{
+						dataField: "storagecondition",
+						width: 100,
+						caption: "存储条件",
+					},
+					 
+					{
+						dataField: "produceusename",
+						width: 100,
+						caption: "通俗名称",
+						alignment: "left",
+					}
+						,{
+						dataField: "produceseries",
+						width: 100,
+						caption: "系列",
+					}, {
+						dataField: "producematerial",
+						width: 100,
+						caption: "材质",
+					}, 
+						,{
+						dataField: "referencenum",
+						width: 160,
+						caption: "注册证号",
+					}],
+				// 	onSelectionChanged: function (e) {
+				// 	selectedArray = [];
+				// 	selectedArray = e.selectedRowsData;
+				// },
+				}).dxDataGrid('instance');
+
+			});
+
+		}
+
+			$(".find").click(function(){
+				seachContent = $(".seachContent").val();
+				chanpinData(true);
+			})
+
+						function order_pages() {
+				laypage.render({
+					elem: 'chanpinManagement', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj,first) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						
+						if(!first){
+						chanpinData(false);
+
+						}
+					}
+				})
+			}
+			
+			//点击新增
+			$(".add").click(function() {
+				layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="../../image/logo.png" alt="" /><span style="margin-left:10px">银行账户详情</span>',
+					area: ['600px', '350px'],
+					content: 'chanpinadd.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero) {
+						layer.setTop(layero); //重点2
+					}
+				});
+			});
+			$(".addHang").click(function() {
+				layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="../../image/logo.png" alt="" /><span style="margin-left:10px">银行账户详情</span>',
+					area: ['600px', '350px'],
+					content: 'chanpinadd.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero) {
+						layer.setTop(layero); //重点2
+					}
+				});
+			});
+		});
+	</script>
+
+</html>

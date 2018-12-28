@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>资金往来</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+			<link rel="stylesheet" type="text/css" href="../../../easyui/themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../../../easyui/themes/icon.css" />
+		<script type="text/javascript" src="../../../easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="../../../easyui/jquery.easyui.min.js"></script>
+	</head>
+	<style type="text/css">
+		* {
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+		}
+		
+		.capital {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.capital .layui-table td,
+		.layui-table th {
+			font-size: 9pt !important;
+		}
+		
+		.layui-form-label {
+			line-height: 28px;
+			padding: 0 !important;
+			margin-right: 5px;
+		}
+		
+		.capital_header .layui-btn {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px ;
+		}
+		
+		.layui-table td,
+		.layui-table th {
+			/*padding: 0 3.5vw !important;*/
+		}
+		
+		.capital_header {
+			margin-top: 10px;
+			margin-bottom: 20px;
+		}
+		
+		#tree11 {
+			float: left;
+			width: 20%;
+			border: 1px solid #CCCCCC;
+			border-right: none;
+			overflow-y: auto;
+		}
+		
+		#tree-view {
+			margin-left: 20px;
+		
+		}
+		
+
+		.btns{
+			float: right;
+		}
+		.btns button{
+			width: 90px !important;
+		}
+		
+			
+		.datagrid-header{
+			display: none !important;
+		}
+		
+		.panel-header, .panel-body{
+		     border: 0px solid #CCCCCC !important;
+		}
+		
+		.panel {
+			overflow-y: auto;
+		}
+		
+		.layui-table-body{
+			overflow-x: hidden;
+
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="capital">
+			<div class="layui-tab">
+				<div class="capital_header">
+					<!--<input class="selelctValue" type="checkbox" value="0"/>去掉0值-->
+					<!--<div class="layui-inline">
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input seachContent" placeholder="请输入关键字" type="text" style="width: 240px;height: 28px;margin-left: 0;">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<button class="layui-btn" style="margin-left: 5px;">查询</button>
+					</div>-->
+					<!--<div class="btns">
+						<button class="layui-btn moreAction">更多操作</button>
+						<ul class="action">
+							<li>
+								<a class="del" data-type="getCheckDel" lay-event='del'>删除</a>
+							</li>
+						</ul>
+					</div>-->
+				</div>
+				
+				<ul id="tree11">
+						<table id="tree" class="easyui-treegrid tree" data-options="">
+						<thead>
+							<tr>
+								<th data-options="field:'name'" width="278"></th>
+							</tr>
+						</thead>
+					</table>
+					
+				</ul>
+				
+			
+				<ul id="tree-view" >
+					<table id="unitDocument" lay-filter="demo" style="display: block;"></table>
+				</ul>
+		
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'tree'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			
+			
+			
+			var findType ="c1";//c1：公司分组，c2：公司
+
+			
+			rightData(findType,1);
+			
+			
+			
+			function dataFun() {
+				
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetCompanyGroup?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						
+						
+						var getdata=[];
+						for (var i=0;i<desData.length;i++) {
+							desData[i]._parentid = desData[i].fatherid;
+							getdata.push(desData[i]);
+						}
+						unitTree(getdata)
+					}
+				});
+
+			}
+			
+			dataFun();
+			
+			function unitTree(desData) {
+				var yijilumuData= [{
+					id : "1",
+					name : "全部往来单位",
+					_parentid:"",
+					children: desData
+				}];
+				
+				
+				//右边树一级目录
+				$("#tree").treegrid({
+					data: yijilumuData,
+					method: 'get',
+					rownumbers: false,
+					idField: 'id',
+					treeField: 'name',
+					onClickRow: function(row) {
+						
+						
+						if(row.children == 0) {
+							return false;
+						}
+						
+						
+					
+						
+						if(row.id ==1){
+							findType = "c1";
+							rightData(findType,row.id);
+							return;
+						}
+						
+						if(row.fatherid == 1){
+							findType = "c1";
+							if(!row.children){
+								getMuluXinXi(row);
+
+							}
+
+						}else{
+							findType = "c2";
+							if(!row.children){
+								getMuluXinXi(row);
+
+							}
+
+						}
+					
+						rightData(findType,row.id);
+
+					}
+					
+			});
+				
+	
+			}
+			
+			
+						
+			function getMuluXinXi(row){
+					
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp  +"/WebGetCompanyInfoByCompanyGroupID?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'id': row.id
+					},
+					success: function(res) {
+						var data = JSON.parse(res);		
+						if(data.length == 0) {
+							return false;
+						}
+						
+						
+						var getdata=[];
+						for (var i=0;i<data.length;i++) {
+							data[i]._parentid = data[i].fatherid;
+							getdata.push(data[i]);
+						}
+				
+						$('#tree').treegrid('append', {
+							parent: row.id, 
+							data: getdata
+						});
+					}
+				});
+			}
+			
+			
+			
+			function rightData(findType,id) {
+				
+				var master = [];
+			
+				var value1 = "";
+				var value2 = "";
+				
+				if(findType == "c2"){
+					master.push({
+						"key" : "companyid",
+						"value1" : id,
+						"value2" : ""
+					})
+				}else{
+					master.push({
+						"key" : "fatherid",
+						"value1" : id,
+						"value2" : ""
+					})
+				}
+					
+				
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetAccountReceivablePayableReportData?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'type': findType,
+						"state":"1",
+						"master" : JSON.stringify(master),
+						'groupCompanyId': localStorage.groupcompanyid
+
+//						'txtCondition': seachContent
+					},
+					success: function(res) {
+						
+						var desData = JSON.parse(res);
+						dataInfo(desData);
+						
+						$(".capital [data-field=ysyf] div:gt(0)").each(function(i) {
+							
+							var ysyf = desData[i].ysyf;
+							if(ysyf >=0) {
+								$(this).html("应收"+ ysyf);
+								$(".capital .layui-form tbody tr:eq("+i+") td:eq(1) div").css("background","#C1FFC1");
+
+
+							}else{
+								$(this).html("应付"+ Math.abs(ysyf));
+								$(".capital .layui-form tbody tr:eq("+i+") td:eq(1) div").css("background","#FFC1C1");
+
+							}
+							
+							
+						});
+						$("#tree11").css("height",$(".layui-form").height());
+
+					}
+				});
+
+			}
+			
+
+		
+	
+			function dataInfo(data) {
+				table.render({
+					elem: '#unitDocument',
+					data: data,
+					id: "idTest",
+					height: "full-30",
+					cols: [
+						[ //标题栏
+							{	field: 'companyname',
+								title: '名称',
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+								minWidth: 200
+
+							},
+							{
+								field: 'ysyf',
+								title: '应收应付'
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: false //是否显示分页
+						,
+					limits: [100,200],
+					limit: 100//每页默认显示的数量
+				});
+				
+
+			}
+			
+
+
+			
+			
+			table.on('tool(demo)', function(obj, index) {
+				var data = obj.data;
+
+				if(obj.event === 'detail') {
+					
+					parent.tab.tabAdd({
+						icon: '',
+						id: data.companyid,
+						title:'资金往来明细:'+ data.companyname,
+						url: 'views/reportAnalysis/capital/detail.html'
+					});
+				}
+
+			});
+			
+			
+	
+		});
+	</script>
+
+</html>

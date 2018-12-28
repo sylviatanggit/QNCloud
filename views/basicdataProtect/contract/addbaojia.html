@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加报价单</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		#adddirect {
+			/*width: calc(100vw+17px);*/
+			font-size: 9pt;
+		}
+		
+		#adddirect legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		#adddirect label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		#adddirect input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		#adddirect select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+			/*border: 1px solid #DDDDDD !important;*/
+		}
+		
+		#adddirect textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+			/*border: 1px solid #ddd !important;*/
+		}
+		
+		#adddirect .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 5px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 1px;
+		}
+		
+		#adddirect button {
+			margin-left: 8px;
+			text-align: center;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		#adddirect {
+			margin-bottom: 120px;
+		}
+	</style>
+
+	<body>
+		<div id="adddirect">
+			<div class="layui-form-item layui-form-title">
+				<button class="layui-btn adddirect_submit">提交</button>
+			</div>
+				<div class="layui-form-item" style="margin-top: 60px;">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>品牌：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input contractprice_manufactor" type="text">
+
+				</div>
+			</div>
+			
+			
+			<div class="layui-form-item" >
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>可交易商品编号：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input adddirect_midnum" type="text">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>配送价：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required"  class="layui-input adddirect_midprice" type="number">
+
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>医用耗材名称：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input adddirect_name" type="text">
+
+				</div>
+			</div>
+			
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">医保号：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input adddirect_num" type="text" value="">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">医保价：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input adddirect_price" type="number" value="">
+
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">医保报销比例：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input adddirect_bili" type="text" value="">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">型号：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input adddirect_type" type="text">
+
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">规格：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input contractprice_unitformat" type="text">
+
+				</div>
+			</div>
+			
+						<div class="layui-form-item">
+				<label class="layui-form-label">经销企业：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input contractprice_subfactroy" type="text">
+
+				</div>
+			</div>
+			
+						<div class="layui-form-item">
+				<label class="layui-form-label">生产企业：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input contractprice_factroy" type="text">
+
+				</div>
+			</div>
+			
+						<div class="layui-form-item">
+				<label class="layui-form-label">项目商品编号：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input contractprice_bidprojectnum" type="text">
+
+				</div>
+			</div>
+			
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">备注：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input adddirect_notes" type="text">
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'layer'], function() {
+			var $ = layui.$, //重点处
+			layer = layui.layer;
+			$(".adddirect_submit").click(function() {
+				//弹出层转圈圈的那个
+		
+				var contractprice_manufactor = $('.contractprice_manufactor').val();
+				if(contractprice_manufactor == "" || contractprice_manufactor ==null){
+							parent.layer.open({
+								title: "提示",
+								content: '品牌不能为空！',
+								zIndex: parent.layer.zIndex, //重点1,
+								end: function(){  
+	                  			} 
+							});
+							
+							return;
+					}
+				
+				
+				var contractprice_bidnum = $('.adddirect_midnum').val();
+				if(contractprice_bidnum == "" || contractprice_bidnum ==null){
+							parent.layer.open({
+								title: "提示",
+								content: '可交易商品编号不能为空！',
+								zIndex: parent.layer.zIndex, //重点1,
+								end: function(){  
+	                  			} 
+							});
+							
+							return;
+					}
+				
+				var contractprice_bidprice = $('.adddirect_midprice').val();
+				if(contractprice_bidprice == "" || contractprice_bidprice ==null){
+							parent.layer.open({
+								title: "提示",
+								content: '配送价不能为空！',
+								zIndex: parent.layer.zIndex, //重点1,
+								end: function(){  
+	                  			} 
+							});
+							
+							return;
+					}
+							
+						
+				var contractprice_quotename = $('.adddirect_name').val();
+				
+				if(contractprice_quotename == "" || contractprice_quotename ==null){
+							parent.layer.open({
+								title: "提示",
+								content: '医用耗材名称不能为空！',
+								zIndex: parent.layer.zIndex, //重点1,
+								end: function(){  
+	                  			} 
+							});
+							
+							return;
+				}
+				var contractprice_proportion = $('.adddirect_bili').val() != "" ?  $('.adddirect_bili').val() : 0;
+					
+				var contractprice_nomo = $('.adddirect_notes').val();
+				var contractprice_unitmodel = $('.adddirect_type').val();
+
+				
+				var contractprice_unitformat = $('.contractprice_unitformat').val();
+				var contractprice_subfactroy = $('.contractprice_subfactroy').val();
+				var contractprice_factroy = $('.contractprice_factroy').val();
+				var contractprice_bidprojectnum = $('.contractprice_bidprojectnum').val();
+				var contractprice_medicarenum = $('.adddirect_num').val();
+				var contractprice_medicareprice = $('.adddirect_price').val() != "" ?  $('.adddirect_price').val() : 0;
+
+				var master = {
+					'contractprice_bidnum': contractprice_bidnum,
+					'contractprice_bidprice': contractprice_bidprice,
+					'contractprice_medicarenum': contractprice_medicarenum,
+					'contractprice_medicareprice': contractprice_medicareprice,
+					'contractprice_quotename': contractprice_quotename,
+					'contractprice_proportion': contractprice_proportion,
+					'contractprice_unitmodel': contractprice_unitmodel,
+					'contractprice_nomo': contractprice_nomo,
+					'contractprice_manufactor': contractprice_manufactor,
+					'contractprice_unitformat': contractprice_unitformat,
+					'contractprice_subfactroy': contractprice_subfactroy,
+					'contractprice_factroy': contractprice_factroy,
+					'contractprice_bidprojectnum': contractprice_bidprojectnum
+				};
+				
+						parent.layer.open({
+				  type: 3, 
+				  zIndex: parent.layer.zIndex, //重点1
+				  success: function(layero, index){
+				  		jiazaiIndex = index;
+						}
+				});
+				
+				$.ajax({
+					type: "POST",
+					url: localStorage.serIp+"/WebAddContractProductBXDInfo",
+					async: true,
+					dataType: 'json',
+					crossDomain: true,
+					contentType:'application/json; charset=utf-8',
+					data:JSON.stringify({
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'contractid':sessionStorage.contract_id,
+						'master': JSON.stringify(master)
+					}),
+					success: function(res) {
+						parent.layer.close(jiazaiIndex);
+						var data = JSON.parse(res);
+						if(data.ResultValue == "1") {
+							parent.layer.open({
+								title: "提示",
+								content: '提交成功！',
+								zIndex: parent.layer.zIndex, //重点1,
+								end: function(){  
+									var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+									parent.layer.close(index); //再执行关闭     
+								}
+							});
+						} 
+						
+						if(data.ResultValue == "2") {
+							parent.layer.open({
+								title: "提示",
+								zIndex: parent.layer.zIndex, //重点1,
+								content: '可交易商品编号已存在！'
+							});
+						}
+						
+						if(data.ResultValue == "0") {
+							parent.layer.open({
+								title: "提示",
+								zIndex: parent.layer.zIndex, //重点1,
+								content: '服务器异常！'
+							});
+						}
+					}
+				});
+			})
+			
+		});
+	</script>
+
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title></title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		* {
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+		}
+		
+		.unitDocument {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.unitDocument .layui-table td,
+		.layui-table th {
+			font-size: 9pt !important;
+		}
+		
+		.layui-form-label {
+			line-height: 28px;
+			padding: 0 !important;
+			margin-right: 0px;
+		}
+		
+		.unitDocument_header .layui-btn {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px !important;
+		}
+		
+		.unitDocument_header {
+			margin-bottom: 20px;
+			margin-top: 10px;
+		}
+		
+		#tree {
+			float: left;
+			width: 220px;
+			border: 1px solid #CCCCCC;
+			border-right: none;
+			overflow: auto;
+		}
+		
+		#tree-view {
+			margin-left: 20px;
+		}
+		
+		.layui-table tr:nth-child(odd) {
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(even) {
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(odd) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		.btns button {
+			width: 90px !important;
+		}
+		
+		label {
+			margin-left: 20px;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 250px;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="unitDocument">
+			<div class="layui-tab">
+				<div class="unitDocument_header">
+
+					<div class="layui-inline" style="margin-top: 18px;">
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input seachContent" placeholder="请输入单据号" type="text" style="width: 240px;height: 28px;margin-left: 0;">
+						</div>
+					</div>
+					<div class="layui-inline" style="margin-top: 18px;">
+						<button class="layui-btn find">查询</button>
+					</div>
+					<div class="btns" style="margin-top: 18px;">
+						<button data-type="getCheckDel" class="layui-btn import" style="display: none;">确认导入</button>
+				
+					</div>
+				</div>
+				<ul id="tree"></ul>
+
+				<ul id="tree-view">
+					<table id="unitDocument" lay-filter="demo" style="display: block;"></table>
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'tree', 'laypage', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+	
+			var laypage = layui.laypage;
+			var laydate = layui.laydate;
+	
+
+			function data() {
+				$.ajax({
+					type: "get",
+					url: "http://192.168.0.196:11525/ByuWCFService/WebGetCompanyGroup?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						console.log(desData)
+						unitTree(desData)
+					}
+				});
+
+			}
+			data()
+			var typeid;
+
+			function unitTree(data) {
+				layui.tree({
+					elem: '#tree',
+					nodes: [{ //节点数据
+						name: '全部往来单位',
+						id: 1,
+						spread: true,
+						children: data
+					}],
+					click: function(node) {
+						//						console.log(node) //node即为当前点击的节点数据
+						typeid = node.id;
+						sessionStorage.groupName = node.name;
+						rightData(node.id);
+
+					}
+				});
+			}
+
+			function rightData(typeid) {
+				var seachContent = $('.seachContent').val();
+				$.ajax({
+					type: "get",
+					url: "http://192.168.0.196:11525/ByuWCFService/WebGetCompanyInfoByGroupId?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'companyName': seachContent,
+						'database': localStorage.database,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'id': typeid ? typeid : 3
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						//						console.log(desData)
+						dataInfo(desData);
+
+					}
+				});
+
+			}
+			if(!typeid) {
+				typeid = 3;
+				rightData()
+			}
+			var active = {
+				getCheckDel: function() { //获取选中数据
+					var checkStatus = table.checkStatus('idTest'),
+						data = checkStatus.data;
+					console.log(data);
+					if(data.length > 1) {
+						parent.layer.open({
+							title: "提示",
+							content: '只能选一个',zIndex: parent.layer.zIndex //重点1,
+						});
+					} else {
+						sessionStorage.unitName = data[0].companyname;
+						sessionStorage.unitId = data[0].id;
+						parent.layer.open({
+							title: "提示",
+							content: '导入成功',zIndex: parent.layer.zIndex //重点1,
+						});
+					}
+
+				}
+			};
+
+			$('.import').on('click', function() {
+				sessionStorage.removeItem('unitName');
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+
+			function dataInfo(data) {
+				table.render({
+					elem: '#unitDocument',
+					data: data,
+					id: "idTest",
+					height: "full-126",
+					cols: [
+						[ //标题栏
+							{
+								field: "index",
+								title: ' ',
+								width: 40,
+								align: "center"
+							}, {
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							}, {
+								field: 'companyname',
+								title: '名称',
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+								minWidth: 180
+							},
+							{
+								field: 'companysid',
+								title: '简码',
+								minWidth: 100,
+							}, {
+								field: '所属分组',
+								title: '所属分组',
+								minWidth: 100
+							}, {
+								field: 'companyaddress',
+								title: '地址',
+								minWidth: 100
+							}, {
+								field: 'companytel',
+								title: '电话',
+								minWidth: 100
+							}, {
+								field: 'accountname',
+								title: '开户名',
+								minWidth: 100
+							}, {
+								field: 'bankofdeposit',
+								title: '开户行',
+								minWidth: 100
+							}, {
+								field: 'accountnum',
+								title: '帐号',
+								minWidth: 100
+							}, {
+								field: 'nomo',
+								title: '备注',
+								minWidth: 100
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					limit:50000
+				});
+				$("#tree").css("height", $(".layui-form").height());
+			}
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				//				console.log(data)
+				if(obj.event === 'detail') {
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">往来单位详情</span>',
+						area: ['85%', '90%'],
+						offset: "rb",
+						content: 'views/basicdataProtect/unit/unitadd.html',
+						zIndex: parent.layer.zIndex, //重点1,
+						success: function(layero) {
+							sessionStorage.unit_id = data.id;
+						},
+						cancel: function() {
+							sessionStorage.removeItem('unit_id');
+							sessionStorage.removeItem('groupName');
+						}
+					});
+				}
+			});
+		});
+	</script>
+
+</html>

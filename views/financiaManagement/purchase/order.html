@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>待办列表</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	<style type="text/css">
+		.inputs {
+			margin-bottom: 8px;
+		}
+		
+		.find,
+		.import {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.import {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+		}
+		
+		.action {
+			right: 41px;
+		}
+		
+		.layui-form-label {
+			padding: 0;
+		}
+		
+		.layui-table-view {
+			margin-bottom: 0;
+		}
+		
+		.cs_container {
+			width: 250px !important;
+		}
+		
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 5px !important;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+		}
+		
+		label {
+			margin-left: 14px;
+		}
+	</style>
+
+	<body>
+		<div class="waitList">
+			<div class="inputs" style="margin-top: 20px;">
+				<div class="layui-inline">
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 14px;width: 240px;">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+				</div>
+				<div class="layui-inline">
+					<button class="layui-btn import" data-type="getImport">确认导入</button>
+				</div>
+			</div>
+			<table id="houselist" lay-filter="demo"></table>
+			<!--<table id="Nohouselist" lay-filter="demo1"></table>-->
+		</div>
+
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'laydate', 'laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laypage = layui.laypage;
+			var laydate = layui.laydate;
+			var myDate = new Date();
+			var myYear = myDate.getFullYear();
+			var myMonth = myDate.getMonth() + 1;
+			laydate.render({
+				elem: '#date1',
+				value: myYear + '-' + myMonth + "-" + '01'
+			});
+			laydate.render({
+				elem: '#date2',
+				value: myDate
+			});
+			$(".unit").click(function() {
+				if(sessionStorage.unitName) {
+					sessionStorage.removeItem('unitName')
+					sessionStorage.removeItem('unitId')
+				}
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">往来单位</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/basicdataProtect/unit/unit.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						$(".import", paentIfarame).css("display", 'block');
+						$(".add", paentIfarame).css("display", 'none');
+						$(".moreAction", paentIfarame).css("display", 'none');
+					},
+					cancel: function() {
+						$(".unit").val(sessionStorage.unitName);
+						$(".unit").attr('data-id', sessionStorage.unitId);
+					}
+				});
+			});
+			var unit, agentId, beginTime, endTime, orderNum;
+			var limit = 50;
+			var curpage = 1;
+			var count;
+			var off = true;
+			var off1 = true;
+			houseData()
+
+			function houseData() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp +"/WebGetOrderMasterInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'orderNum': orderNum,
+						'agentId': agentId,
+						'beginTime': beginTime,
+						'endTime': endTime,
+						'database': localStorage.database,
+						'checkState': 1,
+						'orderState': 2,
+						'groupCompanyId': localStorage.groupcompanyid
+					},
+					success: function(res) {
+						var initData = JSON.parse(res);
+						var data = JSON.parse(initData.data);
+						count = initData.count;
+						houseList(data, limit);
+						$("[data-field=states] div:gt(0)").each(function(i) {
+							if(data[i].states == 1) {
+								$(this).html("待验收");
+							} else if(data[i].states == 2) {
+								$(this).html("待核价");
+							} else if(data[i].states == 3) {
+								$(this).html("待财务结算");
+							} else {
+								$(this).html("完成");
+							}
+						});
+						$("[data-field=checkstate] div:gt(0)").each(function(i) {
+							if(data[i].checkstate == 0) {
+								$(this).html("未审核");
+							} else {
+								$(this).html("已审核");
+							}
+						});
+						$("[data-field=typeof] div:gt(0)").each(function(i) {
+							$(this).html('订单入库')
+						});
+						$("[data-field=checkdate] div:gt(0)").each(function(i) {
+							$(this).html($(this).text().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''))
+						});
+						$("[data-field=actiondate] div:gt(0)").each(function(i) {
+							$(this).html($(this).text().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''))
+						});
+						if(off) {
+							off = false;
+							house_pages();
+						}
+					}
+				});
+			}
+
+			function houseList(data, limit) {
+				//展示已知数据
+				table.render({
+					elem: '#houselist',
+					id: 'houselist',
+					data: data,
+					cols: [
+						[ //标题栏
+							{
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							}, {
+								field: 'ordernum',
+								title: '订货单号',
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+								minWidth: 100,
+							},
+							{
+								field: 'states',
+								title: '操作状态',
+								minWidth: 100,
+							}, {
+								field: 'typeof',
+								title: '单据类型',
+								minWidth: 100,
+							}, {
+								field: 'companyname',
+								title: '往来单位',
+								minWidth: 100
+							}, {
+								field: 'agentname',
+								title: '业务员',
+								minWidth: 100,
+							}, {
+								field: 'operatorname',
+								title: '制单人',
+								minWidth: 100,
+							}, {
+								field: 'actiondate',
+								title: '制单日期',
+								minWidth: 100,
+							}, {
+								field: 'checkername',
+								title: '审核人',
+								minWidth: 100,
+							}, {
+								field: 'checkdate',
+								title: '审核日期',
+								minWidth: 100,
+							}, {
+								field: 'checkstate',
+								title: '单据状态',
+								minWidth: 100,
+							}, {
+								field: 'lastnum',
+								title: '关联单号',
+								minWidth: 100,
+							}, {
+								field: 'mynum',
+								title: '自定义单号',
+								minWidth: 100,
+							}, {
+								field: 'nomo',
+								title: '备注',
+								minWidth: 100,
+							}
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-106",
+					even: true,
+					limit: limit //每页默认显示的数量
+				});
+			}
+			//分页
+			function house_pages() {
+				laypage.render({
+					elem: 'houselist', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						houseData(orderNum);
+					}
+				})
+			}
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				var order = data.ordernum;
+				sessionStorage.purchaseOrder = data.ordernum;
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">调订单入库单</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/financiaManagement/purchase/orderDetail.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					}
+				});
+
+			});
+			var active = {
+				getImport: function() { //获取选中数据
+					var checkStatus = table.checkStatus('houselist'),
+						data = checkStatus.data;
+					if(data.length != 1){
+						parent.layer.open({
+							title: "提示",
+							content: '请选择一条数据导入'
+						});
+						return;
+					}
+					sessionStorage.pur_nodata = JSON.stringify(data);
+					parent.layer.open({
+						title: "提示",
+						content: '导入成功',
+						end: function(){  
+            				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+							parent.layer.close(index); //再执行关闭     
+          			  	}  
+					});
+				}
+			};
+			$(".import").click(function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			})
+			//无订单
+			function nohouseData() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp +"/WebGetInstockrecoverInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'orderNum': orderNum,
+						'agentId': agentId,
+						'beginTime': beginTime,
+						'endTime': endTime,
+						'database': localStorage.database,
+						'checkState': 1,
+						'orderState': 2,
+						'orderType': 103,
+						'groupCompanyId': localStorage.groupcompanyid
+					},
+					success: function(res) {
+						var initData = JSON.parse(res);
+						var data = JSON.parse(initData.data);
+						count = initData.count;
+						nohouseList(data, limit);
+						$("[data-field=typeof] div:gt(0)").each(function(i) {
+							if($(this).html() == -1) {
+								$(this).html("换货入库");
+							} else if($(this).html() == 0) {
+								$(this).html("订货入库");
+							} else if($(this).html() == 1) {
+								$(this).html("无订单入库");
+							} else if($(this).html() == 2) {
+								$(this).html("借货入库");
+							} else if($(this).html() == 3) {
+								$(this).html("退货入库");
+							} else if($(this).html() == 4) {
+								$(this).html("赠送入库");
+							} else if($(this).html() == 5) {
+								$(this).html("报溢");
+							} else if($(this).html() == 6) {
+								$(this).html("初始化入库");
+							}
+						});
+						$(".layui-table-body [data-field=checkstate] div:gt(0)").each(function(i) {
+							if($(this).text() == 0) {
+								$(this).html("未审核");
+							} else {
+								$(this).html("已审核");
+							}
+						});
+						$(".layui-table-body [data-field=states] div:gt(0)").each(function(i) {
+							if($(this).html() == 1) {
+								$(this).html("待验收");
+							} else if($(this).html() == 2) {
+								$(this).html("待核价");
+							} else if($(this).html() == 3) {
+								$(this).html("待财务结算");
+							} else {
+								$(this).html("完成");
+							}
+						});
+
+						$("[data-field=checkdate] div:gt(0)").each(function(i) {
+							$(this).html($(this).text().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''))
+						});
+						$("[data-field=actiondate] div:gt(0)").each(function(i) {
+							$(this).html($(this).text().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''))
+						});
+						if(off1) {
+							off1 = false;
+							nohouse_pages();
+						}
+					}
+				});
+			}
+
+			function nohouseList(data, limit) {
+				table.render({
+					elem: '#Nohouselist',
+					data: data,
+					cols: [
+						[ //标题栏
+							{
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							}, {
+								field: 'ordernum',
+								title: '入库单号',
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+								minWidth: 100,
+							},
+							{
+								field: 'states',
+								title: '操作状态',
+								minWidth: 100,
+							}, {
+								field: 'typeof',
+								title: '单据类型',
+								minWidth: 100,
+							}, {
+								field: 'companyname',
+								title: '往来单位',
+								minWidth: 100
+							}, {
+								field: 'warehousename',
+								title: '对应仓库',
+								minWidth: 100
+							}, {
+								field: 'agentname',
+								title: '业务员',
+								minWidth: 100,
+							}, {
+								field: 'instoragedate',
+								title: '入库日期',
+								minWidth: 100,
+							}, {
+								field: 'operatorname',
+								title: '制单人',
+								minWidth: 100,
+							}, {
+								field: 'actiondate',
+								title: '制单日期',
+								minWidth: 100,
+							}, {
+								field: 'checkername',
+								title: '审核人',
+								minWidth: 100,
+							}, {
+								field: 'checkdate',
+								title: '审核日期',
+								minWidth: 100,
+							}, {
+								field: 'checkstate',
+								title: '单据状态',
+								minWidth: 100,
+							}, {
+								field: 'lastnum',
+								title: '关联单号',
+								minWidth: 100,
+							}, {
+								field: 'mynum',
+								title: '自定义单号',
+								minWidth: 100,
+							}, {
+								field: 'nomo',
+								title: '备注',
+								minWidth: 100,
+							}
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-210",
+					even: true,
+					limit: limit //每页默认显示的数量
+				});
+			}
+			//分页
+			function nohouse_pages() {
+				laypage.render({
+					elem: 'Nohouselist', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						nohouseData(orderNum);
+					}
+				})
+			}
+			table.on('tool(demo1)', function(obj) {
+				var data = obj.data;
+				var order = data.ordernum;
+				sessionStorage.purchaseOrder1 = data.ordernum;
+				if(obj.event === 'detail') {
+					parent.tab.tabAdd({
+						icon: '',
+						id: 'cghj' + data.ordernum,
+						title: data.ordernum + '采购核价',
+						url: 'views/financiaManagement/purchase/addPurchase1.html'
+					});
+				}
+
+			});
+			(function() {
+				$("#Nohouselist").next().hide();
+			})();
+			$(".status").change(function() {
+				if($(".status").val() == 0) {
+					houseData(orderNum);
+					$("#houselist").next().show();
+					$("#Nohouselist").next().hide();
+				} else {
+					nohouseData();
+					$("#houselist").next().hide();
+					$("#Nohouselist").next().show();
+				}
+			});
+			$('.find').click(function() {
+				if($(".status").val() == 0) {
+					off = true;
+					houseData();
+				} else {
+					off1 = true;
+					nohouseData();
+				}
+			})
+		});
+	</script>
+
+</html>

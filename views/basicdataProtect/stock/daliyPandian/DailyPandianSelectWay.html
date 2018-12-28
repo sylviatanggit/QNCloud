@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>实盘信息</title>
+				<link rel="stylesheet" type="text/css" href="../../../../css/comboselect.css" />
+
+				<link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+
+		<link rel="stylesheet" href="../../../../plugins/layui/css/layui.css">
+			<!-- DevExtreme themes -->
+
+	<link rel="stylesheet" href="../../../../devexpresslibrary/css/dx.common.css">
+	<link rel="stylesheet" href="../../../../devexpresslibrary/css/dx.light.css">
+		<link rel="stylesheet" type="text/css" href="../../../../css/qk/dev_public.css" />
+	</head>
+	<style type="text/css">
+		.safetyStockManagement {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 10px;			margin-top: 10px;
+
+		}
+		
+		.safetyStockManagement_header button {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+
+	
+		.safetyStockManagement_header {
+			margin-bottom: 8px;
+		}
+		
+		.btns button,
+		.find {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+	
+		
+				
+				.cs_container,
+				.cs_container_open .cs_input,
+				.cs_result_area {
+					width: 250px !important;
+				}
+				
+						div.cs_result_area div.pagination li {
+					margin: 0 4px !important;
+				}
+				
+				li {
+		line-height: 30px;
+	}
+				
+	</style>
+
+	<body>
+		<div class="safetyStockManagement">
+			<div class="layui-tab">
+				<div class="safetyStockManagement_header">
+					
+					
+					<div class="inputs">
+					<div style="width: 100%;height: auto;">
+						<div  class="layui-inline" style="margin-right: 15px;width: 310px;height: 28px;">
+							<label class="layui-form-label" style="padding: 0px;margin-right: 10px;">货　　架</label>
+							<div style="height: 28px;display: inline-block;" id="goodsshelvesId">
+								<input value="" data-id="" autocomplete="off" id="duiyinggoodsshelvesId" class="layui-input goodsshelves" type="text" style="width: 250px;height: 26px !important;line-height: 26px !important;">
+							</div>
+						</div>
+						
+						<div class="layui-inline"  style="margin-right:15px;width: 310px;height: 28px;">
+							<label class="layui-form-label" style="padding: 0px;margin-right: 10px;">选择品牌</label>
+							<div  id="selecetBrandId" style="height: 28px;display: inline-block;">
+								<input autocomplete="off" class="layui-input brand"  id="brandId" type="text" style="width: 250px;margin-left: 0px;height: 28px;line-height: 28px;">
+							</div>
+						
+						</div> 
+						
+						
+						<div class="layui-inline"  style="margin-right: 15px;width: 310px;height: 28px;">
+							<label class="layui-form-label" style="padding: 0px;margin-right: 10px;">选择系列</label>
+							<div  id="selelctproduceseriesId" style="height: 28px;display: inline-block;">
+								<input autocomplete="off" class="layui-input produceseries"  id="produceseriesId" type="text" style="width: 250px;margin-left: 0px;height: 28px;line-height: 28px;">
+							</div>
+						
+						</div>
+						
+							<div class="layui-inline" style="margin-right: 15px;display: inline-block;">
+								<label class="layui-form-label" style="margin-left: 0px;padding: 0px;margin-right: 10px;">产品种类</label>
+								<div class="layui-input-inline">
+									<select name="" class="layui-input produceproperty" style="width: 100px;">
+										<option value="" selected="selected"></option>	
+										<option value="0">创伤</option>	
+										<option value="1" >关节</option>
+										<option value="2" >脊柱</option>
+										<option value="3" >运动医学</option>
+										<option value="4" >儿童骨科</option>
+										<option value="5" >设备</option>
+										<option value="6" >其他 </option>					
+									</select>
+								</div>
+						</div>
+						
+						</div>	
+						
+						<div style="width: 100%;height: auto;margin-top: 10px;">
+						
+						
+						<div class="layui-inline" style="margin-right: 15px;">
+								<label class="layui-form-label" style="margin-left: 0px;padding: 0px;margin-right: 10px;">产品名称</label>
+								<div class="layui-input-inline">
+									<input autocomplete="off" placeholder="请输入产品名称" class="layui-input producename" type="text" style="margin-left: 0;">
+								</div>
+							</div>
+							
+									<div class="layui-inline" style="margin-right: 15px;">
+								<label class="layui-form-label" style="margin-left: 0px;padding: 0px;margin-right: 10px;">规　　格</label>
+	
+	
+	
+	
+								<div class="layui-input-inline">
+									<input autocomplete="off" placeholder="请输入规格" class="layui-input danwei" type="text" style="margin-left: 0;">
+								</div>
+							</div>
+							
+							<div class="layui-inline" style="margin-right: 10px;">
+							<label class="layui-form-label" style="margin-left: 0px;padding: 0px;margin-right: 10px;">型　　号</label>
+	
+	
+								<div class="layui-input-inline" style="margin-right: 10px;">
+									<input autocomplete="off" placeholder="请输入型号" class="layui-input producemodel" type="text" style="margin-left: 0;">
+								</div>
+							</div>
+							
+								<div class="layui-inline">
+									<button class="layui-btn find" style="margin-left: 0px;">查　询</button>
+								</div>
+								
+								
+								<div class="layui-inline" style="margin-left: 30px;color: #2D89DD ">
+									待盘数量:<span class="daipancount" style="font-size: 12pt;"></span>
+								</div>
+								
+								
+									<div class="btns">
+								<!--<button class="layui-btn configInfo">确认范围</button>-->
+							<button class="layui-btn temporaryRange">暂存范围</button>
+							<button class="layui-btn moreAction">更多操作</button>
+							<ul class="action" style="right: 10px;">
+								<li>
+									<a class="configInfo">确认范围</a>
+								</li>
+								
+								<li>
+									<a class="getCheckDel">批量删除</a>
+								</li>
+							</ul>
+						</div>
+						</div>
+						<!--<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						
+						
+					
+						-->
+						
+						
+						
+					
+					</div>
+				</div>
+				
+				<table id="settlement" lay-filter="demo">
+					<div class="demo-container">
+						<div id="gridContainer"></div>
+
+						</div>
+				</table>
+		
+			</div>
+		</div>
+	</body>
+	
+	<script src="../../../../js/jquery.js" type="text/javascript"></script>
+				<script src="../../../../js/public.js"></script>
+
+
+	<script src="../../../../plugins/layui/layui.js"></script>
+		<!-- DevExtreme library -->
+	<script src="../../../../devexpresslibrary/js/dx.all.js"></script>
+
+	<script>
+		layui.use(['table', 'jquery','laypage'], function() {
+			var table = layui.table;
+			var laypage = layui.laypage;
+			var $ = layui.jquery;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			var limit = 50;
+			var curpage = 1;
+			var totalInfo;
+			var selectData =[];
+			
+
+		function safetyData() {
+				
+			var jiazaiIndex;
+			parent.layer.open({
+			  type: 3, 
+			  zIndex: parent.layer.zIndex, //重点1
+			  success: function(layero, index){
+			  		jiazaiIndex = index;
+	  			}
+			});
+		
+		
+				var goodsshelves_id = $("#duiyinggoodsshelvesId").val();
+				var goodsshelves_name = $(".goodsshelves").val();
+		
+				var produceproperty = $(".produceproperty").val();
+				
+				var producename = $(".producename").val();
+				var danwei = $(".danwei").val();
+				var producemodel = $(".producemodel").val();
+				var manufacturer = $(".brand").val();
+				var series1 = $(".produceseries").val();
+				
+				pandiangoodsshelves_id = goodsshelves_id;
+		
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetStockInfoByInventory?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'stockarea': sessionStorage.areaid,
+						'targetstockId' : sessionStorage.houseId,
+						'brand' :manufacturer,
+						'producemodel' :producemodel,
+						'danwei' :danwei,
+						'series': series1,
+						'producename' :producename,
+						'produceproperty' :produceproperty,
+						'goodsshelves_id' :goodsshelves_id,
+					},
+					success: function(res) {
+						
+						parent.layer.close(jiazaiIndex); 
+						var getData = JSON.parse(res);
+		
+						selectData = getData;
+	
+					
+						safetyInfo(selectData);
+						
+		
+						
+					}
+				});
+			}
+			
+		
+			
+			
+			$(".find").click(function(){
+				selectData = [];
+				safetyData(true);
+			})
+			
+			
+			// 根据可视区的高度判断
+         var viewHeight = $(window).height();
+        if(viewHeight == 855){
+           $('#gridContainer').css('height',700 + 'px'); //855*0.81
+        }else{
+           $('#gridContainer').css('height', viewHeight*0.82 + 'px');
+        }
+        
+
+        var deleteButton = $(".getCheckDel").dxButton({
+				text: "删除产品",heigth:"28",
+				onClick: function () {
+				if(dataGrid.getSelectedRowKeys().length == 0){
+					parent.layer.open({
+							title: "提示",
+							content: '请选择删除产品!',
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						
+						return
+				}
+				
+					var getSelectedRowKeysData = dataGrid.getSelectedRowKeys();
+            	
+	            	selectData = quchongByPandian(selectData,getSelectedRowKeysData);
+		       
+		           	safetyInfo(selectData);
+		           
+	       
+				}
+			}).dxButton("instance");
+			
+			
+        
+	safetyInfo(null) 
+	function safetyInfo(dataSource) {
+		 selectDataStore = new DevExpress.data.ArrayStore({
+				data: dataSource
+		});
+		
+	
+   
+		 dataGrid = $("#gridContainer").dxDataGrid({
+			dataSource: dataSource,
+			allowColumnReordering: true,
+            showBorders: true,
+            keyExpr: "id",
+           columnChooser: {
+	            enabled: false,
+				mode: "dragAndDrop",
+	        },
+            headerFilter: {
+                visible: false
+            },
+            sorting: {
+                mode: "multiple"
+            },
+            filterRow: {
+                visible: false,
+            },
+			paging: {
+				pageSize: 1000,
+            },
+			selection: {
+                mode: "none",
+            },
+			allowColumnResizing: true,
+			columnFixing: {
+				enabled: false
+			},
+			grouping: {
+	            contextMenuEnabled: false,
+	            expandMode: "rowClick"
+	        },
+	        groupPanel: {
+	            visible: false
+	        },
+			columns: [{
+				dataField: "producename",
+				width: 180,
+                caption: "产品名称",
+			},
+			{
+                dataField: "manufacturer",
+                width: 80,
+				caption: "品牌",cssClass:"style_show",
+			},{
+                dataField: "produceseries",   width: 100,
+				caption: "产品系列"
+			},{
+                dataField: "producepropertyname",   width: 100,
+				caption: "产品种类"
+			}, {
+                dataField: "producenum",   width: 100,
+				caption: "编号"
+			}
+			,
+
+			{
+                dataField: "danwei",
+				caption: "规格",   width: 100,
+			}
+			,
+			{
+                dataField: "producemodel",   width: 100,
+				caption: "型号"
+			},
+			{
+                dataField: "producecode",   width: 120,
+				caption: "主条码"
+			},
+       
+            {
+                dataField: "producesubbarcode",width: 120,
+				caption: "副条码"
+			},
+			{
+                dataField: "iots",   width: 100,
+				caption: "批号"
+			},
+       
+            {
+                dataField: "productiondate",dataType:'date',format: "yyyy-MM-dd",width: 90,
+				caption: "生产日期"
+			},
+       
+            {
+                dataField: "indate",dataType:'date',format: "yyyy-MM-dd",width: 90,
+				caption: "有效期"
+			},
+			{
+                dataField: "warehousename",   width: 120,
+				caption: "所在仓库"
+			},
+			{
+                dataField: "produceseries",   width: 100,
+				caption: "货区"
+			},
+			{
+                dataField: "realstockcount",
+				caption: "实库数量",cssClass:"style_show",
+				fixed:true,fixedPosition:"right",alignment:"center",
+				width: 100,
+			}
+			]
+            ,
+            onSelectionChanged:function(){
+//              dataGrid.refresh();
+            },
+            
+    
+        summary: {
+            totalItems: [{
+//                  name: "SelectedRowsSummary",
+//                  showInColumn: "realstockcount",
+   					column: "realstockcount",
+                    summaryType: "sum",
+                }
+            ],
+//          calculateCustomSummary: function (options) {
+//              if (options.name === "SelectedRowsSummary") {
+//                  if (options.summaryProcess === "start") {
+//                      options.totalValue = 0;
+//                  };
+//                  if (options.summaryProcess === "calculate") {
+//                      if (options.component.isRowSelected(options.value.id)) {
+//                     	 options.totalValue = options.totalValue + options.value.realstockcount;
+//                      }
+//                  }
+//              }
+//          }
+             
+        }
+   
+       
+		}).dxDataGrid('instance');
+        
+
+	}
+	
+
+			$(".temporaryRange").click(function() {
+					
+					if(selectData.length ==0){
+							parent.layer.open({
+								title: "提示",
+								content: '无数据，不能保存!',
+								zIndex: parent.layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+						
+						return
+						
+					}
+					
+					
+					
+					
+					
+					
+					var  jiazaiIndex;
+					parent.layer.open({
+					  type: 3, zIndex: parent.layer.zIndex ,	//重点1
+					  success: function(layero, index){
+					  	jiazaiIndex = index;
+			  			}
+					});
+					var pandiangoodsshelves_id = $("#duiyinggoodsshelvesId").val();
+					
+					var master = {
+						 "inventorymaster_ordernum" : sessionStorage.pandianDanHanid,
+						 "targetstockid" : sessionStorage.houseId,
+						 "stockarea" : sessionStorage.areaid,
+						 "goodsshelves_id" : pandiangoodsshelves_id,
+					};
+					
+					$.ajax({
+						type: "POST",
+						url: localStorage.serIp + "/WebSaveInventoryRange",
+						async: true,
+						dataType: 'json',
+						crossDomain: true,
+						contentType:'application/json; charset=utf-8',
+						data:JSON.stringify({
+							"userId": localStorage.userId,
+							"userPw": localStorage.userPw,
+							'database': localStorage.database,
+							'groupCompanyId': localStorage.groupcompanyid,
+							'master': JSON.stringify(master),
+							'tempout': JSON.stringify(selectData),
+						}),
+						success: function(res) {
+					    	parent.layer.close(jiazaiIndex);
+							var data = JSON.parse(res);
+							
+							if(data.ResultValue == "1"){
+
+									
+									parent.layer.open({
+										title: "提示",
+										content: '保存成功!',
+										zIndex: parent.layer.zIndex //重点1
+										,
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+									
+									
+									$(".daipancount").text(data.ResultItem);
+									
+									selectData = [];
+									safetyInfo(null) 
+
+									
+								}
+								
+								if(data.ResultValue == "0")
+								{
+								
+									parent.layer.open({
+										title: "提示",
+										content: "服务器提出一个问题!",
+										zIndex: parent.layer.zIndex ,//重点1,
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										
+										}
+									});
+								}
+							
+							
+							
+						}
+						,error: function(res) {
+							parent.layer.close(jiazaiIndex);
+							
+							parent.layer.open({
+								title: "提示",
+								content: '服务器异常!',
+									zIndex: parent.layer.zIndex //重点1
+					
+							});
+		
+						}
+					});
+			})
+								
+
+
+		$("body").delegate(".configInfo ","click",function(){
+			
+	
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">盘点备注</span>',
+						area: ['450px', '300px'],
+						content: 'views/basicdataProtect/stock/daliyPandian/rejectnomo.html',
+						zIndex: parent.layer.zIndex, //重点1
+						success: function(layero, index11) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						
+							$(".bohui", paentIfarame).click(function() {
+								
+								var rejectnomo = $(".rejectnomo", paentIfarame).val();
+								
+
+								parent.layer.confirm('确认吗？', {
+										icon: 3,	zIndex: parent.layer.zIndex, //重点1
+										title: '提示'
+								}, function(index22) {
+																	
+							
+										var jiazaiIndex;
+										parent.layer.open({
+										  type: 3, 
+										  zIndex: parent.layer.zIndex, //重点1
+										  success: function(layero, index){
+										  		jiazaiIndex = index;
+								  			}
+										});
+										
+										
+									$.ajax({
+											type: "get",
+											url: localStorage.serIp+"/WebSaveInventoryNomo?jsoncallback=?", 
+											async: true,
+											dataType: 'json',
+											data: {
+												'userId': localStorage.userId,
+												'userPw': localStorage.userPw,
+												'orderNum':sessionStorage.pandianDanHanid,  
+												'database': localStorage.database,
+												'nomo': rejectnomo
+						
+											},
+											success: function(res) {
+												
+												parent.layer.close(jiazaiIndex);
+												var data = JSON.parse(res);
+												if(data.ResultValue == "1"){
+										
+													parent.layer.open({
+														title: "提示",
+														content: "确认成功!",
+														zIndex: parent.layer.zIndex ,//重点1,
+														success: function(layero) {
+															parent.layer.setTop(layero); //重点2
+																var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+																parent.layer.close(index); //再执行关闭     
+																parent.layer.close(index11); //再执行关闭   
+																parent.layer.close(index22); //再执行关闭   
+														}
+													});										
+												}else{													
+												parent.layer.open({
+														title: "提示",
+														content: data.ResultValue,
+														zIndex: parent.layer.zIndex ,//重点1,
+														success: function(layero) {
+															parent.layer.setTop(layero); //重点2
+						
+														}
+													});
+					
+												}
+				
+											
+											}
+									
+													,
+					error: function(res) {
+						parent.layer.close(jiazaiIndex);
+							
+							parent.layer.open({
+								title: "提示",
+								content: '服务器异常!',
+									zIndex: parent.layer.zIndex //重点1
+					
+							});
+						
+				
+					}
+										});
+											
+								}
+								
+								);
+	
+				
+		
+									
+							})
+						}
+					});
+			
+
+		
+				
+		})
+				
+
+			//获取品牌
+				function getBrand(manufactName) {
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp  + "/WebGetManufacturerDropByInventory?jsoncallback=?",
+						async: true,
+						dataType: 'jsonp',
+						data: {
+							"userId": localStorage.userId,
+							"userPw": localStorage.userPw,
+							'database': localStorage.database,
+							'stockarea': sessionStorage.areaid,
+							'type' : 0  //0 品牌 1 系
+						},
+						success: function(res) {
+							var data = JSON.parse(res);
+							$('#brandId').bComboSelect({
+								showField: 'manufacturer',
+								keyField: 'manufacturer',
+								data: data
+							});
+					
+						}
+					});
+				}
+				
+				getBrand("");
+				getproduceseries("")
+				
+						
+				//获取系列
+				function getproduceseries(brandName) {
+					
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp  + "/WebGetProductSeries?jsoncallback=?",
+						async: true,
+						dataType: 'jsonp',
+						data: {
+							"userId": localStorage.userId,
+							"userPw": localStorage.userPw,
+							'database': localStorage.database,
+							'manufacturer': brandName
+						},
+						success: function(res) {
+							var data = JSON.parse(res);
+							$('#produceseriesId').bComboSelect({
+								showField: 'produceseries',
+								keyField: 'produceseries',
+								data: data
+							});
+					
+						}
+					});
+					
+				}
+				
+				
+				
+				$("body").delegate("#selecetBrandId .cs_over","mousedown",function(){
+					
+					
+					var produceseriesstr = '<input autocomplete="off" class="layui-input produceseries"  id="produceseriesId" type="text" style="width: 250px;margin-left: 0px;height: 28px;line-height: 28px;">';
+					$("#selelctproduceseriesId").empty();
+					$("#selelctproduceseriesId").append(produceseriesstr);
+					
+
+					getproduceseries($(this).attr("pkey"));
+					
+					
+
+			})	
+			
+			
+				$("body").delegate("#goodsshelvesId .cs_over","mousedown",function(){
+					
+					if($(this).attr("pkey") != "" && $(this).attr("pkey") != null){
+
+						$("input,select").attr("disabled","disabled");
+						$(".goodsshelves").removeAttr("disabled");
+
+					}else{
+						$("input").removeAttr("disabled");
+
+					}
+					
+	
+
+			})	
+					
+				
+		
+
+
+			//获取货架
+			function getgoodsshelves(id) {
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp+"/WebGetGoodsShelves?jsoncallback=?",
+						dataType: "jsonp",
+						async: true,
+						data: {
+							'userId': localStorage.userId,
+							'userPw': localStorage.userPw,
+							'database': localStorage.database,
+							"goodsareaid": id,
+							'txtCondition': "",
+							'num':"10000",
+							'page':"1"
+						},
+						success: function(res) {
+							var data = JSON.parse(res);
+							var goodsshelvesdata = JSON.parse(data.data);
+							$('#duiyinggoodsshelvesId').bComboSelect({
+								showField: 'goodsshelves_name',
+								keyField: 'goodsshelves_id',
+								data: goodsshelvesdata
+							});
+					
+						}
+					});
+				}
+				
+		
+			getgoodsshelves(sessionStorage.areaid);
+			
+		});
+	</script>
+	<script type="text/javascript" src="../../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../../js/b.comboselect.js"></script>
+</html>

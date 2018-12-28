@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>单据编号规则设置</title>
+		<link rel="stylesheet" type="text/css" href="../../plugins/layui/css/layui.css" />
+		<script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+	</head>
+	<style type="text/css">
+		* {
+			color: #232323;
+			/*font-size: 12px;*/
+			font-size: 9pt !important;
+		}
+		
+		.layui-table-view {
+			margin: 0 !important;
+		}
+		
+		.left {
+			float: left;
+			width: 325px;
+		}
+		
+		.right {
+			margin-left: 12px;
+			width: 730px;
+			float: right;
+			height: 500px;
+		}
+		
+		.right .title {
+			margin-top: 36px;
+		}
+		
+		.right .title span {
+			font-family: "微软雅黑";
+			font-size: 18px;
+			color: #2D89DD;
+		}
+		
+		.layui-table tr:nth-child(odd) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(odd) {
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(even) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-form-item .layui-input-inline,
+		.layui-form-item input,
+		.layui-form-item label {
+			line-height: 22px !important;
+			height: 22px !important;
+			min-height: 22px !important;
+		}
+		
+		.zidingyi .layui-input-inline {
+			width: 110px !important;
+			position: relative;
+		}
+		
+		input {
+			width: 110px !important;
+		}
+		
+		.zidingyi label {
+			position: absolute;
+			top: -20px;
+			width: 60px;
+		}
+		
+		.layui-form-label {
+			padding: 0 !important;
+		}
+		
+		.example {
+			margin-left: 82px;
+		}
+		
+		.example label {
+			font-size: 18px !important;
+			font-family: "微软雅黑";
+			padding: 30px 15px !important;
+		}
+		
+		.example textarea {
+			text-align: center;
+			padding-top: 30px;
+			color: red !important;
+			font-family: "微软雅黑";
+			font-size: 18px !important;
+			background-color: #DFDFDF;
+		}
+		
+		.installBill_ture {
+			cursor: pointer;
+			border: none;
+			height: 22px;
+			line-height: 22px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			float: right;
+			margin-right: 24px;
+			margin-top: 44px;
+		}
+	</style>
+
+	<body style="margin:0 8px;border: 1px solid #CCCCCC;height: 545px;">
+		<div class="left">
+			<table id="bill_left" lay-filter="demo"></table>
+		</div>
+		<div class="right">
+			<p class="title">单据类型：
+				<span style="font-size: 18px !important;">无订单出库</span>
+			</p>
+			<p class="title" style="margin-top: 25px;">自定义单据编号样式：</p>
+			<div class="layui-form-item zidingyi" style="margin-top: 34px;margin-left: 53px;">
+				<div class="layui-inline">
+					<label class="layui-form-label">单据标示</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input bill" type="text">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<div class="layui-input-inline">
+						<select class="layui-input geshi1" style="height: 22px;">
+							<option class="one1">-</option>
+							<option class="one2"></option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">日期格式</label>
+					<div class="layui-input-inline">
+						<select class="layui-input geshi2" style="height: 22px;">
+							<option class="geshi_one" val="yyyy-MM-dd"></option>
+							<option class="geshi_two" val="yyyyMMdd"></option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<div class="layui-input-inline">
+						<select class="layui-input geshi3" style="height: 22px;">
+							<option class="one1">-</option>
+							<option class="one2"></option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">流水号长度</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input liushui" type="text" value="4" disabled="">
+					</div>
+				</div>
+			</div>
+			<div class="example">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="margin-right: 12px;">示例</label>
+						<div class="layui-input-inline">
+							<textarea class="layui-textarea billExample" disabled="disabled" style="height: 100px;width: 492px;" name="content" lay-verify="content"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<button class="layui-btn installBill_ture">保存</button>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../plugins/layui/layui.js"></script>
+		<script src="../../js/public.js"></script>
+
+	<script>
+		layui.use(['table', 'jquery'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var id_one;
+			Date.prototype.Format = function(fmt) { //author: meizz 
+				var o = {
+					"M+": this.getMonth() + 1, //月份 
+					"d+": this.getDate(), //日 
+					"h+": this.getHours(), //小时 
+					"m+": this.getMinutes(), //分 
+					"s+": this.getSeconds(), //秒 
+					"q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+					"S": this.getMilliseconds() //毫秒 
+				};
+				if(/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+				for(var k in o)
+					if(new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+					var time_geshi=fmt.split("-");
+					var one=time_geshi[0]+'-'+time_geshi[1]+'-'+time_geshi[2];
+					var two=time_geshi[0]+time_geshi[1]+time_geshi[2];
+					$(".geshi_one").text(one);
+					$(".geshi_two").text(two);
+				return fmt;
+			}
+			dataFun()
+			var on=true;
+			function dataFun(){
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetDocumentTypeInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database
+					},
+					success: function(res) {
+						var billData = JSON.parse(res);
+						$(".DateStyle").val(billData[0].datetypestring);
+						installBill(billData);
+						var myDate = new Date().Format("yyyy-MM-dd");
+						$("[data-field=expression] div:gt(0)").each(function(i) {
+							var date_geshi=billData[i].datetypestring.length;
+							if(date_geshi > 8){
+								var myDate_gs=myDate;
+							}else{
+								var qu_data=myDate.split("-");
+								var myDate_gs=qu_data[0]+qu_data[1]+qu_data[2];
+							}
+							$(this).html(billData[i].rulesign + billData[i].rulefirstsplit + myDate_gs + billData[i].rulesecend + '0001')
+						})
+					}
+				});
+			}
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				if(obj.event === 'detail') {
+					id_one=data.id;
+					var myDate = new Date().Format("yyyy-MM-dd");
+					$(".title span").html(data.typename);
+					$(".bill").val(data.rulesign);
+					if(data.rulefirstsplit != '-'){
+						$(".geshi1 .one1").attr("selected",false);
+						$(".geshi1 .one2").attr("selected",true);
+					}else{
+						$(".geshi1 .one1").attr("selected",true);
+						$(".geshi1 .one2").attr("selected",false);
+					}
+					if(data.rulesecend != '-'){
+						$(".geshi3 .one1").attr("selected",false);
+						$(".geshi3 .one2").attr("selected",true);
+					}else{
+						$(".geshi3 .one1").attr("selected",true);
+						$(".geshi3 .one2").attr("selected",false);
+					}
+					if(data.datetypestring.length < 9){
+						$(".geshi_one").attr("selected",false);
+						$(".geshi_two").attr("selected",true);
+					}else{
+						$(".geshi_one").attr("selected",true);
+						$(".geshi_two").attr("selected",false);
+					}
+					var date_geshi=data.datetypestring.length;
+					if(date_geshi > 8){
+						var myDate_gs=myDate;
+					}else{
+						var qu_data=myDate.split("-");
+						var myDate_gs=qu_data[0]+qu_data[1]+qu_data[2];
+					}
+					$(".billExample").val(data.rulesign + data.rulefirstsplit + myDate_gs + data.rulesecend + '0001')
+					var b_bill=data.rulesign;
+					var geshi1=data.rulefirstsplit;
+					var geshi2=myDate;
+					var geshi3=data.rulesecend;
+					$(".bill").blur(function(){
+						b_bill=$(".bill").val();
+						$(".billExample").val(b_bill + geshi1 + geshi2 + geshi3 + '0001')
+					})
+					$(".geshi1").click(function(){
+						geshi1=$(".geshi1").val();
+						$(".billExample").val(b_bill + geshi1 + geshi2 + geshi3 + '0001')
+					})
+					$(".geshi2").click(function(){
+						geshi2=$(".geshi2").val();
+						$(".billExample").val(b_bill + geshi1 + geshi2 + geshi3 + '0001')
+					})
+					$(".geshi3").click(function(){
+						geshi3=$(".geshi3").val();
+						$(".billExample").val(b_bill + geshi1 + geshi2 + geshi3 + '0001')
+					})
+					if(on){
+						on=false;
+					
+					}
+				}
+				
+			});
+			
+			
+				$(".installBill_ture").click(function(){
+							
+					if(!checkPermissionStatus("单据编号设置-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}
+				
+							var rulesign=$(".bill").val();
+							if(rulesign == "" || rulesign ==null){
+										parent.layer.open({
+											title: "提示",
+											content: "单据标示不能为空",
+											zIndex: parent.layer.zIndex //重点1
+											,
+											success: function(layero) {
+												parent.layer.setTop(layero); //重点2
+											}
+										});
+										return
+						
+							}
+							
+							
+							
+							var rulefirstsplit=$(".geshi1").val();
+							var datetypestring=$(".geshi2").find("option:checked").attr("val"); 
+							var rulesecend=$(".geshi3").val();
+							var master={
+								'ruleSign':rulesign,
+								'ruleFirstSplit':rulefirstsplit,
+								'dateTypeString':datetypestring,
+								'ruleSecend':rulesecend
+							}
+							$.ajax({
+								type: "get",
+								url: localStorage.serIp  + "/WebUpdateDocument?jsoncallback=?",
+								async: true,
+								dataType: 'jsonp',
+								data: {
+									"userId": localStorage.userId,
+									"userPw": localStorage.userPw,
+									'database': localStorage.database,
+									'id': id_one,
+									'master': JSON.stringify(master)
+								},
+								success: function(res) {
+									var data = JSON.parse(res);
+									if(data.ResultValue == 1) {
+										parent.layer.open({
+											title: "提示",
+											content: '提交成功',
+											zIndex: layer.zIndex, //重点1
+											success: function(layero) {
+												parent.layer.setTop(layero); //重点2
+											}
+										});
+										dataFun()
+									} else {
+										parent.layer.open({
+											title: "提示",
+											content: '提交失败'
+										});
+									}
+								}
+							});
+						})
+				
+			function installBill(data) {
+				//展示已知数据
+				table.render({
+					elem: '#bill_left',
+					data: data,
+					height: 'full-11',
+					cols: [
+						[ //标题栏
+							{
+								field: "LAY_TABLE_INDEX",
+								title: ' ',
+								width: 40,
+								align: "center",
+								event: 'detail',
+								sort: true
+							},
+							{
+								field: 'typename',
+								title: '单据类型',
+								event: 'detail',
+								width: 90,
+							}, {
+								field: 'expression',
+								title: '当前表达式',
+								event: 'detail',
+								width: 190
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true
+				});
+			}
+		});
+	</script>
+</html>

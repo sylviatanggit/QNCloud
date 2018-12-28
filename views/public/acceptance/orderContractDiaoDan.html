@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>订货合约</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+
+	</head>
+	<style type="text/css">
+		.orderContract {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 10px;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		label {
+			padding: 0 !important;
+			margin-left: 20px;
+		}
+		
+		.btns button,
+		.find,
+		.import {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 90px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px;
+			font-size: 9pt;
+		}
+		
+		.find {
+			width: 76px;
+		}
+		
+		.orderContract_header {
+			margin-bottom: 8px;
+		}
+		
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+		}
+		
+		.cleardata{
+			cursor: pointer;
+		}
+		
+		.cleardata1{
+			cursor: pointer;
+		}
+		
+				.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 5px !important;
+		}
+		
+		.layui-inline{
+			margin-top: 10px;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="orderContractDiaoDan">
+			<div class="layui-tab">
+				<div class="orderContract_header">
+					<div class="inputs"  style="margin: 0 25PX;">
+
+						<div class="layui-inline" style="margin-top: 18px;">
+							<div class="layui-input-inline">
+								<input autocomplete="off" class="layui-input seachContent" placeholder="请输入关键字" type="text" style="width: 240px;margin-left: 0;">
+							</div>
+						</div>
+						<div class="layui-inline" style="margin-top: 18px;">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						<div class="btns" style="margin-top: 18px;" style="position: relative;">
+						<button class="layui-btn importData"  data-type="getimportData" >导入</button>
+				
+						</div>
+					</div>
+
+				</div>
+				<table id="orderContract" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script src="../../../js/public.js"></script>
+
+	<script>
+		layui.use(['table', 'jquery', 'laydate', 'laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			var laypage = layui.laypage;
+			
+
+			
+			var limit = 50;
+			var curpage = 1;
+			var count;
+	
+
+
+			function orderInfo(data1) {
+				//展示已知数据
+				table.render({
+					elem: '#orderContract',
+					data: data1,
+					height: "full-105",
+					cellMinWidth: "1000",
+					id: "idTest",
+					cols: [
+						[ //标题栏
+							 {
+								checkbox: true,
+								LAY_CHECKED: false,
+								width: 40,
+							}, {
+								field: 'ordernum',
+								title: '订货单号',
+								minWidth: 200,
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+
+							}, {
+								field: 'states',
+								title: '操作状态',
+								minWidth: 80,
+							}, {
+								field: 'typeof',
+								title: '单据类型',
+								minWidth: 80
+							}, {
+								field: 'companyname',
+								title: '往来单位',
+								minWidth: 200
+							}, {
+								field: 'agentname',
+								title: '业务员',
+								minWidth: 100,
+							}, {
+								field: 'ordertime',
+								title: '订货日期',
+								minWidth: 100,
+							}, {
+								field: 'operatorname',
+								title: '制单人',
+								minWidth: 100,
+							}, {
+								field: 'actiondate',
+								title: '制单日期',
+								minWidth: 100,
+							}, {
+								field: 'checkername',
+								title: '审核人',
+								minWidth: 100,
+							}, {
+								field: 'checkdate',
+								title: '审核日期',
+								minWidth: 100,
+							}, {
+								field: 'checkstate',
+								title: '单据状态',
+								minWidth: 100,
+							}, {
+								field: 'mynum',
+								title: '自定义单号',
+								minWidth: 100,
+							}, {
+								field: 'nomo',
+								title: '备注',
+								minWidth: 100,
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					limit: limit
+				});
+			}
+
+			function orderData(jumpFlag) {
+				
+				var seachContent = $(".seachContent").val();	
+			
+				$.ajax({
+					type: "get",
+					url:  localStorage.serIp + "/WebGetTransBillOrderMaster?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'database': localStorage.database,
+						"txtCondition" :seachContent
+		
+					},
+					success: function(res) {
+
+						var orderData = JSON.parse(res);
+						count = orderData.count;
+						var data = JSON.parse(orderData.data)
+				
+						orderInfo(data, limit);
+						
+						$(".orderContractDiaoDan [data-field=states] div:gt(0)").each(function(i) {
+							
+						switch(data[i].states) 
+						{
+							case 1:				
+								
+								$(this).html("待验收");
+							  break;
+							case 2:  
+							
+								$(this).html("待核价");
+							  break;
+							case 3:  				
+								$(this).html("待付款");
+							  break;
+							 case 4:  				
+								$(this).html("已完成");
+							  break;
+						}
+									
+						});
+						
+						$(".orderContractDiaoDan [data-field=typeof] div:gt(0)").each(function(i) {
+							$(this).html("订货合约");
+						});
+						
+						$(".orderContractDiaoDan [data-field=checkstate] div:gt(0)").each(function(i) {
+							if(data[i].checkstate == 0) {
+								$(this).html("未审核");
+							} else if(data[i].checkstate == 1) {
+								$(this).html("已审核");
+							}else if(data[i].checkstate == 2) {
+								$(this).html("已作废");
+							}
+						});
+						
+						$(".orderContractDiaoDan [data-field=checkdate] div:gt(0)").each(function(i) {
+							$(this).html($(this).text().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''))
+						});
+						$(".orderContractDiaoDan [data-field=actiondate] div:gt(0)").each(function(i) {
+							$(this).html($(this).text().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''))
+						});		
+						
+						if(jumpFlag) {
+							order_pages();
+						}
+					}
+				});
+			}
+			
+			//分页
+			function order_pages() {
+				laypage.render({
+					elem: 'orderContract', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						orderData(false);
+					}
+				})
+			}
+			
+					
+		orderData(true);
+				
+
+			
+			$("body").keydown(function(event) {
+				if(event.keyCode == "13") { //keyCode=13是回车键
+					$('.find').click();
+				}
+			});
+		
+
+		
+			$(".find").click(function() {
+				orderData(true);
+			})
+			
+	
+
+
+			$('.importData').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+			
+
+			var active = {
+				getimportData: function() { //获取选中数据
+					var checkStatus = table.checkStatus('idTest'),
+						data = checkStatus.data;
+						
+					if(sessionStorage.instockDiaoDanData) {
+						sessionStorage.removeItem('instockDiaoDanData');
+					}
+					sessionStorage.instockDiaoDanData = JSON.stringify(data);
+					
+					if(data.length > 1) {
+						parent.layer.open({
+							title: "提示",
+							content: '只能导入一条数据',
+							zIndex: parent.layerr.zIndex //重点1
+						,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return;
+					}
+					
+					if(data.length >0 && data.length <=1) {
+						parent.layer.open({
+							title: "提示",
+							content: '导入成功',
+								zIndex: parent.layerr.zIndex //重点1
+						,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+								var  iframeName = $(".iframeName").val();
+//								window.parent.frames[iframeName].productListData();
+						  
+							},
+							  end: function(){  
+                    			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+								parent.layer.close(index); //再执行关闭     
+                  			  }  
+						});
+
+					}else{
+					parent.layer.open({
+							title: "提示",
+							content: '请选择数据！',
+							zIndex: parent.layerr.zIndex //重点1
+						,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return;
+					}
+				
+
+				}
+			};
+
+			
+		});
+	</script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+
+</html>

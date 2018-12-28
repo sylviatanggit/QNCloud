@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>选择产品</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link rel="stylesheet" type="text/css" href="../../../easyui/themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../../../easyui/themes/icon.css" />
+		<script type="text/javascript" src="../../../easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="../../../easyui/jquery.easyui.min.js"></script>
+	</head>
+	
+	
+	<link rel="stylesheet" type="text/css" href="../../../css/qk/custom_style.css">
+<style>
+	
+		.inventoryProfit .layui-laypage {
+			margin: 0;
+			position:absolute;
+			bottom: -25px;
+			left: 0px;
+		}
+		
+		.panel-content{
+			    padding: 10px 1.5% 0px 1.5%;
+		}
+		
+		.panel_header{
+			margin: 0px;
+			padding: 0px;
+		}
+		
+		#tree11 {
+			float: left;
+			width: 18%;
+			border: 1px solid #CCCCCC;
+			margin-right: -1px;
+			border-right: none;
+			overflow: auto;
+			margin-top: 10px;
+		}
+
+		
+		.panel-content .layui-table-cell {
+		    height: auto;
+		    padding: 0 5px;
+		    position: relative;
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		    white-space: nowrap;
+		    box-sizing: border-box;
+		}
+		
+		
+			.datagrid-header{
+			display: none !important;
+		}
+		
+		.panel-header, .panel-body{
+		     border: 0px solid #CCCCCC !important;
+		}
+		
+	.inventoryLoss input{
+		height: 46px;
+	}
+		.inventoryLoss .layui-table-edit {
+			height: 46px !important;
+			width: auto !important;
+		}
+		
+		.layui-table-fixed .layui-table-body tbody .layui-table-cell{
+			line-height: 44px !important;
+		}
+		
+
+		
+</style>
+	<body>
+		<div class="panel-content" id="profitLossIid">
+			<div class="layui-tab">
+				
+				<div class="panel_header">
+					
+					<div class="inputs">
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input autocomplete="off" placeholder="产品名称、主条码、编号、型号、规格" class="layui-input seachContent" type="text" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						
+						<div class="btns">
+							<button class="layui-btn finishCheck" style="width: 80px;">选择</button>
+	
+						</div>
+						
+					</div>
+
+				</div>
+		
+				
+				<div style="width: 100%;height: 100%;">
+					
+					<div style="width: 100%;height: 70%;position: relative;" class="inventoryProfit">
+						
+						<ul id="tree11" style="float: left;">
+							<table id="tree" class="easyui-treegrid tree"  data-options="" style="width: 100%;">
+								<thead>
+										<!--<tr>
+											<th data-options="field:'name'">名称</th>
+											<th data-options="field:'count'">数量</th>
+										</tr>-->
+										<tr id="allProductId">
+											<th data-options="field:'name'" style="width:90%;">所有产品</th>
+											<th id="totalCount" data-options="field:'realstockcount'" style="width: 30%;"></th>
+										</tr>
+								</thead>
+							</table>
+						</ul>			
+					
+		
+						<ul id="tree-view">
+								<table id="inventoryProfitId" lay-filter="inventoryProfit"></table>
+						</ul>
+						
+						
+					</div>
+					
+					<div style="width: 100%;height: 28%;margin-top: 2%;" class="inventoryLoss">
+						<span>选中产品</span>
+						<table id="inventoryLossId" lay-filter="inventoryLoss"></table>
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>
+			<input type="hidden" value="" class="pandianDanHanid"/>
+
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+		<script src="../../../js/public.js"></script>
+
+	<script>
+		 brand1= '';
+		 property1= '';
+		 series1= '';
+			
+		var limit1 = 10;
+		var curpage1 = 1;
+		var count1 = 0;
+		
+		
+		layui.use(['table', 'jquery', 'laypage', 'tree'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laypage = layui.laypage;
+			var layer = layui.layer;
+
+			var inventoryProfitDataInfo = [];
+			var inventoryLossDataInfo=[];
+			var  h = ($(document.body).height()- 140) / 2 ;//浏览器当前窗口文档body的高度
+			
+			
+//			rightProductData(true);
+			stockData();
+			
+			var jiazaiIndex;
+			parent.layer.open({
+			  type: 3, 
+			  zIndex: parent.layer.zIndex, //重点1
+			  success: function(layero, index){
+			  		jiazaiIndex = index;
+	  			}
+			});
+		
+			
+			function stockData() {
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serImportIp  +"/WebGetStockLeftTreeDataByOrders?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'targetstockId': sessionStorage.stockId,
+						'stockarea': sessionStorage.stockareaId,
+						'goodsshelves_id': sessionStorage.stockareagoodsshelvesId,
+						'groupCompanyId': localStorage.groupcompanyid,
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+												
+				
+							
+//						var yijilumuData= [{
+//							id : "1",
+//							name : "所有产品",
+//							count : desData[0].realstockcount,
+//							_parentid:""
+//							
+//						}];
+						
+						
+						//右边树一级目录
+						$("#tree").treegrid({
+							data: desData,
+							idField: 'id',
+							treeField: 'name',
+							onClickRow: function(row) {
+								
+									if(row.id == 1){
+										property1 = "";
+									}else{
+										property1= row.date;
+	
+									}
+								
+									 brand1= row.nameOne;
+//									 property1= row.date;
+									 series1= row.nameThree;
+										
+									 rightProductData(true,true)
+			
+							}
+							
+						});
+					
+//					
+//						var truename;
+//						for (var i=1;i< desData.length;i++) {
+//							
+//							if(desData[i].nameTwo =="-1")
+//							{
+//								truename=desData[i].nameOne;
+//							}
+//							else if(desData[i].nameTwo!="-1"&&desData[i].nameThree=="-1")
+//							{
+//								truename=desData[i].nameTwo;
+//							}
+//							else if(desData[i].nameTwo!="-1"&&desData[i].nameThree!="-1")
+//							{
+//								truename=desData[i].nameThree;
+//							}
+//							
+//						
+//							
+//							yijilumuData= [{
+//								id : desData[i].id,
+//								name : truename,
+////								state :"closed",
+//								count : desData[i].realstockcount,
+//								nameOne : desData[i].nameOne,
+//								nameTwo : desData[i].nameTwo,
+//								nameThree : desData[i].nameThree,
+//								date : desData[i].date,
+//								_parentid:desData[i]._parentId		
+//							}];
+//						
+//							$('.inventoryProfit #tree').treegrid('append', {
+//								parent: desData[i]._parentId, 
+//								data: yijilumuData
+//							});
+						
+//						}
+						
+//							$('#tree').treegrid('collapseAll')
+	
+						
+
+							rightProductData(true,false);
+							parent.layer.close(jiazaiIndex);
+						}
+				
+							
+				});
+
+				}
+			
+	
+			
+	
+		var productData =[];
+		var selectData=[];
+			
+		//单元格被编辑事件
+		table.on('edit(inventoryLoss)', function(obj){ 
+			if(obj.field == "outcount"){
+					
+					
+					var getValue = obj.value;
+					var canstockcount = obj.data.realstockcount;
+
+					var re =  /^[0-9]+.?[0-9]*$/;
+					if (!re.test(getValue)) { 
+						layer.tips('输入非法!',this);
+						$(this).val(canstockcount);
+	
+						return;
+					　} 
+					
+			 		
+					if(getValue > canstockcount){
+						getValue = canstockcount
+					}
+				
+				
+				
+					$(this).val(getValue);
+					
+			
+					return;
+				}
+
+
+		});		
+		
+		
+
+			table.on('checkbox(inventoryProfit)', function(obj){
+				
+				if(obj.type =="all"){ //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+					
+					if(obj.checked){
+					
+						 var checkStatus = table.checkStatus('inventoryProfitId') ,
+						 productData = checkStatus.data;
+						 
+						 
+						for(var j = 0; j < productData.length; j++) {
+							 delete productData[j]["LAY_CHECKED"];
+							 
+							productData[j].outcount = productData[j].realstockcount;
+							selectData.unshift(productData[j]);
+							
+							selectData = selectStockUniqueArrayByziDuan(selectData)
+						}	
+						
+					}else{
+						
+						var productData= [];
+						
+						var tabeData = $(".inventoryProfit .layui-form .layui-table-body table:eq(0) tbody tr");
+						
+						for(var i=0;i<tabeData.length;i++){
+							var productInfo = {};
+//							var  targetstockid= $(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("targetstockid");
+//							var  stockarea= $(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("stockarea");
+//							var  goodsshelves_id = $(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("goodsshelves_id");
+							var  produceid =$(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("produceid");
+							var  producesubbarcode =$(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("producesubbarcode");
+							var iots= $(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("iots");
+							var productiondate=$(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("productiondate");
+							var indate= $(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("indate");
+							var producecode = $(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("producecode");
+
+//							productInfo.targetstockid = targetstockid;
+//							productInfo.stockarea = stockarea;
+//							productInfo.goodsshelves_id = goodsshelves_id;
+							productInfo.produceid = produceid;
+							productInfo.producesubbarcode = producesubbarcode;
+							productInfo.iots = iots;
+							productInfo.productiondate = productiondate;
+							productInfo.indate = indate;
+							productInfo.producecode = producecode;
+							productData.unshift(productInfo);
+							
+						}
+	
+						
+						selectData = deleteStockUniqueArray(selectData,productData);
+							
+					
+					}
+					
+				}else{
+					var data = obj.data;
+				
+					 delete data["LAY_CHECKED"];
+					 
+					 
+					if(obj.checked){
+						 data.outcount = data.realstockcount;
+
+						selectData.unshift(data)
+				
+					}else{
+						selectData = deleteStockjosnobjectByKey(selectData,data)
+					}
+				}
+				
+			
+//				selectData = uniqueArray(selectData)
+				inventoryLossData(selectData);
+				
+				
+			});
+    
+   				var targetstockId = "";
+				if(sessionStorage.stockId){
+					targetstockId = sessionStorage.stockId;
+				}
+				
+				var stockarea = "";
+				if(sessionStorage.stockareaId){
+					stockarea = sessionStorage.stockareaId;
+				}
+				
+				
+				var goodsshelves_id = "";
+				if(sessionStorage.stockareagoodsshelvesId){
+					goodsshelves_id = sessionStorage.stockareagoodsshelvesId;
+				}
+				
+				
+			var istype = 0;
+				
+			if(sessionStorage.istype && sessionStorage.istype != ""){
+				istype = sessionStorage.istype;
+			}else{
+				istype = 0;
+			}
+				
+				
+			function rightProductData(jumpFlag,check) {
+				
+				var seachContent = $(".seachContent").val();
+				seachContent = getJieXiData(seachContent);
+
+
+				var infoType = "0"; // 查询类别：0全部 1实库 2备库 3借出 4借入
+			
+	
+				//type0有批号生成日期的
+				$.ajax({
+					type: "get",
+					url: localStorage.serImportIp+"/WebGetStockTableProduceInOrders?jsoncallback=?",
+					dataType: 'jsonp',
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'brand':brand1,
+						"property":property1,
+						'series': series1,
+						'num':limit1,
+						'page':curpage1,
+						'targetstockId':targetstockId,'goodsshelves_id':goodsshelves_id,
+						'stockarea': stockarea,
+						'groupCompanyId': localStorage.groupcompanyid,
+						"showType":istype,
+						"infoType" :0,
+						'txtCondition': seachContent
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						if(desData == null){
+							inventoryProfitData(desData);
+							return;
+						}
+						
+						count1 = desData.count;
+						
+						var chanpin_datas = JSON.parse(desData.data);
+//						console.log(chanpin_datas)
+						inventoryProfitData(chanpin_datas);
+						
+						$("#tree11").css("height", $(".inventoryProfit .layui-form").height());
+						
+						
+						
+						if(!check){
+							if(sessionStorage.stockProductData && sessionStorage.stockProductData!= "[]" && typeof(sessionStorage.stockProductData) != "undefined") {
+								var saveProductData = JSON.parse(sessionStorage.stockProductData);
+								for(var j = 0; j < saveProductData.length; j++) {
+										saveProductData[j].id = saveProductData[j].produceid;
+										saveProductData[j].stockarea = sessionStorage.stockareaId;
+										saveProductData[j].targetstockid = sessionStorage.stockId;
+										saveProductData[j].outcount = saveProductData[j].producecount;
+//										saveProductData[j].goodsshelves_id = sessionStorage.stockareagoodsshelvesId;
+										saveProductData[j].goodsshelves_id = saveProductData[j].goodsshelves_id;
+										selectData.push(saveProductData[j])
+								}	
+									
+							
+							}
+						}
+				
+							
+						for(var i=0;i<chanpin_datas.length;i++){
+							$(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("stockarea",chanpin_datas[i].stockarea);
+							$(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("targetstockid",chanpin_datas[i].targetstockid);
+							$(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("goodsshelves_id",chanpin_datas[i].goodsshelves_id);
+							$(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("produceid",chanpin_datas[i].produceid);
+							$(".inventoryProfit .layui-table-box .layui-table-body tbody tr:eq("+i+")").attr("producesubbarcode",chanpin_datas[i].producesubbarcode);
+							$(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("iots",chanpin_datas[i].iots);
+							$(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("productiondate",chanpin_datas[i].productiondate);
+							$(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("indate",chanpin_datas[i].indate);
+							$(".inventoryProfit .layui-table-box tbody tr:eq("+i+")").attr("producecode",chanpin_datas[i].producecode);
+
+							
+							for(var j=0;j<selectData.length;j++){
+								
+								
+//								if((chanpin_datas[i].produceid == selectData[j].produceid) && (chanpin_datas[i].producesubbarcode == selectData[j].producesubbarcode) && (chanpin_datas[i].stockarea == selectData[j].stockarea)  && (chanpin_datas[i].targetstockid == selectData[j].targetstockid)&& (chanpin_datas[i].goodsshelves_id == selectData[j].goodsshelves_id)){
+								if((chanpin_datas[i].produceid == selectData[j].produceid) && (chanpin_datas[i].producecode == selectData[j].producecode)&& (chanpin_datas[i].producesubbarcode == selectData[j].producesubbarcode) && (chanpin_datas[i].iots == selectData[j].iots)  && (chanpin_datas[i].productiondate == selectData[j].productiondate)&& (chanpin_datas[i].indate == selectData[j].indate)){
+
+								$(".inventoryProfit .layui-table-box tbody tr:eq("+i+") td:eq(0) .layui-table-cell div").attr("class","layui-unselect layui-form-checkbox layui-form-checked");
+									$(".inventoryProfit .layui-table-box tbody tr:eq("+i+") td:eq(0) .layui-table-cell input").attr("checked","cheked");
+									
+									selectData[j].realstockcount = chanpin_datas[i].realstockcount;
+									selectData[j].usefulcount = chanpin_datas[i].usefulcount;
+									selectData[j].lockstockcount = chanpin_datas[i].lockstockcount;
+									selectData[j].readycount = chanpin_datas[i].readycount;
+									selectData[j].lendincount = chanpin_datas[i].lendincount;
+									selectData[j].lendoutcount = chanpin_datas[i].lendoutcount;
+
+								}
+								
+							}
+							
+							
+						}	
+						
+						inventoryLossData(selectData);
+												
+						if(istype == 0){
+							$("#tree-view .layui-table-fixed [data-field=usefulcount]").css("display","none");
+							$("#tree-view .layui-table-fixed [data-field=lockstockcount]").css("display","none");
+					
+						}else{
+							$("#tree-view .layui-table-fixed[data-field=usefulcount]").css("display","inline-block");
+							$("#tree-view .layui-table-fixed [data-field=lockstockcount]").css("display","inline-block");
+						}
+						
+						
+						$(".inventoryProfit [data-field=regproducename] div:gt(0)").each(function(i) {
+							var str = "";
+							
+							var regproducename = chanpin_datas[i].regproducename;
+							if(regproducename == null){
+								regproducename ="";
+							}
+							
+							var registrationcertificatename = chanpin_datas[i].referencenum;
+							if(registrationcertificatename == null){
+								registrationcertificatename ="";
+							}
+							
+							
+							str = regproducename + "<br/>"+registrationcertificatename;
+					
+			
+					
+							$(this).html(str);
+							
+					})
+								
+						$("[data-field=lendoutcount]").css("background-color","#cae1ec");
+						$("[data-field=lendincount]").css("background-color","#d3ecc6");
+						$("[data-field=readycount]").css("background-color","#fee9d0");
+						$("[data-field=realstockcount]").css("background-color","#ffc8c8");	
+						
+						$("[data-field=usefulcount]").css("background-color","#ffffc0");
+						$("[data-field=lockstockcount]").css("background-color","#e1d5c2");
+						$("[data-field=referprice]").css("background-color","#dacfda");
+						$("[data-field=referpricetotal]").css("background-color","#c9f2f1");	
+						
+						if(localStorage.isshow == 1){
+					
+							if(localStorage.viewrealcost==0){
+								$("[data-field=referprice]").css("display","none");
+								$("[data-field=referpricetotal]").css("display","none");
+								
+							}
+							
+						}else{
+							$("[data-field=referprice]").css("display","none");
+							$("[data-field=referpricetotal]").css("display","none");
+							
+					
+						}
+				
+						
+						
+						
+						$(".inventoryProfit [data-field=danwei] div:gt(0)").each(function(i) {
+							 $(this).html(chanpin_datas[i].danwei + "<br />" +chanpin_datas[i].producemodel);
+
+						});
+						
+						$(".inventoryProfit [data-field=package] div:gt(0)").each(function(i) {
+							$(this).html(chanpin_datas[i].produceunit + "<br />" +chanpin_datas[i].package);
+						})
+						
+						$(".inventoryProfit [data-field=storagecondition] div:gt(0)").each(function(i) {
+							var storagewarehousename = chanpin_datas[i].storagewarehousename;
+							if(storagewarehousename == null){
+								storagewarehousename ="";
+							}
+							
+							$(this).html(chanpin_datas[i].storagecondition + "<br />" +storagewarehousename);
+						})
+						
+						$(".inventoryProfit [data-field=conservationcategory] div:gt(0)").each(function(i) {
+							var conservationcategory = chanpin_datas[i].conservationcategory;
+							if(conservationcategory == null){
+								conservationcategory ="";
+							}
+							
+							$(this).html(chanpin_datas[i].conservationcategoryname + "<br />" +chanpin_datas[i].transportationname);
+						})
+						
+						
+						$(".inventoryProfit [data-field=manufacturer] div:gt(0)").each(function(i) {
+							var manufacturer = chanpin_datas[i].manufacturer;
+							if(manufacturer == null){
+								manufacturer = "";
+							}
+							
+							
+							var manufacturename = chanpin_datas[i].manufacturename;
+							if(manufacturename == null){
+								manufacturename = "";
+							}
+								
+							 $(this).html(manufacturer+ "<br />" +manufacturename);
+
+						});
+						
+						
+						if(jumpFlag) {
+							inventoryProfitData_pages();
+						}
+					}
+				});
+
+			}
+			
+			
+			
+	
+
+		
+
+			function inventoryProfitData(data) {
+				//展示已知数据
+				table.render({
+					elem: '#inventoryProfitId',
+					data: data,
+					id:'inventoryProfitId',
+					height: h+60,
+					cols: [
+						[
+
+							{
+								checkbox: true,
+								LAY_CHECKED: false,
+								width: "4%"
+							} //默认全选
+							, {
+								field: 'producename',
+								title: '产品名称',
+								event: 'guige_editGuige',
+								style: 'cursor: pointer;color:#2D89DD',
+								minWidth: 150
+							},
+							{
+								field: 'danwei',
+								title: '规格/型号',
+								minWidth: 150
+							}, {
+								field: 'producesubbarcode',
+								title: '副条码',
+								minWidth: 150
+							}, {
+								field: 'iots',
+								title: '批号',
+								minWidth: 150
+							},  {
+								field: 'productiondate',
+								title: '生产日期',
+								minWidth: 100
+							}, {
+								field: 'indate',
+								title: '有效期',
+								minWidth: 100
+							},
+							{
+								field: 'producenum',
+								title: '产品编号',
+								minWidth: 120
+							},
+
+							{
+								field: 'producecode',
+								title: '主条码',
+								minWidth: 150
+							}, {
+								field: 'warehousename',
+								title: '仓库',
+								minWidth: 150
+							}, {
+								field: 'areaname',
+								title: '货区',
+								minWidth: 150
+							},  {
+								field: 'goodsshelves_name',
+								title: '货架',
+								minWidth: 150
+							},
+							{
+								field: 'package',
+								title: '单位/包装',
+								minWidth: 80
+							},
+							{
+								field: 'producepropertyname',
+								title: '产品种类',
+								minWidth: 60
+							},
+							{
+								field: 'produceseries',
+								title: '系列',
+								minWidth: 120
+							},
+							{
+								field: 'produceusename',
+								title: '通俗名称',
+								minWidth: 120
+							},
+							{
+								field: 'producematerial',
+								title: '材质',
+								minWidth: 60
+							},
+							{
+								field: 'producettypename',
+								title: '产品属性',
+								minWidth: 60
+							},
+							{
+								field: 'manufacturer',
+								title: '品牌/厂家',
+								minWidth: 150
+							},
+							{
+								field: 'regproducename',
+								title: '注册证产品名称/注册证号',
+								minWidth: 220
+							},
+
+							{
+								field: 'productcertificate',
+								title: '产品生产许可证编号',
+								minWidth: 150
+							},
+							{
+								field: 'storagecondition',
+								title: '存储方式／仓库类型',
+								minWidth: 120
+							},
+							{
+								field: 'conservationcategory',
+								title: '养护要求/运输要求',
+								minWidth: 120
+							},
+
+							{
+								field: 'safecount',
+								title: '安全库存',
+								minWidth: 80
+							},
+							{
+								field: 'lowerlimit',
+								title: '安全库存下限',
+								minWidth: 90
+							},
+							{
+								field: 'upperlimit',
+								title: '安全库存上限',
+								minWidth: 90
+							}, 
+							{
+								field: 'realstockcount',
+								title: '实库',									fixed: 'right',
+
+								width: 40
+							}, 
+							{
+								field: 'usefulcount',
+								title: '可用',									fixed: 'right',
+
+								width: 40
+							}, 
+							{
+								field: 'lockstockcount',
+								title: '锁定',									fixed: 'right',
+
+								width: 40
+							}, {
+								field: 'readycount',
+								title: '备货',									fixed: 'right',
+
+								width: 40
+							}, {
+								field: 'lendincount',
+								title: '借入',									fixed: 'right',
+
+								width: 40
+							}, {
+								field: 'lendoutcount',
+								title: '借出',									fixed: 'right',
+
+								width: 40
+							}, {
+								field: 'referprice',
+								title: '参考成本价',									fixed: 'right',
+
+								width: 70
+							}, {
+								field: 'referpricetotal',
+								title: '小计',									fixed: 'right',
+
+								width: 70
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+											limits: [50, 200],
+
+					even: true,
+					page: false //是否显示分页
+						,
+					limit: limit1 //每页默认显示的数量
+				});
+				
+
+		
+			}
+			
+			//分页
+			function inventoryProfitData_pages() {
+				laypage.render({
+					elem: 'inventoryProfitId', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [10, 50],
+					limit: limit1,
+					curr: curpage1,
+					group: 2,
+					count: count1, //数据总数，从服务端得到
+					jump: function(obj,first) {
+
+						curpage1 = obj.curr;
+						limit1 = obj.limit;
+						if(!first){
+							rightProductData(false,true);
+
+						}
+					}
+				})
+			}
+			
+	
+			
+			
+			function inventoryLossData(chanpin_datas) {
+				//展示已知数据
+				table.render({
+					elem: '#inventoryLossId',
+					data: chanpin_datas,
+					height: h-45,
+					cols: [
+						[
+ 							{
+								type:'numbers',
+								width: 50,
+								align: "center",
+//								sort: true
+							}//默认全选
+							, {
+								field: 'producename',
+								title: '产品名称',
+								event: 'guige_editGuige',
+								style: 'cursor: pointer;color:#2D89DD',
+								minWidth: 150
+							},
+							{
+								field: 'danwei',
+								title: '规格/型号',
+								minWidth: 150
+							}, {
+								field: 'producesubbarcode',
+								title: '副条码',
+								minWidth: 150
+							}, {
+								field: 'iots',
+								title: '批号',
+								minWidth: 150
+							},  {
+								field: 'productiondate',
+								title: '生产日期',
+								minWidth: 100
+							}, {
+								field: 'indate',
+								title: '有效期',
+								minWidth: 100
+							},
+							{
+								field: 'producenum',
+								title: '产品编号',
+								minWidth: 120
+							},
+
+							{
+								field: 'producecode',
+								title: '主条码',
+								minWidth: 150
+							}, {
+								field: 'warehousename',
+								title: '仓库',
+								minWidth: 150
+							}, {
+								field: 'areaname',
+								title: '货区',
+								minWidth: 150
+							},  {
+								field: 'goodsshelves_name',
+								title: '货架',
+								minWidth: 150
+							},
+							{
+								field: 'package',
+								title: '单位/包装',
+								minWidth: 80
+							},
+							{
+								field: 'producepropertyname',
+								title: '产品种类',
+								minWidth: 60
+							},
+							{
+								field: 'produceseries',
+								title: '系列',
+								minWidth: 120
+							},
+							{
+								field: 'produceusename',
+								title: '通俗名称',
+								minWidth: 120
+							},
+							{
+								field: 'producematerial',
+								title: '材质',
+								minWidth: 60
+							},
+							{
+								field: 'producettypename',
+								title: '产品属性',
+								minWidth: 60
+							},
+							{
+								field: 'manufacturer',
+								title: '品牌/厂家',
+								minWidth: 150
+							},
+							{
+								field: 'regproducename',
+								title: '注册证产品名称/注册证号',
+								minWidth: 220
+							},
+
+							{
+								field: 'productcertificate',
+								title: '产品生产许可证编号',
+								minWidth: 150
+							},
+							{
+								field: 'storagecondition',
+								title: '存储方式／仓库类型',
+								minWidth: 120
+							},
+							{
+								field: 'conservationcategory',
+								title: '养护要求/运输要求',
+								minWidth: 120
+							},
+
+							{
+								field: 'safecount',
+								title: '安全库存',
+								minWidth: 80
+							},
+							{
+								field: 'lowerlimit',
+								title: '安全库存下限',
+								minWidth: 90
+							},
+							{
+								field: 'upperlimit',
+								title: '安全库存上限',
+								minWidth: 90
+							}, {
+								field: 'outcount',edit: 'jiage',style: "color:#2D89DD",
+								title: '出库',									fixed: 'right',
+
+								width: 40
+							},
+							{
+								field: 'realstockcount',
+								title: '实库',									fixed: 'right',
+
+								width: 40
+							}, 
+							{
+								field: 'usefulcount',
+								title: '可用',									fixed: 'right',
+
+								width: 40
+							}, 
+							{
+								field: 'lockstockcount',
+								title: '锁定',									fixed: 'right',
+
+								width: 40
+							}
+							, 
+							{
+								field: 'readycount',
+								title: '备货',									fixed: 'right',
+
+								width: 40
+							}, {
+								field: 'lendincount',
+								title: '借入',									fixed: 'right',
+
+								width: 40
+							}, {
+								field: 'lendoutcount',
+								title: '借出',									fixed: 'right',
+
+								width: 40
+							}, {
+								field: 'referprice',
+								title: '成本价',									fixed: 'right',
+
+								width: 70
+							}, {
+								field: 'referpricetotal',
+								title: '小计',									fixed: 'right',
+
+								width: 70
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: false //是否显示分页
+						,
+					limit: selectData.length //每页默认显示的数量
+				});
+				
+//					if(istype == 0){
+//						$(".inventoryLoss [data-field=usefulcount]").css("display","none");
+//						$(".inventoryLoss [data-field=lockstockcount]").css("display","none");
+//				
+//					}else{
+//						$(".inventoryLoss [data-field=usefulcount]").css("display","inline-block");
+//						$(".inventoryLoss [data-field=lockstockcount]").css("display","inline-block");
+//					}
+////			
+								
+						if(istype == 0){
+							$(".inventoryLoss .layui-table-fixed [data-field=usefulcount]").css("display","none");
+							$(".inventoryLoss .layui-table-fixed [data-field=lockstockcount]").css("display","none");
+					
+						}else{
+							$(".inventoryLoss .layui-table-fixed[data-field=usefulcount]").css("display","inline-block");
+							$(".inventoryLoss.layui-table-fixed [data-field=lockstockcount]").css("display","inline-block");
+						}
+						
+						$(".inventoryLoss [data-field=danwei] div:gt(0)").each(function(i) {
+							 $(this).html(chanpin_datas[i].danwei + "<br />" +chanpin_datas[i].producemodel);
+
+						});
+						
+						$(".inventoryLoss [data-field=package] div:gt(0)").each(function(i) {
+							$(this).html(chanpin_datas[i].produceunit + "<br />" +chanpin_datas[i].package);
+						})
+						
+						
+															
+						$(".inventoryLoss [data-field=regproducename] div:gt(0)").each(function(i) {
+							var str = "";
+							
+							var regproducename = chanpin_datas[i].regproducename;
+							if(regproducename == null){
+								regproducename ="";
+							}
+							
+							var registrationcertificatename = chanpin_datas[i].registrationcertificatename;
+							if(registrationcertificatename == null){
+								registrationcertificatename ="";
+							}
+							
+							
+							str = regproducename + "<br/>"+registrationcertificatename;
+					
+			
+					
+							$(this).html(str);
+							
+					})
+						$("[data-field=outcount]").css("background-color","#ffc8c8");
+						$("[data-field=lendoutcount]").css("background-color","#cae1ec");
+						$("[data-field=lendincount]").css("background-color","#d3ecc6");
+						$("[data-field=readycount]").css("background-color","#fee9d0");
+						$("[data-field=realstockcount]").css("background-color","#ffc8c8");	
+						
+						$("[data-field=usefulcount]").css("background-color","#ffffc0");
+						$("[data-field=lockstockcount]").css("background-color","#e1d5c2");
+						$("[data-field=referprice]").css("background-color","#dacfda");
+						$("[data-field=referpricetotal]").css("background-color","#c9f2f1");	
+						
+						
+						if(localStorage.isshow == 1){
+					
+							if(localStorage.viewrealcost==0){
+								$("[data-field=referprice]").css("display","none");
+								$("[data-field=referpricetotal]").css("display","none");
+								
+							}
+							
+						}else{
+							$("[data-field=referprice]").css("display","none");
+							$("[data-field=referpricetotal]").css("display","none");
+							
+					
+						}
+						
+						
+						
+						$(".inventoryLoss [data-field=storagecondition] div:gt(0)").each(function(i) {
+							var storagewarehousename = chanpin_datas[i].storagewarehousename;
+							if(storagewarehousename == null){
+								storagewarehousename ="";
+							}
+							
+							$(this).html(chanpin_datas[i].storagecondition + "<br />" +storagewarehousename);
+						})
+						
+						$(".inventoryLoss [data-field=conservationcategory] div:gt(0)").each(function(i) {
+							var conservationcategory = chanpin_datas[i].conservationcategory;
+							if(conservationcategory == null){
+								conservationcategory ="";
+							}
+							
+							$(this).html(chanpin_datas[i].conservationcategoryname + "<br />" +chanpin_datas[i].transportationname);
+						})
+						
+						
+						$(".inventoryLoss [data-field=manufacturer] div:gt(0)").each(function(i) {
+							var manufacturer = chanpin_datas[i].manufacturer;
+							if(manufacturer == null){
+								manufacturer = "";
+							}
+							
+							
+							var manufacturename = chanpin_datas[i].manufacturename;
+							if(manufacturename == null){
+								manufacturename = "";
+							}
+								
+							 $(this).html(manufacturer+ "<br />" +manufacturename);
+
+						});
+				
+			}
+			
+	
+			
+			$(".find").click(function(){
+					rightProductData(true,true);
+			})
+			
+			
+								
+			$("body").keydown(function(event) {
+					if(event.keyCode == "13") { //keyCode=13是回车键
+						$('.find').click();
+	
+					}
+			});
+			
+			
+			$(".finishCheck").click(function(){
+		
+				
+				
+					if(selectData.length ==0){
+						parent.layer.open({
+							title: "提示",
+							content: '请选择产品!' ,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return;
+					}
+
+					if(sessionStorage.newData) {
+							sessionStorage.removeItem('newData');
+					}
+					sessionStorage.newData = JSON.stringify(selectData);
+					parent.layer.open({
+						title: "提示",
+						content: '选择成功',
+						zIndex: parent.layer.zIndex, //重点1,
+						success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+				  
+						},
+						end: function(){  
+            			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+						parent.layer.close(index); //再执行关闭     
+          			  }  
+					});
+					
+				
+	
+				})
+				
+	
+	
+	});
+		
+		
+	</script>
+
+</html>

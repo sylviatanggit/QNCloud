@@ -1,0 +1,2351 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加直销手术备货</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="../../../css/qk/danju_pulic.css" />
+		<!-- DevExtreme themes -->
+		<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+		<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
+	</head>
+	<style type="text/css">
+		
+		input,
+		section,
+		button,
+		select {
+			border-radius: 2px;
+		}
+		
+		.addConsume {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.layui-input-block select {
+			cursor: pointer;
+		}
+		
+		.layui-input-block option {
+			cursor: pointer;
+		}
+		
+		.addConsume .layui-table td,
+		.layui-table th {
+			font-size: 9pt !important;
+		}
+		
+		.btns {
+			margin-bottom: 12px;
+			position: absolute;
+			right: 20px;
+			top: 114px;
+		}
+		
+	
+		.btns button,
+		.find,
+		.import {
+			cursor: pointer;
+			border: none;
+			width: 90px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+	
+		
+	
+		.two_inputs {
+			padding-top: 12px;
+			background-color: #EFF5FF;
+			margin-top: 50px;
+			padding-bottom: 5px;
+		}
+		
+		.moreAction {
+			width: 90px !important;
+		}
+		
+		.action {
+			width: 88px !important;
+			right: 0;
+		}
+		
+		.show,
+		.hide {
+			padding: 1px 10px;
+			background-color: #1E9FFF;
+			text-align: center;
+			position: absolute;
+			top: 138px;
+			right: 50%;
+			cursor: pointer;
+		}
+		
+		.hide {
+			display: none;
+		}
+		
+		.title {
+			margin-top: 12px;
+		}
+		
+		
+		.detail {
+			position: absolute;
+			top: 150px;
+			float: right;
+			width: 20px;
+			text-align: center;
+			padding: 5px 10px;
+			line-height: 20px;
+			right: 0px;
+			font-size: 9pt;
+			border-top-left-radius: 5px;
+			border-bottom-left-radius: 5px;
+			background-color: #2D89DD;
+			color: white;
+			cursor: pointer;
+			z-index: 9;
+		}
+		
+		.beihuoDetail {
+			width: 85%;
+			height: auto;
+			border: 1px solid #CCCCCC;
+			position: absolute;
+			bottom: 0px;
+			right: 0px;
+			z-index: 99999999999;
+			background-color: white;
+		}
+		
+		.beihuoDetail .layui-table-page {
+			display: none;
+		}
+		.cs_container,
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 4px !important;
+		}
+		
+		.layui-form select {
+			display: block;
+		}
+	
+		input{
+			font-size: 9pt;
+		}
+
+		.subtotal{
+			background-color: rgb(255, 200, 200) !important;
+		}
+		.referprice{
+			background-color: rgb(254, 233, 208) !important;
+		}
+		.number{
+			background-color: rgb(211, 236, 198) !important;
+		}
+	</style>
+
+	<body>
+		<div class="addConsume">
+			<div class="layui-tab">
+				<div class="header1">
+					<p style="color: #232323 !important;font-size: 24px !important;margin-top: 30px;">直销手术备货</p><img class="dsh" src="../../../image/dsh.png" alt=""  style="margin-left: 32px;"/> <img style="margin-left: 32px;" class="ysh" src="../../../image/ysh.png" alt="" />
+					<ul>
+						<li>
+							<label class="layui-form-label">记账日期</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" placeholder="" autocomplete="off" id="operationdate" class="layui-input operationdate" type="text">
+							</div>
+						</li>
+						
+							<li>
+							<label class="layui-form-label" style="width: 117px !important;">直销备货日期</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="on" id="addConsumeDate" class="layui-input consumewait_date" type="text">
+							</div>
+						</li>
+						
+						<li>
+							<label class="layui-form-label" style="width: 117px !important;">申请备货单号</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off" class="input layui-input SQorderNum" type="text" disabled>
+							</div>
+						</li>
+					
+						<li>
+							<label class="layui-form-label" style="width: 117px !important;">直销备货单号</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off"  class="input layui-input ZXorderNum" type="text" disabled>
+							</div>
+						</li>
+						<li>
+							<label class="layui-form-label" style="width: 117px !important;">自定义单号</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="on"  class="layui-input mynum" type="text">
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="header2">
+					<div class="btns">
+				
+						<button class="layui-btn addProduct">添加产品</button>
+						<button class="layui-btn scanCodeOut">扫码出库</button>
+						<button class="layui-btn preserve" data-type="getCheckDel">保存</button>
+						<button class="layui-btn examine">审核</button>
+						<button class="layui-btn noExamine">反审核</button>
+						<button class="layui-btn moreAction">更多操作</button>
+						<ul class="action">
+							
+								<li>
+								<a class="shanchu" data-type="del" lay-event='del'>删除产品</a>
+							</li>
+							
+							<li id="operationzuTaochukuId">
+								<a class="zuTaochuku">组套出库</a>
+							</li>
+							
+							
+							<li>
+								<a class="chuku" data-type="chuku" lay-event='chuku'>货架出库</a>
+							</li>
+						
+						</ul>
+					</div>
+	
+					<div class="two_inputs">
+						
+						<div style="width: 100%;height: auto;">	
+							
+							<div  class="layui-inline selectKung">
+								<label class="layui-form-label">往来单位</label>
+								<div>
+									<input name="title" data-id='' lay-verify="title" value="" disabled="disabled" autocomplete="off" id="unit" class="layui-input unit" type="text" style="width: 250px;height: 28px;line-height: 28px;">
+								</div>
+							</div>
+							
+							<div  class="layui-inline selectKung">
+								<label class="layui-form-label">主刀医生</label>
+								<div class="layui-input-inline">
+								<input name="title" disabled lay-verify="title" autocomplete="off" class="input layui-input doctor" type="text">
+								</div>
+							</div>
+							
+							<div  class="layui-inline selectKung">
+								<label class="layui-form-label">制单人</label>
+								<div class="layui-input-inline">
+									<input name="title" disabled lay-verify="title" autocomplete="off" class="input layui-input maker" type="text">
+								</div>
+							</div>
+							
+							</div>	
+							
+							
+							
+						<div style="width: 100%;height: auto;">		
+							<div  class="layui-inline selectKung">
+								<label class="layui-form-label">备货仓库</label>
+								<div id="warehouseId">
+									<input id="warehouse" data-id='' value=""  class="layui-input warehouse" type="text" style="width: 250px;height: 28px;line-height: 28px;">
+								</div>
+							</div>
+							<div  class="layui-inline selectKung">
+								<label class="layui-form-label">备货货区</label>
+								<div id="stockareaId">
+									<input name="title" lay-verify="title" value=""  autocomplete="off" id="duiyingstockareaId" class="layui-input stockarea" type="text" style="width: 250px;height: 28px;line-height: 28px;">
+								</div>
+							</div>
+							<div  class="layui-inline selectKung">
+								<label class="layui-form-label">备货货架</label>
+								<div  id="goodsshelvesId">
+									<input name="title" data-id="" lay-verify="title" value="" autocomplete="off" id="duiyinggoodsshelvesId" class="layui-input goodsshelves" type="text" style="width: 250px;height: 28px;line-height: 28px;">
+								</div>
+							</div>
+							
+						</div>
+				
+				<div style="width: 100%;height: auto;">		
+						<div class="layui-inline selectKung">
+							<label class="layui-form-label">手术名称</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" disabled autocomplete="off" class="input layui-input surgeryName" type="text">
+							</div>
+						</div>
+						<div class="layui-inline selectKung">
+							<label class="layui-form-label">手术时间</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" disabled id="ConsumeDate" autocomplete="off" class="input layui-input surgeryDate" type="text">
+							</div>
+						</div>
+						<div class="layui-inline selectKung">
+							<label class="layui-form-label">业务员</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" disabled autocomplete="off" id="salesman" class="input layui-input salesman" type="text">
+							</div>
+						</div>
+						<br />
+						
+						
+					
+					</div>
+					
+					<div style="width: 100%;height: auto;">	
+
+				<div  class="layui-inline">
+							<label class="layui-form-label" >备　　注</label>
+							<div class="layui-input-inline">
+								<input  name="title" lay-verify="title"  autocomplete="off" class="layui-input notes" type="text" style="width: 345px;" style="margin-left: 0px;">
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+				
+				
+				<div class="order" style="display: none;">
+					<div class="layui-inline" style="margin-top: 10px;">
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 14px;width: 240px;">
+						</div>
+					</div>
+					<div class="layui-inline" style="margin-top: 10px;">
+						<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+					</div>
+					<div class="layui-inline" style="margin-top: 10px;float: right;margin-right: 20px;">
+						<button class="layui-btn import" style="margin-left: 14px;" data-type="getImport">确定导入</button>
+					</div>
+					<table id="orderDetail" lay-filter="demo1"></table>
+				</div>
+				
+				<input class="updateproductCount" type="hidden" >
+
+				<p class="title">直销备货详情</p>
+				<table id="addOperation" lay-filter="demo">
+					<div id="gridContainer"></div>
+				</table>
+			</div>
+		</div>
+	
+	</body>
+	<script src="../../../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+	<script src="../../../devexpresslibrary/js/dx.all.js"></script>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script src="../../../js/public.js"></script>
+	<script>
+		var scanCodeOutStore;
+		var saveStatus = true;
+
+
+		layui.use(['table', 'jquery', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$(".show").click(function() {
+				$(".show").hide();
+				$(".hide").show();
+				$(".two_inputs").hide();
+				$(".title").css("margin-top", "54px");
+			});
+			$(".hide").click(function() {
+				$(".hide").hide();
+				$(".show").show();
+				$(".two_inputs").show();
+				$(".title").css("margin-top", "12px");
+			});
+			laydate.render({
+				elem: '#addConsumeDate',
+				value: new Date()
+			});
+			laydate.render({
+				elem: '#operationDate',
+					value: new Date()
+			});
+					laydate.render({
+				elem: "#operationdate",
+				value: new Date()
+			})
+
+			
+			var jiazaiIndex;
+			parent.layer.open({
+			  type: 3, 
+			  zIndex: parent.layer.zIndex, //重点1
+			  success: function(layero, index){
+			  		jiazaiIndex = index;
+	  			}
+			});
+			
+			var ordernum=	$(".layui-show", parent.document).attr("lay-item-id");
+			ordernum=ordernum.slice(6,ordernum.length)
+			//加载
+			$(function() {
+			 staffList();
+		
+			 stockList(1);
+				
+			 getunit(510)
+			 
+
+			 
+			 	
+			$("body").delegate("#warehouseId .cs_over","mousedown",function(){
+				
+				
+				var bandstr = '<input data-id="" id="duiyingstockareaId" class="layui-input stockarea" type="text" style="width: 250px;">';
+				
+				$("#stockareaId").empty();
+				$("#stockareaId").append(bandstr);
+				
+				var produceseriesstr = '<input id="duiyinggoodsshelvesId" class="layui-input goodsshelves" type="text" style="width: 250px;">';
+			
+				$("#goodsshelvesId").empty();
+				$("#goodsshelvesId").append(produceseriesstr);
+				
+				getStockarea($(this).attr("pkey"));
+				
+		
+				
+			})
+			$("body").delegate("#stockareaId .cs_over","mousedown",function(){
+				
+			
+				
+				var produceseriesstr = '<input id="duiyinggoodsshelvesId" data-id="" class="layui-input goodsshelves" type="text" style="width: 250px;">';
+			
+				$("#goodsshelvesId").empty();
+				$("#goodsshelvesId").append(produceseriesstr);
+			
+	
+				getGoodsShelvesDropList($(this).attr("pkey"));
+
+				
+			})
+		
+			})
+			var change=false;
+			var oldData =[],ZXorderNum1,panduan;
+			function mainData() {
+				change = false;
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetDirectSellingInfoByLastNum?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': ordernum,
+						'num': 10,
+						'page': 1,
+						'groupCompanyId': localStorage.groupcompanyid
+					},
+					success: function(res) {
+												parent.layer.close(jiazaiIndex);
+
+						var operationData = JSON.parse(res);
+						panduan=operationData.Master.state;
+						
+						var all_data=JSON.parse(operationData.Master.result);
+						//主表state为0,有数据,为-1出库仓库没有
+						if(panduan > -1){
+							//出库仓库
+							$(".warehouse").attr('data-id',all_data[0].targetstockid);
+							$(".warehouse").val(all_data[0].warehousename+'('+all_data[0].naturename+')');
+							//出库货区
+							$(".stockarea").attr('data-id',all_data[0].stockarea)
+							$(".stockarea").val(all_data[0].areaname)
+							
+							if(all_data[0].targetstockid != "" && all_data[0].targetstockid != null){
+								getStockarea(all_data[0].targetstockid);
+							}else{
+								getStockarea('-1');
+							}
+							
+							//出库货架
+							$(".goodsshelves").attr('data-id',all_data[0].goodsshelves_id);
+							$(".goodsshelves").val(all_data[0].goodsshelves_name);
+							
+							
+							if(all_data[0].stockarea != "" && all_data[0].stockarea != null){
+								getGoodsShelvesDropList(all_data[0].stockarea)
+							}else{
+								getGoodsShelvesDropList('-1')
+							}
+							
+							$('.ZXorderNum').val(all_data[0].ordernum);
+							$(".examine").show();
+							$(".SQorderNum").val(all_data[0].lastnum);
+							
+							//状态
+							$(".dsh").show();
+							$(".noExamine").hide();
+						}else if(panduan < 0){
+							$(".examine,.noExamine").hide();
+							$(".SQorderNum").val(all_data[0].lastnum);
+							ZXorderNum1=all_data[0].lastnum
+						}
+						
+						if(all_data[0].directdate){
+							$(".consumewait_date").val(all_data[0].directdate.slice(0, 10));
+						}
+						
+						if(all_data[0].surgerydate){
+							$(".surgeryDate").val(all_data[0].surgerydate.slice(0, 10));
+						}
+						
+						
+						if(typeof(all_data[0].operationdate)!="undefined"){
+							$("#operationdate").val(all_data[0].operationdate);
+						}
+								
+						$(".mynum").val(all_data[0].mynum);
+						$(".unit").val(all_data[0].companyname);
+						$(".unit").attr('data-id', all_data[0].companyid);
+						$(".doctor").val(all_data[0].masterdoctorname);
+						$(".surgeryName").val(all_data[0].surgery);
+						
+						$(".salesman").val(all_data[0].agentname);
+						$(".salesman").attr('data-id', all_data[0].agent);
+						
+						$(".maker").val(all_data[0].operatorname);
+						$(".maker").attr('data-id', all_data[0].operatorsid);
+						
+						$(".notes").val(all_data[0].nomo);
+						
+
+						//从表数据
+						if(operationData.Slave.result != null){
+							var Slave_data=JSON.parse(operationData.Slave.result);
+
+							oldData=Slave_data;
+							
+							operationDetail(Slave_data)
+						}
+						
+					}
+										,
+					error: function(res) {
+						parent.layer.close(jiazaiIndex);
+							
+							parent.layer.open({
+								title: "提示",
+								content: '服务器异常!',
+									zIndex: parent.layer.zIndex //重点1
+					
+							});
+						
+				
+					}
+				});
+			}
+			
+			
+			mainData();
+			operationDetail(null);
+			var viewHeight = $(window).height();
+		$('#gridContainer').css('height', viewHeight * 0.55 + 'px');
+		var printArray = [];
+		//入库验收详情
+		function operationDetail(data) {
+			//展示已知数据
+			var dataGrid = $("#gridContainer").dxDataGrid({
+				dataSource: data,
+				allowColumnReordering: true,
+				key: "producenum",
+				showBorders: true,
+				//hint:'ctrl + v 粘贴数据',
+				editing: {
+					mode: 'cell',
+					allowUpdating: true,
+				},
+				cellHintEnabled: true,
+				columnChooser: {
+					enabled: false,
+					mode: "dragAndDrop",
+				},
+				focusStateEnabled: true,
+				sorting: {
+					mode: "multiple"
+				},
+				paging: {
+					pageSize: 100000,
+				},
+				selection: {
+					mode: "multiple",
+				},
+				allowColumnResizing: true,
+				columns: [{
+					dataField: "producename",
+					caption: "产品名称",
+					width: 160,
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+				             
+                               
+							
+								$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+							 
+					}
+				}
+				,
+				{
+					dataField: "danwei",
+					width: 160,
+					caption: "规格",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				},
+				{
+					dataField: "producemodel",
+					width: 120,
+					caption: "型号",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}
+					,
+				{
+					dataField: "producenum",
+					width: 100,
+					caption: "编号",
+					allowEditing: false,
+					isEditing: true,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "producecode",
+					width: 160,
+					caption: "主条码",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "producesubbarcode",
+					width: 160,
+					caption: "副条码",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.text + "</div>"))
+							.appendTo(container);
+					}
+				},
+				{
+					dataField: "produceunit",
+					width: 50,
+					caption: "单位",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.text + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "iots",
+					width: 100,
+					caption: "批号",
+					dataType: 'text',
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.text + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "productiondate",
+					width: 80,
+					caption: "生产日期",
+					dataType: 'date',
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						var str;
+						if (!options.value) {
+							str = "";
+						} else {
+							str = options.value;
+							str = str.getFullYear() + '-' + (str.getMonth() + 1) + '-' + str.getDate() + ' '
+								;
+
+						}
+						$("<div>")
+							.append($("<div> " + str + "</div>"))
+							.appendTo(container);
+					}
+				},
+				{
+					dataField: "indate",
+					width: 80,
+					caption: "有效期",
+					dataType: 'date',
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						var str;
+						if (!options.value) {
+							str = "";
+						} else {
+							str = options.value;
+							str = str.getFullYear() + '-' + (str.getMonth() + 1) + '-' + str.getDate() + ' '
+								;
+
+						}
+						$("<div>")
+							.append($("<div> " + str + "</div>"))
+							.appendTo(container);
+					}
+
+				}
+					,{
+					dataField: "goodsshelves_name",
+					width: 90,
+					caption: "备货货架",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.text + "</div>"))
+							.appendTo(container);
+					}
+				}
+					, {
+					dataField: "qs",
+					width: 100,
+					caption: "合格",
+					allowEditing: false,
+					 cellTemplate: function (container, options) {
+					
+						var str;
+						if(options.value == 0){
+                            str = '不合格';
+						}else{
+							str="合格";
+						}
+						
+						$("<div>")
+							.append($("<div> " + str + "</div>"))
+							.appendTo(container);
+						
+					
+					
+					}
+
+				}
+					, {
+					dataField: "package",
+					width: 90,
+					caption: "包装",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "storagecondition",
+					width: 70,
+					caption: "存储条件",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "producepropertyname",
+					width: 70,
+					caption: "产品种类",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+
+				}, {
+					dataField: "produceusename",
+					width: 80,
+					caption: "通俗名称",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "producettypename",
+					width: 80,
+					caption: "产品属性",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						if (options.value == null || options.value == '') {
+							$("<div>")
+								.append($("<div></div>"))
+								.appendTo(container);
+						} else {
+							$("<div>")
+								.append($("<div> " + options.value + "</div>"))
+								.appendTo(container);
+						}
+
+					}
+				}, {
+					dataField: "produceseries",
+					width: 80,
+					caption: "产品系列",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "producematerial",
+					width: 80,
+					caption: "材质",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "manufacturer",
+					width: 80,
+					caption: "品牌",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "manufacturename",
+					width: 120,
+					caption: "厂家",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.text + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "regproducename",
+					width: 160,
+					caption: "注册证产品名称",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.text + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "referencenum",
+					width: 120,
+					caption: "注册证号",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.text + "</div>"))
+							.appendTo(container);
+					}
+				},{
+					dataField: "productcertificate",
+					width: 160,
+					caption: "产品生产许可证编号",
+					allowEditing: false,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.text + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "producecount",
+					width: 60,
+					caption: "数量",
+					fixed: true,
+					allowEditing: true,
+					editorOptions: {
+						format: "#"
+					},
+					dataType: "number",
+					fixedPosition: 'right',
+					cssClass: 'number',
+					cellTemplate: function (container, options) {
+						if (options.value == null || options.value == "" || options.value == "0" || options.value == 0 || options.value < 0) {
+							options.value = 1;
+							options.text = '1';
+							options.displayValue = 1;
+							options.data.producecount = 1;
+							$("<div>")
+								.append($("<div >" + options.value + "</div>"))
+								.appendTo(container);
+						}
+						else {
+							$("<div>")
+								.append($("<div>" + options.value + "</div>"))
+								.appendTo(container);
+						}
+					}
+
+				}, {
+					dataField: "referprice",
+					width: 100,
+					caption: "参考未税成本",
+					allowEditing: true,
+					fixed: true,
+					fixedPosition: 'right',
+					allowEditing: false,
+					cssClass: 'referprice',
+					cellTemplate: function (container, options) {
+						if (!options.value || options.value == 0 || options.value == '0.00') {
+							$("<div>")
+								.append($("<div>0</div>"))
+								.appendTo(container);
+						} else {
+							$("<div>")
+								.append($("<div>" + options.value + "</div>"))
+								.appendTo(container);
+						}
+					}
+
+
+				}, {
+					dataField: "referpricetotal",
+					width: 100,
+					caption: "小计",
+					alignment: "right",
+					allowEditing: false,
+					fixed: true,
+					cssClass: "subtotal",
+					fixedPosition: 'right',
+					format: {
+						type: "fixedPoint",
+						precision: 2
+					},
+					customizeText: function (arg) {
+						return arg.valueText;
+					},
+					// cellTemplate: function (container, options) {
+					// 	var mutiple = options.data.producecount * options.data.realcost;
+					// 	if (!mutiple) {
+					// 		$("<div>")
+					// 			.append($("<div>0</div>"))
+					// 			.appendTo(container);
+					// 	} else {
+					// 		$("<div>")
+					// 			.append($("<div>" + mutiple + "</div>"))
+					// 			.appendTo(container);
+					// 	}
+					// },
+					allowEditing: false,
+				},
+				]
+				,
+				summary: {
+					totalItems: [{
+						column: "referpricetotal",
+						summaryType: "sum",
+						customizeText: function (data) {
+						
+							var data = data.value;
+							data = data.toFixed(2);
+							return data;
+						}
+					
+					}, {
+						column: "producecount",
+						summaryType: "sum",
+						customizeText: function (data) {
+							var data = data.value;
+							return data;
+						}
+					},
+					{
+						column: "referprice",
+						summaryType: "sum",
+						customizeText: function (data) {
+							var data = data.value;
+							data = data.toFixed(2);
+							return data;
+						}
+					}
+					]
+				},
+				onRowUpdated: function (e) {
+					// 判断有没有按下保存键,如果按下存1,没有存0
+					saveStatus = false;
+                    
+				},
+				onSelectionChanged: function (e) {
+					selectedArray = [];
+					selectedArray = e.selectedRowsData;
+				},
+				onContentReady: function (e) {
+					// 权限
+					if (localStorage.isshow == 1) {
+
+						if (localStorage.viewrealcost == 0) {
+					
+							   e.component.deleteColumn("参考未税成本");
+							   e.component.deleteColumn("小计");
+						}
+
+					} else {
+						e.component.deleteColumn("参考未税成本");
+						e.component.deleteColumn("小计");
+					}
+			   
+			
+					
+					//编辑之后的数据
+					var data = e.component.getVisibleRows();
+                     
+					var saveData = []
+					$.each(data, function (v, i, arr) {
+				
+						
+						saveData.push(i.data)
+					})
+                   
+					oldData = saveData;
+				
+					
+				},
+				
+			}).dxDataGrid('instance');
+
+
+
+
+		}
+
+
+      
+
+
+		var selectedArray = [];
+			$('.shanchu').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+			active = {
+				//删除
+				del : function(){
+					
+				if(!checkPermissionStatus("标准流程-手术备货-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+				}
+							
+							
+					var checkStatus = table.checkStatus('productDetail'),
+					data = checkStatus.data;
+					eventFlag = true;
+					if (selectedArray.length ==0){
+					parent.layer.open({
+						title: "提示",
+						content: '请选择产品',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					return;
+				}
+					
+					change = true;
+					oldData =  deleteUniqueArray(oldData,selectedArray);
+					operationDetail(oldData);	
+		
+
+				}
+			};
+		
+			$("input,select").change(function(){
+				change=true;
+			})
+
+			//调单
+			$(".addProduct").click(function(){
+				
+						if(!checkPermissionStatus("标准流程-手术备货-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+				}
+						
+						
+				eventFlag = true;
+	 			var warehouse = $('#warehouse').val() ? $('#warehouse').val() : $('.warehouse').attr('data-id');
+				if (warehouse === undefined || warehouse == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请选择备货仓库!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					return;
+				}
+		
+				var stockarea = $('#duiyingstockareaId').val() ? $('#duiyingstockareaId').val() : $('.stockarea').attr('data-id');
+				if (stockarea === undefined || stockarea == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请选择备货货区!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					return;
+				}
+				var goodsshelves = $('#duiyinggoodsshelvesId').val() ? $('#duiyinggoodsshelvesId').val() : $('.goodsshelves').attr('data-id');
+				goodsshelves=goodsshelves==undefined?"":goodsshelves;
+				if($(".goodsshelves").val() == ""){
+					goodsshelves="";
+				}
+		
+				
+				
+				if(sessionStorage.stockProductData || sessionStorage.stockProductData!= "[]") {
+					sessionStorage.removeItem('stockProductData');
+				}
+				
+				if(sessionStorage.newData || sessionStorage.newData!= "[]") {
+					sessionStorage.removeItem('newData');
+				}
+			 	
+			 	
+				
+//				var yuanbenoldData = oldData;
+
+					
+				sessionStorage.stockProductData = JSON.stringify(oldData);
+				
+				sessionStorage.stockId = warehouse;
+				
+				sessionStorage.stockareagoodsshelvesId =goodsshelves;
+				
+				sessionStorage.stockareaId = stockarea;
+					
+				
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">库存列表</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/public/stock/choicesStockPublicList.html',
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						
+				
+					},
+		
+					end: function(){  
+               		if(sessionStorage.newData) {
+						if(sessionStorage.newData.length>0 && sessionStorage.newData!= "[]"){
+
+						var chanpin_datas = JSON.parse(sessionStorage.newData);
+						change = true;
+						oldData = [];
+						for(var j = 0; j < chanpin_datas.length; j++) {
+							
+							var flag = false;
+							var currIndex = 0;
+							for(var i=0;i<oldData.length;i++){
+								if((chanpin_datas[j].goodsshelves_id == oldData[i].goodsshelves_id)&&(chanpin_datas[j].produceid == oldData[i].produceid)&& (chanpin_datas[j].producecode == oldData[i].producecode) && (chanpin_datas[j].producesubbarcode == oldData[i].producesubbarcode) && (chanpin_datas[j].iots == oldData[i].iots)&& (new Date(chanpin_datas[j].indate) == new Date(oldData[i].indate))){
+								
+									if(chanpin_datas[j].productiondate == oldData[i].productiondate){
+											flag = true;
+											currIndex = i;
+											break;
+									}
+								
+								}
+							}
+							
+							if(flag){
+								var currentProductCount = Number(oldData[currIndex].producecount) + Number(chanpin_datas[j].outcount);
+								oldData[currIndex].producecount = currentProductCount;
+								oldData[currIndex].referpricetotal = (oldData[currIndex].referprice * currentProductCount).toFixed(2);
+								
+							}else{
+								if(typeof(chanpin_datas[j].referprice)=="undefined"  ){
+									chanpin_datas[j].referprice = "0.00";
+									chanpin_datas[j].referpricetotal = "0.00";
+								}	
+								
+								chanpin_datas[j].referpricetotal = eval(chanpin_datas[j].referprice * chanpin_datas[j].outcount).toFixed(2);
+								chanpin_datas[j].producecount  = chanpin_datas[j].outcount;
+						
+								oldData.push(chanpin_datas[j]);
+						
+							}
+							
+							
+					
+						}	
+						
+						//去重
+						oldData=uniqueArrayZX(oldData,6)
+						
+						operationDetail(oldData);
+						
+						
+						everyFun();
+	
+						sessionStorage.removeItem('newData');		
+						} else {
+							layer.closeAll();
+						}
+					}
+           		
+           		    
+           		    	if(sessionStorage.stockProductData || sessionStorage.stockProductData!= "[]") {
+								sessionStorage.removeItem('stockProductData');
+							}
+					
+					}
+				});
+			
+			})
+			//计算总价
+			function everyFun(){
+				var totalprice=0;
+				var totalCount =0;
+				var totalnotaxCost =0;
+
+			
+				for(var i=0;i<oldData.length;i++){
+					var currentprice =oldData[i].referpricetotal;
+					var currentCount = oldData[i].producecount;
+					var notaxCost = oldData[i].referprice;
+
+					//判断是整数
+					var zs = /^[0-9]+$/ ;
+					var re = /^[0-9]+.?[0-9]*$/;
+					if (!re.test(currentCount) || isNaN(currentCount) || !zs.test(currentCount)) {
+						currentCount=1;	
+					}
+					if( currentprice != ""&& currentprice !=0 &&  currentprice != undefined){
+						totalprice= totalprice  + Number(currentprice);
+					}
+					
+					if( currentCount != ""&& currentCount !=0 && currentCount != undefined){
+						totalCount= totalCount  + Number(currentCount);
+					}
+					
+					if( notaxCost != ""&& notaxCost !=0){
+						totalnotaxCost= totalnotaxCost  + Number(notaxCost);
+					}
+				
+					
+				}
+				
+				$(".fixStyle #totalrealCostId").text(totalnotaxCost.toFixed(2));
+
+				
+				$(".fixStyle #totalCountId").text(totalCount)
+	
+				$(".fixStyle #totalCostId").text(totalprice.toFixed(2))
+				
+			}
+			var check;
+			var mark=0;
+			function sendDate(){
+	
+				var slave=[];
+				
+				
+				for(var i=0;i<oldData.length;i++){
+					//产品id  produceid
+					var produceid= oldData[i].produceid;
+					//产品数量 producecount
+					var producecount= oldData[i].producecount;
+					
+					if(producecount == '') {
+						parent.layer.close(jiazaiIndex);
+						parent.layer.open({
+							title: "提示",
+							content: '数量不能为空！！！'
+						});
+						return false;
+					}
+					//批号 iots
+					var iots=oldData[i].iots;
+					//有效期 indate
+					var indate=oldData[i].indate;
+					//生产日期 productiondate
+					var productiondate=oldData[i].productiondate;
+					//是否合格 qs 0不合格，1合格
+//					var hege=$(".addConsume tbody tr:eq("+i+") [data-field=qs]").text();
+//					if(hege == '不合格') {
+//						qs = 0;
+//					} else {
+//						qs = 1;
+//					}
+					qs = oldData[i].qs;
+					//包装 package
+					var package=oldData[i].package;
+					//存储条件 storagecondition
+					var storagecondition=oldData[i].storagecondition;
+					//副条码 producesubbarcode
+					var producesubbarcode=oldData[i].producesubbarcode;
+					//成本价 realcost（传0）
+//					var realcost=oldData[i].realcost;
+					
+					var referprice = oldData[i].referprice;
+					var goodsshelves_id = oldData[i].goodsshelves_id;
+						
+					slave.push({
+						"produceid": '' + produceid + '',
+						"producecount": '' + producecount + '',
+						"iots": '' + iots + '',
+						"indate": '' + indate + '',
+						"productiondate": '' + productiondate + '',
+						"qs": '' + qs + '',
+						"package": '' + package + '',
+						"storagecondition": '' + storagecondition + '',
+						"producesubbarcode": '' + producesubbarcode + '',
+						'realcost': '' + referprice + '',
+						'goodsshelves_id': '' + goodsshelves_id + ''
+					});
+				}
+				
+				var warehouse = $("#warehouse").val() ? $("#warehouse").val() : $(".warehouse").attr('data-id')
+				if (warehouse === undefined || warehouse == ""){
+					parent.layer.close(jiazaiIndex);
+					parent.layer.open({
+						title: "提示",
+						content: '请选择备货仓库!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					return;
+				}
+				var stockarea = $('#duiyingstockareaId').val() ? $('#duiyingstockareaId').val() : $('.stockarea').attr('data-id');
+				if (stockarea === undefined || stockarea == ""){
+					parent.layer.close(jiazaiIndex);
+					parent.layer.open({
+						title: "提示",
+						content: '请选备货货区!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					return;
+				}
+				var goodsshelves_id=$('#duiyinggoodsshelvesId').val() ? $('#duiyinggoodsshelvesId').val() : $('.goodsshelves').attr('data-id');
+				var mynum = $(".mynum").val();
+				
+				if(panduan<0){
+					var lastnum=ZXorderNum1;
+					var ordernum = '';
+				}else{
+					var lastnum = $('.SQorderNum').val();
+					var ordernum = $(".ZXorderNum").val();
+				}
+				
+				var Masterdoctor = $('.doctor').val();
+				var EstimateDate = $('.surgeryDate').val();
+				var surgeryName = $('.surgeryName').val();
+				var directdate = $('#addConsumeDate').val();
+				var company = $(".unit").attr('data-id');
+				var agent = $(".salesman").attr('data-id');
+
+				var operatorSID = $(".maker").attr('data-id');
+				var nomo = $('.notes').val();
+				var operationdate = $('#operationdate').val();
+				var master = {
+					'lastnum':lastnum,
+					'mynum': '' + mynum + '',
+					'ordernum': ordernum,
+					'Masterdoctor': Masterdoctor,
+					'EstimateDate': EstimateDate,
+					'directdate': directdate,
+					'companyID': company,
+					'targetStockID': warehouse,
+					'agent': agent,
+					'operatorSID': operatorSID,
+					'nomo': nomo,
+					'operationdate': operationdate,
+					'stockarea': '' + stockarea + '',
+//					'goodsshelves_id': goodsshelves_id
+				};
+			
+				if(slave.length == 0) {
+					parent.layer.close(jiazaiIndex);
+					parent.layer.open({
+						title: "提示",
+						content: '请添加产品信息'
+					});
+					return false;
+				} else {
+					
+					var jiazaiIndex;
+					parent.layer.open({
+					  type: 3, 
+					  zIndex: parent.layer.zIndex, //重点1
+					  success: function(layero, index){
+					  		jiazaiIndex = index;
+			  			}
+					});
+					
+					
+					$.ajax({
+						type: "POST",
+						url: localStorage.serIp+"/WebOperateDirectSellingTable",
+						async: true,
+						dataType: 'json',
+						crossDomain: true,
+						contentType:'application/json; charset=utf-8',
+						data:JSON.stringify({
+							"userId": localStorage.userId,
+							"userPw": localStorage.userPw,
+							'database': localStorage.database,
+							'groupCompanyId': localStorage.groupcompanyid,
+							'master': JSON.stringify(master),
+							'slave': JSON.stringify(slave),
+							'check': check,
+							'mark': mark
+						}),
+						success: function(res) {
+							parent.layer.close(jiazaiIndex);
+							change=false;
+							sessionStorage.removeItem('operation_data');
+							var data = JSON.parse(res);
+							switch(data.SaveState.state)
+							{
+							case 0:
+							
+								if(data.CheckState.state == 0) {
+												
+									parent.layer.open({
+										title: "提示",
+										content: "保存失败!",
+										zIndex: layer.zIndex ,//重点1,
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										
+										}
+									});
+									
+									return
+								}
+								
+					
+								
+								if(data.CheckState.state == 3) {
+									if(sessionStorage.shengheErrorData) {
+										if(sessionStorage.shengheErrorData.length>0 && sessionStorage.shengheErrorData!= "[]"){
+											sessionStorage.removeItem("shengheErrorData")
+										}
+									}
+									sessionStorage.shengheErrorData = data.CheckState.result;
+									parent.layer.open({
+										type: 2 
+											,
+										title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">信息</span>',
+										area: ['60%', '65%'],
+					
+										content: 'views/public/shengheerror.html',	
+										zIndex: layer.zIndex //重点1
+											,
+										success: function(layero,index) {
+											parent.layer.setTop(layero); //重点2
+											var body = layer.getChildFrame('body', 'index');
+											paentIfarame = layero.find("iframe")[0].contentWindow.document;
+														
+										}
+									});
+									return;
+								} 
+								
+								
+								return;
+								break;
+							case 1:								
+								if(data.CheckState.state == 0) {  //保存
+									saveStatus = true;
+									change=false;
+									parent.layer.open({
+										title: "提示",
+										content: '保存成功',
+										zIndex: layer.zIndex //重点1
+										,
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+									mainData();
+									return;
+								} 
+								
+								if(data.CheckState.state == 1) {
+									parent.layer.open({
+										title: "提示",
+										content: '审核成功',
+										zIndex: layer.zIndex //重点1
+										,
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+									var  qk = $(".kit-tab ul.layui-tab-title li[class=layui-this]", parent.document).attr("lay-id");
+									parent.tab.tabAdd({
+										icon: '',
+										id: 'ZXSSBH'+data.SaveState.result,
+										title:data.SaveState.result + '直销手术备货详情',
+										url: 'views/salesManagement/operation/addOperation.html'
+									});
+									
+									 parent.layui.element.tabDelete("kitTab",qk);	
+									return;
+								} 
+								
+//								if(data.CheckState.state == 0) {
+//									parent.layer.open({
+//										title: "提示",
+//										content: '保存失败',
+//										zIndex: layer.zIndex //重点1
+//										,
+//										success: function(layero) {
+//											parent.layer.setTop(layero); //重点2
+//										}
+//									});
+//									return;
+//								} 
+						
+							break;
+							case 9:
+								if(sessionStorage.shouyingzizhiData) {
+									if(sessionStorage.shouyingzizhiData.length>0 && sessionStorage.shouyingzizhiData!= "[]"){
+										sessionStorage.removeItem("shouyingzizhiData")
+									}
+								}
+								sessionStorage.shouyingzizhiData = data.SaveState.result;
+								parent.layer.open({
+									type: 2 
+										,
+									title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">首营资质</span>',
+									area: ['60%', '65%'],
+				
+									content: 'views/public/shouYingZiZhi.html',	
+				
+									zIndex: layer.zIndex //重点1
+										,
+									success: function(layero,index) {
+										parent.layer.setTop(layero); //重点2
+										var body = layer.getChildFrame('body', 'index');
+										paentIfarame = layero.find("iframe")[0].contentWindow.document;
+										$(".save", paentIfarame).click(function() {
+											mark=1;
+											sendDate()
+											parent.layer.close(index); //再执行关闭     
+										})
+										
+									}
+								});
+						  	break;
+						  	
+						  	 case 10: //判断是否能断帐
+			  					
+					  			parent.layer.open({
+									title: "提示",
+									content: data.SaveState.result,
+									zIndex: parent.layer.zIndex //重点1
+									
+								});
+							  break;
+							}
+						}
+								
+					,error: function(res) {
+						
+						parent.layer.close(jiazaiIndex);
+						
+						parent.layer.open({
+							title: "提示",
+							content: '服务器异常!',
+								zIndex: parent.layer.zIndex //重点1
+				
+						});
+
+					}
+					});
+				}
+			}
+			table.on('edit(demo)', function(obj) {
+			change=true;
+			
+			var value = obj.value //得到修改后的值
+					,
+					data = obj.data //得到所在行所有键值
+					,
+					field = obj.field; //得到字段
+					
+				
+							   
+		   if(field == "producecount"){  //小计
+		   		var getvalue=value;
+			    //判断是整数
+				var zs = /^[0-9]+$/ ;
+				var re = /^[0-9]+.?[0-9]*$/;
+				if (!re.test(value) || isNaN(value) || !zs.test(value)) {
+					layer.tips('输入非法!',this);
+					getvalue=1;	
+				}
+		        if (getvalue <=0 ){
+		    		 getvalue= "1";
+				}
+				if (Number(getvalue) > Number(data.usefulcount)){
+		         	layer.tips('不能大于可用数量!',this);
+		    		getvalue= data.usefulcount;
+				}
+				
+				
+	    		$(this).val(getvalue);	
+	    	  	var index = data.LAY_TABLE_INDEX;
+	    	  	var totalcost = (getvalue * data.referprice).toFixed(2);
+
+				$(".layui-table-fixed .layui-table-body table tbody [data-index="+index+"] [data-field=referpricetotal] div").html(totalcost);
+				
+					oldData[index].referprice = data.referprice;
+					oldData[index].referpricetotal = totalcost;
+					oldData[index].producecount = getvalue;
+						
+						
+//				for (var i=0;i< oldData.length;i++) {
+//					if((oldData[i].produceid == data.produceid) &&(oldData[i].producesubbarcode == data.producesubbarcode) && (oldData[i].iots == data.iots) && (oldData[i].productiondate ==data.productiondate)  && (oldData[i].indate == data.indate)){
+//						oldData[i].referprice = data.referprice;
+//						oldData[i].referpricetotal = totalcost;
+//						oldData[i].producecount = getvalue;
+//					}
+//			
+//				}
+		         	everyFun();
+			
+				
+		   }
+
+			})
+			$(".preserve").click(function() {
+				if(!checkPermissionStatus("标准流程-手术备货-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+				}
+						
+				check = 0;
+				sendDate()
+			})
+			$(".examine").click(function() {
+				
+				if(!checkPermissionStatus("标准流程-手术备货-审核1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+				}
+				if(change || !saveStatus) {
+					parent.layer.open({
+						title: "提示",
+						content: '请先保存!!!'
+					});
+					return false;
+				}
+				check = 1;
+				sendDate()
+			});
+			
+			
+			
+		var cleckFlag = false;	
+		 $("body").delegate(".warehouse","click",function(){
+				
+			if(oldData.length == 0){
+					cleckFlag = true;
+					return;
+				}
+				
+				parent.layer.confirm('更改备货仓库将删除列表中已选择的产品！', {
+						icon: 3,
+						title: '提示'
+				}, function(index) {
+				
+					oldData = [];
+					operationDetail(oldData);
+					cleckFlag = true;
+
+					parent.layer.close(index);	
+
+					return;
+				},
+				 function(index) {
+				 			 $(".cs_result_area").css("display","none");
+					 	cleckFlag = false;	 			 
+					 			
+					parent.layer.close(index);
+			
+				
+
+					return;
+				}
+				);
+	
+				
+			})
+			  $("body").delegate(".stockarea","click",function(){
+				
+				if(oldData.length == 0){
+					cleckFlag = true;
+					return;
+				}
+				
+				parent.layer.confirm('更改备货货区将删除列表中已选择的产品！', {
+						icon: 3,
+						title: '提示'
+				}, function(index) {
+				
+					oldData = [];
+					operationDetail(oldData);
+					cleckFlag = true;
+
+					parent.layer.close(index);	
+
+					return;
+				},
+				 function(index) {
+				  $(".cs_result_area").css("display","none");
+				 cleckFlag = false;	 			 
+					 			
+					 			
+					parent.layer.close(index);
+			
+				
+
+					return;
+				}
+				);
+	
+				
+			})
+//		$("body").delegate(".goodsshelves","click",function(){
+//				
+//					if(oldData.length == 0){
+//											cleckFlag = true;
+//
+//					return;
+//				}
+//				
+//				parent.layer.confirm('更改备货货架将删除列表中已选择的产品！', {
+//						icon: 3,
+//						title: '提示'
+//				}, function(index) {
+//				
+//					oldData = [];
+//					operationDetail(oldData);
+//									cleckFlag = true;
+//
+//
+//					parent.layer.close(index);	
+//
+//					return;
+//				},
+//				 function(index) {
+//				 		  $(".cs_result_area").css("display","none");
+//				 cleckFlag = false;	 	
+//					parent.layer.close(index);
+//			
+//				
+//
+//					return;
+//				}
+//				);
+//	
+//				
+//			})
+		
+		//扫码出库
+			$(".scanCodeOut").click(function() {
+				if(!checkPermissionStatus("标准流程-手术备货-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+				}
+						
+						
+				var warehouse = $('#warehouse').val() ? $('#warehouse').val() : $('.warehouse').attr('data-id');
+				if (warehouse === undefined || warehouse == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请选择备货仓库!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					return;
+				}
+		
+				var stockarea = $('#duiyingstockareaId').val() ? $('#duiyingstockareaId').val() : $('.stockarea').attr('data-id');
+				if (stockarea === undefined || stockarea == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请选择备货货区!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					return;
+				}
+				
+				
+				var goodsshelves = $('#duiyinggoodsshelvesId').val() ? $('#duiyinggoodsshelvesId').val() : $('.goodsshelves').attr('data-id');
+				goodsshelves=goodsshelves==undefined?"":goodsshelves;
+				
+				sessionStorage.scanCodeOutStockId = warehouse;
+			
+				sessionStorage.scanCodeOutstockareaId = stockarea;
+					
+				sessionStorage.scanCodeOutgoodsshelvesId = goodsshelves;
+				
+				
+				parent.layer.open({
+					
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">扫码出库</span>',
+					area: ['700px', '90%'],
+					offset: "rb",
+					content: 'views/public/scanCode/scanCodeOut.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+						sessionStorage.scanCodeOutStockId = warehouse;
+					},
+							
+					end: function(){ 
+						if(sessionStorage.scanCodeOutStockId){
+							sessionStorage.removeItem("scanCodeOutStockId")
+						}
+						
+						if(sessionStorage.scanCodeOutstockareaId){
+							sessionStorage.removeItem("scanCodeOutstockareaId")
+						}
+						if(sessionStorage.scanCodeOutgoodsshelvesId){
+							sessionStorage.removeItem("scanCodeOutgoodsshelvesId")
+						}
+				
+					}
+				});
+				
+				
+			});
+		var eventFlag;
+			$(function(){
+				
+		scanCodeOutStore =function scanCodeRetrunData(data){
+					    eventFlag = true;
+					var index =0;
+					if(oldData.length == 0){
+							index= 0;
+							data[0].referpricetotal = 1 * data[0].referprice;
+
+							oldData.push(data[0]);
+					}else{
+						var flag = false;
+						
+						for(var i=0;i< oldData.length;i++){
+							
+//							if((oldData[i].produceid == data[0].produceid) && (oldData[i].producesubbarcode == data[0].producesubbarcode)){
+							if((oldData[i].goodsshelves_id == data[0].goodsshelves_id) && (oldData[i].produceid == data[0].produceid) && (oldData[i].producecode == data[0].producecode) && (oldData[i].producesubbarcode == data[0].producesubbarcode) && (oldData[i].iots == data[0].iots)  && (oldData[i].indate == data[0].indate)&& (oldData[i].productiondate == data[0].productiondate)){
+
+								 index = i;
+								 flag = true;
+								break;
+							}
+						
+						}
+						
+						if(flag){
+							
+						
+								var count  = eval(oldData[index].producecount) +1;
+								
+								oldData[index].referpricetotal = (count * oldData[index].referprice).toFixed(2);
+
+								oldData[index].producecount = count;
+								
+						
+						
+							
+						}else{
+							
+							data[0].referpricetotal = (1 * data[0].referprice).toFixed(2);
+	
+							oldData.push(data[0]);
+							
+							index = Number(oldData.length) - 1;
+						}
+					
+					}
+					
+					change = true;
+						
+					operationDetail(oldData)
+					$(".layui-table-view .layui-table-box .layui-table-body tbody tr:eq("+index+")").css("border","1px solid red");
+
+					everyFun();
+				
+				
+		}
+		
+		})
+			
+		
+		
+		$(".zuTaochuku").click(function(){
+			
+					if(!checkPermissionStatus("标准流程-手术备货-保存1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+				}
+					
+					
+				var warehouse = $("#warehouse").val() ? $("#warehouse").val() : $(".warehouse").attr('data-id')
+				if (warehouse === undefined || warehouse == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请选择备货仓库!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return;
+				}
+				var stockarea = $('#duiyingstockareaId').val() ? $('#duiyingstockareaId').val() : $('.stockarea').attr('data-id');
+				if (stockarea === undefined || stockarea == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请选择备货货区!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return;
+				}
+				
+	
+				var goodsshelves_id=$("#duiyinggoodsshelvesId").val() ? $('#duiyinggoodsshelvesId').val() : $('.goodsshelves').attr('data-id');
+
+			
+				sessionStorage.warehouse = warehouse;
+				sessionStorage.stockarea = stockarea;
+				sessionStorage.goodsshelves_id = goodsshelves_id;
+			
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: "产品组套",
+					area: ['85%', "90%"],
+					offset: "rb",
+					content: 'views/salesManagement/operation/operationZuTao.html',
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero, index) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+				
+			
+	
+					}
+					,
+					end:function(){
+						
+						var chanpin_datas = JSON.parse(sessionStorage.productZuTaoData);
+						var chayiData = JSON.parse(sessionStorage.shengheErrorData);
+						 if(chayiData.length >0){
+						 	
+						
+						 		
+					 			parent.layer.open({
+									type: 2 
+										,
+									title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">信息</span>',
+									area: ['60%', '65%'],
+				
+									content: 'views/public/shengheerror.html',	
+									zIndex: layer.zIndex //重点1
+										,
+									success: function(layero,index) {
+										parent.layer.setTop(layero); //重点2
+										var body = layer.getChildFrame('body', 'index');
+										paentIfarame = layero.find("iframe")[0].contentWindow.document;
+													
+									},
+									end:function(){
+									
+										if(sessionStorage.shengheErrorData) {
+											sessionStorage.removeItem('shengheErrorData');
+										}
+									}
+								});
+						 }
+						
+						
+						change = true
+						for(var j = 0; j < chanpin_datas.length; j++) {
+							var flag = false;
+							var currIndex = 0;
+							for(var i=0;i<oldData.length;i++){
+								if((chanpin_datas[j].goodsshelves_id == oldData[i].goodsshelves_id)&&(chanpin_datas[j].produceid == oldData[i].produceid)&& (chanpin_datas[j].producecode == oldData[i].producecode) && (chanpin_datas[j].producesubbarcode == oldData[i].producesubbarcode) && (chanpin_datas[j].iots == oldData[i].iots)&& (chanpin_datas[j].productiondate == oldData[i].productiondate)&& (chanpin_datas[j].indate== oldData[i].indate)){
+									flag = true;
+									currIndex = i;
+									break;
+								}
+							}
+							
+							if(flag){
+//								var currentProductCount = Number(oldData[currIndex].producecount) + Number(chanpin_datas[j].realstockcount);
+								var currentProductCount =  Number(chanpin_datas[j].realstockcount);
+
+								oldData[currIndex].producecount = currentProductCount;
+								oldData[currIndex].referpricetotal = (oldData[currIndex].referprice * currentProductCount).toFixed(2);
+								
+							}else{
+								if(typeof(chanpin_datas[j].referprice)=="undefined"  ){
+									chanpin_datas[j].referprice = "0.00";
+									chanpin_datas[j].referpricetotal = "0.00";
+								}	
+								
+								chanpin_datas[j].referpricetotal = eval(chanpin_datas[j].referprice * chanpin_datas[j].realstockcount).toFixed(2);
+//								chanpin_datas[j].producecount  = chanpin_datas[j].realstockcount;
+						
+								oldData.push(chanpin_datas[j]);
+						
+							}
+						}	
+				
+						operationDetail(oldData);
+						everyFun();
+							
+						if(sessionStorage.warehouse){
+							sessionStorage.removeItem("warehouse");
+						}
+						if(sessionStorage.stockarea){
+							sessionStorage.removeItem("stockarea");
+						}
+							
+						if(sessionStorage.goodsshelves_id){
+							sessionStorage.removeItem("goodsshelves_id");
+						}
+							
+						if(sessionStorage.productZuTaoData) {
+							sessionStorage.removeItem('productZuTaoData');
+						}
+
+						
+						
+					}
+				});
+		})
+			
+			
+		//一键出库
+		$(".chuku").click(function(){
+			
+				if(!checkPermissionStatus("标准流程-手术备货-保存1")){
+				
+					parent.layer.open({
+						title: "提示",
+						content: localStorage.jurisdictionTips,
+						zIndex: parent.layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+					return
+					
+			}
+					
+					
+			var warehouse = $("#warehouse").val() ? $("#warehouse").val() : $(".warehouse").attr('data-id')
+			if (warehouse === undefined || warehouse == ""){
+				parent.layer.open({
+					title: "提示",
+					content: '请选择备货仓库!',
+					zIndex: layer.zIndex //重点1
+					,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					}
+				});
+				return;
+			}
+			var stockarea = $('#duiyingstockareaId').val() ? $('#duiyingstockareaId').val() : $('.stockarea').attr('data-id');
+			if (stockarea === undefined || stockarea == ""){
+				parent.layer.open({
+					title: "提示",
+					content: '请选择备货货区!',
+					zIndex: layer.zIndex //重点1
+					,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					}
+				});
+				return;
+			}
+			
+
+			var goodsshelves_id=$("#duiyinggoodsshelvesId").val() ? $('#duiyinggoodsshelvesId').val() : $('.goodsshelves').attr('data-id');
+			if (goodsshelves_id === undefined || goodsshelves_id == ""){
+				parent.layer.open({
+					title: "提示",
+					content: '请选择备货货架!',
+					zIndex: layer.zIndex //重点1
+					,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					}
+				});
+				return;
+			}
+			
+					var jiazaiIndex;
+					parent.layer.open({
+					  type: 3, 
+					  zIndex: parent.layer.zIndex, //重点1
+					  success: function(layero, index){
+					  		jiazaiIndex = index;
+			  			}
+					});
+			
+
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp+"/WebGetStockTableProduceInOrders?jsoncallback=?",
+				dataType: 'jsonp',
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'database': localStorage.database,
+					'brand':'',
+					"property":'',
+					'series': '',
+					'num':1000000,
+					'page':1,
+					'targetstockId':warehouse,
+					'goodsshelves_id':goodsshelves_id,
+					'stockarea': stockarea,
+					'groupCompanyId': localStorage.groupcompanyid,
+					"showType":0,
+					"infoType" :0,
+					'txtCondition': ''
+				},
+				success: function(res) {
+																parent.layer.close(jiazaiIndex);
+
+					var desData = JSON.parse(res);
+					change = true
+					var chanpin_datas = JSON.parse(desData.data);
+					for(var j = 0; j < chanpin_datas.length; j++) {
+						var flag = false;
+						var currIndex = 0;
+						for(var i=0;i<oldData.length;i++){
+							if((chanpin_datas[j].goodsshelves_id == oldData[i].goodsshelves_id)&&  (chanpin_datas[j].produceid == oldData[i].produceid)&& (chanpin_datas[j].producecode == oldData[i].producecode) && (chanpin_datas[j].producesubbarcode == oldData[i].producesubbarcode) && (chanpin_datas[j].iots == oldData[i].iots)&& (chanpin_datas[j].productiondate == oldData[i].productiondate)&& (chanpin_datas[j].indate == oldData[i].indate)){
+								flag = true;
+								currIndex = i;
+								break;
+							}
+						}
+						
+						if(flag){
+//							var currentProductCount = Number(oldData[currIndex].producecount) + Number(chanpin_datas[j].realstockcount);
+							var currentProductCount = Number(chanpin_datas[j].realstockcount);
+
+							oldData[currIndex].producecount = currentProductCount;
+							oldData[currIndex].referpricetotal = oldData[currIndex].referprice * currentProductCount;
+							
+						}else{
+							if(typeof(chanpin_datas[j].referprice)=="undefined"  ){
+								chanpin_datas[j].referprice = "0.00";
+								chanpin_datas[j].referpricetotal = "0.00";
+							}	
+							
+							chanpin_datas[j].referpricetotal = eval(chanpin_datas[j].referprice * chanpin_datas[j].realstockcount).toFixed(2);
+							chanpin_datas[j].producecount  = chanpin_datas[j].realstockcount;
+					
+							oldData.push(chanpin_datas[j]);
+					
+						}
+					}	
+					//去重
+//					oldData=uniqueArrayZX(chanpin_datas,6)
+					operationDetail(oldData);
+					everyFun();
+				}
+				,
+				error: function(res) {
+					parent.layer.close(jiazaiIndex);
+					
+					parent.layer.open({
+						title: "提示",
+						content: '服务器异常!',
+							zIndex: parent.layer.zIndex //重点1
+			
+					});
+				
+				
+				}
+			})
+		})
+		
+		
+		});
+	</script>
+
+	<script>
+		
+		function scanCodeOutStoreData(data){
+
+			scanCodeOutStore(data)
+	
+		}
+	</script>
+</html>

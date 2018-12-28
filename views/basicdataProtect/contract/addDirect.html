@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加报价单</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+						<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+	</head>
+	<style type="text/css">
+		#adddirect {
+			/*width: calc(100vw+17px);*/
+			font-size: 9pt;
+		}
+		
+		#adddirect legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		#adddirect label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		#adddirect input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		#adddirect select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+			/*border: 1px solid #DDDDDD !important;*/
+		}
+		
+		#adddirect textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+			/*border: 1px solid #ddd !important;*/
+		}
+		
+		#adddirect .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 5px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 1px;
+		}
+		
+		#adddirect button {
+			margin-left: 8px;
+			text-align: center;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		#adddirect {
+			margin-bottom: 120px;
+		}
+		
+			div.cs_result_area div.pagination li {
+		    text-align: center;
+		    display: inline-block;
+		    margin: 0 15px !important;
+		}
+	</style>
+
+	<body>
+		<div id="adddirect">
+			<div class="layui-form-item layui-form-title">
+				<button class="layui-btn adddirect_submit">提交</button>
+			</div>
+			
+				<div class="layui-form-item" style="margin-top: 60px;">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;height: 36px;">*</b>往来单位：</label>
+				<div>
+					<input autocomplete="off" required="required" class="layui-input companyId" id="companyId" type="text"  style="width: 260px;height: 26px;line-height: 26px;">
+
+				</div>
+			</div>
+			
+			
+			<div class="layui-form-item" >
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>合同编号：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input contract_num" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>合同名称：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required"  class="layui-input contract_name" type="text">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>合同开始时间：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input contract_begin_time" type="text">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">合同结束时间：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input contract_end_time" type="text">
+
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">账　　期：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input contract_backmonth" type="number" style="display: inline-block;">个月
+
+				</div>
+			</div>
+			
+				<p style="margin-left: 75px;height: 24px;">
+					<input type="checkbox" class="login" style="width: 12px !important;height: 12px !important" > 是否长期
+				</p>
+				
+		
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>业务类型：</label>
+				<div class="layui-input-block">
+					<!--<input autocomplete="off" required="required" class="layui-input adddirect_name" type="text">-->
+					<select class="layui-input contract_business_type">
+						<!--<option value="0">专项合同</option>-->
+						<option value="1">框架合同</option>
+				
+					</select>
+				</div>
+			</div>
+			<!--<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>归属部门：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input adddirect_bili" type="text">
+
+				</div>
+			</div>-->
+			
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>责任人：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input contract_directorId" id="contract_directorId" type="text" style="width: 260px;height: 26px;line-height: 26px;">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">备　　注：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input contract_nomo" type="text">
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'laydate', 'laypage','layer'], function() {
+			var $ = layui.$, //重点处
+			layer = layui.layer;
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: '.contract_begin_time',
+				value: new Date()
+			});
+			laydate.render({
+				elem: '.contract_end_time',
+			});
+			
+			
+			
+			$(".companyId").change(function(){
+				if($(".companyId").val()== ""){
+					$("#companyId").val("");
+				}
+			})
+			
+			
+		$(".contract_num").blur(function(){
+			var contract_num=$(".contract_num").val();
+
+
+			if(contract_num == ""){
+				return;
+			}
+			var companyId = $('#companyId').val();
+		
+			if(companyId == ""){
+				parent.layer.open({
+					title: "提示",
+					content: '请先选择往来单位！',zIndex: parent.layer.zIndex //重点1
+				});
+				$(".contract_num").val("");  
+				return;
+			}
+			
+
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp+"/WebCheckContractNumIsRepeat?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					'groupCompanyId': localStorage.groupcompanyid,
+					'contractNum':contract_num,
+					'companyId' : companyId
+				},
+				success: function(res) {
+					var data = JSON.parse(res);
+					if(data.ResultValue == 1) {
+						layer.tips('合同编号已存在!',".contract_num", {tips:3});
+
+						$(".contract_num").val("");  
+					} 
+				}
+				
+				
+			});
+		})
+				
+				
+			
+			$(".adddirect_submit").click(function() {
+				
+				
+			
+				var contract_num = $('.contract_num').val();//合同编号
+				if(contract_num == "") {
+						parent.layer.open({
+							title: "提示",
+							content: '合同编号不能为空！',
+							zIndex: parent.layer.zIndex,//重点1
+							
+						});
+						
+						return
+					} 
+				
+				
+				
+				var contract_name = $('.contract_name').val();//合同名称
+				if(contract_name == "") {
+					parent.layer.open({
+						title: "提示",
+						content: '合同名称不能为空！',
+						zIndex: parent.layer.zIndex,//重点1
+						
+					});
+					
+					return
+				} 
+				
+				
+				var contract_begin_time = $('.contract_begin_time').val();
+					if(contract_begin_time == "") {
+					parent.layer.open({
+						title: "提示",
+						content: '合同开始时间不能为空！',
+						zIndex: parent.layer.zIndex,//重点1
+						
+					});
+					
+					return
+				} 
+				
+				var contract_end_time = $('.contract_end_time').val();
+				var contract_nomo = $('.contract_nomo').val();
+				var contract_companyid = $('#companyId').val();
+				if(contract_companyid == "") {
+					parent.layer.open({
+						title: "提示",
+						content: '往来单位不能为空！',
+						zIndex: parent.layer.zIndex,//重点1
+						
+					});
+					
+					return
+				} 
+				
+				
+				var contract_g_companyid = localStorage.groupcompanyid;
+				
+				var contract_business_type = $('.contract_business_type').val();
+				var contract_director=$('#contract_directorId').val();
+				if(contract_director == "") {
+					parent.layer.open({
+						title: "提示",
+						content: '责任人不能为空！',
+						zIndex: parent.layer.zIndex,//重点1
+						
+					});
+					
+					return
+				} 
+				
+				
+				var certificates_islong;
+				if($(".login").is(":checked")){
+					 certificates_islong=1;
+					 contract_end_time = null;
+				}else{
+					 certificates_islong=0
+					 
+					if(contract_end_time == "") {
+						parent.layer.open({
+							title: "提示",
+							content: '合同结束时间不能为空！',
+							zIndex: parent.layer.zIndex,//重点1
+							
+						});
+					
+						return
+					} 
+					 
+				}
+			
+				var contract_backmonth = $(".contract_backmonth").val();
+				if(contract_backmonth == "" || contract_backmonth == null) {
+					parent.layer.open({
+						title: "提示",
+						content: '账期不能为空！',
+						zIndex: parent.layer.zIndex,//重点1
+						
+					});
+					
+					return
+				} 
+				var master = {
+					'contract_type': 2,
+					'contract_num': contract_num,
+					'contract_name': contract_name,
+					'contract_begin_time': contract_begin_time,
+					'contract_end_time': contract_end_time,
+					'contract_nomo': contract_nomo,
+					'contract_companyid': contract_companyid,
+					'contract_g_companyid': contract_g_companyid,
+					'contract_business_type': contract_business_type,
+					'contract_director': contract_director,
+					'contract_islong':certificates_islong,
+					'contract_backmonth' : contract_backmonth
+				};
+				var jiazaiIndex;
+				parent.layer.open({
+				  type: 3, 
+				  zIndex: parent.layer.zIndex, //重点1
+				  success: function(layero, index){
+				  		jiazaiIndex = index;
+						}
+				});
+				$.ajax({
+					type: "POST",
+					url: localStorage.serIp+"/WebAddContractInfo",
+					async: true,
+					dataType: 'json',
+					crossDomain: true,
+					contentType:'application/json; charset=utf-8',
+					data:JSON.stringify({
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'master': JSON.stringify(master),
+						'groupcompanyid':localStorage.groupcompanyid
+					}),
+					success: function(res) {
+						parent.layer.close(jiazaiIndex);
+						var data = JSON.parse(res);
+						if(data.ResultValue == 1) {
+							parent.layer.open({
+								title: "提示",
+								zIndex: parent.layer.zIndex ,//重点1
+								content: '提交成功！！！',
+								end: function(){  
+									var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+									parent.layer.close(index); //再执行关闭     
+								}
+							});
+						}
+						
+					  if(data.ResultValue == 2) {
+							parent.layer.open({
+								title: "提示",
+								zIndex: parent.layer.zIndex ,//重点1
+								content: '合同编号已存在！'
+							});
+						}
+					  
+					  if(data.ResultValue == 0) {
+							parent.layer.open({
+								title: "提示",
+								zIndex: parent.layer.zIndex ,//重点1
+								content: '服务器提出一个异常！'
+							});
+						}
+					}
+				});
+			})
+			//选择往来单位
+			 function getunit(){
+			 	
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetCompanyByDropList?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid,
+						"type" : -1
+				
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						
+						$('#companyId').bComboSelect({
+							showField: 'companyname',
+							keyField: 'id',
+							data: desData
+						});
+						
+						
+					}
+				});
+				
+			};
+			
+			getunit();
+			
+			
+		 function getcontract_directo(){
+			 	
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetEmployeeDropDownList?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid
+				
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						
+						$('#contract_directorId').bComboSelect({
+							showField: 'employeename',
+							keyField: 'employeesid',
+							data: desData
+						});
+						
+						
+					}
+				});
+				
+			};
+			
+			getcontract_directo();
+
+		});
+	</script>
+	
+</html>
+<script src="../../../js/jquery.js" type="text/javascript"></script>
+<script type="text/javascript" src="../../../js/comboselect.js"></script>
+<script type="text/javascript" src="../../../js/b.comboselect.js"></script>

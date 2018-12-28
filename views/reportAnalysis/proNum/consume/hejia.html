@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>待办列表</title>
+		<link rel="stylesheet" href="../../../../plugins/layui/css/layui.css">
+	</head>
+
+	<body>
+		<div class="waitList">
+
+			<table id="houselist" lay-filter="demo"></table>
+		</div>
+
+	</body>
+	<!--<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>-->
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			function receiptData() {
+				$.ajax({
+					type: "get",
+					url: "http://192.168.0.196:11525/ByuWCFService/WebGetOutSettlementDtInfoAndRealUseInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': sessionStorage.cpph_bkjs
+					},
+					success: function(res) {
+						console.log(sessionStorage.zxbhOrder)
+						var orderData = JSON.parse(res);
+						console.log(orderData.NewDataSet[0].table1)
+						datail(orderData.NewDataSet[0].table1);
+					}
+				});
+
+			}
+			receiptData()
+			function datail(data) {
+				//展示已知数据
+				table.render({
+					elem: '#houselist',
+					data: data,
+					cols: [
+						[ //标题栏
+							{
+								field: "index",
+								title: ' ',
+								width: 40,
+								align: "center",
+								//							sort: true
+							}, {
+								purchasebox: true,
+								LAY_purchaseED: false,
+								align: "center",
+								width: 40,
+							}, {
+								field: 'bidnum',
+								title: '中标编号',
+								minWidth: 100,
+							},
+							{
+								field: 'name',
+								title: '报价名称',
+								minWidth: 100,
+							}, {
+								field: 'produceunit',
+								title: '规格',
+								minWidth: 100
+							}, {
+								field: 'medicarenum',
+								title: '医保编号',
+								minWidth: 100
+							}, {
+								field: 'medicareprice',
+								title: '医保单价',
+								minWidth: 100
+							}, {
+								field: 'medicareprice',
+								title: '医保合计',
+								minWidth: 100,
+							}, {
+								field: 'bidprice',
+								title: '收费单价',
+								minWidth: 100,
+							}, {
+								field: 'producecount',
+								title: '数量',
+								minWidth: 100,
+							}, {
+								field: 'totalprice',
+								title: '合计',
+								minWidth: 100,
+							}
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-382",
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [10, 20, 30, 40, 50],
+					limit: 5 //每页默认显示的数量
+				});
+			}
+		});
+	</script>
+
+</html>

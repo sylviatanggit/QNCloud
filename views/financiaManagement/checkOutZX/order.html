@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>已完成列表</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+	</head>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	<style type="text/css">
+		.completeList {
+			margin: 0 20px;
+		}
+		
+		.inputs {
+			margin-bottom: 8px;
+		}
+		
+		.find,
+		.import,.daoru {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.import {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+		}
+		
+		.layui-form-label {
+			padding: 0;
+		}
+		
+		label {
+			margin-left: 14px;
+		}
+		
+		.action {
+			right: 41px;
+		}
+		
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 5px !important;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+			z-index: 5;
+		}
+	</style>
+
+	<body>
+		<div class="completeList">
+			<div class="inputs">
+				<div class="layui-inline">
+					<div class="layui-input-inline" style="margin-top: 18px;">
+						<input data-id='' class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 14px;width: 240px;">
+					</div>
+				</div>
+				<div class="layui-inline" style="margin-top: 18px;">
+					<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+				</div>
+				<div class="layui-inline" style="margin-top: 18px;">
+					<button class="layui-btn import" data-type="getImport">确认导入</button>
+				</div>
+			</div>
+			<table id="completelist" lay-filter="demo"></table>
+			<div class="inputs">
+				<div class="layui-inline" style="margin-top: 18px;float: right;">
+					<button class="layui-btn daoru" style="margin-left: 5px;" data-type="getImport">选择</button>
+				</div>
+			</div>
+			<div style="clear: both;"></div>
+			<table id="addPurchase" lay-filter="demo"></table>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'laydate', 'laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			var laypage = layui.laypage;
+			var unit, agentId, beginTime, endTime, orderNum, state;
+			var limit = 50;
+			var curpage = 1;
+			var count;
+			var lasttype;
+			var off = true;
+			completeData();
+			function completeData() {
+				if(sessionStorage.hejiaDH){
+					hejiaDH=sessionStorage.hejiaDH;
+				}else{
+					hejiaDH='';
+				}
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp  +"/WebGetOutSettlementInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'orderNum': orderNum,
+						'agentId': '',
+						'companyId': sessionStorage.companyid,
+						'beginTime': '',
+						'endTime': '',
+						'database': localStorage.database,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'checkState': -1,
+						'lastType': 91,
+						'ordernum':hejiaDH
+					},
+					success: function(res) {
+						var initData = JSON.parse(res);
+						var data = JSON.parse(initData.data);
+						if(data.length == 0){
+							return;
+						}
+						completeDataCong(data[0].ordernum);
+						lasttype=data[0].lasttype;
+						count = initData.count;
+//						complete(data, limit);
+						$("[data-field=typeof] div:gt(0)").each(function(i) {
+							if(data[i].typeof == -1) {
+								$(this).html("换货入库");
+							} else if(data[i].typeof == 0) {
+								$(this).html("订货入库");
+							} else if(data[i].typeof == 1) {
+								$(this).html("无订单入库");
+							} else if(data[i].typeof == 2) {
+								$(this).html("借货入库");
+							} else if(data[i].typeof == 3) {
+								$(this).html("退货入库");
+							} else if(data[i].typeof == 4) {
+								$(this).html("赠送入库");
+							} else if(data[i].typeof == 5) {
+								$(this).html("报溢");
+							} else if(data[i].typeof == 6) {
+								$(this).html("初始化入库");
+							}
+						});
+						$(".layui-table-body [data-field=checkstate] div").each(function(i) {
+							if($(this).text() == 0) {
+								$(this).html("未审核");
+							} else {
+								$(this).html("已审核");
+							}
+						});
+						$(".layui-table-body [data-field=states] div").each(function(i) {
+							if($(this).html() == 1) {
+								$(this).html("待验收");
+							} else if($(this).html() == 2) {
+								$(this).html("待核价");
+							} else if($(this).html() == 3) {
+								$(this).html("待财务结算");
+							} else {
+								$(this).html("完成");
+							}
+						});
+						$(".layui-table-body [data-field=lasttype] div").each(function(i) {
+							if($(this).html() == 0) {
+								$(this).html("订货入库");
+							} else if($(this).html() == 1) {
+								$(this).html("无订单入库");
+							} else if($(this).html() == 2) {
+								$(this).html("退货入库");
+							}
+						});
+						$("[data-field=checkdate] div:gt(0)").each(function(i) {
+							$(this).html($(this).text().slice(0, 10))
+						});
+						$("[data-field=actiondate] div:gt(0)").each(function(i) {
+							$(this).html($(this).text().slice(0, 10))
+						});
+						if(off) {
+							off = false;
+							complete_pages();
+						}
+					}
+				});
+			}
+
+			function complete(data, limit) {
+				table.render({
+					elem: '#completelist',
+					data: data,
+					id: 'idTest',
+					cols: [
+						[ //标题栏
+							{
+								field: 'ordernum',
+								title: '入库核价单号',
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+								minWidth: 150,
+							},
+							{
+								field: 'states',
+								title: '操作状态',
+								minWidth: 100,
+							},
+							{
+								field: 'lasttype',
+								title: '单据类型',
+								minWidth: 100
+							},
+							{
+								field: 'companyname',
+								title: '往来单位',
+								minWidth: 100
+							}, {
+								field: 'totalprice',
+								title: '总金额',
+								minWidth: 100,
+							}, {
+								field: 'nomoney',
+								title: '待付',
+								minWidth: 100,
+							}, {
+								field: 'noinvoce',
+								title: '欠票',
+								minWidth: 100,
+							}, {
+								field: 'coupon',
+								title: '优惠',
+								minWidth: 100,
+							}, {
+								field: 'discount',
+								title: '折扣',
+								minWidth: 100,
+							}, {
+								field: 'agentname',
+								title: '业务员',
+								minWidth: 100,
+							}, {
+								field: 'insettdate',
+								title: '核价日期',
+								minWidth: 100,
+							}, {
+								field: 'operatorsidname',
+								title: '制单人',
+								minWidth: 100,
+							}, {
+								field: 'actiondate',
+								title: '制单日期',
+								minWidth: 100,
+							}, {
+								field: 'checkername',
+								title: '审核人',
+								minWidth: 100,
+							}, {
+								field: 'checkdate',
+								title: '审核日期',
+								minWidth: 100,
+							}, {
+								field: 'checkstate',
+								title: '单据状态',
+								minWidth: 100,
+							}, {
+								field: 'lastnum',
+								title: '关联单号',
+								minWidth: 100,
+							}, {
+								field: 'mynum',
+								title: '自定义单号',
+								minWidth: 100,
+							}, {
+								field: 'nomo',
+								title: '备注',
+								minWidth: 100,
+							}
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-500",
+					even: true,
+					limit: limit //每页默认显示的数量
+				});
+			}
+			//分页
+			function complete_pages() {
+				laypage.render({
+					elem: 'completelist', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						completeData(orderNum);
+					}
+				})
+			}
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				var order = data.ordernum;
+				lasttype=data.lasttype
+				completeDataCong(order)
+			});
+			function completeDataCong(ordernum) {
+				$.ajax({
+					type: "POST",
+					url: localStorage.serIp +"/WebGetDirOutSettlementSlaveTableByOrderNum",
+					async: true,
+					dataType: 'json',
+					crossDomain: true,
+					contentType:'application/json; charset=utf-8',
+					data:JSON.stringify({
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'ordernum':ordernum
+					}),
+					success: function(res) {
+						var initData = JSON.parse(res);
+						detail(initData)
+						$("[data-field=typeof] div:gt(0)").each(function(i) {
+							if(data[i].typeof == -1) {
+								$(this).html("换货入库");
+							} else if(data[i].typeof == 0) {
+								$(this).html("订货入库");
+							} else if(data[i].typeof == 1) {
+								$(this).html("无订单入库");
+							} else if(data[i].typeof == 2) {
+								$(this).html("借货入库");
+							} else if(data[i].typeof == 3) {
+								$(this).html("退货入库");
+							} else if(data[i].typeof == 4) {
+								$(this).html("赠送入库");
+							} else if(data[i].typeof == 5) {
+								$(this).html("报溢");
+							} else if(data[i].typeof == 6) {
+								$(this).html("初始化入库");
+							}
+						});
+						$(".layui-table-body [data-field=checkstate] div").each(function(i) {
+							if($(this).text() == 0) {
+								$(this).html("未审核");
+							} else {
+								$(this).html("已审核");
+							}
+						});
+						$(".layui-table-body [data-field=states] div").each(function(i) {
+							if($(this).html() == 1) {
+								$(this).html("待验收");
+							} else if($(this).html() == 2) {
+								$(this).html("待核价");
+							} else if($(this).html() == 3) {
+								$(this).html("待财务结算");
+							} else {
+								$(this).html("完成");
+							}
+						});
+						$(".layui-table-body [data-field=lasttype] div").each(function(i) {
+							if($(this).html() == 0) {
+								$(this).html("订货入库");
+							} else if($(this).html() == 1) {
+								$(this).html("无订单入库");
+							} else if($(this).html() == 2) {
+								$(this).html("退货入库");
+							}
+						});
+						$("[data-field=checkdate] div:gt(0)").each(function(i) {
+							$(this).html($(this).text().slice(0, 10))
+						});
+						$("[data-field=actiondate] div:gt(0)").each(function(i) {
+							$(this).html($(this).text().slice(0, 10))
+						});
+					}
+				});
+			}
+			var put_cong=[];
+			var active = {
+				getImport: function() { //获取选中数据
+					var checkStatus = table.checkStatus('addPurchase'),
+						data = checkStatus.data;
+						for(var j=0;j<data.length;j++){
+							data[j]['lasttype']=lasttype;
+							initData1=data[j]
+							put_cong.push(initData1)
+						}
+					if(data.length == 0){
+						parent.layer.open({
+							title: "提示",
+							content: '请选择一条数据'
+						});
+						return;
+					}else{
+						parent.layer.open({
+							title: "提示",
+							content: '选择成功'
+						});
+					}
+//					sessionStorage.pur_nodata = JSON.stringify(data);
+//					parent.layer.open({
+//						title: "提示",
+//						content: '导入成功',
+//						end: function(){  
+//          				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+//							parent.layer.close(index); //再执行关闭     
+//        			  	}  
+//					});
+				}
+			};
+			$(".daoru").click(function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			})
+			$(".import").click(function() {
+				if(put_cong.length == 0){
+					parent.layer.open({
+						title: "提示",
+						content: '请选择一条数据'
+					});
+					return;
+				}else{
+					sessionStorage.put_cong=JSON.stringify(put_cong);
+					parent.layer.open({
+						title: "提示",
+						content: '导入成功',
+						end: function(){  
+	        				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+							parent.layer.close(index); //再执行关闭     
+	      			  	}
+					});
+				}
+			})
+			function detail(data) {
+				//展示已知数据
+				table.render({
+					elem: '#addPurchase',
+					data: data,
+					height: "full-620",
+					cols: [
+						[ //标题栏
+							{
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							},
+							{
+								field: 'producenum',
+								title: '编号',
+								minWidth: 100,
+							},
+							{
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 170,
+							}, {
+								field: 'manufacturer',
+								title: '品牌',
+								minWidth: 80
+							},
+							{
+								field: 'danwei',
+								title: '规格',
+								minWidth: 80
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 80
+							},{
+								field: 'produceunit',
+								title: '单位',
+								minWidth: 100
+							}, {
+								field: 'producecount',
+								title: '数量',
+								edit: 'text',
+								minWidth: 100
+							},
+							 {
+								field: 'unitprice',
+								title: '含税单价',
+								edit: 'text',
+								minWidth: 80
+							}, 
+							{
+								field: 'untax',
+								title: '不含税价',
+								minWidth: 80
+							},  {
+								field: 'totalprice',
+								title: '小计',
+								minWidth: 80
+							}, 
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: false //是否显示分页
+						,
+					limits: [10, 20, 30, 40, 50],
+					limit: 10 //每页默认显示的数量
+				});
+				if(data != null && data.length != 0){
+					for(var i=0;i<data.length;i++){
+						$(".addPurchase tbody tr:eq("+i+")").attr('produceid',data[i].produceid);
+						$(".addPurchase tbody tr:eq("+i+")").attr('id_',data[i].id);
+						var shuilv=(data[0].taxpre * 100 - 100)/100;
+						shuilv=shuilv.toFixed(2)
+						$(".addPurchase tbody tr:eq("+i+") td:eq(13) div").text(shuilv);
+						shuilv=JSON.stringify(shuilv);
+						$(".tax").find("option[value="+shuilv+"]").attr("selected",true)
+					}
+				}
+			}
+		});
+	</script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+
+</html>

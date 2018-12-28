@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>备库或备货详情</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	</head>
+	<style type="text/css">
+		.addPayment {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.layui-input-block,
+		.layui-input-block input,
+		.layui-input-block label,
+		.layui-input-block select {
+			line-height: 28px !important;
+			height: 28px !important;
+			min-height: 28px !important;
+		}
+		
+		.layui-form-label {
+			line-height: 28px !important;
+		}
+		
+		.layui-input-block input,
+		.layui-input-block select {
+			width: 150px;
+		}
+		
+		.find,
+		.btns button {
+			cursor: pointer;
+			border: none;
+			width: 90px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+	</style>
+
+	<body>
+		<div class="addPayment">
+			<div class="layui-tab">
+				
+				<table id="addPayment" lay-filter="demo"></table>
+			</div>
+		</div>
+		
+		<input  type="hidden" value="" class="orderNumInfo"/>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			
+			
+			function receiptData(receiptOrdernum) {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp + "/WebGetOutsettlementMasterTableByOrderNum?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': receiptOrdernum
+					},
+					success: function(res) {
+						var orderData = JSON.parse(res);
+						detail(orderData);
+						
+						$(".layui-table-body .layui-table [data-field=patientsex] div").each(function(i) {
+							if(orderData[i].patientsex == 0) {
+								$(this).html("男");
+							} else{
+								$(this).html("女");
+							}
+						});
+					}
+				});
+
+			}
+			
+			var receiptOrdernum =  $(".orderNumInfo").val() != "" ? $(".orderNumInfo").val()  : sessionStorage.receiptOrdernum
+			$(".orderNumInfo").val(receiptOrdernum);
+			receiptData(receiptOrdernum);
+			
+			
+			//展示已知数据
+			function detail(data) {
+				table.render({
+					elem: '#addPayment',
+					data: data,
+					height: "full-50",
+					cols: [
+						[ //标题栏
+						
+							{
+								field: 'masterdoctorname',
+								title: '主刀医生',
+								minWidth: 100,
+							}, {
+								field: 'surgery',
+								title: '手术名称',
+								minWidth: 100
+							},
+							{
+								field: 'surgerydate',
+								title: '手术时间',
+								minWidth: 100
+							}, {
+								field: 'assistantonename',
+								title: '助手1姓名',
+								minWidth: 100
+							}, {
+								field: 'patienname',
+								title: '患者姓名',
+								minWidth: 100
+							}, {
+								field: 'patientage',
+								title: '患者年龄',
+								minWidth: 100
+							},
+							{
+								field: 'patientsex',
+								title: '患者性别',
+								minWidth: 100
+							},
+							{
+								field: 'patienthospitalnum',
+								title: '住院号',
+								minWidth: 100
+							},
+							{
+								field: 'patientbednum',
+								title: '床号',
+								minWidth: 100
+							},
+							{
+								field: 'agentname',
+								title: '业务员',
+								minWidth: 100
+							},
+							{
+								field: 'followname',
+								title: '跟台人员',
+								minWidth: 100
+							},
+							{
+								field: 'lastnum',
+								title: '关联单号',
+								minWidth: 100
+							}
+							,
+							{
+								field: 'nomo',
+								title: '备注',
+								minWidth: 100
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [100,200],
+					limit: 100 //每页默认显示的数量
+				});
+			}
+
+		});
+	</script>
+
+</html>

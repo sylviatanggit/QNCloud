@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>关联产品</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		* {
+			font-family: "PingFang" !important;
+			font-size: 9pt !important;
+		}
+		
+		#guanlian {
+			margin-left: 30px;
+			margin-bottom: 120px;
+			overflow-y: hidden;
+		}
+		
+		.guanlianxinzheng .guanlianTable {
+			margin-top: 12px;
+		}
+		
+		.guanlianxinzheng #guanlianSeach {
+			height: 28px !important;
+			line-height: 28px !important;
+			width: 200px;
+		}
+		
+		.guanlianxinzheng .guanlianTable .layui-btn {
+			width: 76px !important;
+			line-height: 28px !important;
+			height: 28px !important;
+			background-color: #2D89DD !important;
+		}
+		
+		#guanlian .layui-table-cell {
+			padding: 0 10px !important;
+		}
+		.layui-table td, .layui-table th{
+			height: auto !important;
+			line-height: 50px !important;
+		}
+		.layui-table-cell{
+			height: auto !important;
+		}
+		.layui-table-fixed .layui-table-body{
+			display: none;
+		}
+		.layui-table-fixed-r{
+			display: none;
+		}
+	</style>
+
+	<body id="guanlian">
+		<div class="layui-tab-item layui-show">
+			<div class="guanlianxinzheng">
+				<div class="guanlianTable">
+					<div class="layui-inline">
+						<input class="layui-input" name="id" id="guanlianSeach" autocomplete="off" placeholder="请输入产品">
+					</div>
+					<button class="layui-btn guanlianSeachBtn" data-type="reload">搜索</button>
+				</div>
+			</div>
+			<table id="guanlian_content" lay-filter="demo5" lay-data="{id:'guanlian_content'}"></table>
+			<script type="text/html" id="barDemo5">
+				<a class="layui-btn layui-btn-mini" lay-event="edit5" style="background-color: white !important;color: #357BEA !important;">关联</a>
+			</script>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'layer', 'table', 'laypage'], function() {
+			var table2 = layui.table;
+			var $ = layui.$ //重点处
+			layer = layui.layer;
+			var laypage = layui.laypage;
+
+			table2.on('tool(demo5)', function(obj) {
+				var data = obj.data;
+				var layEvent = obj.event; //获得 lay-event 对应的值
+				var tr = obj.tr; //获得当前行 tr 的DOM对象
+				if(obj.event === 'edit5') {
+					//					layer.alert('编辑行：<br>' + JSON.stringify(data))
+					//					var registrationId = data.registrationId;
+					//					var registrationdate = data.registrationId;
+					var relatedRegistrationId = data.registrationId;
+					var relatedregistrationdate = data.registrationdate;
+					var flag = 0;
+					if($(this).html() == "取消关联") {
+						flag = 1;
+						guanlian_ajax(flag);
+					} else {
+						flag = 0;
+						$(this).html() == "关联"
+					}
+
+					//					function guanlian_show() {
+					if(flag == 0) {
+						$(this).html("关联");
+						guanlian_ajax(flag)
+					} else if(flag == 1) {
+						guanlian_ajax(flag)
+						$(this).html("取消关联");
+					}
+					//					}
+					//					guanlian_show();
+					function guanlian_ajax(flag) {
+						layer.confirm('确定关联？', {
+							icon: 3,
+							title: '关联'
+						}, function(index) {
+							$.ajax({
+								type: "post",
+								url: "http://www.gudaiwang.com/QingNangServer/AllProductManagerAPI",
+								async: true,
+								data: {
+									"method": 12,
+									"flag": flag,
+									"registrationId": sessionStorage.getItem("chanpin_registrationId"),
+									"registrationdate": sessionStorage.getItem("chanpin_registrationdate"),
+									"relatedRegistrationId": relatedRegistrationId,
+									"relatedregistrationdate": relatedregistrationdate
+								},
+								success: function(data) {
+									var datas = JSON.parse(data);
+									//								console.log(datas.result)
+
+									if(datas.result == 0) {
+										//									alert("关联成功");
+										layui.use(['jquery', 'layer'], function() {
+											var $ = layui.$ //重点处
+												,
+												layer = layui.layer;
+											parent.layer.open({
+												content: "关联成功"
+											});
+
+										})
+										flag = 1;
+										//									guanlian_show();
+										window.parent.location.reload();
+										var index = parent.layer.getFrameIndex(window.name);
+										parent.layer.close(index);
+										return flag;
+
+									} else if(datas.result == 1) {
+										layui.use(['jquery', 'layer'], function() {
+											var $ = layui.$ //重点处
+												,
+												layer = layui.layer;
+											parent.layer.open({
+												content: '关联失败'
+											});
+										});
+										flag = 0;
+										//									guanlian_show();
+										return flag;
+									} else {
+										layui.use(['jquery', 'layer'], function() {
+											var $ = layui.$ //重点处
+												,
+												layer = layui.layer;
+											parent.layer.open({
+												content: '老证大于新证无法关联'
+											});
+										})
+										flag = 0;
+										//									guanlian_show();
+										return flag;
+									}
+									//								window.location.reload();
+								}
+							});
+							layer.close(index);
+						});
+
+					}
+
+				}
+			});
+			//展示已知数据
+			function guanlian_data(data, limit) {
+				table2.render({
+					elem: '#guanlian_content',
+					data: data,
+					height: "full-70",
+					id: 'gl',
+					cols: [
+						[ //标题栏
+							{
+								field: "biaohao",
+								title: '序号',
+								width: 60,
+								align: "center",
+								sort: true
+							},
+							{
+								field: 'productName',
+								title: '产品名称/注册证',
+								width: 300
+							}, {
+								field: 'manuName',
+								title: '生产厂家',
+								width: 180
+							}, {
+								fixed: 'right',
+								title: '操作',
+								width: 80,
+								align: 'center',
+								toolbar: '#barDemo5'
+							}
+						]
+					],
+					skin: 'row', //表格风格
+					id: "guanlian",
+					even: true,
+					page: true,
+					limit: 50,
+					limits: [50, 200, 500] //每页默认显示的数量
+				});
+			}
+			var limit = 50;
+			var curpage = 1;
+			var count;
+			var off = true;
+			var guanlianSeach = $("#guanlianSeach").val();
+
+			function guanlian(guanlianSeach) {
+				$.ajax({
+					type: "post",
+					url: "http://www.gudaiwang.com/QingNangServer/AllProductManagerAPI",
+					async: true,
+					data: {
+						"method": 11,
+						"manuId": '',
+						"content": guanlianSeach,
+						"registrationId": sessionStorage.getItem("chanpin_registrationId"),
+						"showNum": 50,
+						"currentPage": curpage
+					},
+					success: function(data) {
+						//										console.log(data)
+						var datas = JSON.parse(data);
+						guanlian_data(datas.data);
+
+						$("#guanlian [data-field=productName] div:gt(0)").each(function(i) {
+							$(this).html(datas.data[i].productName + "<br />" + datas.data[i].registrationnum + "<br />" + datas.data[i].registrationdate + "至" + datas.data[i].failuredate);
+						});
+						if(off) {
+							off = false;
+							guanlian_pages();
+						}
+					}
+				});
+			}
+			guanlian(guanlianSeach);
+			$(".guanlianSeachBtn").click(function() {
+				off = true;
+				var guanlianSeach = $("#guanlianSeach").val();
+				guanlian(guanlianSeach);
+			})
+
+			function guanlian_pages() {
+				var guanlianSeach = $("#guanlianSeach").val();
+				laypage.render({
+					elem: 'index_3_content_chanpin', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 200, 500],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						//						console.log(obj);
+						curpage = obj.curr;
+						limit = obj.limit;
+						guanlian(guanlianSeach);
+					}
+				})
+			}
+
+		});
+	</script>
+
+</html>

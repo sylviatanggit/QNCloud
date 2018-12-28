@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>进销存汇总</title>
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+	<!-- DevExtreme themes -->
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+	<link rel="stylesheet" href="../../../css/qk/dev_tab_public.css">
+	</head>
+		<body>
+		<div class="dev_public_content">
+			<div class="layui-tab">
+					<div class="find_conditions">
+					<div style="width: 100%;height: auto;">	
+					<div class="layui-inline" id="fengongsiId" style="margin-right: 15px;">
+							<label class="layui-form-label" style="margin-left: 0px;">所属公司</label>
+							<div class="layui-input-inline">
+								<select name="" class="layui-input companytypeid" style="width: 200px;">
+									<option value="-1">全部</option>
+								</select>
+							</div>
+					</div>
+					
+					
+						<div class="layui-inline" style="margin-right: 15px;width: 310px;">
+							<label class="layui-form-label" style="margin-right: 10px;padding-left: 0px;">对应仓库</label>
+							<div id="duiywarehouseId" style="height: 26px">
+								<input value="" data-id="" autocomplete="off" id="warehouseId" class="layui-input warehouse" type="text" style="width: 250px !important;height: 26px !important;line-height: 26px !important;padding-left: 0px !important;">
+							</div>
+						</div>
+					
+						<!--<div class="layui-inline" style="margin-right: 15px;width: 308px;">
+							<label class="layui-form-label" style="margin-right: 10px;">往来单位</label>
+							<div id="append_group">
+								<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" class="layui-input unit" type="text" id="unit" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+			
+						</div>
+						<div class="layui-inline" style="margin-right: 15px;width: 296px;">
+							<label class="layui-form-label" style="margin-right: 10px;">业务员</label>
+							<div id="append_sale">
+								<input autocomplete="off" class="layui-input salesman" id="salesman" type="text" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+						</div>-->
+						
+						<div class="layui-inline" style="margin-right: 15px;">
+							<label class="layui-form-label">日期范围</label>
+							<div class="layui-input-inline">
+								<input autosettlement="off" id="settlementdate1" class="layui-input" type="text">
+							</div>
+				
+						</div>
+						
+						<!--<div class="layui-inline">
+							<label class="layui-form-label" style="margin-left: 0px !important;">开票状态</label>
+							<div class="layui-input-inline">
+								<select name="" class="isinvoice layui-input">
+									<option value="0">未开票</option>
+									<option value="1">已开票</option>
+								</select>
+							</div>
+						</div>-->
+					
+						<div class="layui-inline" style="margin-top: 10px;margin-left: 0px;">
+							<div class="layui-input-inline">
+								<input autosettlement="off" placeholder="品牌、产品名称" class="layui-input seachContent" type="text" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						<div class="layui-inline" style="margin-top: 10px;">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						<div class="btns" style="margin-top: 10px;position: relative;">
+							<button class="layui-btn moreAction">更多操作</button>
+							<ul class="action" style="right: 0px;">
+							
+									<li>
+									<a class="allExport" data-type="allExport">导出全部明细</a>
+								</li>
+								
+							</ul>
+						</div>
+					</div>
+
+				</div>
+						
+				<div class="my-container">
+						<div id="gridContainer"></div>
+
+				</div>
+		  </div>
+		  
+		  		<div id="footerPageId" style="position: relative;height: 35px;"></div>
+
+       </div>   
+	</body>
+
+	
+	<!-- layui插件 -->
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+
+	<!-- 本页面功能 -->
+	<script src="./js/showInvoicingSummary.js"></script>
+	<script src="../../../js/public.js"></script>
+  
+
+</html>

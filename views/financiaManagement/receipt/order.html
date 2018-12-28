@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>收款单调单</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+	</head>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	<style type="text/css">
+		.inputs {
+			margin-bottom: 8px;
+		}
+		
+		.find,
+		.import {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.import {
+			position: fixed;
+			top: 18px;
+			right: 20px;
+			padding: 0px !important;
+		}
+		
+		.layui-form-label {
+			padding: 0;
+		}
+		
+		label {
+			margin-left: 14px;
+		}
+		
+		.action {
+			right: 41px;
+		}
+		
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 5px !important;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+			z-index: 5;
+		}
+		
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 5px !important;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+			z-index: 5;
+		}
+		
+		input{
+			font-size: 9pt!important;
+		}
+	</style>
+
+	<body>
+		<div class="completeList">
+			<div class="inputs">
+				<div class="layui-inline" style="margin-top: 18px;">
+					<div class="layui-input-inline">
+						<input data-id='' class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 14px;width: 240px;font-size: 9pt;">
+					</div>
+				</div>
+				<div class="layui-inline" style="margin-top: 18px;">
+					<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+				</div>
+				<div class="layui-inline" style="margin-top: 18px;">
+					<button class="layui-btn import" data-type="getImport">确认选择</button>
+				</div>
+			</div>
+			<table id="completelist" lay-filter="demo"></table>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			var laypage = layui.laypage;
+			
+			
+
+			var limit = 100000;
+			var curpage = 1;
+			var count;
+	
+
+			function completeData(jumpFlag) {
+				
+				var orderNum = $(".seachContent").val();
+				var unit = $(".seachContent").attr('data-id') != "" ? $(".seachContent").attr('data-id')  : sessionStorage.receiptUnit
+
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetOutSettlementInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'companyId' : unit,
+						'orderNum': orderNum,
+						'agentId': "",
+						'beginTime': "",
+						'endTime': "",
+						'database': localStorage.database,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'checkState': 1,
+						'lastType': 7
+					},
+					success: function(res) {
+						
+						var initData = JSON.parse(res);
+						var data = JSON.parse(initData.data);
+			
+			
+						count = initData.count;
+						complete(data, limit);
+						$(".layui-table-body [data-field=lasttype] div").each(function(i) {
+								switch(data[i].lasttype) 
+								{		
+								case 0:   
+									$(this).html("直销备货");
+			
+								 break;
+								case 1:   
+									$(this).html("无订单出库");
+								 break;	
+								case 2:   
+									$(this).html("借货出库");
+								 break;	
+								case 3:   
+									$(this).html("退货出库");
+			
+								 break;	
+								 	case 4:   
+									$(this).html("赠送出库");
+			
+								 break;	
+								 	case 5:   
+									$(this).html("分销订单出库");
+			
+								 break;	
+								 	 	case 6:   
+									$(this).html("直销备库");
+			
+								 break;	
+								 
+								}
+						});
+						
+				
+						
+						
+						$(".layui-table-body [data-field=checkstate] div").each(function(i) {
+							if($(this).text() == 0) {
+								$(this).html("未审核");
+							} else {
+								$(this).html("已审核");
+							}
+						});
+			
+			
+				
+
+						$("[data-field=checkdate] div:gt(0)").each(function(i) {
+							$(this).html($(this).text().substring(0,10))
+						});
+						$("[data-field=actiondate] div:gt(0)").each(function(i) {
+							$(this).html($(this).text().substring(0,10))
+						});
+						
+//						if(jumpFlag) {
+//							complete_pages();
+//						}
+					}
+				});
+			}
+			
+			
+			$(".seachContent").attr('data-id',sessionStorage.receiptUnit);
+			completeData(true);
+			
+			
+			function complete(data, limit) {
+				//展示已知数据
+				table.render({
+					elem: '#completelist',
+					data: data,
+					cols: [
+						[ //标题栏
+							{
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							}, {
+								field: 'ordernum',
+								title: '出库核价单号',
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+								minWidth: 170
+							}, {
+								field: 'statesName',
+								title: '操作状态',
+								minWidth: 100
+							}, {
+								field: 'lasttype',
+								title: '单据类型',
+								minWidth: 100
+							},
+							{
+								field: 'companyname',
+								title: '往来单位',
+								minWidth: 150
+							},
+							{
+								field: 'masterdoctorname',
+								title: '主刀医生',
+								minWidth: 100
+							},
+							{
+								field: 'patienname',
+								title: '患者姓名',
+								minWidth: 100
+							},
+							{
+								field: 'surgerydate',
+								title: '手术日期',
+								minWidth: 100
+							}
+//							, {
+//								field: 'coupon',
+//								title: '优惠',
+//								minWidth: 100
+//							}, {
+//								field: 'discount',
+//								title: '折扣',
+//								minWidth: 100
+//							}
+							, {
+								field: 'agentname',
+								title: '业务员',
+								minWidth: 100
+							}, {
+								field: 'outsettlementdate',
+								title: '核价日期',
+								minWidth: 100
+							},
+							{
+								field: 'agentname',
+								title: '制单人',
+								minWidth: 100
+							}, {
+								field: 'actiondate',
+								title: '制单日期',
+								minWidth: 100
+							},
+							{
+								field: 'checkername',
+								title: '审核人',
+								minWidth: 100
+							}, {
+								field: 'checkdate',
+								title: '审核日期',
+								minWidth: 100
+							},
+							{
+								field: 'checkstate',
+								title: '单据状态',
+								minWidth: 100
+							}, {
+								field: 'lastnum',
+								title: '关联单号',
+								minWidth: 100
+							},
+							{
+								field: 'mynum',
+								title: '自定义单号',
+								minWidth: 100
+							}, {
+								field: 'nomo',
+								title: '备注',
+								minWidth: 100
+							},
+							{
+								field: 'totalprice',
+								title: '总金额',
+								minWidth: 100,fixed: 'right',
+							}, {
+								field: 'nomoney',
+								title: '待收',
+								minWidth: 100,fixed: 'right',
+							}, {
+								field: 'noinvoce',
+								title: '欠票',
+								minWidth: 100,fixed: 'right',
+							}
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-80",
+					even: true,
+					id:"idTest",
+					page:false,
+					limit: limit //每页默认显示的数量
+				});
+				
+				$("[data-field=totalprice]").css("background-color","#d3ecc6");
+				$("[data-field=nomoney]").css("background-color","#d3ecc6");
+				$("[data-field=noinvoce]").css("background-color","#d3ecc6");	
+			}
+			
+			//分页
+			function complete_pages() {
+				laypage.render({
+					elem: 'completelist', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 2,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						completeData(false);
+					}
+				})
+			}
+			
+			$(".find").click(function() {
+
+				completeData();
+			})
+			
+			
+
+			
+			var active = {
+				getImport: function() { //获取选中数据
+					var checkStatus = table.checkStatus('idTest'),
+						data = checkStatus.data;
+						
+					if(sessionStorage.receiptDiaoDanData) {
+						sessionStorage.removeItem('receiptDiaoDanData');
+					}
+				
+					if(data.length >0) {
+						
+						sessionStorage.receiptDiaoDanData = JSON.stringify(data);
+						
+						parent.layer.open({
+							title: "提示",
+							content: '选择成功',
+							zIndex: layer.zIndex, //重点1,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+								var  iframeName = $(".iframeName").val();
+						  
+							},
+						    end: function(){  
+                				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+								parent.layer.close(index); //再执行关闭     
+              			  	}  
+						});
+						
+					} else {
+							parent.layer.open({
+							title: "提示",
+							content: '请选择数据!',
+							zIndex: layer.zIndex //重点1
+						,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+					}				
+
+				}
+			};
+			
+			
+			
+			$(".import").click(function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			})
+	
+		});
+	</script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+
+</html>

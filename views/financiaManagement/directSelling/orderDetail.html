@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>订单入库详情</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.orderDetail {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		label {
+			padding: 0 !important;
+			margin-left: 20px;
+		}
+		
+		.btns button,
+		.find {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+		
+		.layui-table td,
+		.layui-table th {
+			/*padding: 0 1.45vw !important;*/
+		}
+		
+		.orderDetail_header {
+			/*margin-top: -10px;*/
+			margin-bottom: 8px;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="orderDetail">
+			<div class="layui-tab">
+				<div class="orderDetail_header">
+					<div class="inputs">
+
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input autocomplete="off" placeholder="请输入单号" class="layui-input" type="text" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						<!--<div class="btns">
+							<button class="layui-btn orderDetailadd">确认导入</button>
+
+						</div>-->
+					</div>
+
+				</div>
+				<table id="orderDetail" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			laydate.render({
+				elem: '#orderDetaildate1'
+			});
+			laydate.render({
+				elem: '#orderDetaildate2'
+			});
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				
+			});
+			//展示已知数据
+			table.render({
+				elem: '#orderDetail',
+				data: [{
+					"index": "1",
+					"name": "名称",
+					"danwei": "计量单位",
+					"notes": "notes",
+				}],
+				height: "full-90",
+				cols: [
+					[ //标题栏
+						{
+							checkbox: true,
+							LAY_CHECKED: false,
+							align: "center",
+							width: 40,
+						}, 
+						{
+							field: 'name',
+							title: '产品名称',
+							align: "center",
+							width: 100,
+						}, {
+							field: 'tel',
+							title: '品牌',
+							width: 100
+						}, {
+							field: 'tel',
+							title: '规格',
+							width: 100
+						}, {
+							field: 'person',
+							title: '型号',
+							width: 100
+						}, {
+							field: 'notes',
+							title: '编号',
+							width: 100
+						}, {
+							field: 'name',
+							title: '主条码',
+							align: "center",
+							width: 100,
+						}, {
+							field: 'name',
+							title: '副条码',
+							align: "center",
+							width: 100,
+						}, {
+							field: 'name',
+							title: '单位',
+							align: "center",
+							width: 100,
+						},
+						{
+							field: 'name',
+							title: '数量',
+							align: "center",
+							width: 100,
+						}, 
+						{
+							field: 'name',
+							title: '批号',
+							align: "center",
+							width: 100,
+						}, {
+							field: 'name',
+							title: '生产日期',
+							align: "center",
+							width: 100,
+						},
+						{
+							field: 'name',
+							title: '有效期',
+							align: "center",
+							width: 100,
+						},
+						{
+							field: 'name',
+							title: '合格',
+							align: "center",
+							width: 100,
+						}, {
+							field: 'name',
+							title: '包装',
+							align: "center",
+							width: 100,
+						}, {
+							field: 'name',
+							title: '存储条件',
+							align: "center",
+							width: 100,
+						}, 
+						{
+							field: 'name',
+							title: '注册证号',
+							align: "center",
+							width: 100,
+						}, 
+					]
+				],
+				skin: 'row' //表格风格
+					,
+				even: true,
+				page: true //是否显示分页
+					,
+				limits: [10, 20, 30, 40, 50],
+				limit: 10 //每页默认显示的数量
+			});
+
+		});
+	</script>
+
+</html>

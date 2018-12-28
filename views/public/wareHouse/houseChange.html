@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加仓库</title>
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+				<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+
+	</head>
+	<style type="text/css">
+		#addstock {
+			/*width: calc(100vw+17px);*/
+			font-size: 9pt;
+		}
+		
+		#addstock legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		#addstock label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		#addstock input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		#addstock select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+			/*border: 1px solid #DDDDDD !important;*/
+		}
+		
+		#addstock textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+			/*border: 1px solid #ddd !important;*/
+		}
+		
+		#addstock .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 5px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 1px;
+		}
+		
+		#addstock button {
+			margin-left: 8px;
+			text-align: center;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		#addstock {
+			margin-bottom: 120px;
+		}
+		
+		.cleardata{
+			cursor: pointer;
+			margin-top: 5px;
+		}
+		
+		.layui-form-item .layui-input-inline{
+			width: auto !important;
+		}
+	</style>
+
+	<body>
+		<div id="addstock">
+			<div class="layui-form-item layui-form-title">
+				<button class="layui-btn addstock_submit">提交</button>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>仓库信息</legend>
+			</fieldset>
+			
+				
+						<div class="layui-form-item">
+				<label class="layui-form-label" style="margin-left: 0px;"><b style="color: red !important;margin-right: 4px;">*</b>仓库性质：</label>
+				<div class="layui-input-inline">
+					<select name="" class="layui-input nature" disabled="disabled">
+						<option value="0">直管仓库</option>
+						<option value="1">外管仓库</option>
+						<option value="2">周转仓库</option><option value="3">自营仓库</option>
+					</select>
+				</div>
+			</div>
+				
+			<div class="layui-form-item" id="fengongsiId" style="margin-right: 20px;">
+					<label class="layui-form-label" style="margin-left: 0px;">选择公司：</label>
+					<div class="layui-input-inline">
+						<select name="" class="layui-input companytypeid" style="width: 200px;" disabled="disabled">
+							
+						</select>
+					</div>
+			</div>
+			
+		
+						
+						
+						
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>仓库名称：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input addstock_regname" type="text" value="" >
+
+				</div>
+			</div>
+			
+
+	
+			
+		
+					
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label" style="margin-left: 0;"><b style="color: red !important;margin-right: 4px;">*</b>分管领导：</label>
+				<div class="layui-input-inline selectAreaId">
+					<input  autocomplete="off" class="layui-input name" id="staffName" type="text">
+				</div>
+				
+				<!--<div class="layui-input-inline cleardata">
+					X
+				</div>-->
+			
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">备　　注：</label>
+				<div class="layui-input-block">
+					<textarea autocomplete="off" class="layui-input addstock_reginfo" data-id="" type="text" value="" style="height: 100px;"></textarea>
+
+				</div>
+			</div>
+		</div>
+		
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		
+
+			function staffName(companytypeid) {
+		
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp  + "/WebGetEmployeeDropDownList?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					'groupCompanyId': companytypeid
+				},
+				success: function(res) {
+					var data = JSON.parse(res);
+					
+					$('#staffName').bComboSelect({
+						showField: 'employeename',
+						keyField: 'employeesid',
+						data: data
+					});
+				}
+			});
+		}
+			
+			
+			//获取公司信息
+			function getCompanyInfo() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetAllGroupCompany?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid
+
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						var optionsStr = "";
+						for(var i=0;i<desData.length;i++){
+							var id= desData[i].myg_companyid;
+							var name= desData[i].companyname;
+							
+							
+								if(id == sessionStorage.groupcompanyid){
+									optionsStr+= "<option value='"+id+"' selected='selected'>"+name+"</option>";
+	
+								}else{
+									optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+	
+								}
+								
+							
+						
+							
+						}
+						$(".companytypeid").append(optionsStr);
+						
+						if($('.nature option:selected').val() == '3')
+						{
+							$(".companytypeid option[value='0']").css("display","inline-block");
+							
+						}else{
+							
+							$(".companytypeid option[value='0']").css("display","none");
+
+						}
+						
+						staffName($('.companytypeid option:selected').val());
+					}
+				});
+
+			}
+			
+				
+		layui.use(['jquery', 'layer'], function() {
+			var $ = layui.$, //重点处
+			layer = layui.layer;
+			
+			//判断子公司登录
+			if(localStorage.groupcompanyid != "0"){
+				$("#fengongsiId").hide();
+				
+				staffName(localStorage.groupcompanyid);
+			}else{
+					 getCompanyInfo();
+			}
+		
+		
+		
+			$(".companytypeid").change(function(){
+				
+				$(".name").val("");
+				$("#staffName").val("");
+				$("#staffName").attr("data-id","");
+				
+				var str = '<input  autocomplete="off" class="layui-input name" id="staffName"  type="text">';
+				
+				$(".selectAreaId").empty();
+				$(".selectAreaId").append(str);
+				
+				
+				staffName($('.companytypeid option:selected').val());
+				
+			})
+			
+			
+			
+
+		
+					
+			$(".name").change(function(){
+			
+				if($(".name").val() == ""){
+					$("#staffName").val("");
+					$(".name").val("");
+					$("#staffName").attr("data-id","");
+				}
+	
+			})
+			
+			
+			
+			if(localStorage.allowCompanyCount == "0" || localStorage.allowCompanyCount ==0){
+				$(".nature option[value='0']").remove();
+				$(".nature option[value='1']").remove();
+				$(".nature option[value='2']").remove();
+			}
+			
+			
+			$(".nature").change(function(){
+			
+				if($('.nature option:selected').val() == '3')
+				{
+						$(".companytypeid option[value='0']").css("display","inline-block");
+						
+				}else{
+						
+						$(".companytypeid option[value='0']").css("display","none");
+
+				}
+			
+			})	
+			
+			
+		$(".addstock_regname").change(function(){
+			var addstock_regname=$(".addstock_regname").val();
+			
+			if(addstock_regname == ""){
+				return;
+			}
+			
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp+"/WebCheckWarehouseNameIsRepeat?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					'groupCompanyId': localStorage.groupcompanyid,
+					'warehouseName':addstock_regname,
+					'id':sessionStorage.houseId
+				},
+				success: function(res) {
+					var data = JSON.parse(res);
+					if(data.ResultValue == "1") {
+						layer.tips('仓库已存在!',".addstock_regname", {tips:3});
+
+						$(".addstock_regname").val("");  
+					} 
+				}
+				
+				
+			});
+		})
+					
+			
+			
+		
+		
+			
+	
+		});
+	</script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+</html>

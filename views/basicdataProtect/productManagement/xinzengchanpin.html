@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>新增产品</title>
+
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+	</head>
+	<style type="text/css">
+		* {
+			color: #232323;
+			font-family: "PingFang" !important;
+		}
+		
+		.xzcp {
+			padding-top: -20px;
+		}
+		
+		.layui-header {
+			font-family: "PingFang";
+			font-size: 16px;
+			color: #232323 !important;
+			line-height: 60px;
+		}
+		
+		.layui-layout-admin .layui-header {
+			background: none;
+		}
+		
+		.addContent-title {
+			margin-left: 20px;
+		}
+		
+		.addShou,
+		.daoru,
+		.download {
+			height: 50px !important;
+			background-color: #F3F3F3;
+		}
+		
+		.addShou a,
+		.daoru a,
+		.download a {
+			height: 50px !important;
+			line-height: 50px;
+			padding-left: 33px !important;
+		}
+		
+		.addShou a,
+		.daoru a,
+		.download a hover {
+			background-color: none !important;
+		}
+		
+		.layui-nav-tree .layui-this {
+			background-color: #2D89DD !important;
+		}
+		
+		.layui-nav-tree .layui-this a {
+			background-color: white !important;
+		}
+		
+		legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		.form_xzcp label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		.form_xzcp input {
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		.form_xzcp select {
+			width: 400px !important;
+			height: 28px !important;
+			display: block;
+		}
+		
+		#content .layui-form-item b {
+			color: red !important;
+			font-size: 12px !important;
+		}
+		
+		.layui-form-title {
+			/*margin-right: 44px;*/
+			/*margin-top: 10px;*/
+			padding-left: 600px !important;
+		}
+		
+		.form_xzcp .layui-form-title .layui-form-title {
+			margin-top: 5px !important;
+			margin-bottom: -20px !important;
+		}
+		
+		.form_xzcp .layui-form-title button {
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			font-family: "PingFang";
+			font-size: 9pt;
+			color: #FFFFFF !important;
+			background-color: #2D89DD;
+		}
+		
+		.addChangjia {
+			display: inline-block;
+			color: #FFFFFF !important;
+			border-radius: 2px;
+			margin-left: 20px;
+			padding: 0 15px;
+			line-height: 30px;
+			background-color: #007DDB;
+			cursor: pointer;
+		}
+		
+		.daorushunxu {
+			margin-top: 9pt;
+			margin-left: 40px;
+		}
+		
+		.daorushunxu p {
+			font-family: "PingFang";
+			font-weight: bold;
+			font-size: 9pt;
+			color: #2D89DD !important;
+		}
+		
+		#daoruOne div button {
+			margin-top: 20px;
+			width: 140px;
+			height: 28px;
+			line-height: 28px;
+			padding: 0 !important;
+			color: #FFFFFF !important;
+			font-size: 9pt !important;
+		}
+		
+		#daoruTwo {
+			margin-top: 40px;
+		}
+		
+		#daoruTwo ul {
+			margin-top: 20px;
+			color: #232323 !important;
+			font-family: "PingFang" !important;
+			font-size: 9pt;
+		}
+		
+		#daoruTwo ul li {
+			color: #232323 !important;
+			font-family: "PingFang";
+		}
+		
+		#daoruThree {
+			margin-top: 40px;
+			font-family: "PingFang";
+		}
+		
+		#daoruThree div {
+			/*margin-top: 20px;*/
+		}
+		
+		#daoruThree div input {
+			margin-top: 20px;
+			border: none;
+			/*display: block;*/
+			height: 28px;
+			line-height: 28px;
+			font-size: 9pt !important;
+		}
+		
+		#daoruThree div p {
+			font-weight: normal;
+			margin-top: 12px;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		#daoruThree div p.red {
+			color: red !important;
+		}
+		
+		.xzcp .layui-layout-admin .layui-side {
+			top: 0px !important;
+		}
+		
+		.xzcp .addContent {
+			top: 0px !important;
+			overflow-y: auto;
+		}
+		
+		label {
+			font-size: 9pt;
+		}
+		
+		input#comboSelect3 {
+			border: none;
+			border: 1px solid #e6e6e6 !important;
+		}
+		
+		textarea,
+		input {
+			border: 1px solid #e6e6e6;
+		}
+		
+		.form_xzcp_btn {
+			position: fixed;
+			top: 0;
+			background-color: #FFFFFF !important;
+			z-index: 100;
+			padding-top: 5px;
+		}
+		
+		.uploadImg5 {
+			margin-left: 15px;
+			position: relative;
+		}
+		
+		.removeImg5 {
+			cursor: pointer;
+			position: absolute;
+			top: 100px;
+			font-size: 20px !important;
+		}
+		
+		.uploadImg6 {
+			margin-left: 15px;
+			position: relative;
+		}
+		
+		.removeImg6 {
+			cursor: pointer;
+			position: absolute;
+			top: 100px;
+			font-size: 20px !important;
+		}
+		
+		.photoBtn {
+			display: inline-block;
+			color: #FFFFFF !important;
+			border-radius: 2px;
+			margin-left: 20px;
+			padding: 0 15px;
+			line-height: 30px;
+			background-color: #007DDB;
+		}
+		
+		.layui-body {
+			position: absolute !important;
+			;
+			left: 200px !important;
+			;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			z-index: 998;
+			width: auto;
+			overflow: hidden;
+			/* overflow-y: auto; */
+			box-sizing: border-box;
+		}
+		
+		.layui-nav-tree .layui-nav-item a:hover {
+			background-color: #FFFFFF;
+			color: #232323 !important;
+		}
+		
+		.xzcp .layui-nav-tree .layui-nav-bar {
+			background-color: #2D89DD;
+		}
+		
+		.layui-nav-tree .layui-nav-item a {
+			line-height: 50px;
+			color: #232323;
+		}
+		/*关联*/
+		
+		.layui-table td,
+		.layui-table th {
+			height: auto !important;
+			line-height: 50px !important;
+		}
+		
+		.layui-table-cell {
+			height: auto !important;
+		}
+		
+		.layui-table-fixed .layui-table-body {
+			display: none;
+		}
+		
+		.layui-table-fixed-r {
+			display: none;
+		}
+		
+		#guanlian {
+			margin-left: 20px;
+			overflow-y: hidden;
+			margin-bottom: -12px;
+		}
+		
+		.guanlianxinzheng .guanlianTable {
+			margin-top: 12px;
+		}
+		
+		.guanlianxinzheng .layui-input {
+			height: 28px !important;
+			line-height: 28px !important;
+			width: 208px;
+		}
+		
+		.guanlianxinzheng .guanlianTable .layui-btn {
+			width: 76px;
+			line-height: 28px !important;
+			height: 28px !important;
+			background-color: #2D89DD;
+			color: #FFFFFF !important;
+		}
+		
+		#guanlian .layui-table-cell {
+			padding: 0 10px !important;
+		}
+		
+		.layui-layout-admin .layui-body {
+			bottom: 0;
+		}
+		
+		.layui-laypage {
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+			z-index: 10;
+			margin: 0;
+		}
+		
+		.windowDownload {
+			margin: 0;
+			margin-top: 5px;
+			margin-bottom: 5px;
+			overflow-y: hidden !important;
+		}
+		
+		.guanlianTable .layui-inline .cs_container_open .cs_input {
+			width: 300px !important;
+		}
+		
+		.guanlianTable .cs_result_area {
+			width: 300px;
+		}
+		
+		.guanlianTable .cs_container {
+			width: 300px !important;
+		}
+		
+		.guanlianTable div.cs_result_area div.pagination li {
+			margin: 0 8px !important;
+			font-size: 9pt;
+		}
+		
+		.addShouContent div.cs_result_area div.pagination li {
+			margin: 0 18px !important;
+			font-size: 9pt;
+		}
+	</style>
+
+	<body class="layui-layout-body xzcp">
+		<div class="layui-layout layui-layout-admin">
+
+			<div class="layui-side layui-bg-black" style="background: #F3F3F3 !important;top: 0 !important;">
+				<div class="layui-side-scroll" style="background-color: #F3F3F3 !important;">
+					<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+					<ul class="layui-nav layui-nav-tree" lay-filter="test">
+						<li class="layui-nav-item download" style="background-color: #FFFFFF;">
+							<a href="javascript:;">A.从平台下载</a>
+						</li>
+						<li class="layui-nav-item addShou">
+							<a href="javascript:;">B.手动添加</a>
+						</li>
+						<li class="layui-nav-item daoru">
+							<a href="javascript:;">C.从Excel导入</a>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+			<div id="load-layout" style="position:fixed;width:100%;height:100%;top:0px;left:0px;opacity:0.4;background:#000;z-index: 99900;display: none;">
+				<div id="" style="display: inline-block;margin-top: 25%;margin-left: 40%;">
+					<img src="../../../plugins/layui/css/modules/layer/default/loading-2.gif" alt="" />
+					<span style="display: inline-block;color: white !important;">文件正在上传中。。。</span>
+				</div>
+			</div>
+			<div class="layui-body addContent">
+				<div class="addShouContent" style="display: none;">
+
+					<div class="form_xzcp" style="margin-bottom: 124px;">
+						<div class="layui-form-item layui-form-title form_xzcp_btn">
+							<!--<button class="layui-btn">预览</button>-->
+							<!--<button class="layui-btn">暂存</button>-->
+							<button class="layui-btn addChanpin_submit">提交</button>
+						</div>
+						<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+							<legend>基本信息</legend>
+						</fieldset>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>产品类型：</label>
+							<div class="layui-input-block">
+
+								<select class="xzcp_typeId layui-input" lay-verify="required" disabled="disabled" style="display: block;">
+									<option selected="selected" value="1">医疗器械</option>
+									<option value="2">试剂</option>
+									<option value="3">药品</option>
+									<option value="4">其他</option>
+									<option value="5">化妆品</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>产品名称：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_name layui-input" required="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>注册证号：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_regNum layui-input" name="" lay-verify="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>品牌信息：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_pinpai layui-input" required="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>产品规格：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_guige layui-input" required="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>产品型号：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_xinghao layui-input" required="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>产品编号：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_bianhao layui-input" required="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>主条码：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_zhutiaoma layui-input" required="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">通俗名称：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_tongsu layui-input" required="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">产品系列：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_xilie layui-input" required="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">材质：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_caizhi layui-input" required="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">产品属性：</label>
+							<div class="layui-input-block ">
+								<select name="" class="xzcp_shuxing">
+									<option value="0">产品</option>
+									<option value="1">工具</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">包装：</label>
+							<div class="layui-input-block ">
+								<select name="" class="xzcp_meijun">
+									<option value="0">灭菌包装</option>
+									<option value="1">非灭菌包装</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">储存方式：</label>
+							<div class="layui-input-block ">
+								<select name="" class="xzcp_chucun">
+									<option value="0">常温</option>
+									<option value="1">冷藏</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">安全库存：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_anquan layui-input" required="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">库存上限：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_shangxian layui-input" required="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">库存下限：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_xiaxian layui-input" required="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">所属分组：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_fenzu layui-input" required="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>注册时间：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_regTime layui-input" id="xinzheng_regtime" name="" lay-verify="required" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>失效时间：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_regFailtime layui-input" id="xinzheng_regfailtime" name="" lay-verify="required" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">过延受理号：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_regOvernum layui-input" name="" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>生产厂家：</label>
+							<div class="layui-input-block">
+								<input class="xzcp_manuName layui-input" type="text" id="comboSelect3" class="layui-input" required="required">
+								<li class="addChangjia">添加厂家</li>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">注册证照片：</label>
+							<div class="layui-input-block">
+								<div class="layui-upload">
+									<button type="button" class="photoBtn layui-btn" id="test5">图片上传</button>
+									<blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+										预览图：
+										<div class="layui-upload-list" id="demo5"></div>
+									</blockquote>
+								</div>
+							</div>
+						</div>
+						<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+							<legend>扩展信息</legend>
+						</fieldset>
+						<div class="layui-form-item">
+							<label class="layui-form-label">产品照片：</label>
+							<div class="layui-input-block">
+								<div class="layui-upload">
+									<button type="button" class="photoBtn layui-btn" id="test6">图片上传</button>
+									<blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+										预览图：
+										<div class="layui-upload-list" id="demo6"></div>
+									</blockquote>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>产品性能结构：</label>
+							<div class="layui-input-block">
+								<textarea class="xzcp_power layui-input" lay-verify="required" name="" rows="" cols="" style="width: 400px;height: 80px;"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>产品适用范围：</label>
+							<div class="layui-input-block">
+								<textarea class="xzcp_range layui-input" lay-verify="required" name="" rows="" cols="" style="width: 400px;height: 80px;"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">产品标准：</label>
+							<div class="layui-input-block">
+								<textarea class="xzcp_standards layui-input" name="" rows="" cols="" style="width: 400px;height: 80px;"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>产品禁忌症：</label>
+							<div class="layui-input-block">
+								<textarea class="xzcp_warning layui-input" lay-verify="required" name="" rows="" cols="" style="width: 400px;height: 80px;"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">变更情况：</label>
+							<div class="layui-input-block">
+								<input class="xzcp_change layui-input" name="" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">预期用途：</label>
+							<div class="layui-input-block">
+								<input class="xzcp_use layui-input" name="" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">审批部门：</label>
+							<div class="layui-input-block">
+								<input class="xzcp_exam layui-input" name="" class="layui-input" type="text">
+							</div>
+						</div>
+						<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+							<legend>其他信息</legend>
+						</fieldset>
+						<div class="layui-form-item">
+							<label class="layui-form-label">代理人：</label>
+							<div class="layui-input-block">
+								<input class="xzcp_agent layui-input" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">售后服务：</label>
+							<div class="layui-input-block">
+								<input class="xzcp_service layui-input" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">备注：</label>
+							<div class="layui-input-block">
+								<textarea class="xzcp_notes layui-input" name="" rows="" cols="" style="width: 400px;height: 80px;"></textarea>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="daoruContent" style="display: none;">
+					<div class="daorushunxu">
+						<div id="daoruOne">
+							<p>第一步：下载模板</p>
+							<div>
+								<button class="layui-btn layui-btn-normal download1">下载Exacl模板（注册证）</button>
+								<button class="layui-btn layui-btn-normal download2">下载Exacl模板（产品）</button>
+							</div>
+						</div>
+						<div id="daoruTwo">
+							<p>第二步：整理产品</p>
+							<ul>
+								<li>1)必须使用模板并严格按照其中的说明填写顺序；</li>
+								<li>2)规格数量不要超过2000条，文件尺寸小于500K。</li>
+							</ul>
+						</div>
+						<div id="daoruThree">
+							<p>第三步：上传文件</p>
+							<div>
+								<!--<a href="" id="uploads">导入注册证<input type="file" id="file" /></a>-->
+								<label for="">导入注册证：</label><input type="file" title="导入注册证" name="xlfile" id="zhucezheng_xlf" />
+								<!--<button id="shangchuan">上传</button>-->
+								<p class="red">（*注册证必须先行导入）</p>
+								<label for="">导入产品：</label><input type="file" id="chanpin_xlf" name="" />
+								<p>（产品可以选择不导入，但若想导入产品，必须先导入注册证）</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="windowDownload" id="guanlian">
+					<div class="layui-tab-item layui-show">
+						<div class="guanlianxinzheng">
+							<div class="guanlianTable">
+								<div class="layui-inline">
+									<input class="layui-input" name="id" id="proName" placeholder="请输入厂家" style="width: 300px;">
+								</div>
+								<div class="layui-inline">
+									<input class="layui-input" name="id" id="seachContent" autocomplete="off" placeholder="请输入产品或注册证">
+								</div>
+								<button class="layui-btn seachContentBtn">搜索</button>
+								<button class="layui-btn" style="margin-left: 70px;width: 90px;">确认导入</button>
+							</div>
+						</div>
+						<table id="guanlian_content" lay-filter="demo5" lay-data="{id:'guanlian_content'}"></table>
+					</div>
+				</div>
+
+			</div>
+
+			<script src="../../../plugins/layui/layui.js"></script>
+			<script>
+				//JavaScript代码区域
+				layui.use(['jquery', 'layer', 'element', "laydate"], function() {
+					var element = layui.element;
+					var $ = layui.$ //重点处
+						,
+						layer = layui.layer;
+					var laydate = layui.laydate;
+					var imgArr5 = [];
+					var imgArr6 = [];
+					var controllDel5;
+					var controllDel6;
+					layui.use('upload', function() {
+						var $ = layui.jquery,
+							upload = layui.upload;
+
+						upload.render({
+							elem: '#test5',
+							url: 'http://www.gudaiwang.com/QingNangServer/UploadCloudImageAPI?type=0',
+							multiple: true,
+							before: function(obj) {
+								controllDel5 = false;
+								//预读本地文件示例，不支持ie8
+								obj.preview(function(index, file, result) {
+									$('#demo5').append('<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img uploadImg5 arrDel5" width="140px" height="120px"><span class="removeImg5">X</span>')
+								});
+							},
+							done: function(res) {
+								if(res.errorDesc) {
+									layui.use(['jquery', 'layer'], function() {
+										var $ = layui.$ //重点处
+											,
+											layer = layui.layer;
+										parent.layer.open({
+											content: '上传失败'
+										});
+									})
+									$(".uploadImg5").eq($(".uploadImg5").length - 1).remove();
+									$(".removeImg5").eq($(".removeImg5").length - 1).remove();
+									return;
+								}
+								imgArr5.push({
+									imgUrl: res.Img,
+									imgName: res.picName
+								});
+								sessionStorage.imgArr5 = JSON.stringify(imgArr5)
+								controllDel5 = true;
+							},
+							error: function(e) {
+								layui.use(['jquery', 'layer'], function() {
+									var $ = layui.$ //重点处
+										,
+										layer = layui.layer;
+									parent.layer.open({
+										content: '上传失败'
+									});
+								})
+								$(".uploadImg5").eq($(".uploadImg5").length - 1).remove();
+								$(".removeImg5").eq($(".removeImg5").length - 1).remove();
+								controllDel5 = true;
+							}
+						})
+						upload.render({
+							elem: '#test6',
+							url: 'http://www.gudaiwang.com/QingNangServer/UploadCloudImageAPI?type=1',
+							multiple: true,
+							before: function(obj) {
+								//预读本地文件示例，不支持ie8
+								controllDel6 = false;
+								obj.preview(function(index, file, result) {
+									$('#demo6').append('<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img uploadImg6 arrDel6" width="140px"height="120px"><span class="removeImg6">X</span>')
+								});
+							},
+							done: function(res) {
+								if(res.errorDesc) {
+									layui.use(['jquery', 'layer'], function() {
+										var $ = layui.$ //重点处
+											,
+											layer = layui.layer;
+										parent.layer.open({
+											content: '上传失败'
+										});
+									})
+									$(".uploadImg6").eq($(".uploadImg6").length - 1).remove();
+									$(".removeImg6").eq($(".removeImg6").length - 1).remove();
+									return;
+								}
+								imgArr6.push({
+									imgUrl: res.Img,
+									imgName: res.picName
+								});
+								//								imgArr6 = JSON.stringify(imgArr6);
+								sessionStorage.imgArr6 = JSON.stringify(imgArr6)
+								controllDel6 = true;
+							}
+						})
+					});
+					$(document).delegate('.removeImg5', 'click', function() {
+						//						if(controllDel5) {
+						var i = $(".removeImg5").index(this);
+						var arri = $(".arrDel5").index($(".uploadImg5").eq(i)[0]);
+						if(arri > -1) {
+							imgArr5.splice(arri, 1);
+						}
+						sessionStorage.imgArr5 = JSON.stringify(imgArr5)
+						$(".uploadImg5").eq(i).remove();
+						$(this).remove();
+
+						//						} else {
+						//							layui.use(['jquery', 'layer'], function() {
+						//								var $ = layui.$ //重点处
+						//									,
+						//									layer = layui.layer;
+						//								parent.layer.open({
+						//									content: '正在上传中请稍后删除'
+						//								});
+						//							})
+						//						}
+					})
+
+					$(document).delegate('.removeImg6', 'click', function() {
+						//						if(controllDel6) {
+						var i = $(".removeImg6").index(this);
+						var arri = $(".arrDel6").index($(".uploadImg6").eq(i)[0]);
+						if(arri > -1) {
+							imgArr6.splice(arri, 1);
+						}
+						sessionStorage.imgArr6 = JSON.stringify(imgArr6);
+						$(".uploadImg6").eq(i).remove();
+						$(this).remove();
+						//						} else {
+						//							layui.use(['jquery', 'layer'], function() {
+						//								var $ = layui.$ //重点处
+						//									,
+						//									layer = layui.layer;
+						//								parent.layer.open({
+						//									content: '正在上传中请稍后删除'
+						//								});
+						//							})
+						//						}
+					})
+					laydate.render({
+						elem: '#xinzheng_regtime'
+					});
+					laydate.render({
+						elem: '#xinzheng_regfailtime'
+					});
+					//后面就跟你平时使用jQuery一样
+					$(document).on("click", ".download1", function() {
+
+						window.location.href = "model/01产品注册证导入.rar";
+
+					})
+					$(document).on("click", ".download2", function() {
+						window.location.href = "model/02产品导入.rar";
+					})
+					$(".addShou").click(function() {
+						$(".addShou").css("background", "white")
+						$(".daoru").css("background", "#F3F3F3")
+						$(".download").css("background", "#F3F3F3")
+						$(".addShouContent").css("display", "block");
+						$(".daoruContent").css("display", "none");
+						$(".windowDownload").css("display", "none");
+					});
+					$(".daoru").click(function() {
+						$(".addShou").css("background", "#F3F3F3");
+						$(".daoru").css("background", "#white");
+						$(".download").css("background", "#F3F3F3");
+						$(".addShouContent").css("display", "none");
+						$(".windowDownload").css("display", "none");
+						$(".daoruContent").css("display", "block");
+					});
+					$(".download").click(function() {
+						$(".addShou").css("background", "#F3F3F3");
+						$(".daoru").css("background", "#F3F3F3");
+						$(".download").css("background", "#white");
+						$(".addShouContent").css("display", "none");
+						$(".daoruContent").css("display", "none");
+						$(".windowDownload").css("display", "block");
+					});
+					$(".addChangjia").click(function() {
+						parent.parent.layer.open({
+							type: 2,
+							title: "添加厂家",
+							content: "views/basicdataProtect/productManagement/addchangjia.html", //这里content是一个普通的String
+							area: ['700px', '90%'],
+							offset: 'rb'
+						});
+					});
+				});
+			</script>
+			<script type="text/javascript">
+				layui.use(['jquery', 'layer', 'table', 'laypage'], function() {
+					var table2 = layui.table;
+					var $ = layui.$ //重点处
+					layer = layui.layer;
+					var laypage = layui.laypage;
+
+					table2.on('tool(demo5)', function(obj) {
+						var data = obj.data;
+						var layEvent = obj.event; //获得 lay-event 对应的值
+						var tr = obj.tr; //获得当前行 tr 的DOM对象
+						if(obj.event === 'edit5') {
+							var relatedRegistrationId = data.registrationId;
+							var relatedregistrationdate = data.registrationdate;
+
+						}
+					});
+					//展示已知数据
+					function guanlian_data(data, limit) {
+						table2.render({
+							elem: '#guanlian_content',
+							data: data,
+							height: "full-95",
+							id: 'gl',
+							cols: [
+								[ //标题栏
+									{
+										field: "biaohao",
+										title: '序号',
+										width: 60,
+										align: "center",
+										sort: true
+									},
+									{
+										checkbox: true,
+										LAY_CHECKED: false,
+										align: "center",
+										width: 60,
+									},
+									{
+										field: 'productName',
+										title: '产品名称/注册证',
+										width: 350
+									}, {
+										field: 'manuName',
+										title: '生产厂家',
+										width: 280
+									}
+									//									, {
+									//										fixed: 'right',
+									//										title: '操作',
+									//										width: 100,
+									//										align: 'center',
+									//										toolbar: '#barDemo5'
+									//									}
+								]
+							],
+							skin: 'row', //表格风格
+							id: "guanlian",
+							even: true,
+							//							page: true,
+							//							limit: 50,
+							//							limits: [50, 200, 500] //每页默认显示的数量
+						});
+					}
+					var limit = 10;
+					var curpage = 1;
+					var count;
+					var off = true;
+					var seachContent = $("#seachContent").val();
+
+					function guanlian(seachContent, proName) {
+						var seachContent = $("#seachContent").val();
+						var proName = $("#proName").val();
+						$.ajax({
+							type: "post",
+							url: "http://www.gudaiwang.com/QingNangServer/AllProductManagerAPI",
+							async: true,
+							data: {
+								"method": 11,
+								"manuId": proName,
+								"content": seachContent,
+								"registrationId": '',
+								"showNum": limit,
+								"currentPage": curpage
+							},
+							success: function(data) {
+								//										console.log(data)
+								var datas = JSON.parse(data);
+								//								console.log(datas.count);
+								guanlian_data(datas.data);
+
+								$("#guanlian [data-field=productName] div:gt(0)").each(function(i) {
+									$(this).html(datas.data[i].productName + "<br />" + datas.data[i].registrationnum + "<br />" + datas.data[i].registrationdate + "至" + datas.data[i].failuredate);
+								});
+								if(off) {
+									off = false;
+									guanlian_pages(datas.count, limit);
+								}
+							}
+						});
+					}
+					//					guanlian(seachContent,proName);
+					$(".seachContentBtn").click(function() {
+						off = true;
+						var proName = $("#proName").val();
+						var seachContent = $("#seachContent").val();
+						guanlian(seachContent, proName);
+					})
+					guanlian_pages()
+
+					function guanlian_pages(count, limit) {
+						var seachContent = $("#seachContent").val();
+						laypage.render({
+							elem: 'guanlian_content', //注意，这里的 test1 是 ID，不用加 # 号
+							layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+							limits: [50, 200, 500],
+							limit: limit,
+							curr: curpage,
+							group: 3,
+							count: count, //数据总数，从服务端得到
+							jump: function(obj) {
+								//						console.log(obj);
+								curpage = obj.curr;
+								limit = obj.limit;
+								guanlian(seachContent);
+							}
+						})
+					}
+					$('#proName_text').change(function() {
+						off = true;
+						var proName = $("#proName").val();
+						//						console.log(proName)
+						var seachContent = $("#seachContent").val();
+						guanlian(seachContent, proName);
+					});
+					$(".xzcp_fenzu").click(function() {
+						parent.layer.open({
+							type: 2 //此处以iframe举例
+								,
+							title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">产品分组</span>',
+							area: ['700px', '90%'],
+							offset: "rb",
+							content: 'views/public/product/group.html',
+							zIndex: layer.zIndex //重点1
+								,
+							success: function(layero) {
+								layer.setTop(layero); //重点2
+							}
+						});
+					})
+				});
+			</script>
+			<script src="../../systemManagement/excelImportJS/shim.js"></script>
+			<script src="../../systemManagement/excelImportJS/jszip.js"></script>
+			<script src="../../systemManagement/excelImportJS/xlsx.js"></script>
+			<script src="../../../js/jquery.js" type="text/javascript"></script>
+			<script type="text/javascript" src="../../../js/comboselect.js"></script>
+			<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+			<script type="text/javascript">
+				$(function() {
+					$(".csFirstPage a i").removeClass('fa-step-backward');
+					$(".csFirstPage a i").addClass("layui-icon");
+					$(".csFirstPage a i").html("&#xe603;")
+				})
+				//下拉框分页
+				$(function() {
+					var xzcp_manuName = $(".xzcp_manuName").val();
+					$.ajax({
+						type: "post",
+						url: "http://www.gudaiwang.com/QingNangServer/GetManuInfoByConditionAPI",
+						async: true,
+						dataType: "json",
+						data: {
+//							"manuId": '',
+//							"content": xzcp_manuName,
+//							"currentPage": 1
+						},
+						success: function(data) {
+							var tag_data;
+							tag_data = data.data;
+							$('#comboSelect3').bComboSelect({
+								showField: 'maunName',
+								keyField: 'maunId',
+								data: tag_data
+							});
+						},
+						error: function() {
+							layui.use(['jquery', 'layer'], function() {
+								var $ = layui.$ //重点处
+									,
+									layer = layui.layer;
+								parent.layer.open({
+									content: '服务器错误，请稍后再试'
+								});
+							})
+						}
+					});
+				});
+				$(function() {
+					var proName = $("#proName").val();
+					$.ajax({
+						type: "post",
+						url: "http://www.gudaiwang.com/QingNangServer/GetManuInfoByConditionAPI",
+						async: true,
+						dataType: "json",
+						data: {
+//							"manuId": '',
+//							"content": proName,
+//							"currentPage": 1
+						},
+						success: function(data) {
+							var tag_data;
+							tag_data = data.data;
+							$('#proName').bComboSelect({
+								showField: 'maunName',
+								keyField: 'maunId',
+								data: tag_data
+							});
+						},
+						error: function() {
+							layui.use(['jquery', 'layer'], function() {
+								var $ = layui.$ //重点处
+									,
+									layer = layui.layer;
+								parent.layer.open({
+									content: '服务器错误，请稍后再试'
+								});
+							})
+						}
+					});
+				});
+				//上传文件
+				var X = XLSX;
+				var XW = {
+					/* worker message */
+					msg: 'xlsx',
+					/* worker scripts */
+					rABS: 'excelImportJS/xlsxworker2.js',
+					norABS: 'excelImportJS/xlsxworker1.js',
+					noxfer: 'excelImportJS/xlsxworker.js'
+				};
+
+				var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== "undefined" && typeof FileReader.prototype.readAsBinaryString !== "undefined";
+
+				var use_worker = typeof Worker !== 'undefined';
+
+				var transferable = use_worker;
+
+				var wtf_mode = false;
+
+				function fixdata(data) {
+					var o = "",
+						l = 0,
+						w = 10240;
+					for(; l < data.byteLength / w; ++l) o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w, l * w + w)));
+					o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w)));
+					return o;
+				}
+
+				function ab2str(data) {
+					var o = "",
+						l = 0,
+						w = 10240;
+					for(; l < data.byteLength / w; ++l) o += String.fromCharCode.apply(null, new Uint16Array(data.slice(l * w, l * w + w)));
+					o += String.fromCharCode.apply(null, new Uint16Array(data.slice(l * w)));
+					return o;
+				}
+
+				function s2ab(s) {
+					var b = new ArrayBuffer(s.length * 2),
+						v = new Uint16Array(b);
+					for(var i = 0; i != s.length; ++i) v[i] = s.charCodeAt(i);
+					return [v, b];
+				}
+
+				function xw_noxfer(data, cb) {
+					var worker = new Worker(XW.noxfer);
+					worker.onmessage = function(e) {
+						switch(e.data.t) {
+							case 'ready':
+								break;
+							case 'e':
+								break;
+							case XW.msg:
+								cb(JSON.parse(e.data.d));
+								break;
+						}
+					};
+					var arr = rABS ? data : btoa(fixdata(data));
+					worker.postMessage({
+						d: arr,
+						b: rABS
+					});
+				}
+
+				function xw_xfer(data, cb) {
+					var worker = new Worker(rABS ? XW.rABS : XW.norABS);
+					worker.onmessage = function(e) {
+						switch(e.data.t) {
+							case 'ready':
+								break;
+							case 'e':
+								break;
+							default:
+								xx = ab2str(e.data).replace(/\n/g, "\\n").replace(/\r/g, "\\r");
+								cb(JSON.parse(xx));
+								break;
+						}
+					};
+					if(rABS) {
+						var val = s2ab(data);
+						worker.postMessage(val[1], [val[1]]);
+					} else {
+						worker.postMessage(data, [data]);
+					}
+				}
+
+				function xw(data, cb) {
+					xw_xfer(data, cb);
+				}
+
+				function to_json(workbook) {
+					var result = {};
+					workbook.SheetNames.forEach(function(sheetName) {
+						var roa = X.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+
+						if(roa.length > 0) {
+							result[sheetName] = roa;
+
+						}
+					});
+
+					return result;
+				}
+				var output;
+
+				function process_wb(wb) {
+
+					//output = JSON.stringify(to_json(wb));
+					output = to_json(wb);
+					//去掉表格名称
+					for(var item in output) {
+						var jValue = output[item];
+						output = JSON.stringify(jValue);
+					}
+					excel_ajax(flag)
+				}
+
+				function excel_ajax(flag) {
+					//					console.log("这是jsaon数据：" + output);
+					$.ajax({
+						type: "post",
+						url: "http://www.gudaiwang.com/QingNangServer/AllProductManagerAPI",
+						async: true,
+						data: {
+							"method": 3,
+							"importJson": output,
+							"flag": flag
+						},
+						success: function(res) {
+							$('#load-layout').hide();
+							//						console.log(res);
+							if(res == 0) {
+								layui.use(['jquery', 'layer'], function() {
+									var $ = layui.$ //重点处
+										,
+										layer = layui.layer;
+									parent.layer.open({
+										content: '上传失败'
+									});
+								})
+
+							} else if(res == 1) {
+								layui.use(['jquery', 'layer'], function() {
+									var $ = layui.$ //重点处
+										,
+										layer = layui.layer;
+									//									layer.alert('上传成功', function(index) {
+									//										window.parent().location.reload();
+									//										layer.close(index);
+									//										
+									//
+									//									});
+									parent.layer.open({
+										content: '上传成功',
+										yes: function(index, layero) {
+											window.location.reload();
+											layer.close(index); //如果设定了yes回调，需进行手工关闭
+										}
+									});
+								})
+
+							} else {
+								layui.use(['jquery', 'layer'], function() {
+									var $ = layui.$ //重点处
+										,
+										layer = layui.layer;
+									parent.layer.open({
+										content: '上传数据为空'
+									});
+								})
+
+							}
+						},
+						error: function() {
+							$('#load-layout').hide();
+							layui.use(['jquery', 'layer'], function() {
+								var $ = layui.$ //重点处
+									,
+									layer = layui.layer;
+								parent.layer.open({
+									content: '服务器响应失败，请刷新重新上传'
+								});
+							})
+						}
+					});
+				}
+
+				function handleDragover(e) {
+					e.stopPropagation();
+					e.preventDefault();
+					e.dataTransfer.dropEffect = 'copy';
+				}
+
+				function handleFile(e) {
+					var files = e.target.files;
+					var f = files[0]; {
+						var reader = new FileReader();
+						var name = f.name;
+						reader.onload = function(e) {
+							if(typeof console !== 'undefined') console.log("onload", new Date(), rABS, use_worker);
+							var data = e.target.result;
+							if(use_worker) {
+								xw(data, process_wb);
+							} else {
+								var wb;
+
+								wb = X.read(data, {
+									type: 'binary'
+								});
+
+								process_wb(wb);
+							}
+						};
+						if(rABS) reader.readAsBinaryString(f);
+						else reader.readAsArrayBuffer(f);
+					}
+					$('#load-layout').show();
+				}
+
+				$("body").delegate("#zhucezheng_xlf", "change", function(e) {
+					$('#load-layout').show();
+					flag = 0
+					handleFile(e);
+				})
+
+				$("body").delegate("#chanpin_xlf", "change", function(e) {
+					$('#load-layout').show();
+					flag = 1
+					handleFile(e);
+				});
+			</script>
+
+</html>

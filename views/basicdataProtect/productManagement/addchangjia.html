@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>新增产品</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		*{
+			font-size: 9pt;
+		}
+		#addChangjia legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		#addChangjia label {
+			width: 100px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		#addChangjia input {
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		#addChangjia select {
+			width: 400px !important;
+			height: 28px !important;
+			border: 1px solid #ddd;
+		}
+		
+		#addChangjia textarea {
+			width: 400px !important;
+			height: 80px;
+			border: 1px solid #ddd;
+		}
+		
+		#addChangjia .layui-form-title {
+			width: 100%;
+			margin-bottom: -20px;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			position: fixed;
+			line-height: 32px;
+			top: 0px;
+			right: 40px;
+		}
+		
+		#addChangjia .layui-form-title button {
+			margin-left: 8px;
+			text-align: center;
+			width: 64px;
+			height: 32px;
+			line-height: 32px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+		}
+		
+		.layui-input-block ul {
+			width: 440px;
+			height: 100px;
+			margin-bottom: 44px;
+		}
+		
+		.layui-input-block ul li {
+			display: inline-block;
+			width: 64px;
+			height: 24px;
+			color: #A0A0A0 !important;
+			font-family: "PingFang";
+			font-size: 9pt;
+			border: 1px solid #C5C5C5;
+			line-height: 24px;
+			text-align: center;
+			border-radius: 2px;
+			margin-right: 8px;
+			margin-top: 8px;
+			cursor: pointer;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		#addChangjia {
+			margin-bottom: 120px;
+		}
+		
+		.uploadImg {
+			margin-left: 15px;
+			position: relative;
+		}
+		
+		.removeImg {
+			cursor: pointer;
+			position: absolute;
+			/*top: 100px;*/
+			font-size: 20px !important;
+		}
+		#test2{
+			background-color: #2D89DD;
+			line-height: 28px;
+			height: 28px;
+			width: 78px;
+		}
+	</style>
+
+	<body>
+		<div id="addChangjia">
+			<div class="layui-form-item layui-form-title">
+				<!--<button class="layui-btn">预览</button>-->
+				<!--<button class="layui-btn">暂存</button>-->
+				<button class="layui-btn addChangjia_submit">提交</button>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+				<legend>企业信息</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>企业名称：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input add_manuName" required="required" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>企业简称：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input add_shorthand" required="required" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>联系电话：</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" class="layui-input add_tel" required="required" type="tel">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;">*</b>企业地址：</label>
+				<div class="layui-input-block">
+					<textarea required="required" class="add_manuAddress layui-input" style="width: 400px;height: 80px;"></textarea>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">公司介绍：</label>
+				<div class="layui-input-block">
+					<textarea class="add_introduce layui-input" name="" rows="" cols="" style="width: 400px;height: 80px;"></textarea>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">公司规模：</label>
+				<div class="layui-input-block">
+					<select name="" class="add_scale layui-input">
+						<option value="0" selected="selected">0-50人</option>
+						<option value="1">50-100人</option>
+						<option value="2">100人以上</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">公司性质：</label>
+				<div class="layui-input-block">
+					<select name="" class="add_type">
+						<option value="0" selected="selected">有限责任公司</option>
+						<option value="1">股份责任公司</option>
+						<option value="2">国有企业</option>
+						<option value="3">私营企业</option>
+						<option value="4">集体企业</option>
+						<option value="5">联营企业</option>
+						<option value="6">股份合作制企业</option>
+						<option value="7">合伙企业</option>
+						<option value="8">个体户</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">厂家类别：</label>
+				<div class="layui-input-block">
+					<select name="" class="add_category">
+						<option value="0" selected="selected">厂家</option>
+						<option value="1">经销商</option>
+						<option value="2">平台</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">资质证书：</label>
+				<div class="layui-input-block">
+					<div class="layui-upload">
+						<button type="button" class="layui-btn" id="test2">上传图片</button>
+						<blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+							预览图：
+							<div class="layui-upload-list" id="demo2"></div>
+						</blockquote>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">经营类别：</label>
+				<div class="layui-input-block">
+					<ul class="jylb">
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li style="margin-left: 20px;"></li>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var imgChanJiaArr = [];
+		layui.use(['jquery', 'layer'], function() {
+
+			var controllDel;
+			var $ = layui.$, //重点处
+				layer = layui.layer;
+			//点击图片实现选择文件的效果
+			layui.use('upload', function() {
+				var $ = layui.jquery,
+					upload = layui.upload;
+
+				upload.render({
+					elem: '#test2',
+					url: 'http://www.gudaiwang.com/QingNangServer/UploadImageServlet?manuId=0',
+					multiple: true,
+					before: function(obj) {
+						controllDel = false;
+						//预读本地文件示例，不支持ie8
+						obj.preview(function(index, file, result) {
+							$('#demo2').append('<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img uploadImg" width="140px" height="120px"><span class="removeImg">X</span>')
+
+						});
+					},
+					done: function(res) {
+						if(res.errorDesc) {
+							layui.use(['jquery', 'layer'], function() {
+								var $ = layui.$ //重点处
+									,
+									layer = layui.layer;
+								parent.layer.open({
+									content: '上传失败'
+								});
+							})
+							$(".uploadImg").eq($(".uploadImg").length - 1).remove();
+							$(".removeImg").eq($(".removeImg").length - 1).remove();
+							return;
+						}
+						imgChanJiaArr.push({
+							imgUrl:res.Img
+						});
+						
+						
+						controllDel = true;
+					},
+					error: function(e) {
+						layui.use(['jquery', 'layer'], function() {
+							var $ = layui.$ //重点处
+								,
+								layer = layui.layer;
+							parent.layer.open({
+								content: '上传失败'
+							});
+						})
+						$(".uploadImg").eq($(".uploadImg").length - 1).remove();
+						$(".removeImg").eq($(".removeImg").length - 1).remove();
+						controllDel = true;
+					}
+				})
+			});
+			$(document).delegate('.removeImg', 'click', function() {
+//				if(controllDel) {
+					var i = $(".removeImg").index(this);
+					$(".uploadImg").eq(i).remove();
+					$(this).remove();
+					imgChanJiaArr.splice(i, 1);
+					
+//				} else {
+//					layui.use(['jquery', 'layer'], function() {
+//						var $ = layui.$ //重点处
+//							,
+//							layer = layui.layer;
+//						layer.open({
+//							content: '正在上传中请稍后删除'
+//						});
+//					})
+//				}
+			})
+			$(".addChangjia_submit").click(function() {
+				var add_manuName = $(".add_manuName").val();
+				var add_shorthand = $(".add_shorthand").val();
+				var add_tel = $(".add_tel").val();
+				var add_address = $(".add_manuAddress").val();
+				var add_introduce = $(".add_introduce").val();
+				var add_scale = $(".add_scale").val();
+				var add_type = $(".add_type").val();
+				var add_category = $(".add_category").val();
+				//				var add_imageArray = [];
+				var jylb = '';
+
+				//经营类别点击是否选中
+				$(".current").each(function() {
+					var text_current = $(this).text() + ",";
+					jylb += text_current;
+					return jylb;
+				})
+				//				console.log(jylb.substring(0,jylb.length-1))
+				jylb = jylb.substring(0, jylb.length - 1);
+				var Oimg = JSON.stringify(imgChanJiaArr);
+				if(Oimg=='[]'){
+					Oimg = '';
+				}
+//				alert(imgChanJiaArr)
+//				alert(Oimg)
+				return
+				if(add_manuName && add_shorthand && add_tel && add_address) {
+					
+					$.ajax({
+						type: "post",
+						url: "http://www.gudaiwang.com/QingNangServer/MaunHomePageServlet",
+						async: true,
+						data: {
+							"status": 9,
+							"imageArray": Oimg,
+							"manuShorthand": add_shorthand,
+							"manuContact": add_tel,
+							"manuName": add_manuName,
+							"manuAddress": add_address,
+							"manuLabers": jylb,
+							"manufactureIntroduce": add_introduce,
+							"manufactureScale": add_scale,
+							"manufactureType": add_type,
+							"manufactureCategory": add_category
+						},
+						success: function(data) {
+//							var datas = JSON.parse(data)
+							if(data.errorDesc == "") {
+								layui.use(['jquery', 'layer'], function() {
+									var $ = layui.$ //重点处
+										,
+										layer = layui.layer;
+									parent.layer.open({
+										content: '添加成功'
+									});
+								})
+							} else {
+								layui.use(['jquery', 'layer'], function() {
+									var $ = layui.$ //重点处
+										,
+										layer = layui.layer;
+									parent.layer.open({
+										content: '添加失败'
+									});
+								})
+							}
+
+						},
+						error: function(XMLHttpRequest, textStatus, data) {
+							//						console.log(data)
+							layui.use(['jquery', 'layer'], function() {
+								var $ = layui.$ //重点处
+									,
+									layer = layui.layer;
+								parent.layer.open({
+									content: '服务器错误，请稍后再试'
+								});
+							})
+						}
+					})
+				} else {
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+							layer = layui.layer;
+						parent.layer.open({
+							content: '星号为必填内容'
+						});
+					})
+				}
+
+			})
+
+			$(".jylb li").each(function() {
+				$(this).click(function() {
+					$(this).toggleClass("current")
+				})
+			});
+			$.post("http://www.gudaiwang.com/QingNangServer/MaunHomePageServlet", {
+				"status": 8
+			}, function(res) {
+//				var data = JSON.parse(res);
+				$(".jylb li").each(function(index) {
+
+					$(this).text(res[index].name)
+				})
+			})
+
+		});
+	</script>
+
+</html>

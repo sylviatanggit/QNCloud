@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>快递公司管理</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.jurisdictionManagement {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.jurisdictionManagement_header button {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px;
+		}
+		
+		.layui-table td,
+		.layui-table th {
+			/*padding: 0 3.5vw !important;*/
+		}
+		
+		.jurisdictionManagement_header {
+			margin-bottom: 8px;
+		}
+		
+		.jurisdictionadd {
+			margin-left: 0px !important;
+		}
+		
+		.btns button,
+		.find {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../css/same.css" />
+
+	<body>
+		<div class="jurisdictionManagement">
+			<div class="layui-tab">
+				<div class="jurisdictionManagement_header">
+					<div class="inputs">
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						<div class="btns">
+							<button class="layui-btn jurisdictionadd">新增</button>
+							<button class="layui-btn moreAction">更多操作</button>
+							<ul class="action">
+								<li>
+									<a class="del" data-type="getCheckDel" lay-event='del'>批量删除</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<table id="jurisdictionManagement" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			
+			//获取数据
+			getData();
+			function getData() {
+				var seachContent = $(".seachContent").val();
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetEmployeeOrderTable?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid,
+						"txtCondition" :seachContent,
+					},
+					success: function(res) {
+						var staffData = JSON.parse(res);
+						dataFun(staffData);
+					}
+				});
+			}
+			
+			$(".find").click(function() {
+				getData();
+			})
+			
+			
+			$(".seachContent").keydown(function(event) {
+				if(event.keyCode == "13") { //keyCode=13是回车键
+					$('.find').click();
+				}
+			});
+			
+			
+			
+			//展示已知数据
+			dataFun(null)
+			function dataFun(data){
+				table.render({
+					elem: '#jurisdictionManagement',
+					data: data,
+					height: "full-78",
+					cols: [
+						[ //标题栏
+							{
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+							},
+							{
+								field: 'permission_name',
+								event: 'detail',
+								style: "color:#2D89DD;cursor:pointer",
+								title: '权限名称',
+							}, {
+								field: 'permission_nomo',
+								title: '备注',
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: false //是否显示分页
+						,
+					limits: [10, 20, 30, 40, 50],
+					limit: 10000 //每页默认显示的数量
+				});
+			}
+			//点击新增
+			$(".jurisdictionadd").click(function() {
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">权限管理</span>',
+					area: ['700px', '90%'],
+					offset: "rb",
+					content: 'views/basicdataProtect/jurisdictionadd.html',
+					zIndex: parent.layer.zIndex //重点1
+
+						,
+					success: function(layero) {
+//						layer.setTop(layero); //重点2
+					},
+					end:function(){
+						getData();
+					}
+				});
+			});
+			
+			
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				if(obj.event === 'detail') {
+					sessionStorage.smallQuanxian="";
+					var id=data.permission_id;
+					
+					//操作权限存放
+					sessionStorage.smallQuanxian=data.permission_list;
+							
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">員工信息</span>',
+						area: ['700px', '90%'],
+						offset: "rb",
+						content: 'views/basicdataProtect/jurisdictionchange.html',
+						zIndex: parent.layer.zIndex ,//重点1
+
+							
+						success: function(layero, index11) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$('.quanxian', paentIfarame).val(data.permission_name);
+							$('.nomo', paentIfarame).val(data.permission_nomo);
+						
+							//点击保存
+							$(".addstaff_submit", paentIfarame).click(function() {
+								//基本信息
+								var permissionName = $('.quanxian', paentIfarame).val();
+								var permissionNomo = $('.nomo', paentIfarame).val();
+								//操作权限employeeorder
+								var small1="";
+								var arr=[11,12,13,14,15,130,16,230,17,18,19,110,120];
+								var employeeorder="";
+								for(var j=0;j<arr.length;j++){
+									var tr=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr");
+									
+									switch(arr[j])
+									{
+										case 11:
+											for(var i=0;i<tr.length;i++){
+												var text=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+												var true_1=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+												true_1 = true_1==true?1:0;
+												var true_2=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+												true_2 = true_2==true?1:0;
+											
+												small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';';
+											}
+											
+										  break;
+										case 12:
+											for(var i=0;i<tr.length;i++){
+												var text=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+												var true_1=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+												true_1 = true_1==true?1:0;
+												var true_2=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+												true_2 = true_2==true?1:0;
+												var true_3=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+												true_3 = true_3==true?1:0;
+												var true_4=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(5) input").is(':checked')
+												true_4 = true_4==true?1:0;
+												small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'导出'+true_3+';'+text+'-'+'审核'+true_4+';'
+											}
+											
+											break;
+											
+										case 230:
+											for(var i=0;i<tr.length;i++){
+												var text=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+												var true_1=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+												true_1 = true_1==true?1:0;
+												var true_2=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+												true_2 = true_2==true?1:0;
+												var true_3=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+												true_3 = true_3==true?1:0;
+												var true_4=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(5) input").is(':checked')
+												true_4 = true_4==true?1:0;
+	
+												var true_5=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(6) input").is(':checked')
+												true_5 = true_5==true?1:0;
+												
+												var true_6=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(7) input").is(':checked')
+												true_6 = true_6==true?1:0;
+												
+												
+												small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'审核'+true_3+';'+text+'-'+'打印'+true_4+';'+text+'-'+'导出'+true_5+';'+text+'-'+'追踪'+true_6+';';
+											}
+											break;
+										case 13:
+											for(var i=0;i<tr.length;i++){
+												var text=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+												var true_1=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+												true_1 = true_1==true?1:0;
+												var true_2=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+												true_2 = true_2==true?1:0;
+												var true_3=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+												true_3 = true_3==true?1:0;
+											
+												small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'导出'+true_3+';';
+											}
+											
+											
+											
+										break;	
+										case 14:
+											for(var i=0;i<tr.length;i++){
+												var text=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+												var true_1=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+												true_1 = true_1==true?1:0;
+												var true_2=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+												true_2 = true_2==true?1:0;
+												var true_3=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+												true_3 = true_3==true?1:0;
+												var true_4=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(5) input").is(':checked')
+												true_4 = true_4==true?1:0;
+	
+												var true_5=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(6) input").is(':checked')
+												true_5 = true_5==true?1:0;
+												
+												var true_6=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(7) input").is(':checked')
+												true_6 = true_6==true?1:0;
+												
+												
+												small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'审核'+true_3+';'+text+'-'+'打印'+true_4+';'+text+'-'+'导出'+true_5+';'+text+'-'+'追踪'+true_6+';';
+											}
+											break;
+											case 17:  //库存管理
+											for(var i=0;i<tr.length;i++){
+												var text=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+												var true_1=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+												true_1 = true_1==true?1:0;
+												var true_2=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+												true_2 = true_2==true?1:0;
+												var true_3=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+												true_3 = true_3==true?1:0;
+												var true_4=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(5) input").is(':checked')
+												true_4 = true_4==true?1:0;
+	
+												var true_5=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(6) input").is(':checked')
+												true_5 = true_5==true?1:0;
+												
+												var true_6=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(7) input").is(':checked')
+												true_6 = true_6==true?1:0;
+												
+												var true_7=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(8) input").is(':checked')
+												true_7 = true_7==true?1:0;
+												
+												var true_8=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(9) input").is(':checked')
+												true_8 = true_8==true?1:0;
+											
+												
+												small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'审核'+true_3+';'+text+'-'+'打印'+true_4+';'+text+'-'+'导出'+true_5+';'+text+'-'+'断帐'+true_6+';'+text+'-'+'补货'+true_7+';'+text+'-'+'盘点'+true_8+';';
+											}
+											
+											break;
+												
+																
+										case 18:  //财务
+											for(var i=0;i<tr.length;i++){
+												var text=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+												var true_1=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+												true_1 = true_1==true?1:0;
+												var true_2=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+												true_2 = true_2==true?1:0;
+												var true_3=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+												true_3 = true_3==true?1:0;
+												var true_4=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(5) input").is(':checked')
+												true_4 = true_4==true?1:0;
+	
+												var true_5=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(6) input").is(':checked')
+												true_5 = true_5==true?1:0;
+												
+												var true_6=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(7) input").is(':checked')
+												true_6 = true_6==true?1:0;
+												
+												var true_7=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(8) input").is(':checked')
+												true_7 = true_7==true?1:0;
+												
+												var true_8=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(9) input").is(':checked')
+												true_8 = true_8==true?1:0;
+												
+												
+												small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'初审'+true_3+';'+text+'-'+'复核'+true_4+';'+text+'-'+'开票'+true_5+';'+text+'-'+'审核'+true_6+';'+text+'-'+'打印'+true_7+';'+text+'-'+'导出'+true_8+';';
+											}
+											break;
+										case 19:
+											for(var i=0;i<tr.length;i++){
+												var text=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+												var true_1=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+												true_1 = true_1==true?1:0;
+												var true_2=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+												true_2 = true_2==true?1:0;
+												small1+=text+'-'+'查看'+true_1+';'+text+'-'+'导出'+true_2+';';
+											}
+											
+										  break;
+										  	case 110:
+										  		for(var i=0;i<tr.length;i++){
+												var text=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+												var true_1=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+												true_1 = true_1==true?1:0;
+												var true_2=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+												true_2 = true_2==true?1:0;
+												small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';';
+											}
+											
+										  break;
+										  	case 120:
+										  		for(var i=0;i<tr.length;i++){
+												var text=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+												var true_1=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+												true_1 = true_1==true?1:0;
+												var true_2=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+												true_2 = true_2==true?1:0;
+												small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';';
+											}
+											
+										  break;
+										default:
+										for(var i=0;i<tr.length;i++){
+											var text=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+											var true_1=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+											true_1 = true_1==true?1:0;
+											var true_2=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+											true_2 = true_2==true?1:0;
+											var true_3=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+											true_3 = true_3==true?1:0;
+											var true_4=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(5) input").is(':checked')
+											true_4 = true_4==true?1:0;
+
+											var true_5=$("#"+arr[j],paentIfarame).next().find("tbody").find("tr:eq("+i+")").find("td:eq(6) input").is(':checked')
+											true_5 = true_5==true?1:0;
+											small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'审核'+true_3+';'+text+'-'+'打印'+true_4+';'+text+'-'+'导出'+true_5+';';
+										}
+												
+												
+									}
+							
+							
+								
+									employeeorder=small1;
+								}
+								var master={
+									'employeeorder':employeeorder
+								}
+							var jiazaiIndex;
+							parent.layer.open({
+							  type: 3, 
+							  zIndex: parent.layer.zIndex, //重点1,
+							  success: function(layero, index){
+							  		jiazaiIndex = index;
+					  			}
+							});
+								
+								
+								$.ajax({
+									type: "POST",
+									url: localStorage.serIp+"/WebAddEmployeeOrder",
+									async: true,
+									dataType: 'json',
+									crossDomain: true,
+									contentType:'application/json; charset=utf-8',
+									data:JSON.stringify({
+										"userId": localStorage.userId,
+										"userPw": localStorage.userPw,
+										'database': localStorage.database,
+										'permissionList': employeeorder,
+										"permissionId":id,
+										'permissionNomo':permissionNomo,
+										'permissionName':permissionName,
+										'g_companyid': localStorage.groupcompanyid,
+									}),
+									success: function(res) {
+										var data = JSON.parse(res);
+											parent.layer.close(jiazaiIndex); 
+										if(data.ResultValue == 1) {
+											parent.layer.open({
+												title: "提示",
+												content: '修改成功',zIndex: parent.layer.zIndex //重点1
+
+											});
+											getData();
+											parent.layer.close(index11); 	
+										} else {
+											parent.layer.open({
+												title: "提示",
+												content: '修改失败',zIndex: parent.layer.zIndex //重点1
+											});
+										}
+									},
+									error: function() {
+										parent.layer.close(jiazaiIndex); 		
+										
+									}
+								});
+							})
+						}
+					});
+				}
+
+			});
+			//点击删除
+			var $ = layui.$,
+			active = {
+				getCheckDel: function() { //获取选中数据
+					var checkStatus = table.checkStatus('jurisdictionManagement'),
+					data1 = checkStatus.data;
+					if(data1.length ==0 ){
+						parent.layer.open({
+										title: "提示",
+										content: '请选择权限名称',zIndex: parent.layer.zIndex //重点1
+									});
+						return;
+					}
+					var idstr = data1[0].permission_id;
+					parent.layer.confirm('确定删除记录？', {
+						icon: 3,zIndex: parent.layer.zIndex, //重点1
+						title: '删除'
+					}, function(index) {
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp+"/WebDeleteEmployeeOrder?jsoncallback=?",
+							async: true,
+							dataType: 'jsonp',
+							data: {
+								"userId": localStorage.userId,
+								"userPw": localStorage.userPw,
+								"database": localStorage.database,
+								'groupCompanyId': localStorage.groupcompanyid,
+								"permissionId": idstr
+							},
+							success: function(res) {
+								var data = JSON.parse(res);
+								if(data.ResultValue == 1) {
+									parent.layer.open({
+										title: "提示",
+										content: '删除成功',zIndex: parent.layer.zIndex //重点1
+									});
+									getData();
+								} else {
+									parent.layer.open({
+										title: "提示",
+										content: '删除失败',zIndex: parent.layer.zIndex //重点1
+									});
+								}
+							}
+						});
+						parent.layer.close(index);
+					});
+				}
+			};
+			$('.del').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+		});
+	</script>
+
+</html>

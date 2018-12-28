@@ -1,0 +1,338 @@
+.layui-laypage-limits{
+   display: none;
+}
+table thead td {
+    padding: 0;
+    border-left: 1px solid #CAD3DA;
+    background: #DFEBFB;
+}
+table tbody tr:nth-child(even) {
+    background: #E7EFF9;
+}
+
+
+
+/* 选中行计算 */
+#selectRowSum {
+	float: left;
+	padding-left: 20px;
+	line-height: 20px;
+}
+.message{
+	line-height: 20px;
+	float: left;
+	margin-left: 20px;
+}
+#selectRowSum > input{
+	border: 1px solid grey;
+}
+
+/* 调整宽度 */
+
+
+
+colgroup > col:first-child{
+	width: 45px!important;
+}
+
+.dx-col-fixed:nth-child(1){
+	width: 45px !important;
+}
+
+/* .dx-column-lines > .dx-command-select{
+    width: 10px!important;
+} */
+/* 表格hover效果 */
+/*tbody tr:not(:last-child):hover{
+	background-color: rgba(137, 207, 240,.6)!important;
+}*/
+
+.dx-datagrid-rowsview .dx-selection.dx-row > td{
+	background-color: yellow!important;
+}
+
+.dx-command-select{
+	width: 5px!important;
+}
+
+.dx-editor-inline-block{
+	width: 30px !important;
+}
+body{
+	line-height: 0!important;
+}
+.kit-tab .layui-tab-title {
+  margin-bottom: 20px !important;
+}
+
+
+.totalInfo{
+	  width: 100px;
+	  height: 20px;
+	  float: left;
+	  margin-top: 35px;
+}
+
+
+  .clearfix:after {
+    content: '.';
+    height: 0;
+    display: block;
+    clear: both;
+}
+
+  footer{
+	  margin-top: 23px;
+  }
+  
+  .layui-laypage-limits {
+	  font-size: 12px;
+	  display: none;
+	  float: left;
+	  margin-top: 20px;
+  }
+
+   #lay-ignore {
+	height: 25px;
+    width: 60px;
+  }
+  
+  .dx-checkbox-container span{
+	  border: 1px solid black;
+  }
+  
+  .dx-column-lines>td:nth-child(2) {
+	  color: #2D89DD;
+  }
+
+  .dx-datagrid-text-content {
+	  color: grey;
+  }
+
+  input {
+	  text-align: left !important;
+  }
+#events {
+    background-color: rgba(191, 191, 191, 0.15);
+    padding: 20px;
+	margin-top: 20px;
+	float: left;
+}
+
+#events > div {
+    padding-bottom: 5px;
+}
+
+#events > div:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+#events #clear {
+    float: right;
+}
+
+#events .caption {
+    float: left;
+    font-weight: bold;
+    font-size: 115%;
+    line-height: 115%;
+    padding-top: 7px;
+}
+
+#events ul {
+    list-style: none;
+    max-height: 100px;
+    overflow: auto;
+}
+
+#events ul li {
+    padding: 7px 0;
+    border-bottom: 1px solid #dddddd;
+}
+
+#events ul li:last-child {
+    border-bottom: none;
+}
+     .dx-viewport{
+         margin-bottom: 80px;
+        } 
+
+
+    .dx-texteditor-container{
+        margin-bottom: 20px;
+	} 
+		
+	.purchase {
+		font-family: "PingFang SC" !important;
+		font-size: 9pt !important;
+		color: #232323 !important;
+		margin: 0 10px;
+	}
+		.startUpload {
+				    padding: 0;
+				    cursor: pointer;
+				    border: none;
+				    width: 85px;
+				    height: 28px;
+				    text-align: center;
+				    line-height: 28px;
+				    border-radius: 2px;
+				    background-color: #2D89DD;
+				    color: #FFFFFF;
+				    margin-left: 8px;
+				}
+
+	.btns {
+		float: right;
+		margin-top: 10px;
+	}
+
+	label {
+		padding: 0 !important;
+		margin-left: 0px;
+	}
+
+	.btns button,
+	.find,
+	.import {
+		padding: 0;
+		cursor: pointer;
+		border: none;
+		width: 76px;
+		height: 28px;
+		text-align: center;
+		line-height: 28px;
+		border-radius: 2px;
+		background-color: #2D89DD;
+		color: #FFFFFF;
+		margin-left: 8px;
+		font-size: 9pt;
+	}
+
+	.btns button {
+		width: 90px;
+	}
+
+
+
+	.layui-laypage {
+		margin: 0;
+		position: absolute;
+		bottom: 0px;
+		left: 25px;
+	}
+
+	.cs_container,
+	.cs_container_open .cs_input,
+	.cs_result_area {
+		width: 250px !important;
+	}
+
+	div.cs_result_area div.pagination li {
+		margin: 0 5px !important;
+	}
+
+     .dx-data-row,.dx-column-lines > td:nth-child(2) {
+		cursor: pointer;
+	 }
+	
+	.cleardata {
+		cursor: pointer;
+	}
+
+	.cleardata1 {
+		cursor: pointer;
+	}
+
+	.layui-inline {
+		margin-top: 10px;
+	}
+
+	table{
+		height: 100%;
+	}
+
+     .layui-input{
+       color: #000000;
+	 }
+
+    .dx-widget {
+		font-size: 9pt!important;
+		line-height: 17px;
+	}
+
+	.options {
+		padding: 20px;
+		margin-top: 20px;
+		background-color: rgba(191, 191, 191, 0.15);
+	}
+
+	.caption {
+		font-size: 18px;
+		font-weight: 500;
+	}
+
+	.option {
+		margin-top: 10px;
+	}
+
+	.option>span {
+		margin-right: 10px;
+	}
+
+	.option>.dx-selectbox {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.options {
+		display: none;
+	}
+
+	.fl{
+		float: left;
+	}
+
+	/* 分页插件 */
+	.M-box2 {
+    display: inline-block;
+    padding: 0 15px;
+    height: 28px;
+    line-height: 28px;
+    color: #333;
+	font-size: 12px;
+	margin-top: 10px;
+	}
+
+	.M-box2 a{
+		margin-left: 15px;
+		padding: 0 15px;
+		text-decoration: none;
+		background-color: #ffffff;
+		color: #000000;
+	}
+
+	.M-box2 .active {
+		margin-left: 5px;
+		padding: 0 15px;
+		color: #ffffff;
+		width: 100%;
+		height: 100%;
+		background-color: #2D89DD;
+		border: 1px solid #e2e2e2;
+	}
+
+	.jump-ipt {
+		float: none;
+		margin-left: 5px;
+		margin-left: 11px;
+		width: 60px;
+		border: 1px solid #e6e6e6;
+		height: 20px!important;
+	}
+
+	.dx-editor-cell {
+		height: 15px;
+	}

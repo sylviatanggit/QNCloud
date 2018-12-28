@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title></title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+		<!-- DevExtreme themes -->
+		<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+		<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
+	</head>
+	<style type="text/css">
+		.relatedNewregList {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+		}
+		.inputs .layui-inline,.btns{
+			margin-top: 18px;
+		}
+		.btns button,
+		.find,
+		.import {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+		.layui-table-cell {
+			height: auto !important;
+		}
+		.help{
+			height: 1px;
+		}
+		
+	
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+		}
+
+		colgroup>col:first-child {
+		width: 266px!important;
+	}
+
+	.dx-col-fixed:nth-child(1) {
+		width: 266px !important;
+	}
+		
+	</style>
+
+	<body>
+		<div class="relatedNewregList">
+			<div class="help"></div>
+			<div class="layui-tab" style="margin-top: 8px;">
+				<div class="layui-inline">
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 0;width: 240px;">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+				</div>
+			
+				<table id="relatedNewregList" lay-filter="demo">
+					<div id="gridContainer"></div>
+				</table>
+			</div>
+		</div>
+	</body>
+	
+<script src="../../../js/jquery.js" type="text/javascript"></script>
+<!-- DevExtreme library -->
+<script src="../../../devexpresslibrary/js/dx.all.js"></script>
+<script src="../../../plugins/layui/layui.js"></script>
+<script src="../../../js/public.js"></script>
+
+	<script>
+		layui.use(['table', 'jquery','laydate'], function() {
+			var table = layui.table;
+			var laypage=layui.laypage;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+		
+		
+		
+			var limit = 100;
+			var curpage = 1;
+			var count;
+			
+			
+		
+		
+			function getData(flag){
+				
+				var seachContent=$(".seachContent").val();
+					
+					
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetregistrationCertificate?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'txtCondition': seachContent,
+						'num': limit,
+						'page': curpage,
+						'regid':sessionStorage.regid
+					},
+					success: function(res) {
+						var staffData = JSON.parse(res);
+						count=staffData.count;
+						var chanpin_datas=JSON.parse(staffData.data);
+						
+						authorization(chanpin_datas);
+						
+						$("[data-field=caozuo] div:gt(0)").each(function(i) {
+							$(this).html('关联')
+						});
+						
+						
+						$("[data-field=referencenum] div:gt(0)").each(function(i) {
+							var failuredate = "";var worning = "";var str = "";
+						
+								failuredate = chanpin_datas[i].failuredate;
+								var registrationdate =  chanpin_datas[i].registrationdate;
+								
+								if(failuredate == "" || failuredate ==null){
+									
+									worning = "注册证日期有缺失";
+									
+									str = chanpin_datas[i].referencenum + "<br/><span style='color:red'>！"+registrationdate + " - " + failuredate + " "+worning +"</span>";
+								}else{
+										
+									var myDate = new Date();
+	
+									var currentDate =  myDate.getFullYear() + '-' +(myDate.getMonth() + 1)  + '-'+  myDate.getDate();
+							
+									
+									var  days = diffDay(failuredate,currentDate)
+									if(days > 0 && days <  chanpin_datas[i].zhucezheng){
+										worning  = "<span style='color:#FFAB39'>即将到期</span>";
+									}
+									
+										
+									if(chanpin_datas[i].newregid != 0){
+										if(days < 0){
+											worning  = "<span style='color: red''>已过期</span>";
+										}
+						
+									}
+									
+							
+									if(chanpin_datas[i].newregid != 0){
+										worning  = "<span style='color: #FCB322''>这是老证</span>";
+									}
+									
+									
+								
+									str = chanpin_datas[i].referencenum + "<br/>"+registrationdate + " - " + failuredate + " "+worning;
+										
+									}
+					
+							
+							$(this).html(str);
+								
+						})
+								
+								
+						if(flag) {
+							direct_pages()
+						}
+					}
+				});
+			}
+	
+			getData(true);
+
+			function authorization(data) {
+				$(function () {
+				var dataGrid = $("#gridContainer").dxDataGrid({
+					dataSource: data,
+					allowColumnReordering: false,
+					showBorders: true,
+					keyExpr: "id",
+					headerFilter: {
+						visible: false
+					},
+					sorting: {
+						mode: "none"//none
+					},
+					columnChooser: "enable",
+					paging: {
+						pageSize: 200,
+					},
+					selection: {
+						mode: "single",
+					},
+					allowColumnResizing: true,
+					columns: [
+						{
+							dataField: "producename",
+							// width: 100,
+							caption: "产品名称",
+						}, {
+							dataField: "referencenum",
+							width: 160,
+							caption: "产品名称",
+						}, {
+							dataField: "referencenum",
+							// width: 160,
+							caption: "注册证",
+							cellTemplate:function(container,options){
+								var failuredate = "";var worning = "";var str = "";
+						
+						failuredate = options.data.failuredate;
+						var registrationdate =  options.data.registrationdate;
+						
+						if(failuredate == "" || failuredate ==null){
+							
+							worning = "注册证日期有缺失";
+							
+							str = options.data.referencenum + "<br/><span style='color:red'>！"+registrationdate + " - " + failuredate + " "+worning +"</span>";
+						}else{
+								
+							var myDate = new Date();
+
+							var currentDate =  myDate.getFullYear() + '-' +(myDate.getMonth() + 1)  + '-'+  myDate.getDate();
+					
+							
+							var  days = diffDay(failuredate,currentDate)
+							if(days > 0 && days <  options.data.zhucezheng){
+								worning  = "<span style='color:#FFAB39'>即将到期</span>";
+							}
+							
+							if(options.data.newregid != 0){
+								if(days < 0){
+									worning  = "<span style='color: red''>已过期</span>";
+								}
+				
+							}
+							
+					
+							if(options.data.newregid != 0){
+								worning  = "<span style='color: #FCB322''>这是老证</span>";
+							}
+							
+							str = options.data.referencenum + "<br/>"+registrationdate + " - " + failuredate + " "+worning;
+						}
+						
+						$("<div>")
+							.append($("<div> " + str + "</div>"))
+							.appendTo(container);
+
+							}
+						},{
+							dataField: "brand",
+							width: 160,
+							caption: "品牌",
+						},
+						{
+							dataField: "manufacturename",
+							// width: 160,
+							caption: "生产厂家",
+						},
+						{
+							dataField: "produceseries",
+							width: 150,
+							caption: "操作",
+							cellTemplate:function(container,options){
+								$("<div>")
+							.append($("<div style='color:#2D89DD'> " + "关联" + "</div>"))
+							.appendTo(container);
+							}
+						}
+					],
+					onCellClick: function (e) {
+                     var data = e.data;
+					 if(e.columnIndex == 5 && e.rowType == 'data'){
+                        	
+					var newfailuredate = data.failuredate;
+					var regfailtime = sessionStorage.regfailtime;
+					var  days = diffDay(newfailuredate,regfailtime)
+					
+					if(days < 0){
+						parent.layer.open({
+							title: "提示",
+							content: '新证失效日期大于老证失效日期不能关联!',
+							zIndex: parent.layer.zIndex, //重点1
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						
+						return;
+					}
+
+                    					$.ajax({
+						type: "get",
+						url: localStorage.serIp+"/WebCorrelationRegiCertPro",
+						async: true,
+						data: {
+							"userId": localStorage.userId,
+							"userPw": localStorage.userPw,
+							'database': localStorage.database,
+							'newregid': data.id,
+							"regid" : sessionStorage.regid
+						},
+						success: function(res) {
+							var data1 = JSON.parse(res);
+							if(data1.ResultValue == 1) {
+								
+								var arr=[data.id,data.referencenum,data.producename];
+					
+					
+					
+								if(sessionStorage.regGuanlianData){
+									sessionStorage.removeItem("regGuanlianData");
+								}
+								
+								sessionStorage.regGuanlianData=JSON.stringify(arr);
+								
+								
+								var index = parent.layer.getFrameIndex(window.name);
+								parent.layer.close(index); //再执行关闭
+								
+								
+								parent.layer.open({
+									title: "提示",
+									content: '关联成功',
+									zIndex: parent.layer.zIndex, //重点1
+									success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+									}
+								});
+								
+				
+					
+					
+								
+							} else {
+								parent.layer.open({
+									title: "提示",
+									content: '关联失败',zIndex: parent.layer.zIndex //重点1
+								});
+							}
+						}
+					});
+				
+
+
+
+					 }
+
+					},
+
+					onContentReady: function (e) {
+						// 权限判断
+
+					}
+
+				}
+				).dxDataGrid('instance');
+
+
+
+
+
+
+			});
+				
+			}
+			//分页
+			function direct_pages() {
+				laypage.render({
+					elem: 'relatedNewregList', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 2,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						getData(false)
+					}
+				})
+			}
+			//查询
+			$(".find").click(function() {
+				getData(true);
+			})
+			
+			
+			$(".seachContent").keydown(function(event) {
+				if(event.keyCode == "13") { //keyCode=13是回车键
+					$('.find').click();
+				}
+			});
+			
+			// 根据可视区的高度判断
+		var viewHeight = $(window).height();
+		$('#gridContainer').css('height', viewHeight * 0.88 + 'px');
+		});
+	</script>
+</html>

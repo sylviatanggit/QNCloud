@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+
+	<script src="../../../js/qrcode/jquery-1.10.2.min.js"></script>
+				<script src="../../../js/qrcode/jquery.qrcode.min.js"></script>
+
+	</head>
+	<body style="text-align: center;vertical-align: middle;">
+		
+		<div id="qrcode" style="margin-top: 40px;"></div>
+	</body>
+</html>
+<script>
+  jQuery(function(){
+  	
+		jQuery('#qrcode').qrcode({
+		    render: "canvas", //也可以替换为table
+		    width: 250,
+		    height: 250,  background: "#FFF",  foreground: "#2D89DD",
+		    text: sessionStorage.pandianDanHanid + ",type=5"
+		});
+})
+		
+</script>

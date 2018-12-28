@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>直销报价单</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.directQuotation {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.btns {
+			margin-top: 18px;
+			float: right;
+		}
+		
+		label {
+			padding: 0 !important;
+		}
+		
+		.btns button,
+		.find {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+		
+		.directQuotation_header {
+			margin-bottom: 8px;
+		}
+		
+		.layui-form {
+			margin-bottom: 0;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+			z-index: 5;
+			background-color: #FFFFFF;
+		}
+		.cleardata{
+			cursor: pointer;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="directQuotation">
+			<div class="layui-tab">
+				<div class="directQuotation_header">
+					<div class="inputs">
+						<div class="layui-inline">
+							<label class="layui-form-label">往来单位</label>
+							<div class="layui-input-inline">
+								<input autocomplete="off" class="layui-input unitInfo unit" type="text" style="width: 260px;">
+							</div>
+							<div class="layui-input-inline cleardata">
+								X
+							</div>
+						</div>
+						<br />
+						<div class="layui-inline" style="margin-top: 18px;">
+							<div class="layui-input-inline">
+								<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入中标号或者产品名称" style="width: 240px;margin-left: 0;">
+							</div>
+						</div>
+						<div class="layui-inline" style="margin-top: 18px;">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						<div class="btns">
+							<button class="layui-btn quotationadd">新增</button>
+							<button class="layui-btn moreAction">更多操作</button>
+							<ul class="action">
+								<li>
+									<a class="del" data-type="getCheckDel" lay-event='del'>删除</a>
+								</li>
+								<li>
+									<a class="" data-type="" lay-event=''>导入</a>
+								</li>
+								<li>
+									<a class="" data-type="" lay-event=''>导出</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+				</div>
+				<table id="directQuotation" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laypage = layui.laypage;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			//查询
+			var unitInfo = $(".unitInfo").val(); //350 贵州广合
+			var bidnum = $(".seachContent").val();
+			var limit = 50;
+			var curpage = 1;
+			var count;
+			var off = true;
+
+			function directData() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetQuoteInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'companyId': unitInfo,
+						'bidnum': bidnum,
+						'produce': bidnum,
+						'database': localStorage.database
+					},
+					success: function(res) {
+						var directData = JSON.parse(res);
+						var data = JSON.parse(directData.data);
+						count = directData.count;
+						firectInfo(data, limit);
+						if(off) {
+							off = false;
+							direct_pages();
+						}
+					}
+				});
+			}
+
+			function firectInfo(data) {
+				//展示已知数据
+				table.render({
+					elem: '#directQuotation',
+					data: data,
+					height: "full-150",
+					cols: [
+						[ //标题栏
+							 {
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							}, {
+								field: 'bidnum',
+								title: '中标号',
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+								minWidth: 160,
+							}, {
+								field: 'bidprice',
+								title: '中标价',
+								minWidth: 100,
+							}, {
+								field: 'medicarenum',
+								title: '医保号',
+								minWidth: 100
+							}, {
+								field: 'medicareprice',
+								title: '医保价',
+								minWidth: 100
+							}, {
+								field: 'companyname',
+								title: '往来单位',
+								minWidth: 205
+							}, {
+								field: 'name',
+								title: '医用耗材名称',
+								align: "center",
+								minWidth: 230,
+							}, {
+								field: 'unitmodel',
+								title: '规格型号',
+								minWidth: 200,
+							}, {
+								field: 'proportion',
+								title: '医保报销比例',
+								minWidth: 150,
+							},
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					//					page: true //是否显示分页
+					//						,
+					//					limits: [10, 20, 30, 40, 50],
+					//					limit: 10 //每页默认显示的数量
+				});
+			}
+			//分页
+			function direct_pages() {
+				laypage.render({
+					elem: 'directQuotation', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						directData();
+					}
+				})
+			}
+			directData();
+			$(".find").click(function() {
+				off = true;
+				unitInfo = $(".unitInfo").val();
+				bidnum = $(".seachContent").val();
+				directData();
+			})
+			//查询回车事件
+			$(".seachContent").bind("keydown",function(e){
+			　　  var theEvent = e || window.event;
+			　　  var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+			　　   if (code == 13) {
+			　　	    off = true;
+					unitInfo = $(".unitInfo").val();
+					bidnum = $(".seachContent").val();
+					directData();
+			　　  }
+			});
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				if(obj.event === 'detail') {
+					var id = data.id;
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">编辑报价单</span>',
+						area: ['700px', '90%'],
+						offset: "rb",
+						content: 'views/basicdataProtect/directQuotation/editDirect.html',
+						zIndex: layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$('.adddirect_midnum', paentIfarame).val(data.bidnum);
+							$('.adddirect_midprice', paentIfarame).val(data.bidprice);
+							$('.adddirect_num', paentIfarame).val(data.medicarenum);
+							$('.adddirect_price', paentIfarame).val(data.medicareprice);
+							$('.adddirect_unit', paentIfarame).val(data.companyname);
+							$('.adddirect_unit', paentIfarame).attr('data-id', data.companyid);
+							$('.adddirect_name', paentIfarame).val(data.name);
+							$('.adddirect_bili', paentIfarame).val(data.proportion);
+							$('.adddirect_type', paentIfarame).val(data.unitmodel);
+							$('.adddirect_notes', paentIfarame).val(data.nomo);
+							$(".adddirect_submit", paentIfarame).click(function() {
+								var BidNum = $('.adddirect_midnum', paentIfarame).val();
+								var BidPrice = $('.adddirect_midprice', paentIfarame).val();
+								var MedicareNum = $('.adddirect_num', paentIfarame).val();
+								var MedicarePrice = $('.adddirect_price', paentIfarame).val();
+								var companyID = $('.adddirect_unit', paentIfarame).attr('data-id');
+								var Name = $('.adddirect_name', paentIfarame).val();
+								var Proportion = $('.adddirect_bili', paentIfarame).val();
+								var Unitmodel = $('.adddirect_type', paentIfarame).val();
+								var nomo = $('.adddirect_notes', paentIfarame).val();
+								var master = {
+									'id': id,
+									'Name': Name,
+									'Unitmodel': Unitmodel,
+									'BidNum': BidNum,
+									'MedicareNum': MedicareNum,
+									'BidPrice': BidPrice,
+									'MedicarePrice': MedicarePrice,
+									'companyID': companyID,
+									'produceID': '',
+									'Typeof': 1,
+									'nomo': nomo,
+									'Proportion': Proportion
+								};
+								if($('.adddirect_unit', paentIfarame).val() == '') {
+									parent.layer.open({
+										title: "提示",
+										content: '请填写往来单位！！！'
+									});
+									return false;
+								}
+								$.ajax({
+									type: "get",
+									url: localStorage.serIp+"/WebOperateQuoteTable?jsoncallback=?",
+									async: true,
+									dataType: 'jsonp',
+									data: {
+										"userId": localStorage.userId,
+										"userPw": localStorage.userPw,
+										'database': localStorage.database,
+										'groupCompanyId': localStorage.groupcompanyid,
+										'master': JSON.stringify(master)
+									},
+									success: function(res) {
+										var data1 = JSON.parse(res);
+										if(data1.ResultValue == 1) {
+											parent.layer.open({
+												title: "提示",
+												content: '提交成功！！！'
+											});
+											direct_pages()
+										} else {
+											parent.layer.open({
+												title: "提示",
+												content: '提交失败！！！'
+											});
+										}
+
+									}
+								});
+							})
+						}
+					});
+				}
+
+			});
+			//点击新增
+			$(".quotationadd").click(function() {
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">添加报价单</span>',
+					area: ['700px', '90%'],
+					offset: "rb",
+					content: 'views/basicdataProtect/directQuotation/addDirect.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					},
+					cancel: function() {
+						direct_pages();
+					}
+				});
+			});
+			//删除
+			$(".del").click(function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+			//点击删除
+			var $ = layui.$,
+			active = {
+				getCheckDel: function() { //获取选中数据
+					var checkStatus = table.checkStatus('directQuotation'),
+						data1 = checkStatus.data;
+					var idstr = "";
+				    for(var i=0;i<data1.length;i++) { 
+			      		idstr += data1[i].id ;
+			      		if((i+1)!=data1.length){
+			      			idstr += ",";
+			      		}
+					} 
+					parent.layer.confirm('确定删除记录？', {
+						icon: 3,
+						title: '删除'
+					}, function(index) {
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp+"/WebDeleteQuote?jsoncallback=?",
+							async: true,
+							dataType: 'jsonp',
+							data: {
+								"userId": localStorage.userId,
+								"userPw": localStorage.userPw,
+								"database": localStorage.database,
+								"id": idstr
+							},
+							success: function(res) {
+								var data = JSON.parse(res);
+								if(data[0].ResultValue == 1) {
+									parent.layer.open({
+										title: "提示",
+										content: '删除成功'
+									});
+									directData();
+								} else{
+									parent.layer.open({
+										title: "提示",
+										content: '删除失败'
+									});
+								}
+							}
+						});
+						parent.layer.close(index);
+					});
+				}
+			};
+			//导入
+			$(".quotationimport").click(function() {
+				layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="../../../image/logo.png" alt="" /><span style="margin-left:10px">导入报价单</span>',
+					area: ['600px', '100px'],
+					content: 'import.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero) {
+						layer.setTop(layero); //重点2
+					}
+				});
+			});
+			//清空查询
+			$(".cleardata").click(function(){
+				$(".unitInfo").val("");
+			})
+			//模糊查询
+			$(".unit").click(function() {
+				if (sessionStorage.unitName) {
+					sessionStorage.removeItem(sessionStorage.unitName)
+				}
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">往來单位</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/public/unit/unitPublicList.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero, index) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						$(".import", paentIfarame).css("display", 'block');
+						$(".add", paentIfarame).css("display", 'none');
+						$(".moreAction", paentIfarame).css("display", 'none');
+
+					},
+					cancel: function() {
+//						$(".unit").val(sessionStorage.unitName);
+//						$(".unit").attr('data-id', sessionStorage.unitId);
+					},
+					end: function(){  
+                    	if(sessionStorage.unitData) {
+							if(sessionStorage.unitData.length>0 && sessionStorage.unitData!= "[]"){
+							var data = JSON.parse(sessionStorage.unitData);
+							$(".unit").attr("data-id",data.id)
+							$(".unit").val(data.companyname);
+							}
+						
+						}
+						
+					}
+				});
+			});
+		});
+	</script>
+
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加公司</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link rel="stylesheet" type="text/css" href="../companyManagement/easyui/themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../companyManagement/easyui/themes/icon.css">
+		<script type="text/javascript" src="../companyManagement/easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="../companyManagement/easyui/jquery.easyui.min.js"></script>
+	</head>
+	<style type="text/css">
+		#addcompany {
+			/*width: calc(100vw+17px);*/
+			font-size: 9pt;
+		}
+		
+		#addcompany legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		.layui-input-inline {
+			width: 400px !important;
+		}
+		
+		#addcompany .layui-form-item label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		#addcompany .layui-form-item .layui-input-inline input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		#addcompany .layui-form-item .layui-input-inline select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+			/*border: 1px solid #DDDDDD !important;*/
+		}
+		
+		#addcompany .layui-form-item .layui-input-inline textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+			/*border: 1px solid #ddd !important;*/
+		}
+		
+		#addcompany .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 10px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 0px;
+		}
+		
+		.addcompany_submit,
+		.changeRange,
+		.addbankAccount,
+		.delbankAccount,
+		.addcontacts,
+		.delcontacts {
+			display: inline-block;
+			text-align: center;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 9pt !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+			margin-right: 20px;
+		}
+		
+		.delbankAccount,
+		.delcontacts {
+			margin-right: 12px;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		.layui-form {
+			margin: 0 20px;
+			margin-top: 40px;
+		}
+		
+		.layui-form-item {
+			margin-bottom: 0;
+		}
+		
+		.uploadImg {
+			margin-left: 15px;
+			position: relative;
+		}
+		
+		.removeImg {
+			cursor: pointer;
+			position: absolute;
+			/*top: 100px;*/
+			font-size: 20px !important;
+		}
+		
+		#test2 {
+			background-color: #2D89DD;
+			line-height: 28px;
+			height: 28px;
+			width: 90px;
+		}
+		
+		.panel-body {
+			border-color: #DDDDDD
+		}
+		.datagrid-body{
+			height: 300px !important;
+		}
+		select{
+			border: 1px solid #ddd;
+		}
+	</style>
+	<!--<link rel="stylesheet" type="text/css" href="../../../css/same.css" />-->
+
+	<body>
+		<div id="addcompany">
+			<div class="layui-form-item layui-form-title">
+				<button class="layui-btn addcompany_submit">提交</button>
+			</div>
+			<div>
+			<div class="">
+				<fieldset class="layui-elem-field layui-field-title">
+					<legend>首营审核</legend>
+				</fieldset>
+				<div class="layui-form-item ">
+					<div class="layui-inline">
+						<label class="layui-form-label">证件类型：</label>
+						<div class="layui-input-inline">
+							<select id="choose_type">
+								<option value="0">医疗器械生产许可证</option>
+								<option value="1">第一类医疗器械生产企业备案</option>
+								<option value="2">营业执照（三证合一）</option>
+								<option value="3">医疗器械经营许可证</option>
+								<option value="4">第二类医疗器械经营备案凭证</option>
+								<option value="5">销售人员备案授权</option>
+								<option value="6">质量保证协议书</option>
+							</select>
+							<!--<input autocomplete="off" class="layui-input changeCompany_reg" type="text">-->
+						</div>
+					</div>
+							
+					<div class="layui-inline" id="myname" style="display: none;">
+						<label class="layui-form-label ">姓名：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input myname" type="text">
+						</div>
+					</div>
+					
+					<div class="layui-inline" id="zhengjianhao">
+						<label class="layui-form-label change_name" >证号：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input changeCompany_model" type="text">
+						</div>
+					</div>
+					
+					<div class="layui-inline" id="authorized_regions"  style="display: none;">
+						<label class="layui-form-label">授权区域和品种：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input authorized_regions" type="text">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item ">
+					<div class="layui-inline">
+						<label class="layui-form-label">开始时间：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" id="startDate" class="layui-input changeCompany_startDate" type="text">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">结束时间：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" id="stopDate" class="layui-input changeCompany_stopDate" type="text">
+						</div>
+					</div>
+				</div>
+			<div class="imagesInfo">
+				<p style="margin-left: 75px;height: 24px;">
+					<input type="checkbox" class="login"> 是否长期
+				</p>
+				<div class="layui-form-item ">
+					<div class="layui-inline">
+						<label class="layui-form-label">上传图片：</label>
+						<div class="layui-input-inline">
+							<div class="layui-upload">
+								<button type="button" class="layui-btn" id="test2">上传图片</button>
+								<blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+									预览图：
+									<div class="layui-upload-list" id="demo2"></div>
+								</blockquote>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+				
+				
+				<div class="layui-inline hidden_div" style="margin-left: 80px;">
+					<button class="layui-btn changeRange" style="width: auto;">修改经营范围</button>
+				</div>
+				<div id="demo1" class="hidden_div" style="margin-left: 80px;margin-bottom: 50px;margin-top: 10px;">
+					<table id="jyfw" class="easyui-treegrid jyfw" style="width:580px;height:300px" data-options="">
+						<thead>
+							<tr>
+								<th data-options="field:'name'" width="300">类别</th>
+								<th data-options="field:'date'" width="300">名称</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../js/public.js" type="text/javascript" charset="utf-8"></script>
+
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'tree', 'laydate'], function() {
+
+								
+			var $ = layui.jquery,
+				element = layui.element,
+				laydate = layui.laydate;
+			var table = layui.table;
+			
+
+			if(!checkPermissionStatus("往来单位管理-保存1")){
+			
+				$(".addcompany_submit").remove();
+			}	
+			
+			laydate.render({
+				elem: "#startDate"
+			})
+			laydate.render({
+				elem: "#stopDate"
+			})
+			var jyfwTreeData;
+			if(sessionStorage.jyfwTreeData != 'undefined' && sessionStorage.jyfwTreeData){
+				jyfwTreeData=JSON.parse(sessionStorage.jyfwTreeData);
+			}
+			$("#jyfw").treegrid({
+				data: jyfwTreeData,
+				rownumbers: false,
+				idField: 'id',
+				treeField: 'name'
+			});	
+			$(document).delegate('.removeImg', 'click', function() {
+				$(this).prev().remove();
+				$(this).remove();
+		
+			})
+			//点击图片实现选择文件的效果
+			var imgChanJiaArr=[];
+			layui.use('upload', function() {
+				var $ = layui.jquery,
+				upload = layui.upload;
+				upload.render({
+					elem: '#test2',
+					url: localStorage.serIp+'/WebUploadPhoto',
+					multiple: true,
+					before: function(obj) {
+						controllDel = false;
+						//预读本地文件示例，不支持ie8
+//						obj.preview(function(index, file, result) {
+//							$('#demo2').append('<img src="' + result + '" class="layui-upload-img uploadImg" style="width:120px;height:140px;"><span class="removeImg">X</span>')
+//							$(".removeImg").click(function(){
+//								$(this).prev().remove();
+//								$(this).remove();
+//							})
+//						});
+					},
+					done: function(res) {
+						if(res.errorDesc) {
+							layui.use(['jquery', 'layer'], function() {
+								var $ = layui.$ //重点处
+									,
+									layer = layui.layer;
+								layer.open({
+									content: '上传失败'
+								});
+							})
+//							$(".uploadImg").eq($(".uploadImg").length - 1).remove();
+//							$(".removeImg").eq($(".removeImg").length - 1).remove();
+							return;
+						}else if(res.status == 1){
+													$('#demo2').append('<img src="/' + res.Img + '" class="layui-upload-img uploadImg" style="width:120px;height:140px;"><span class="removeImg">X</span>')
+
+						}
+						controllDel = true;
+					},
+					error: function(e) {
+					}
+				})
+			});
+			$(".changeRange").click(function() {
+//				$('#demo1 table').remove();
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">经营范围</span>',
+					area: ['700px', '90%'],
+					offset: "rb",
+					content: 'views/basicdataProtect/companyManagement/easyui/demo/treegrid/basic.html',
+
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero, index) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						$("#submit", paentIfarame).click(function(res) {
+							parent.layer.open({
+								title: "提示",
+								content: '确认成功',
+									zIndex: parent.layer.zIndex //重点1
+							});
+							
+							parent.layer.close(index); //再执行关闭     
+						})
+						sessionStorage.zhucez=$(".addcompany_submit").attr("name_id");
+					},
+					end: function(index, layero) {
+						if(sessionStorage.jyfwTreeData) {
+							var data_back=JSON.parse(sessionStorage.jyfwTreeData)
+							$('#jyfw').treegrid('loadData', { total: 0, rows: [] });
+							$("#jyfw").treegrid({
+								data: data_back,
+								rownumbers: false,
+								idField: 'id',
+								treeField: 'name'
+							});
+							sessionStorage.zhucez='';
+						}
+
+					}
+				});
+			});
+		
+			var rows, rows2;
+			//点击切换模式choose_type
+			$("#choose_type").change(function(){
+				var type=$(this).val();
+							$("input").val("");$("#demo2").empty();
+				switch (type){
+					case '0' :
+					$("#zhengjianhao").css("display","inline-block");
+
+					$(".change_name").text("证号：");
+					$(".hidden_div").show();
+					$(".imagesInfo").css("display","inline-block"); 
+					$("#authorized_regions").css("display","none");
+					$("#myname").css("display","none");
+					break;
+					case '1' :
+								$("#zhengjianhao").css("display","inline-block");
+
+					$(".change_name").text("登记号：");
+					$(".hidden_div").hide();
+					$(".imagesInfo").css("display","inline-block");
+					$("#authorized_regions").css("display","none");
+					$("#myname").css("display","none");
+					break;
+					case '2' :
+								$("#zhengjianhao").css("display","inline-block");
+
+					$(".change_name").text("统一社会信用代码：");
+					$(".hidden_div").hide();
+					$(".imagesInfo").css("display","inline-block");
+					$("#authorized_regions").css("display","none");
+					$("#myname").css("display","none");
+					break;
+					case '3' :
+					$("#zhengjianhao").css("display","inline-block");
+
+					$(".change_name").text("证号：");
+					$(".hidden_div").show();
+					$(".imagesInfo").css("display","inline-block");
+					$("#authorized_regions").css("display","none");
+					$("#myname").css("display","none");
+					break;
+					case '4' :
+					$("#zhengjianhao").css("display","inline-block");
+
+					$(".change_name").text("备案号："); 
+					$(".hidden_div").show();
+					$(".imagesInfo").css("display","inline-block");
+						$("#authorized_regions").css("display","none");
+					$("#myname").css("display","none");
+					break;
+					case '5' :
+					$("#zhengjianhao").css("display","inline-block");
+					$(".change_name").text("身份证号：");
+					$(".hidden_div").hide();
+					$("#authorized_regions").css("display","inline-block");
+					$("#myname").css("display","inline-block");
+					break;
+					case '6' :
+					$("#zhengjianhao").css("display","none");			
+					$(".hidden_div").hide();
+					$("#authorized_regions").css("display","none");
+					$("#myname").css("display","none");
+					break;
+				}
+			})
+		});
+	</script>
+
+</html>

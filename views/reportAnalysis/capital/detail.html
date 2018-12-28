@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>往来资金明细</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.detail {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.detail_header button {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.layui-table td,
+		.layui-table th {
+			/*padding: 0 3.5vw !important;*/
+		}
+		
+		.detail_header {
+			margin-bottom: 8px;
+		}
+		
+		.btns button,
+		.find {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="detail">
+			<div class="layui-tab">
+				<div class="detail_header">
+					<div class="inputs">
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入单号" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						<div class="btns">
+							<button class="layui-btn moreAction">更多操作</button>
+							<ul class="action">
+						
+								<li>
+									<a class="del" data-type="getCheckDel" lay-event='del'>导出</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<table id="detail" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+		<script src="../../../js/public.js"></script>
+
+	<script>
+		layui.use(['table', 'jquery'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			
+			var companyid=	$(".layui-show", parent.document).attr("lay-item-id");
+
+			
+			getDetailData(companyid);
+						
+			function getDetailData(companyid) {
+
+				var seachContent = $(".seachContent").val();
+				$.ajax({
+					type: "post",
+					url: localStorage.serIp+"/WebGetPayAndReceiveDetails",
+					dataType: "json",
+					contentType:'application/json; charset=utf-8',
+					crossDomain:true,
+					async: true,
+					data: JSON.stringify({
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'companyId':companyid,
+						'txtCondition': seachContent
+					}),
+					success: function(res) {
+						
+						var desData = JSON.parse(res);
+						dataInfo(desData);
+						$(".detail [data-field=date] div:gt(0)").each(function(i) {
+			
+							$(".detail .layui-form tbody tr:eq("+i+") td:eq(2) div").text(desData[i].date.substring(0,10));
+							
+						});
+						
+						$(".detail [data-field=accountperiod] div:gt(0)").each(function(i) {
+							var accountperiod = diffDay(desData[i].accountperiod,desData[i].date)+ "天";
+							$(".detail tbody tr:eq("+i+") td:eq(5) div").text(accountperiod);
+
+							
+						});
+						
+					}
+				});
+
+			}
+			
+			
+			function dataInfo(data) {
+			//展示已知数据
+				table.render({
+					elem: '#detail',
+					data: data,
+					height: "full-78",
+					cols: [
+						[ //标题栏
+							{
+								field: 'ordernum',
+								title: '单号',
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+								minWidth: 200
+
+							}, {
+								field: 'companyname',
+								title: '往来单位',
+								minWidth: 200
+
+							}, {
+								field: 'date',
+								title: '核价日期',
+							}, {
+								field: 'receive',
+								title: '应收',
+							}, {
+								field: 'pay',
+								title: '应付',
+							}, {
+								field: 'accountperiod',
+								title: '账期',
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [50,100,200],
+					limit: 50//每页默认显示的数量
+				});
+			}
+			
+			
+			$(".find").click(function() {
+
+				getDetailData(companyid);
+			})
+			
+			
+			$("body").keydown(function(event) {
+				if(event.keyCode == "13") { //keyCode=13是回车键
+					$('.find').click();
+				}
+			});
+		
+			
+	
+		});
+	</script>
+
+</html>

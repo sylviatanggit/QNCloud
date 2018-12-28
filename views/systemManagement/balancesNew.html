@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+			<title>结存并新开账套</title>
+			<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+		</head>
+	</head>
+	<style type="text/css">
+		body {
+			margin: 0;
+			padding: 0;
+		}
+		
+		.balancesNew_title {
+			font-size: 20px;
+			color: #232323;
+			font-weight: bold;
+			margin: 20px 0 20px 48px;
+		}
+		
+		.warning {
+			margin-left: 20px;
+			color: red;
+			font-size: 14px !important;
+		}
+		
+		.balancesNew_body {
+			height: 190px;
+			border-top: 1px solid #C5C5C5;
+			border-bottom: 1px solid #C5C5C5;
+		}
+		
+		.balancesNew_body p {
+			margin-top: 12px;
+			margin-left: 72px;
+			font-size: 16px;
+			color: #232323;
+		}
+		
+		.balancesNew_body ul {
+			margin-left: 100px;
+			color: #232323;
+			font-size: 12px;
+			margin-bottom: 30px;
+		}
+		
+		.balancesNew_body ul li {
+			margin-top: 10px;
+		}
+		.balancesNew_footer{
+			font-size: 12px;
+			padding-top:20px;
+		}
+		.layui-layer-btn0 {
+			font-size: 9pt;
+			margin-left: 20px !important;
+			width: 60px;
+			display: inline;
+			border: 1px solid #357BEA;
+			background-color: #357BEA;
+			color: #fff;
+			border-radius: 2px;
+			line-height: 25px !important;
+			cursor: pointer;
+		}
+		
+		.layui-layer-btn1 {
+			font-size: 9pt;
+			width: 60px;
+			display: inline;
+			border: 1px solid #357BEA;
+			background-color: #FFFFFF;
+			color: #357BEA;
+			margin-left: 5px;
+			border-radius: 2px;
+			line-height: 25px !important;
+			cursor: pointer;
+		}
+		.balancesNew_footer input{
+			width: 90px;
+			border: none;
+			border: 1px solid #8C8C8C;
+			border-radius: 2px;
+			margin-left: 8px;
+			line-height: 26px !important;
+		}
+		.balancesNew_footer label{
+			margin-left: 12px;
+			line-height: 25px !important;
+		}
+	</style>
+
+	<body>
+		<div class="balancesNew_header">
+			<h2 class="balancesNew_title">结存并新开账套<span class="warning">（注意：如果对数据进行跨年查询，请不要结存）</span></h2>
+		</div>
+		<div class="balancesNew_body">
+			<p>提示：</p>
+			<ul>
+				<li>1.结存将对数据进行结转，并删除所有业务单据</li>
+				<li>2.所有业务单据都需要审核完成才能进行年结存</li>
+				<li>3.结存完成后，系统将新建一个账套</li>
+				<li>4.如需要看以前账套数据，请在登录系统界面选择需要的账套</li>
+				<li>5.进入系统来查看历史数据，不能对数据进行修改</li>
+			</ul>
+		</div>
+		<div class="balancesNew_footer">
+			<label for="">新开账套名称</label><input type="text" name="" id="" value="" />
+			<label for="">结存截止日期</label><input type="text" name="" id="balancesNew" value="" />
+			<button class="layui-layer-btn0">确认</button>
+			<button class="layui-layer-btn1">关闭</button>
+		</div>
+	</body>
+	<script src="../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'laydate'], function(){
+			var table = layui.table;
+			var laydate = layui.laydate;
+			var $ = layui.jquery;
+			laydate.render({
+				elem: "#balancesNew",
+				value: new Date()
+			})
+			$(".layui-layer-btn1").click(function(){
+//				layer.closeAll('iframe');
+			});
+		});
+	</script>
+</html>

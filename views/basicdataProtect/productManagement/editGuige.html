@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>青囊</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		* {
+			font-size: 9pt;
+		}
+		
+		input {
+			font-size: 9pt;
+		}
+		
+		.editGuige {
+			margin-left: 24px;
+			margin-bottom: 20px;
+			overflow-y: hidden;
+		}
+		
+		.editGuige .layui-this {
+			border-bottom: 3px solid #FFFFFF;
+			z-index: 5;
+			border-top: 2px solid #2D89DD;
+		}
+		
+		.editGuige_seach {
+			margin-top: 11px;
+		}
+		
+		.editGuige_seach .layui-input {
+			height: 28px !important;
+			line-height: 28px !important;
+			width: 240px;
+		}
+		
+		.editGuige_seach .layui-btn {
+			width: 76px !important;
+			line-height: 28px !important;
+			height: 28px !important;
+			background-color: #2D89DD !important;
+		}
+		
+		.editGuige_seach .layui-btn {
+			line-height: 28px !important;
+			height: 28px !important;
+		}
+		
+		tbody .layui-table-cell {
+			font-family: "PingFang" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		tbody tr {
+			height: 56px !important;
+		}
+		
+		.layui-table-fixed-r {
+			display: none !important;
+		}
+		
+		tbody .laytable-cell-1-mingcheng,
+		tbody .laytable-cell-1-guige {
+			color: #357BEA !important;
+		}
+		
+		tbody .laytable-cell-2-mingcheng,
+		tbody .laytable-cell-2-guige {
+			color: #357BEA !important;
+		}
+		
+		.layui-table[lay-even] tr:nth-child(even) {
+			background-color: #EFF5FF;
+		}
+		
+		.editGuige_btn {
+			margin-right: 40px;
+			margin-top: -27px;
+			margin-left: 800px;
+		}
+		
+		.editGuige_btn .layui-btn {
+			height: 28px !important;
+			line-height: 28px !important;
+		}
+		
+		.editGuige .layui-table-view .layui-table td {
+			/*padding: 5px 7px !important;*/
+		}
+		
+		.editGuige .layui-table-view .layui-table th {
+			/*padding: 5px 7px !important;*/
+		}
+		
+		#editGuige_title {
+			width: 100%;
+			z-index: 100;
+			position: fixed;
+			background-color: #FFFFFF;
+		}
+		
+		.editGuige .layui-table-tool {
+			bottom: 0;
+		}
+		
+		.editGuige_btn ul {
+			border: 1px solid #2D89DD;
+			box-sizing: border-box;
+		}
+		
+		.editGuige_btn ul li {
+			width: 83px;
+			background-color: #FFFFFF;
+			height: 28px;
+			line-height: 28px;
+			text-align: center;
+		}
+		
+		.editGuige_btn ul li a {
+			color: #357BEA;
+			cursor: pointer;
+		}
+		
+		.editGuige_btn ul li:hover {
+			/*background-color: #CCCCCC;*/
+		}
+		
+		#editGuige_content .layui-laypage {
+			position: absolute;
+			bottom: 0px;
+			z-index: 99;
+		}
+		
+		.layui-table-cell {
+			height: auto !important;
+		}
+		
+		td[data-edit=text] {
+			border: 1px solid #CCCCCC !important;
+			border: none !important;
+		}
+		
+		input.layui-table-edit {
+			display: block !important;
+			border: 1px solid #CCCCCC !important;
+		}
+	</style>
+
+	<body>
+		<div class="editGuige" id="editGuige">
+			<div id="editGuige_title">
+				<div class="editGuige_seach">
+					<div class="layui-inline">
+						<input class="layui-input editGuige_seach_content" name="id" id="" autocomplete="off" placeholder="请输入产品">
+					</div>
+					<button class="layui-btn editGuige_seach_btn " style="margin-left: 5px;">查询</button>
+					<span style="color: red;text-align: center;display: inline-block;margin-left: 300px;">产品类别只能填写产品或者工具两个类别!!!!!!</span>
+				</div>
+
+				<div class="layui-inline editGuige_btn " style="float: right;">
+
+					<button class="layui-btn layui-nav-item layui-btn-normal baocun">保存</button>
+					<button class="layui-btn layui-nav-item layui-btn-normal piliangcaozuo" style="position: relative;margin-left: 0;">批量操作</button>
+					<ul style="position: absolute;top: 27px;left: 63px;z-index: 10;display: none;">
+						<li>
+							<a class="editGuige_caozuo" data-type="getCheckDeleditGuige">批量删除</a>
+						</li>
+					</ul>
+					<!--<button class="layui-btn layui-nav-item layui-btn-normal addNewhang">添加新行</button>-->
+					<button class="layui-btn layui-nav-item layui-btn-normal addGuige" style="margin-left: 0;">添加规格</button>
+				</div>
+
+			</div>
+			<table id="editGuige_content" lay-filter="demo10" style="margin-top: 40px;">
+
+			</table>
+			<script type="text/html" id="editGuige_barDemo2">
+				<a class="layui-btn layui-btn-mini" lay-event="edit6" style="background-color: transparent !important;color: #357BEA !important;">编辑</a>
+			</script>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+
+	<script type="text/javascript">
+		layui.use(['jquery', 'layer'], function() {
+			var $ = layui.$ //重点处
+				,
+				layer = layui.layer;
+
+			$(".editGuige_btn .piliangcaozuo").hover(function() {
+				$(".editGuige_btn ul").css("display", "block");
+			}, function() {
+				$(".editGuige_btn ul").css("display", "none")
+			});
+			$(".editGuige_btn ul").hover(function() {
+				$(".editGuige_btn ul").css("display", "block");
+			}, function() {
+				$(".editGuige_btn ul").css("display", "none")
+			})
+		})
+	</script>
+	<script>
+		layui.use(['jquery', 'layer', 'table', 'laypage'], function() {
+			var table = layui.table;
+			var $ = layui.$ //重点处
+			layer = layui.layer;
+			var laypage = layui.laypage;
+
+			table.on('tool(demo10)', function(obj) {
+				var data = obj.data;
+				if(obj.event === 'del') {
+					parent.layer.confirm('真的删除行么', function(index) {
+						obj.del();
+						parent.layer.close(index);
+					});
+				}
+
+				//点击编辑
+				if(obj.event === 'edit6') {
+					parent.parent.layer.open({
+						type: 2,
+						title: "编辑规格",
+						content: "views/basicdataProtect/productManagement/editGuige_edit.html", //这里content是一个普通的String
+						area: ['700px', '90%'],
+						offset: "rb",
+						success: function(layero, index) {
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$(".editGuige_edit_regname", paentIfarame).val(sessionStorage.getItem("data_manuName"));
+							$(".editGuige_edit_reginfo", paentIfarame).val(sessionStorage.getItem("data_regNum") + " " + sessionStorage.getItem("data_regtime") + "至" + sessionStorage.getItem("data_failtime"));
+							$(".editGuige_edit_reginfo", paentIfarame).attr("data-id", sessionStorage.getItem("data_id"));
+							$(".editGuige_edit_proName", paentIfarame).val(data.productName);
+							$(".editGuige_edit_seriesName", paentIfarame).val(data.seriesName);
+							$(".editGuige_edit_brandName", paentIfarame).val(data.brandName);
+							if(data.productType == 0) {
+								$(".editGuige_edit_proType", paentIfarame).val('产品');
+							} else {
+								$(".editGuige_edit_proType", paentIfarame).val('工具');
+							}
+							$(".editGuige_edit_danwei", paentIfarame).val(data.productDanwei);
+							$(".editGuige_edit_proUnit", paentIfarame).val(data.productUnit);
+							$(".editGuige_edit_proMaterial", paentIfarame).val(data.productMaterial);
+							$(".editGuige_edit_proModel", paentIfarame).val(data.productModel);
+							$(".editGuige_edit_proNum", paentIfarame).val(data.productNum);
+							$(".editGuige_edit_package", paentIfarame).val(data.productPackage);
+							$(".editGuige_edit_con", paentIfarame).val(data.storagecondition);
+							$(".editGuige_edit_code", paentIfarame).val(data.productCode);
+							$(".editGuige_edit_submit", paentIfarame).click(function() {
+								var editGuige_edit_regNum = sessionStorage.getItem("data_regNum");
+								var editGuige_edit_id = data.registrationId;
+								var editGuige_edit_proName = $(".editGuige_edit_proName", paentIfarame).val();
+								var editGuige_edit_seriesName = $(".editGuige_edit_seriesName", paentIfarame).val();
+								var editGuige_edit_brandName = $(".editGuige_edit_brandName", paentIfarame).val();
+								var editGuige_edit_proType = $(".editGuige_edit_proType", paentIfarame).val();
+								var editGuige_edit_danwei = $(".editGuige_edit_danwei", paentIfarame).val();
+								if($(".editGuige_edit_proType", paentIfarame).val() == '产品') {
+									var editGuige_edit_type = 0;
+								} else {
+									var editGuige_edit_type = 1;
+								}
+
+								var editGuige_edit_proUnit = $(".editGuige_edit_proUnit", paentIfarame).val();
+								var editGuige_edit_proMaterial = $(".editGuige_edit_proMaterial", paentIfarame).val();
+								var editGuige_edit_proModel = $(".editGuige_edit_proModel", paentIfarame).val();
+								var editGuige_edit_proNum = $(".editGuige_edit_proNum", paentIfarame).val();
+								var editGuige_edit_package = $(".editGuige_edit_package", paentIfarame).val();
+								var editGuige_edit_con = $(".editGuige_edit_con", paentIfarame).val();
+								var editGuige_edit_code = $(".editGuige_edit_code", paentIfarame).val();
+								//								if(editGuige_edit_regNum && editGuige_edit_id && editGuige_edit_type && editGuige_edit_proName && editGuige_edit_danwei && editGuige_edit_proUnit && editGuige_edit_package && editGuige_edit_con) {
+								$.ajax({
+									type: "post",
+									url: "http://www.gudaiwang.com/QingNangServer/AllProductManagerAPI",
+									async: true,
+									data: {
+										"method": 7,
+										"productId": data.productId,
+										"registrationnum": editGuige_edit_regNum,
+										"registrationId": editGuige_edit_id,
+										"productName": editGuige_edit_proName,
+										"seriesName": editGuige_edit_seriesName,
+										"brandName": editGuige_edit_brandName,
+										"productType": editGuige_edit_type,
+										"productDanwei": editGuige_edit_danwei,
+										"productUnit": editGuige_edit_proUnit,
+										"productMaterial": editGuige_edit_proMaterial,
+										"productModel": editGuige_edit_proModel,
+										"productNum": editGuige_edit_proNum,
+										"productPackage": editGuige_edit_package,
+										"storagecondition": editGuige_edit_con,
+										"productCode": editGuige_edit_code,
+										"productImgArray": "",
+									},
+									success: function(res) {
+										var res1 = JSON.parse(res)
+										if(res1.result == 1) {
+											layui.use(['jquery', 'layer'], function() {
+												var $ = layui.$ //重点处
+													,
+													layer = layui.layer;
+												parent.parent.layer.open({
+													content: '修改成功'
+												});
+											})
+											//刷新
+											$.post("http://www.gudaiwang.com/QingNangServer/AllProductManagerAPI", {
+												"method": 4,
+												"showNum": editGuige_limit,
+												"content": '',
+												"currentPage": editGuige_curpage,
+												"registrationId": sessionStorage.getItem("data_id")
+											}, function(data) {
+												var datas = JSON.parse(data);
+												editGuige_count = datas.count;
+												edit_Chanpinguige(datas.data, editGuige_limit);
+												if(editGuige_off) {
+													editGuige_off = false;
+													editGuihe_pages(editGuige_limit, editGuige_count)
+												}
+												$("[data-field=productType] div:gt(0)").each(function(i) {
+													if(datas.data[i].productType == 0) {
+														$(this).html("产品");
+													} else {
+														$(this).html("工具");
+													}
+												});
+											})
+											window.location.reload();
+										} else {
+											layui.use(['jquery', 'layer'], function() {
+												var $ = layui.$ //重点处
+													,
+													layer = layui.layer;
+												parent.parent.layer.open({
+													content: '规格已存在'
+												});
+											})
+										}
+									}
+								});
+
+							})
+						}
+					});
+				}
+			});
+			var $ = layui.$,
+				active = {
+					getCheckDeleditGuige: function() { //获取选中数据
+						var checkStatus = table.checkStatus('editGuige'),
+							data = checkStatus.data;
+						var editGuige_checkDel = "";
+						for(var i = 0; i < data.length; i++) {
+
+							editGuige_checkDel += data[i].productId + ",";
+						}
+						editGuige_checkDel = editGuige_checkDel.substring(0, editGuige_checkDel.length - 1);
+						parent.layer.confirm('确定删除产品？', {
+							icon: 3,
+							title: '删除'
+						}, function(index) {
+							$.ajax({
+								type: "post",
+								url: "http://www.gudaiwang.com/QingNangServer/MoreOperationsAPI",
+								async: true,
+								data: {
+									"method": 1,
+									"flag": 0,
+									"id": editGuige_checkDel
+								},
+								success: function(res) {
+									//								console.log(res)
+									if(res == 1) {
+										layui.use(['jquery', 'layer'], function() {
+											var $ = layui.$ //重点处
+												,
+												layer = layui.layer;
+											parent.parent.layer.open({
+												content: '删除成功'
+											});
+										})
+									} else if(res == 0) {
+										layui.use(['jquery', 'layer'], function() {
+											var $ = layui.$ //重点处
+												,
+												layer = layui.layer;
+											parent.parent.layer.open({
+												content: '删除失败'
+											});
+										})
+									} else {
+										layui.use(['jquery', 'layer'], function() {
+											var $ = layui.$ //重点处
+												,
+												layer = layui.layer;
+											parent.parent.layer.open({
+												content: '请选中产品后继续操作'
+											});
+										})
+									}
+									editguige_ajax()
+								}
+
+							});
+							parent.layer.close(index);
+						});
+					},
+					getCheckStarteditGuige: function() { //获取选中数目
+						var checkStatus = table.checkStatus('editGuige'),
+							data = checkStatus.data;
+
+						var editGuige_checkStart = "";
+						for(var i = 0; i < data.length; i++) {
+
+							editGuige_checkStart += data[i].registrationId + ",";
+						}
+						editGuige_checkStart = editGuige_checkStart.substring(0, editGuige_checkStart.length - 1);
+						parent.layer.confirm('确定启用产品？', {
+							icon: 3,
+							title: '启用'
+						}, function(index) {
+
+							$.ajax({
+								type: "post",
+								url: "http://www.gudaiwang.com/QingNangServer/MoreOperationsAPI",
+								async: true,
+								data: {
+									"method": 1,
+									"flag": 1,
+									"id": editGuige_checkStart
+								},
+								success: function(res) {
+									//								console.log(res)
+									if(res == 1) {
+										layui.use(['jquery', 'layer'], function() {
+											var $ = layui.$ //重点处
+												,
+												layer = layui.layer;
+											parent.parent.layer.open({
+												content: '启用成功'
+											});
+										})
+									} else if(res == 0) {
+										layui.use(['jquery', 'layer'], function() {
+											var $ = layui.$ //重点处
+												,
+												layer = layui.layer;
+											parent.parent.layer.open({
+												content: '启用失败'
+											});
+										})
+									} else {
+										layui.use(['jquery', 'layer'], function() {
+											var $ = layui.$ //重点处
+												,
+												layer = layui.layer;
+											parent.parent.layer.open({
+												content: '请选中产品后继续操作'
+											});
+										})
+									}
+									editguige_ajax()
+								}
+							});
+							parent.layer.close(index);
+						});
+
+					},
+					getCheckStopeditGuige: function() { //获取选中数目
+						var checkStatus = table.checkStatus('editGuige'),
+							data = checkStatus.data;
+
+						var editGuige_checkStop = "";
+						for(var i = 0; i < data.length; i++) {
+
+							editGuige_checkStop += data[i].registrationId + ",";
+						}
+						editGuige_checkStop = editGuige_checkStop.substring(0, editGuige_checkStop.length - 1);
+						parent.layer.confirm('确定停用产品？', {
+							icon: 3,
+							title: '停用'
+						}, function(index) {
+
+							$.ajax({
+								type: "post",
+								url: "http://www.gudaiwang.com/QingNangServer/MoreOperationsAPI",
+								async: true,
+								data: {
+									"method": 1,
+									"flag": 2,
+									"id": editGuige_checkStop
+								},
+								success: function(res) {
+									//								console.log(res)
+									if(res == 1) {
+										layui.use(['jquery', 'layer'], function() {
+											var $ = layui.$ //重点处
+												,
+												layer = layui.layer;
+											parent.parent.layer.open({
+												content: '停用成功'
+											});
+										})
+									} else if(res == 0) {
+										layui.use(['jquery', 'layer'], function() {
+											var $ = layui.$ //重点处
+												,
+												layer = layui.layer;
+											parent.parent.layer.open({
+												content: '停用失败'
+											});
+										})
+									} else {
+										layui.use(['jquery', 'layer'], function() {
+											var $ = layui.$ //重点处
+												,
+												layer = layui.layer;
+											parent.parent.layer.open({
+												content: '请选中产品后继续操作'
+											});
+										})
+									}
+									editguige_ajax()
+								}
+							});
+							parent.layer.close(index);
+						});
+
+					}
+				};
+			$('.editGuige_caozuo').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+
+			//添加规格
+			$(".addGuige").click(function() {
+				parent.parent.layer.open({
+					type: 2,
+					title: "添加规格",
+					content: "views/basicdataProtect/productManagement/addGuige.html", //这里content是一个普通的String
+					area: ['700px', '90%'],
+					offset: "rb",
+					success: function(layero, index) {
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						$(".addGuige_regname", paentIfarame).val(sessionStorage.getItem("data_manuName"));
+						$(".addGuige_reginfo", paentIfarame).val(sessionStorage.getItem("data_regNum") + " " + sessionStorage.getItem("data_regtime") + "至" + sessionStorage.getItem("data_failtime"));
+						$(".addGuige_reginfo", paentIfarame).attr("data-id", sessionStorage.getItem("data_id"));
+
+						$(".addGuige_submit", paentIfarame).click(function() {
+							var addGuige_regNum = $(".addGuige_reginfo", paentIfarame).val();
+							var addGuige_id = $(".addGuige_reginfo", paentIfarame).attr("data-id");
+							var addGuige_proName = $(".addGuige_proName", paentIfarame).val();
+							var addGuige_proType = $(".addGuige_proType", paentIfarame).val();
+							var addGuige_prodanwei = $(".addGuige_prodanwei", paentIfarame).val();
+							var addGuige_proUnit = $(".addGuige_proUnit", paentIfarame).val();
+							var addGuige_proMaterial = $(".addGuige_proMaterial", paentIfarame).val();
+							var addGuige_proModel = $(".addGuige_proModel", paentIfarame).val();
+							var addGuige_proNum = $(".addGuige_proNum", paentIfarame).val();
+							var addGuige_package = $(".addGuige_package", paentIfarame).val();
+							var addGuige_con = $(".addGuige_con", paentIfarame).val();
+							var addGuige_seriesName = $(".addGuige_seriesName", paentIfarame).val();
+							var addGuige_brandName = $(".addGuige_brandName", paentIfarame).val();
+							var addGuige_code = $(".addGuige_code", paentIfarame).val();
+							//						console.log(addGuige_regNum + addGuige_id + addGuige_proName + addGuige_proType + addGuige_prodanwei + addGuige_proUnit + addGuige_proMaterial)
+
+							if(addGuige_regNum && addGuige_id && addGuige_proType && addGuige_proName && addGuige_prodanwei && addGuige_proUnit && addGuige_package && addGuige_con) {
+								$.ajax({
+									type: "post",
+									url: "http://www.gudaiwang.com/QingNangServer/AllProductManagerAPI",
+									async: true,
+									data: {
+										"method": 8,
+										"registrationnum": sessionStorage.getItem("data_regNum"),
+										"registrationId": addGuige_id,
+										"productName": addGuige_proName,
+										"productType": addGuige_proType,
+										"productDanwei": addGuige_prodanwei,
+										"productUnit": addGuige_proUnit,
+										"productMaterial": addGuige_proMaterial,
+										"productModel": addGuige_proModel,
+										"productNum": addGuige_proNum,
+										"productPackage": addGuige_package,
+										"storagecondition": addGuige_con,
+										"seriesName": addGuige_seriesName,
+										"brandName": addGuige_brandName,
+										"productCode": addGuige_code,
+										"productImgArray": "",
+									},
+									success: function(res) {
+										var res1 = JSON.parse(res)
+										if(res1.result == 1) {
+											layui.use(['jquery', 'layer'], function() {
+												var $ = layui.$ //重点处
+													,
+													layer = layui.layer;
+												parent.parent.layer.open({
+													content: '添加成功'
+												});
+											})
+											$.post("http://www.gudaiwang.com/QingNangServer/AllProductManagerAPI", {
+												"method": 4,
+												"showNum": editGuige_limit,
+												"content": '',
+												"currentPage": editGuige_curpage,
+												"registrationId": sessionStorage.getItem("data_id")
+											}, function(data) {
+												var datas = JSON.parse(data);
+												editGuige_count = datas.count;
+												edit_Chanpinguige(datas.data, editGuige_limit);
+												if(editGuige_off) {
+													editGuige_off = false;
+													editGuihe_pages(editGuige_limit, editGuige_count)
+												}
+												$("[data-field=productType] div:gt(0)").each(function(i) {
+													if(datas.data[i].productType == 0) {
+														$(this).html("产品");
+													} else {
+														$(this).html("工具");
+													}
+												});
+											})
+										} else {
+											layui.use(['jquery', 'layer'], function() {
+												var $ = layui.$ //重点处
+													,
+													layer = layui.layer;
+												parent.parent.layer.open({
+													content: '规格已存在'
+												});
+											})
+										}
+									}
+								});
+							} else {
+								layui.use(['jquery', 'layer'], function() {
+									var $ = layui.$ //重点处
+										,
+										layer = layui.layer;
+									parent.parent.layer.open({
+										content: '星号为必填内容'
+									});
+								})
+							}
+						})
+						//						sessionStorage.removeItem("data_manuName");
+						//						sessionStorage.removeItem("data_redNum");
+						//						sessionStorage.removeItem("data_regtime");
+						//						sessionStorage.removeItem("data_failtime");
+						//						sessionStorage.removeItem("data_id");
+					}
+				});
+			});
+
+			$(".addNewhang").click(function() {
+
+				var biaohao1 = '<td data-field="biaohao" align="center"><div class="layui-table-cell laytable-cell-2-biaohao"></div></td>';
+				var checkbox1 = '<td data-field="1"><div class="layui-table-cell laytable-cell-checkbox"><input type="checkbox" name="layTableCheckbox" lay-skin="primary"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div></div></td>';
+				var productName = '<td data-field="productName" data-edit="true"><div class="layui-table-cell laytable-cell-2-productName addName"></div></td>';
+				var productUnit = '<td data-field="productUnit" data-edit="true"><div class="layui-table-cell laytable-cell-2-productUnit addUnit"></div></td>';
+				var productModel = '<td data-field="productModel" data-edit="true"><div class="layui-table-cell laytable-cell-2-productModel addModel"></div></td>';
+				var productType = '<td data-field="productType" data-edit="true"><div class="layui-table-cell laytable-cell-2-productType addType"></div></td>';
+
+				var productNum = '<td data-field="productNum" data-edit="true"><div class="layui-table-cell laytable-cell-2-productNum addNum"></div></td>';
+				var productDanwei = '<td data-field="productDanwei" data-edit="true"><div class="layui-table-cell laytable-cell-2-productDanwei addDanwei"></div></td>';
+				var productPackage = '<td data-field="productPackage" data-edit="true"><div class="layui-table-cell laytable-cell-2-productPackage addPackage"></div></td>';
+				var productMaterial = '<td data-field="productMaterial" data-edit="true"><div class="layui-table-cell laytable-cell-2-productMaterial addMaterial"></div></td>';
+				var storagecondition = '<td data-field="storagecondition" data-edit="true"><div class="layui-table-cell laytable-cell-2-storagecondition addcondition"></div></td>';
+				var brandName = '<td data-field="brandName" data-edit="true"><div class="layui-table-cell laytable-cell-2-brandName addbrandName"></div></td>';
+				var seriesName = '<td data-field="seriesName" data-edit="true"><div class="layui-table-cell laytable-cell-2-seriesName addseriesName"></div></td>';
+				var productCode = '<td data-field="productCode" data-edit="true"><div class="layui-table-cell laytable-cell-2-productCode addCode"></div></td>';
+				var Aedit = '<td data-field="12" data-edit="true" align="center" data-off="true"><div class="layui-table-cell laytable-cell-2-12"> <a class="layui-btn layui-btn-mini" lay-event="del" style="background-color: white !important;color: #357BEA !important;">删除</a> </div></td>';
+				var htmlStr = '<tr data-index="" class="new">' + biaohao1 + checkbox1 + productName + productUnit + productModel + productType + productNum + productDanwei + productPackage + productMaterial + storagecondition + productCode + seriesName + brandName + Aedit + '</tr>';
+				$("#editGuige tbody").prepend(htmlStr);
+			})
+			$(".baocun").click(function() {
+				if($(".new").text() == "") {
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+							layer = layui.layer;
+						parent.parent.layer.open({
+							content: '请先添加行再保存'
+						});
+					})
+					return;
+				}
+				if($(".addType").text() == '工具') {
+					var addType = 0;
+				} else {
+					var addType = 1;
+				}
+				//				console.log(sessionStorage.getItem("data_regNum"))
+				//				console.log(sessionStorage.getItem("data_id"))
+				if($(".addName").text() == "") {
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+							layer = layui.layer;
+						parent.parent.layer.open({
+							content: '请填写产品名称'
+						});
+					})
+				} else if(addType == "") {
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+							layer = layui.layer;
+						parent.parent.layer.open({
+							content: '请选择产品类别'
+						});
+					})
+				} else if($(".addNum").text() == "") {
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+							layer = layui.layer;
+						parent.parent.layer.open({
+							content: '请填写产品编号'
+						});
+					})
+				} else if($(".addUnit").text() == "") {
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+							layer = layui.layer;
+						parent.parent.layer.open({
+							content: '请填写规格'
+						});
+					})
+				} else if($(".addDanwei").text() == "") {
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+							layer = layui.layer;
+						parent.parent.layer.open({
+							content: '请填写单位'
+						});
+					})
+				} else if($(".addPackage").text() == "") {
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+							layer = layui.layer;
+						parent.parent.layer.open({
+							content: '请填写包装'
+						});
+					})
+				} else if($(".addcondition").text() == "") {
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+							layer = layui.layer;
+						parent.parent.layer.open({
+							content: '请填写存储方式'
+						});
+					})
+				} else if($(".addseriesName").text() == "") {
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+							layer = layui.layer;
+						parent.parent.layer.open({
+							content: '请填写系列名称'
+						});
+					})
+				} else if($(".addbrandName").text() == "") {
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+							layer = layui.layer;
+						parent.parent.layer.open({
+							content: '请填写品牌名称'
+						});
+					})
+				} else {
+					$.ajax({
+						type: "post",
+						url: "http://www.gudaiwang.com/QingNangServer/AllProductManagerAPI",
+						async: true,
+						data: {
+							"method": 8,
+							//						"productId": "",
+							"registrationnum": sessionStorage.getItem("data_regNum"),
+							"registrationId": sessionStorage.getItem("data_id"),
+							"productName": $(".addName").text(),
+							"seriesName": $(".addseriesName").text(),
+							"brandName": $(".addbrandName").text(),
+							"productType": addType,
+							"productDanwei": $(".addDanwei").text(),
+							"productUnit": $(".addUnit").text(),
+							"productMaterial": $(".addMaterial").text(),
+							"productModel": $(".addModel").text(),
+							"productNum": $(".addNum").text(),
+							"productPackage": $(".addPackage").text(),
+							"storagecondition": $(".addcondition").text(),
+							"productCode": $(".addCode").text(),
+							"productImgArray": "",
+						},
+						success: function(res) {
+							var res1 = JSON.parse(res)
+							if(res1.result == 1) {
+								layui.use(['jquery', 'layer'], function() {
+									var $ = layui.$ //重点处
+										,
+										layer = layui.layer;
+									parent.parent.layer.open({
+										content: '添加成功'
+									});
+								})
+								$.post("http://www.gudaiwang.com/QingNangServer/AllProductManagerAPI", {
+									"method": 4,
+									"showNum": editGuige_limit,
+									"content": '',
+									"currentPage": editGuige_curpage,
+									"registrationId": sessionStorage.getItem("data_id")
+								}, function(data) {
+									var datas = JSON.parse(data);
+									//												console.log(datas.count)
+									editGuige_count = datas.count;
+									edit_Chanpinguige(datas.data, editGuige_limit);
+									if(editGuige_off) {
+										editGuige_off = false;
+										editGuihe_pages(editGuige_limit, editGuige_count)
+									}
+									$("[data-field=productType] div:gt(0)").each(function(i) {
+										if(datas.data[i].productType == 0) {
+											$(this).html("产品");
+										} else {
+											$(this).html("工具");
+										}
+									});
+								})
+							} else {
+								layui.use(['jquery', 'layer'], function() {
+									var $ = layui.$ //重点处
+										,
+										layer = layui.layer;
+									parent.layer.open({
+										content: '规格已存在'
+									});
+								})
+							}
+						}
+					});
+				}
+			})
+
+			table.on('edit(demo10)', function(obj) {
+				var value = obj.value //得到修改后的值
+					,
+					data = obj.data //得到所在行所有键值
+					,
+					field = obj.field; //得到字段
+
+				$.ajax({
+					type: "post",
+					url: "http://www.gudaiwang.com/QingNangServer/AllProductManagerAPI",
+					async: true,
+					data: {
+						"method": 7,
+						"productId": data.productId,
+						"registrationnum": data.registrationnum,
+						"registrationId": data.registrationId,
+						"productName": data.productName,
+						"productType": data.productType,
+						"productDanwei": data.productDanwei,
+						"productUnit": data.productUnit,
+						"productMaterial": data.productMaterial,
+						"productModel": data.productModel,
+						"productNum": data.productNum,
+						"productPackage": data.productPackage,
+						"storagecondition": data.storagecondition,
+						"productCode": data.productCode,
+						"productImgArray": "",
+					},
+					success: function(res) {
+						var res1 = JSON.parse(res)
+						if(res1.result == 1) {
+							layui.use(['jquery', 'layer'], function() {
+								var $ = layui.$ //重点处
+									,
+									layer = layui.layer;
+								parent.layer.open({
+									content: '修改成功'
+								});
+							})
+						} else {
+							layui.use(['jquery', 'layer'], function() {
+								var $ = layui.$ //重点处
+									,
+									layer = layui.layer;
+								parent.layer.open({
+									content: '规格已存在'
+								});
+							})
+						}
+					}
+				});
+			});
+
+			function edit_Chanpinguige(edit_guige, limit) {
+
+				table.render({
+					elem: '#editGuige_content',
+					data: edit_guige,
+					height: "full-100",
+					id: "editGuige",
+					cols: [
+						[ //标题栏
+							{
+								field: "biaohao",
+								title: ' ',
+								width: 40,
+								align: "center",
+								sort: true
+							},
+							{
+								checkbox: true,
+								LAY_CHECKED: false
+							} //默认全选
+							, {
+								field: 'producename',
+								title: '产品名称',
+//								edit: 'text',
+								minWidth: 100
+							},
+
+							{
+								field: 'danwei',
+								title: '规格',
+//								edit: 'text',
+								minWidth: 100
+							},
+
+							{
+								field: 'producemodel',
+								title: '型号',
+//								edit: 'text',
+								minWidth: 60
+							},
+							{
+								field: 'producettype',
+								title: '产品类别',
+//								edit: 'text',
+								minWidth: 60
+							},
+							{
+								field: 'producenum',
+								title: '产品编号',
+//								edit: 'text',
+								minWidth: 80
+							},
+							{
+								field: 'produceunit',
+								title: '单位',
+//								edit: 'text',
+								minWidth: 60
+							}, {
+								field: 'package',
+								title: '包装',
+//								edit: 'text',
+								minWidth: 70
+							}, {
+								field: 'producematerial',
+								title: '材质',
+//								edit: 'text',
+								minWidth: 60
+							}, {
+								field: 'storagecondition',
+								title: '存储方式',
+//								edit: 'text',
+								minWidth: 80
+							},
+							{
+								field: 'producecode',
+								title: '主条码',
+//								edit: 'text',
+								minWidth: 80
+							},
+							{
+								field: 'produceseries',
+								title: '系列名称',
+//								edit: 'text',
+								minWidth: 90
+							},
+							{
+								field: 'manufacturer',
+								title: '品牌名称',
+//								edit: 'text',
+								minWidth: 90
+							},
+							{
+								fixed: 'right',
+								title: '操作',
+								minWidth: 60,
+								align: 'center',
+								toolbar: '#editGuige_barDemo2'
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					limit: limit //每页默认显示的数量
+				});
+			}
+
+			var editGuige_limit = 50;
+			var editGuige_curpage = 1;
+			var editGuige_count;
+			var editGuige_off = true;
+			var editGuige_seach = $(".editGuige_seach_content").val();
+			function editguige_ajax(editGuige_seach) {
+				$.ajax({
+					type: "get",
+					url: "http://192.168.0.196:11525/ByuWCFService/WebGetProduceInfoByReg?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'regId': sessionStorage.productId,
+						'num':editGuige_limit,
+						'page':editGuige_curpage,
+						"searchName":editGuige_seach
+					},
+					success: function(res) {
+						var data1 = JSON.parse(res);
+						editGuige_count = data1.count;
+						var data = JSON.parse(data1.data)
+						edit_Chanpinguige(data,editGuige_limit);
+						$("[data-field=producettype] div:gt(0)").each(function(i) {
+							if(data1.data[i].productType == 0) {
+								$(this).html("产品");
+							} else {
+								$(this).html("工具");
+							}
+						});
+						if (editGuige_off) {
+							editGuige_off = false;
+							editGuihe_pages()
+						}
+					}
+				});
+			}
+			editguige_ajax()
+
+			//分页
+			function editGuihe_pages() {
+				var editGuige_seach = $(".editGuige_seach_content").val();
+				laypage.render({
+					elem: 'editGuige_content', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 200, 500],
+					limit: editGuige_limit,
+					curr: editGuige_curpage,
+					group: 3,
+					count: editGuige_count, //数据总数，从服务端得到
+					jump: function(obj) {
+						editGuige_curpage = obj.curr;
+						editGuige_limit = obj.limit;
+						editguige_ajax(editGuige_seach);
+					}
+				})
+			}
+
+			$(".editGuige_seach_btn").click(function() {
+				editGuige_off = true
+				var editGuige_seach = $(".editGuige_seach_content").val();
+				editguige_ajax(editGuige_seach)
+			})
+			$("body").keydown(function(event) {
+				editGuige_off = true
+				if(event.keyCode == "13") { //keyCode=13是回车键
+					var editGuige_seach = $(".editGuige_seach_content").val();
+					editguige_ajax(editGuige_seach)
+				}
+			});
+		})
+	</script>
+
+</html>

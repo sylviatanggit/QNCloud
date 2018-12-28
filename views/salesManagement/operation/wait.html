@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>待办列表</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	<style type="text/css">
+		.inputs {
+			margin-bottom: 8px;
+		}
+		
+		.find {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.action {
+			right: 41px;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+		}
+		
+		.layui-form table tbody tr td:nth-child(2) {
+			color: #2D89DD;
+			cursor: pointer;
+		}
+		.layui-inline{
+			margin-top: 10px;
+		}
+	</style>
+
+	<body>
+		<div class="waitList">
+			<div class="inputs">
+				<div class="layui-inline" id="fengongsiId" style="margin-left: 15px;">
+					<label class="layui-form-label" style="margin-right: 10px;">所属公司</label>
+					<div class="layui-input-inline">
+						<select name="" class="layui-input companytypeid" style="width: 200px;margin-left: 0px;">
+							<option value="-1">全部</option>
+							
+						</select>
+					</div>
+				</div>
+			
+				<div class="layui-inline">
+					<div class="layui-input-inline">
+						<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 15px;width: 240px;">
+					</div>
+					<div class="layui-inline" style="margin-top: 0px !important;">
+						<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+					</div>
+				</div>
+				
+				<div class="btns" style="margin-top: 18px;">
+					
+				</div>
+			</div>
+
+			<table id="houselist" lay-filter="demo" >
+				<div id="gridContainer" style="margin-top: 10px;"></div>
+			</table>
+		</div>
+
+	</body>
+	<script src="../../../js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laypage = layui.laypage;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			table.on('checkbox(demo)', function(obj) {
+			});
+			var limit = 50;
+			var curpage = 1;
+			var count;
+
+		
+			
+			
+			if(localStorage.groupcompanyid != "0"){
+				$("#fengongsiId").css("display","none");
+				operationData(true);
+			}else{
+					dataFun1(true);
+			}
+			
+			//获取公司信息
+			function dataFun1() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetAllGroupCompany?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						var optionsStr = "";
+						for(var i=0;i<desData.length;i++){
+							var id= desData[i].myg_companyid;
+							var name= desData[i].companyname;
+							
+							
+							if(id == localStorage.groupcompanyid){
+								optionsStr+= "<option value='"+id+"' selected='selected'>"+name+"</option>";
+
+							}else{
+								optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+
+							}
+							
+						
+							
+						}
+						$(".companytypeid").append(optionsStr);
+						operationData(true);
+						
+					}
+				});
+
+			}	
+			
+			
+			$(".companytypeid").change(function() {
+					$('.unit').val("");
+					$('#unit').val("");
+					operationData(true);
+			})
+		
+			function operationData(jumpFlag) {
+				var companytypeid = "";
+				if(localStorage.groupcompanyid == "0"){
+					companytypeid = $('.companytypeid option:selected').val();
+				}else{
+					companytypeid = localStorage.groupcompanyid;
+				}
+				
+					var seachContent = $(".seachContent").val();
+						var jiazaiIndex;
+			parent.layer.open({
+			  type: 3, 
+			  zIndex: parent.layer.zIndex, //重点1
+			  success: function(layero, index){
+			  		jiazaiIndex = index;
+	  			}
+			});
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetSsbhBacklogInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'groupCompanyId': companytypeid,
+						'database': localStorage.database,
+						'txtCondition': seachContent
+					},
+					success: function(res) {
+												parent.layer.close(jiazaiIndex);
+
+						var operationData = JSON.parse(res);
+						var data = JSON.parse(operationData.data);
+						count = operationData.count;
+						operationInfo(data, limit);
+					
+					
+						if(jumpFlag) {
+							operation_pages();
+						}
+					}
+										,
+					error: function(res) {
+						parent.layer.close(jiazaiIndex);
+							
+							parent.layer.open({
+								title: "提示",
+								content: '服务器异常!',
+									zIndex: parent.layer.zIndex //重点1
+					
+							});
+						
+				
+					}
+				});
+			}
+			//往来单位
+			$(".unit").click(function(){
+				
+				if (sessionStorage.unitData) {
+					sessionStorage.removeItem('unitData')
+				}
+				
+				if (sessionStorage.companyid) {
+					sessionStorage.removeItem('companyid')
+				}
+				
+				sessionStorage.companyid = $(".companytypeid option:selected").val();
+				
+				
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">往来单位</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/public/unit/unitPublicListBycompanyId.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+	
+					},
+					cancel: function() {
+					
+					},
+				end: function(){  
+             	  	if(sessionStorage.unitData) {
+						if(sessionStorage.unitData.length>0 && sessionStorage.unitData!= "[]"){
+
+						var unitData = JSON.parse(sessionStorage.unitData);
+					
+						$(".unit").val(unitData.companyname);
+						$(".unit").attr('data-id',unitData.id);
+							
+						} else {
+							layer.closeAll();
+						}
+					}
+	             	  	
+	             	 if (sessionStorage.companyid) {
+						sessionStorage.removeItem('companyid')
+					}
+	             	 
+	             	 operationData(true);
+						
+					}
+				});
+			});
+			function operationInfo(data, limit) {
+				//   Dev Extreme
+				$(function () {
+			var dataGrid = $("#gridContainer").dxDataGrid({
+				dataSource: data,
+				//keyExpr: "ordernum",
+				allowColumnReordering: true,
+				showBorders: true,
+				paging: {
+					pageSize: 200,
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				selection: {
+					mode: "multiple"
+				},
+				filterRow: {
+					visible: false,
+					applyFilter: "auto"
+				},
+				headerFilter: {
+					visible: false
+				},
+				allowColumnResizing: true,
+				columnFixing: {
+					enabled: false
+				},
+				columns: [{
+					dataField: "ordernum",
+					width: 160,
+					caption: "直销手术单号",
+					fixed: true,
+					cellTemplate:function (container, options) {
+						$("<div>")
+							.append($("<div style='color:#2D89DD'> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}
+				,
+				{
+					dataField: "companyname",
+					//width: 160,
+					caption: "往来单位",
+				},
+				{
+					dataField: "owncompanyname",
+					//width: 160,
+					caption: "所属公司"
+				},
+				{
+					dataField: "masterdoctorname",
+					width: 100,
+					caption: "主刀医生",
+				},{
+					dataField: "surgery",
+					//width: 100,
+					caption: "手术名称",
+				},{
+					dataField: "surgerydate",
+					width: 100,
+					caption: "预计手术日期",
+					cellTemplate:function (container, options) {
+						var value = options.text
+						 value = value.slice(0,10);
+						$("<div>")
+							.append($("<div> " + value + "</div>"))
+							.appendTo(container);
+					}
+				},
+				{
+					dataField: "agentname",
+					width: 100,
+					caption: "业务员",
+				},{
+					dataField: "operatorname",
+					width: 100,
+					caption: "申请人",
+				},
+				{
+					dataField: "actiondate",
+					format: "yyyy-MM-dd",
+					dataType: "date",
+					width: 100,
+					caption: "制单日期",
+					cellTemplate:function (container, options) {
+						var value = options.text
+						 value = value.slice(0,10);
+						$("<div>")
+							.append($("<div> " + value + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "nomo",
+					width: 260,
+					caption: "备注",
+					format: {
+						type: "fixedPoint",
+						precision: 2
+					},
+					customizeText: function (arg) {
+						return arg.valueText;
+					}
+				},
+				],
+				onCellClick:function(e){
+					var data = e.data
+					if (e.columnIndex == 1 && e.rowType != "header") {
+						parent.tab.tabAdd({
+						icon: '',
+						id: 'ZXSSBH'+data.ordernum,
+						title: data.ordernum + '备货详情',
+						url: 'views/salesManagement/operation/addOperationwait.html'
+					});
+
+					}
+		
+				
+			
+				}
+			}).dxDataGrid('instance');
+		});
+			}
+				 // 根据可视区的高度判断
+	var viewHeight = $(window).height();
+	
+		$('#gridContainer').css('height', viewHeight * 0.805 + 'px');
+
+			//分页
+			function operation_pages() {
+				laypage.render({
+					elem: 'houselist', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj,first) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						if(!first){
+							operationData(false);
+						}
+						
+					}
+				})
+			}
+			
+			$(".find").click(function() {
+			
+				
+				operationData(true);
+			})
+	
+			$(".operationadd").click(function() {
+				var  num  = randomString();
+				parent.tab.tabAdd({
+					icon: '',
+					id: 'xindan' + num,
+					title: '直销手术备货',
+					url: 'views/salesManagement/operation/newaddOperation.html'
+				});
+			});
+		});
+	</script>
+
+</html>

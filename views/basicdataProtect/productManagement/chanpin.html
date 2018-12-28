@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>青囊</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+
+	<body>
+		<div class="layui-tab-item layui-show chanpin">
+			<div class="index_content_header_chanpin">
+				<div class="index_content_header_seach">
+					<div class="layui-inline">
+						<input class="layui-input chanpin_seach_content" style="margin-left: 12px;" name="id" id="" autocomplete="off" placeholder="请输入产品">
+					</div>
+					<button class="layui-btn chanpin_seach_value" data-type="reload" style="margin-left: 5px;">搜索</button>
+				</div>
+				<div class="layui-inline index_content_header_btn" style="float: right;">
+					<button class="layui-btn layui-btn-normal newAdd">新增产品</button>
+					<button class="layui-btn layui-btn-normal gengduocaozuo">更多操作</button>
+					<ul style="position: absolute;top: 28px;z-index: 10;display: none;">
+						<li>
+							<a class="chanpin_caozuo chanpin_del" data-type="getCheckDel" lay-event='del'>删除</a>
+						</li>
+					</ul>
+
+				</div>
+			</div>
+			<table id="index_content_chanpin" lay-filter="demo">
+			</table>
+
+		</div>
+	</body>
+	<!--<script src="../../../plugins/layui/layui.js"></script>-->
+	<script type="text/javascript">
+		//所有产品
+		layui.use(['jquery', 'layer', 'table', 'laypage'], function() {
+			var $ = layui.$ //重点处
+			layer = layui.layer;
+			var table = layui.table;
+			var laypage = layui.laypage;
+
+			//全选事件
+			var $ = layui.$,
+				active = {
+
+					getCheckDel: function() { //获取选中数据
+						var checkStatus = table.checkStatus('idTest'),
+							data = checkStatus.data;
+						var chanpin_checkDel = "";
+						for(var i = 0; i < data.length; i++) {
+
+							chanpin_checkDel += data[i].registrationId + ",";
+						}
+
+						chanpin_checkDel = chanpin_checkDel.substring(0, chanpin_checkDel.length - 1);
+
+						parent.layer.confirm('确定删除产品？', {
+							icon: 3,
+							title: '删除'
+						}, function(index) {});
+
+					}
+				};
+
+			$('.index_content_header_btn .chanpin_caozuo').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+
+			//产品更多操作
+			$(".index_content_header_btn .gengduocaozuo").hover(function() {
+				$(".index_content_header_btn ul").css("display", "block");
+			}, function() {
+				$(".index_content_header_btn ul").css("display", "none")
+			})
+			$(".index_content_header_btn ul").hover(function() {
+				$(".index_content_header_btn ul").css("display", "block");
+			}, function() {
+				$(".index_content_header_btn ul").css("display", "none")
+			})
+			$(".newAdd").click(function() {
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">新增产品</span>',
+					area: ['80%', '90%'],
+					offset: "rb",
+					content: 'views/basicdataProtect/productManagement/xinzengchanpin.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					},
+					cancel: function() {
+//						pages()
+					}
+				});
+			});
+			//监听工具条
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				var layEvent = obj.event; //获得 lay-event 对应的值
+				var tr = obj.tr; //获得当前行 tr 的DOM对象
+				var changjiaName;
+				if(obj.event === 'editGuige') {
+					sessionStorage.productId = data.id;
+					parent.layer.open({
+						type: 2,
+						id: "editGuige",
+						title: "产品规格【" + data.producename + "】 ",
+						content: "views/basicdataProtect/productManagement/editGuige.html", //这里content是一个普通的String
+						area: ['85%', "90%"],
+						offset: 'rb',
+						success: function(layero, index) {
+
+						},
+						cancel: function(index, layero) {
+							parent.layer.close(index)
+							$(function() {
+								$(".contentL").load("index3_chanpin.html")
+							})
+							return false;
+						}
+					});
+				}
+
+				if(obj.event === 'editChanpinmingcheng') {
+					parent.layer.open({
+						type: 2,
+						id: 'selectUser1',
+						title: "编辑产品【" + data.producename + "】 ",
+						content: "views/basicdataProtect/productManagement/editChanpin.html", //这里content是一个普通的String
+						area: ['700px', '90%'],
+						offset: 'rb',
+						success: function(layero, index) {
+							var body = layer.getChildFrame('body', 'index');
+
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$(".productName", paentIfarame).val(data.producename);
+							$(".productName", paentIfarame).attr('data-id', data.id);
+							$(".productPinpai", paentIfarame).val(data.manufacturename);
+							$(".productGuige", paentIfarame).val(data.danwei);
+							$(".productModel", paentIfarame).val(data.producemodel);
+							$(".productNum", paentIfarame).val(data.producenum);
+							$(".productMaincode", paentIfarame).val(data.producecode);
+							$(".productUnit", paentIfarame).val(data.produceunit);
+							$(".productTongsuname", paentIfarame).val(data.produceusename);
+							$(".productXilie", paentIfarame).val(data.produceseries);
+							$(".productChangjia", paentIfarame).val(data.manufacturename);
+							$(".productCailiao", paentIfarame).val(data.producematerial);
+							$(".productReg", paentIfarame).val(data.referencenum);
+							$(".productShuxing", paentIfarame).val(data.producettype);
+							$(".productPackage", paentIfarame).val(data.package);
+							$(".productWay", paentIfarame).val(data.storagecondition);
+							$(".productSafe", paentIfarame).val(data.safecount);
+							$(".productSafedown", paentIfarame).val(data.lowerlimit);
+							$(".productSafetop", paentIfarame).val(data.upperlimit);
+							$(".productGroup", paentIfarame).val(data.groupname);
+							$(".productNotes", paentIfarame).val(data.notes);
+							$(".submit", paentIfarame).click(function() {
+								var produceName = $(".productName", paentIfarame).val();
+								var produceId = $(".productName", paentIfarame).attr('data-id');
+								var manufacturer = $(".productPinpai", paentIfarame).val();
+								var danwei = $(".productGuige", paentIfarame).val();
+								var producemodel = $(".productModel", paentIfarame).val();
+								var producenum = $(".productNum", paentIfarame).val();
+								var produceCode = $(".productMaincode", paentIfarame).val();
+								var produceUnit = $(".productUnit", paentIfarame).val();
+								var produceusename = $(".productTongsuname", paentIfarame).val();
+								var produceseries = $(".productXilie", paentIfarame).val();
+								//								var a = $(".productChangjia", paentIfarame).val();
+								var producematerial = $(".productCailiao", paentIfarame).val();
+								var registrationCertificateID = $(".productReg", paentIfarame).val();
+								var producettype = $(".productShuxing", paentIfarame).val();
+								var package = $(".productPackage", paentIfarame).val();
+								var storagecondition = $(".productWay", paentIfarame).val();
+								var safecount = $(".productSafe", paentIfarame).val();
+								var lowerlimit = $(".productSafedown", paentIfarame).val();
+								var upperlimit = $(".productSafetop", paentIfarame).val();
+								//								var a = $(".productGroup", paentIfarame).val();
+								var nomo = $(".productNotes", paentIfarame).val();
+								var master = {
+									'produceName': produceName,
+									'produceUnit': produceUnit,
+									'danwei': danwei,
+									'producettype': producettype,
+									'producemodel': producemodel,
+									'producematerial': producematerial,
+									'produceusename': produceusename,
+									'produceseries': produceseries,
+									'producenum': producenum,
+									'produceCode': produceCode,
+									'produceCode2': '',
+									'manufacturer': manufacturer,
+									'registrationCertificateID': registrationCertificateID,
+									'father': '',
+									'photoaddress': '',
+									'safecount': safecount,
+									'upperlimit': upperlimit,
+									'lowerlimit': lowerlimit,
+									'nomo': nomo,
+									'package': package,
+									'storagecondition': storagecondition,
+									'costprice': '',
+									'id': registrationCertificateID,
+								};
+								//								$.ajax({
+								//									type: "get",
+								//									url: "http://192.168.0.196:11525/ByuWCFService/WebUpdateProduceTable?jsoncallback=?",
+								//									async: true,
+								//									dataType: 'jsonp',
+								//									data: {
+								//										"userId": localStorage.userId,
+								//										"userPw": localStorage.userPw,
+								//										'database': localStorage.database,
+								//										'produceid': produceId,
+								//										'produce': JSON.stringify(master),
+								//										'referencenum': registrationCertificateID
+								//									},
+								//									success: function(res) {
+								//										console.log(res)
+								//										var data = JSON.parse(res);
+								//										console.log(data);
+								//										pages()
+								//									}
+								//								});
+							})
+						}
+
+					})
+				}
+
+			});
+
+			var limit = 50;
+			var curpage = 1;
+			var count;
+			var off = true;
+			//数据请求
+			function chanpin(chanpin_content) {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetregistrationCertificate?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'referencenum': chanpin_content,
+						'num': limit,
+						'page': curpage
+					},
+					success: function(res) {
+						//						console.log(res)
+						var data = JSON.parse(res);
+						//						console.log(data);
+						count = data.count;
+						var chanpin_datas = JSON.parse(data.data);
+						//						console.log(chanpin_datas);
+						chanpin_data(chanpin_datas, limit);
+						if(off) {
+							off = false;
+							chanpin_pages();
+						}
+					}
+				});
+			}
+			//展示已知数据
+			function chanpin_data(chanpin, limit) {
+
+				table.render({
+					elem: '#index_content_chanpin',
+					data: chanpin,
+					height: "full-170",
+					cellMinWidth: "1000",
+					id: 'idTest',
+					cols: [
+						[ //标题栏
+							{
+								field: "biaohao",
+								title: '标号',
+								width: 60,
+								align: "center",
+								sort: true
+							},
+							{
+								checkbox: true,
+								LAY_CHECKED: false
+							} //默认全选
+							,
+							//							{
+							//								field: 'productImg',
+							//								title: '产品图片',
+							//								align: "center",
+							//								minWidth: 80,
+							//							}, 
+							{
+								field: 'producename',
+								title: '产品名称',
+								event: 'editChanpinmingcheng',
+								style: 'cursor: pointer;',
+								minWidth: 200
+							}, {
+								field: 'referencenum',
+								title: '注册证',
+								minWidth: 200
+							}, {
+								field: 'count',
+								title: '规格数量',
+								event: 'editGuige',
+								style: 'cursor: pointer;color:#2D89DD',
+								minWidth: 100
+							}, {
+								field: 'manufacturename',
+								title: '厂家',
+								minWidth: 150
+							}, {
+								field: 'registrationdate',
+								title: '时间',
+								minWidth: 100
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					limit: limit //每页默认显示的数量
+				});
+
+			}
+			//分页
+			function chanpin_pages() {
+
+				var chanpin_content = $(".chanpin_seach_content").val();
+				laypage.render({
+					elem: 'index_content_chanpin', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 200, 500],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						//						console.log(obj);
+						curpage = obj.curr;
+						limit = obj.limit;
+						chanpin(chanpin_content);
+					}
+				})
+			}
+
+			chanpin();
+			//搜索
+
+			$(".chanpin_seach_value").click(function() {
+				off = true;
+				var chanpin_content = $(".chanpin_seach_content").val();
+				chanpin(chanpin_content)
+			})
+			$("body").keydown(function(event) {
+				off = true;
+				if(event.keyCode == "13") { //keyCode=13是回车键
+					var chanpin_content = $(".chanpin_seach_content").val();
+					chanpin(chanpin_content)
+				}
+			});
+		});
+	</script>
+
+</html>

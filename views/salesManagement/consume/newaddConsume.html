@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加直销实耗清点</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	</head>
+	<style type="text/css">
+		input,
+		section,
+		button,
+		select {
+			border-radius: 2px;
+		}
+		
+		.addConsume {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.layui-input-block,
+		.layui-input-block input,
+		.layui-input-block label,
+		.layui-input-block select {
+			line-height: 28px !important;
+			height: 28px !important;
+			min-height: 28px !important;
+		}
+		
+		.layui-form-label {
+			line-height: 28px !important;
+		}
+		
+		.layui-input-block input,
+		.layui-input-block select {
+			width: 150px;
+		}
+		
+		.layui-input-block select {
+			cursor: pointer;
+		}
+		
+		.layui-input-block option {
+			cursor: pointer;
+		}
+		
+		.addConsume .layui-table td,
+		.layui-table th {
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+		}
+		
+		.btns {
+			margin-bottom: 12px;
+			position: absolute;
+			right: 20px;
+			top: 114px;
+		}
+		
+		.addConsume_header1_two {
+			margin-bottom: 12px;
+		}
+		
+		.btns button,
+		.find,
+		.import {
+			cursor: pointer;
+			border: none;
+			width: 90px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.addConsume_header1 {
+			padding-bottom: 40px;
+			border-bottom: 1px solid #F2F2F2;
+		}
+		
+		.addConsume_header1 ul {
+			float: right;
+		}
+		
+		.addConsume_header1 ul li {
+			margin-left: 8px;
+			margin-top: -50px;
+			display: inline-block;
+			width: 150px;
+		}
+		
+		.addConsume_header1 ul li label {
+			display: block;
+			padding: 0 !important;
+			text-align: left;
+			margin-bottom: 4px;
+		}
+		
+		.addConsume_header1 .layui-input-block {
+			margin-left: 0px !important;
+		}
+		
+		.addConsume_header1_two {
+			margin-left: 0px;
+			margin-top: 12px;
+		}
+		
+		.addConsume_header1_two .layui-form-item {
+			display: inline-block !important;
+			margin-bottom: 0 !important;
+		}
+		
+		.addConsume_header1_two .layui-form-item label {
+			margin-left: 12px;
+			display: block;
+			padding: 0 !important;
+			text-align: left;
+			margin-bottom: 4px;
+		}
+		
+		.layui-form-item .layui-input-inline {
+			width: 150px;
+		}
+		
+		.layui-input-block {
+			min-height: 22px;
+		}
+		
+		.two_inputs {
+			padding-top: 12px;
+			background-color: #EFF5FF;
+			margin-top: 50px;
+			padding-bottom: 5px;
+		}
+		
+		.moreAction {
+			width: 90px !important;
+		}
+		
+		.action {
+			width: 88px !important;
+			right: 0;
+		}
+		
+		.show,
+		.hide {
+			padding: 1px 10px;
+			background-color: #1E9FFF;
+			text-align: center;
+			position: absolute;
+			top: 138px;
+			right: 50%;
+			cursor: pointer;
+		}
+		
+		.hide {
+			display: none;
+		}
+		
+		.title {
+			margin-top: 12px;
+		}
+		
+		.detail {
+			position: absolute;
+			top: 150px;
+			float: right;
+			width: 20px;
+			text-align: center;
+			padding: 5px 10px;
+			line-height: 20px;
+			right: 0px;
+			font-size: 9pt;
+			border-top-left-radius: 5px;
+			border-bottom-left-radius: 5px;
+			background-color: #2D89DD;
+			color: white;
+			cursor: pointer;
+			z-index: 9;
+		}
+		
+		.beihuoDetail {
+			width: 85%;
+			height: 95%;
+			border: 1px solid #CCCCCC;
+			position: absolute;
+			bottom: 0px;
+			right: 0px;
+			z-index: 99999999999;
+			background-color: white;
+		}
+		
+		.beihuoDetail .layui-table-tool {
+			bottom: 25px;
+		}
+		
+		.layui-form select {
+			display: block;
+		}
+		
+		.productiondate,
+		.indate {
+			border: none;
+			height: 20px;
+			padding: 0;
+		}
+	</style>
+
+	<body>
+		<div class="addConsume">
+			<div class="layui-tab">
+				<div class="addConsume_header1">
+					<p style="color: #232323 !important;font-size: 24px !important;margin-top: 30px;">直销实耗清点</p><img class="dsh" src="../../../image/dsh.png" alt="" /> <img class="ysh" src="../../../image/ysh.png" alt="" />
+					<ul>
+						<li>
+							<label class="layui-form-label">申请备货单号</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off" placeholder="请输入单号" class="input layui-input SQorderNum" type="text">
+							</div>
+						</li>
+						<li>
+							<label class="layui-form-label">实耗清点日期</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" placeholder="请选择日期" autocomplete="on" id="addConsumeDate" class="layui-input consumewait_date" type="text">
+							</div>
+						</li>
+						<li>
+							<label class="layui-form-label">实耗清点单号</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off" placeholder="请输入单号" class="input layui-input consumewait_ordernum" type="text">
+							</div>
+						</li>
+						<li>
+							<label class="layui-form-label">自定义单号</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="on" placeholder="请输入标题" class="layui-input consumewait_mynum" type="text">
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="detail">直销备货详情</div>
+				<div class="addConsume_header1_two">
+					<div class="btns">
+						<button class="layui-btn xinzeng">新单</button>
+						<button class="layui-btn preserve" data-type="getCheckDel">保存</button>
+						<button class="layui-btn adjustOrder">调单</button>
+						<button class="layui-btn moreAction">更多操作</button>
+						<ul class="action">
+							<li>
+								<a class="del" data-type="getCheckDel" lay-event='del'>打印</a>
+							</li>
+							<li>
+								<a class="examine" data-type="getCheckDel" lay-event='del'>审核</a>
+							</li>
+							<li>
+								<a class="noExamine" data-type="getCheckDel" lay-event='del'>反审核</a>
+							</li>
+						</ul>
+					</div>
+					<!--<i class="layui-icon show">&#xe61a;</i>
+					<i class="layui-icon hide">&#xe619;</i>-->
+					<div class="two_inputs">
+						<div class="layui-form-item">
+							<label class="layui-form-label">往来单位</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" data-id='' class="layui-input unit" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">出库仓库</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" data-id='' class="layui-input warehouse" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">主刀医生</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input doctor" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">制单人</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input maker" type="text" value="">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">手术名称</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input operationName" type="text">
+							</div>
+						</div>
+						<br />
+						<div class="layui-form-item">
+							<label class="layui-form-label">手术时间</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input operationDate" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">患者姓名</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input patientName" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">住院号&nbsp;&nbsp;&nbsp;</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input hospital" type="text">
+							</div>
+						</div>
+
+						<div class="layui-form-item">
+							<label class="layui-form-label">业务员</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" data-id='' class="layui-input salesman" type="text">
+							</div>
+						</div>
+						<br />
+						<div class="layui-form-item">
+							<label class="layui-form-label">备 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input notes" type="text" style="width: 240px;">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="beihuoDetail" style="display: none;">
+					<div class="layui-inline" style="margin-top: 10px;">
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 14px;width: 240px;">
+						</div>
+					</div>
+					<div class="layui-inline" style="margin-top: 10px;">
+						<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+					</div>
+					<div class="layui-inline" style="margin-top: 10px;float: right;margin-right: 20px;">
+						<button class="layui-btn import" style="margin-left: 14px;" data-type="getImport">确定导入</button>
+					</div>
+					<!--<p class="title" style="margin-left: 20px;">订单详情</p>-->
+					<table id="orderDetail" lay-filter="demo"></table>
+				</div>
+				<p class="title">实耗清点详情</p>
+				<table id="addConsume" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script src="../../../js/public.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$(".show").click(function() {
+				$(".show").hide();
+				$(".hide").show();
+				$(".two_inputs").hide();
+				$(".title").css("margin-top", "54px");
+			});
+			$(".hide").click(function() {
+				$(".hide").hide();
+				$(".show").show();
+				$(".two_inputs").show();
+				$(".title").css("margin-top", "12px");
+			});
+			laydate.render({
+				elem: "#addConsumeDate",
+				value: new Date()
+			});
+			function beihuoDetail(data) {
+				table.render({
+					elem: '#orderDetail',
+					data: data,
+					id: "productDetail",
+					height: "full-106",
+					cols: [
+						[ //标题栏
+						
+							{
+								checkbox: true,
+								LAY_CHECKED: true,
+								align: "center",
+								width: 40,
+							},
+							{
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 150,
+							}, {
+								field: 'manufacturer',
+								title: '厂家',
+								minWidth: 100
+							},
+							{
+								field: 'danwei',
+								title: '规格',
+								minWidth: 100
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 100
+							}, {
+								field: 'producenum',
+								title: '编号',
+								minWidth: 100
+							}, {
+								field: 'producecode',
+								title: '主条码',
+								minWidth: 100
+							}, {
+								field: 'producesubbarcode1',
+								title: '副条码',
+								minWidth: 100
+							}, {
+								field: 'produceunit',
+								title: '单位',
+								minWidth: 100
+							}, {
+								field: 'producecount',
+								title: '数量',
+								minWidth: 100
+							},
+							{
+								field: 'iots',
+								title: '批号',
+								minWidth: 100
+							},
+							{
+								field: 'productiondate',
+								title: '生产日期',
+								minWidth: 100
+							},
+							{
+								field: 'indate',
+								title: '有效期',
+								minWidth: 100
+							},
+							{
+								field: 'areaname',
+								title: '货区',
+								minWidth: 100
+							},
+							{
+								field: 'qs',
+								title: '合格',
+								minWidth: 100
+							},
+							{
+								field: 'package',
+								title: '包装',
+								minWidth: 100
+							},
+							{
+								field: 'storagecondition',
+								title: '存储条件',
+								minWidth: 100
+							}, {
+								field: 'registrationcertificatename',
+								title: '注册证号',
+								minWidth: 120
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: false //是否显示分页
+						,
+					limits: [10, 20, 30, 40, 50],
+					limit: 50 //每页默认显示的数量
+
+				})
+				for(var i=0;i<data.length;i++){
+					$(".addConsume tbody:eq(0) tr:eq("+i+") td:eq(9) div").empty().append("<span id=A_"+data[i].produceid+">"+0+"</span>/<span id=B_"+data[i].produceid+">"+data[i].producecount+"</span>");
+				}
+			}
+			//			<=======================================>
+			
+			function consumeInfo(data) {
+				//展示已知数据
+				table.render({
+					elem: '#addConsume',
+					data: data,
+					id: "orderTest",
+					height: "full-325",
+					cols: [
+						[ //标题栏
+						
+							{
+								checkbox: true,
+								LAY_CHECKED: true,
+								align: "center",
+								width: 40,
+							},
+							{
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 150,
+							}, {
+								field: 'manufacturer',
+								title: '厂家',
+								minWidth: 100
+							},
+							{
+								field: 'danwei',
+								title: '规格',
+								minWidth: 100
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 100
+							}, {
+								field: 'producenum',
+								title: '编号',
+								minWidth: 100
+							}, {
+								field: 'producecode',
+								title: '主条码',
+								minWidth: 100
+							}, {
+								field: 'producesubbarcode1',
+								title: '副条码',
+								edit: 'text',
+								minWidth: 100
+							}, {
+								field: 'produceunit',
+								title: '单位',
+								minWidth: 100
+							}, {
+								field: 'producecount',
+								title: '数量',
+								edit: 'text',
+								minWidth: 100
+							},
+							{
+								field: 'iots',
+								title: '批号',
+								edit: 'text',
+								minWidth: 100
+							},
+							{
+								field: 'productiondate',
+								title: '生产日期',
+								edit: 'text',
+								minWidth: 100
+							},
+							{
+								field: 'indate',
+								title: '有效期',
+								edit: 'text',
+								minWidth: 100
+							},
+							{
+								field: 'areaname',
+								title: '货区',
+								minWidth: 100
+							},
+							{
+								field: 'qs',
+								title: '合格',
+								minWidth: 100
+							},
+							{
+								field: 'package',
+								title: '包装',
+								minWidth: 100
+							},
+							{
+								field: 'storagecondition',
+								title: '存储条件',
+								minWidth: 100
+							}, {
+								field: 'registrationcertificatename',
+								title: '注册证号',
+								minWidth: 120
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [1000],
+					limit: 1000 //每页默认显示的数量
+				});
+				if(data != null && data){
+					for(var i=0;i<data.length;i++){
+						if(data[i].qs == '0') {
+							$(".addConsume tbody:eq(1) tr:eq("+i+") td:eq(14) div").text("不合格");
+						} else {
+							$(".addConsume tbody:eq(1) tr:eq("+i+") td:eq(14) div").text("合格");
+						}
+						var produceid=data[i].produceid;
+						var stockarea=data[i].stockarea;
+						$(".addConsume tbody:eq(1) tr:eq("+i+") td:eq(9) div").attr("zong",data[i].producecount);
+						$(".addConsume tbody:eq(1) tr:eq("+i+")").attr("ck_id",produceid);
+						$(".addConsume tbody:eq(1) tr:eq("+i+")").attr("hq_id",stockarea);
+					}
+				}
+			}
+			
+			table.on('edit(demo)', function(obj){
+				if(obj.field == "producecount"){
+					var bh_num_id=obj.data.produceid; //绑定直销备货的id
+					var bh_num=obj.value; //实耗清点当前数量
+					var sx_num=$(this).prev().attr("zong") //实耗清点页面刷新时候的数量
+					var get_real_count=$("#A_"+bh_num_id).text();//直销备货的当前数量
+					var get_all_count=$("#B_"+bh_num_id).text();//直销备货总数
+					//最大数量=直销备货总数-(直销备货当前数量-页面一刷新时的数量)
+					var jian_num=get_all_count-(get_real_count-sx_num);
+					//判断当前数量不能大于总数,如果大于直接被赋最大值
+					if(bh_num > jian_num){
+						bh_num=jian_num;
+					}else if(bh_num == 0 || bh_num == ""){
+						parent.layer.open({
+							title: "提示",
+							content: '数量不能为零或空!',
+							zIndex: layer.zIndex, //重点1
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						bh_num=1;
+					}
+					$(this).val(bh_num);
+					//直销备货当前的数量
+					var zhixiao_num=get_real_count-sx_num+bh_num;
+					$("#A_"+bh_num_id).text(zhixiao_num)
+				}
+			})
+			
+			
+			var a = true;
+			$(".detail").click(function() {
+				if(a) {
+					$(".beihuoDetail").show();
+					$(".detail").css("right", $(".beihuoDetail").width());
+				} else {
+					$(".beihuoDetail").hide();
+					$(".detail").css("right", 0);
+				}
+				a = !a;
+			});
+			var active1 = {
+				getImport: function() { //获取选中数据
+					var checkStatus = table.checkStatus('productDetail'),
+						data = checkStatus.data;
+					if(data != '') {
+						parent.layer.open({
+							title: "提示",
+							content: '导入成功'
+						});
+						consumeInfo(data);
+					} else {
+						parent.layer.open({
+							title: "提示",
+							content: '点击调单获取订单信息'
+						});
+					}
+				}
+			};
+			$(".beihuoDetail .import").click(function() {
+				var type = $(this).data('type');
+				active1[type] ? active1[type].call(this) : '';
+			})
+			table.on('edit(productDetail)', function(obj) {
+				var value = obj.value //得到修改后的值
+					,
+					data = obj.data //得到所在行所有键值
+					,
+					field = obj.field; //得到字段
+
+			})
+			$(".adjustOrder").click(function() {
+				sessionStorage.consumediaodan="";
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">调备货单</span>',
+					area: ['85%', '90%'],
+					content: 'views/salesManagement/consume/waitDiao.html',
+					offset: "rb",
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					},
+					end: function() {
+						if(sessionStorage.consumediaodan) {
+							var data = JSON.parse(sessionStorage.consumediaodan);
+							var masterData = JSON.parse(sessionStorage.consumediaodan)[0];
+							$(".SQorderNum").val(masterData.lastnum)
+							$(".zxbhOrder").val(masterData.ordernum)
+							$(".unit").val(masterData.companyname);
+							$(".unit").attr('data-id', masterData.companyid);
+							$(".warehouse").val(masterData.warehousename);
+							$(".warehouse").attr('data-id', masterData.targetstockid);
+							$(".doctor").val(masterData.masterdoctorname);
+							$(".maker").val(masterData.operatorsidname);
+							$(".operationName").val(masterData.surgery);
+							$(".operationDate").val(masterData.surgerydate.slice(0, 10));
+							$(".patientName").val(masterData.patienname);
+							$(".hospital").val(masterData.patienthospitalnum);
+							$(".salesman").val(masterData.agentname);
+							$(".salesman").attr('data-id', masterData.agent);
+							$(".notes").val(masterData.nomo);
+							getDate()
+						}
+
+					}
+				});
+			});
+			table.on('edit(orderTest)', function(obj) {
+				var value = obj.value //得到修改后的值
+					,
+					data = obj.data //得到所在行所有键值
+					,
+					field = obj.field; //得到字段
+
+			})
+			$(".preserve").click(function() {
+				check = 0;
+				sendDate()
+			});
+			$(".examine").click(function() {
+				if(change) {
+					parent.layer.open({
+						title: "提示",
+						content: '请先保存!!!'
+					});
+					return false;
+				}
+				check = 1;
+				sendDate()
+			});
+			$(".noExamine").click(function() {
+				if($('.consumeOrdernum').val() == '') {
+					parent.layer.open({
+						title: "提示",
+						content: '不能进行此操作'
+					});
+					return false;
+				}
+				if($('.ysh').css('display') == 'none') {
+					parent.layer.open({
+						title: "提示",
+						content: '此状态无法进行反审核'
+					});
+					return false;
+				}
+				parent.layer.confirm('确定进行反审核操作？', {
+					icon: 3,
+					title: '提示'
+				}, function(index) {
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp+"/WebCheckReturnSaveState?jsoncallback=?",
+						dataType: "jsonp",
+						async: true,
+						data: {
+							'userId': localStorage.userId,
+							'userPw': localStorage.userPw,
+							'database': localStorage.database,
+							'orderNum': $('.consumeOrdernum').val()
+						},
+						success: function(res) {
+							var data = JSON.parse(res);
+							switch(data.type)
+							{
+								case 1:
+									parent.layer.open({
+									title: "提示",
+									content: '反审核成功',
+									zIndex: layer.zIndex, //重点1
+									success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+										$(".dsh").css("display", 'inline-block');
+										$(".ysh").css("display", 'none');
+									}
+								});
+							  break;
+								case 0:
+									parent.layer.open({
+										title: "提示",
+										content: data.data,
+										zIndex: layer.zIndex, //重点1
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+							  break;
+							  case 2:
+							  		var infoData = JSON.parse(data.data);
+									var  info = infoData[0].info;			  		
+									parent.layer.open({
+									title: "提示",
+									content: info,
+									zIndex: layer.zIndex, //重点1
+									success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+									}
+								});
+							  break;
+							}
+							parent.layer.close(index);
+							return;
+						}
+					});
+					layer.close(index);
+				});
+			})
+			//获取基本信息
+			function getDate() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetRealuseslaveInfoByLastNum?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': $(".SQorderNum").val()
+					},
+					success: function(res) {
+						var consumeDataAll = JSON.parse(res);
+						//consumeData.Master.result 0的时候有清点单号,-1没有
+						consumeData=JSON.parse(consumeDataAll.Master.result)[0];
+						if(consumeDataAll.Slave){
+							consumeZX=JSON.parse(consumeDataAll.Slave.result);
+							beihuoDetail(consumeZX);
+						}
+						if(consumeDataAll.Master.state == 0){
+							$(".consumewait_ordernum").val(consumeData.ordernum);
+							var sh=$(".consumewait_ordernum").val();
+						}else if(consumeDataAll.Master.state == -1){
+							return;
+						}
+						if(consumeData.checkstate==0){
+							$(".noExamine").hide();
+							$(".dsh").show();
+							$(".examine").show();
+							$(".ysh").hide();
+//
+						}else if(consumeData.checkstate==1){
+							$(".noExamine").show();
+							$(".dsh").hide();
+							$(".examine").hide();
+							$(".ysh").show();
+						}
+					}
+				});
+			}
+			$(".xinzeng").click(function(){
+				var  num  = randomString();
+				parent.tab.tabAdd({
+					icon: '',
+					id: 'xindan' + num,
+					title: '新增直销实耗清点',
+					url: 'views/salesManagement/consume/newaddConsume.html'
+				});
+			})
+			//点击保存
+			var check;
+			var mark=0;
+			function sendDate(){
+				var data_length=$(".addConsume tbody:eq(1) tr").length;
+				var slave=[];
+				for(var i=0;i<data_length;i++){
+					//产品id  produceid
+					var produceid= $(".addConsume tbody:eq(1) tr:eq("+i+")").attr("ck_id");;
+					//产品数量 producecount
+					var producecount=$(".addConsume tbody:eq(1) tr:eq("+i+") td:eq(9) div").text();
+					if(producecount == '') {
+						parent.layer.open({
+							title: "提示",
+							content: '数量不能为空！！！'
+						});
+						return false;
+					}
+					//批号 iots
+					var iots=$(".addConsume tbody:eq(1) tr:eq("+i+") td:eq(10)").text();
+					//有效期 indate
+					var indate=$(".addConsume tbody:eq(1) tr:eq("+i+") td:eq(12)").text();
+					//生产日期 productiondate
+					var productiondate=$(".addConsume tbody:eq(1) tr:eq("+i+") td:eq(11)").text();
+					//是否合格 qs 0不合格，1合格
+					var hege=$(".addConsume tbody:eq(1) tr:eq("+i+") td:eq(14)").text();
+					if(hege == '不合格') {
+						qs = 0;
+					} else {
+						qs = 1;
+					}
+					//货区id stockarea
+					var stockarea=$(".addConsume tbody:eq(1) tr:eq("+i+")").attr("hq_id");
+					//包装 package
+					var package=$(".addConsume tbody:eq(1) tr:eq("+i+") td:eq(15)").text();
+					//存储条件 storagecondition
+					var storagecondition=$(".addConsume tbody:eq(1) tr:eq("+i+") td:eq(16)").text();
+					//副条码 producesubbarcode
+					var producesubbarcode=$(".addConsume tbody:eq(1) tr:eq("+i+") td:eq(7)").text();
+					//成本价 realcost（传0）
+					var realcost=0;
+					slave.push({
+						"produceid": '' + produceid + '',
+						"producecount": '' + producecount + '',
+						"iots": '' + iots + '',
+						"indate": '' + indate + '',
+						"productiondate": '' + productiondate + '',
+						"qs": '' + qs + '',
+						"stockarea": '' + stockarea + '',
+						"package": '' + package + '',
+						"storagecondition": '' + storagecondition + '',
+						"producesubbarcode": '' + producesubbarcode + '',
+						'realcost': '' + realcost + ''
+					});
+				}
+				var mynum = $(".consumewait_mynum").val();
+				var lastnum = $(".SQorderNum").val();
+				var ordernum = $('.consumewait_ordernum').val();
+				var Masterdoctor = $('.doctor').val();
+				var EstimateDate = $('.surgeryDate').val();
+				var surgeryName = $('.surgeryName').val();
+				var directdate = $('#addOperationDate').val();
+				var targetStockID = $(".warehouse").attr("data-id");
+				var company = $(".unit").attr('data-id');
+				var agent = $(".salesman").attr('data-id');
+				var operatorSID = localStorage.userId;
+				var nomo = $('.notes').val();
+				var master = {
+					'ordernum':ordernum,
+					'mynum': '' + mynum + '',
+					'lastnum': lastnum,
+					'Masterdoctor': Masterdoctor,
+					'EstimateDate': EstimateDate,
+					'directdate': directdate,
+					'companyID': company,
+					'targetStockID': targetStockID,
+					'agent': agent,
+					'operatorSID': operatorSID,
+					'nomo': nomo
+				};
+				if($(".SQorderNum").val() == '') {
+					parent.layer.open({
+						title: "提示",
+						content: '请填写单据信息'
+					});
+					return false;
+				}
+				if(slave.length == 0) {
+					parent.layer.open({
+						title: "提示",
+						content: '请添加产品信息'
+					});
+					return false;
+				} else {
+					$.ajax({
+						type: "POST",
+						url: localStorage.serIp+"/WebOperateRealuseTable",
+						async: true,
+						dataType: 'json',
+						crossDomain: true,
+						contentType:'application/json; charset=utf-8',
+						data:JSON.stringify({
+							"userId": localStorage.userId,
+							"userPw": localStorage.userPw,
+							'database': localStorage.database,
+							'groupCompanyId': localStorage.groupcompanyid,
+							'master': JSON.stringify(master),
+							'slave': JSON.stringify(slave),
+							'check': check,
+							'mark': mark
+						}),
+						success: function(res) {
+							change=false;
+							sessionStorage.removeItem('operation_data');
+							var data = JSON.parse(res);
+							switch(data.SaveState.state)
+							{
+							case 0:
+								parent.layer.open({
+									title: "提示",
+									content: data.SaveState.result,
+									zIndex: layer.zIndex ,//重点1,
+									success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+									
+									}
+								});
+								$(".layui-table-view table thead th .layui-icon").trigger("click");
+								return;
+								break;
+							case 1:								
+								if(data.CheckState.state == 2) {  //保存
+									parent.layer.open({
+										title: "提示",
+										content: '保存成功',
+										zIndex: layer.zIndex //重点1
+										,
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+											$(".consumewait_ordernum").val();
+										}
+									});
+									return;
+								} 
+								if(data.CheckState.state == 1) {
+									parent.layer.open({
+										title: "提示",
+										content: '审核成功',
+										zIndex: layer.zIndex //重点1
+										,
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});	
+										$(".layui-table-view table thead th .layui-icon").trigger("click");
+									return;
+								} 
+								if(data.CheckState.state == 0) {
+									parent.layer.open({
+										title: "提示",
+										content: '审核失败',
+										zIndex: layer.zIndex //重点1
+										,
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+										$(".layui-table-view table thead th .layui-icon").trigger("click");
+									return;
+								} 
+								if(data.CheckState.state == 3) {
+									if(sessionStorage.shengheErrorData) {
+										if(sessionStorage.shengheErrorData.length>0 && sessionStorage.shengheErrorData!= "[]"){
+											sessionStorage.removeItem("shengheErrorData")
+										}
+									}
+									sessionStorage.shengheErrorData = data.CheckState.result;
+									parent.layer.open({
+										type: 2 
+											,
+										title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">信息</span>',
+										area: ['60%', '65%'],
+					
+										content: 'views/public/shengheerror.html',	
+										zIndex: layer.zIndex //重点1
+											,
+										success: function(layero,index) {
+											parent.layer.setTop(layero); //重点2
+											var body = layer.getChildFrame('body', 'index');
+											paentIfarame = layero.find("iframe")[0].contentWindow.document;
+														
+										}
+									});
+									(".layui-table-view table thead th .layui-icon").trigger("click");
+									return;
+								} 
+							break;
+							case 9:
+								$(".layui-table-view table thead th .layui-icon").trigger("click");
+								if(sessionStorage.shouyingzizhiData) {
+									if(sessionStorage.shouyingzizhiData.length>0 && sessionStorage.shouyingzizhiData!= "[]"){
+										sessionStorage.removeItem("shouyingzizhiData")
+									}
+								}
+								sessionStorage.shouyingzizhiData = data.SaveState.result;
+								parent.layer.open({
+									type: 2 
+										,
+									title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">首营资质</span>',
+									area: ['60%', '65%'],
+				
+									content: 'views/public/shouYingZiZhi.html',	
+				
+									zIndex: layer.zIndex //重点1
+										,
+									success: function(layero,index) {
+										parent.layer.setTop(layero); //重点2
+										var body = layer.getChildFrame('body', 'index');
+										paentIfarame = layero.find("iframe")[0].contentWindow.document;
+										$(".save", paentIfarame).click(function() {
+											mark=1;
+											sendDate()
+											parent.layer.close(index); //再执行关闭     
+										})
+										
+									}
+								});
+						  	break;
+							}
+						}
+					});
+				}
+			}
+		});
+	</script>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>信息</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.staffmanagement {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 5px;
+		}
+		
+		.inputs {
+		}
+		
+		.btns button,
+		.find,
+		.import {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt;
+		}
+		
+		.btns {
+			width: 100%;
+			height: 100%;
+		}
+		
+		.btns button {
+			width: 90px;
+			float: right;
+			 margin-bottom: 10px;
+
+		}
+		
+		.layui-table-box, .layui-table-view{
+			    clear: both;
+		
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../css/same.css" />
+
+	<body>
+		<div class="staffmanagement">
+			<div class="layui-tab">
+				<table id="staffmanagement" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+
+
+			function staffInfo(data) {
+				//展示已知数据
+				table.render({
+					elem: '#staffmanagement',
+					data: data,
+					height: "full-35",
+					id: 'idTest',
+					cols: [
+						[ //标题栏
+						 {
+								field: 'info',
+								title: '信息',
+							}, 
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [50, 100],
+					limit: 50 //每页默认显示的数量
+				});
+			}
+			
+			
+		shengheError();
+		
+		function shengheError(){
+			
+			var shengheErrorData =JSON.parse(sessionStorage.shengheErrorData);
+			staffInfo(shengheErrorData);
+					
+
+		}
+
+
+		});
+	</script>
+
+</html>

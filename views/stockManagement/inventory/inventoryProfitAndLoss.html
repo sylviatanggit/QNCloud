@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>盘盈盘亏</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+
+	</head>
+	<style>
+		.inventoryProfit .layui-laypage {
+			margin: 0;
+			position:absolute;
+			bottom: -25px;
+			left: 0px;
+		}
+	</style>
+	
+	<link rel="stylesheet" type="text/css" href="../../../css/qk/custom_style.css">
+
+	<body>
+		<div class="panel-content" id="profitLossIid">
+			<div class="layui-tab">
+				
+				<div class="panel_header">
+					
+					<div class="inputs">
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input autocomplete="off" placeholder="请输入关键字" class="layui-input seachContent" type="text" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						
+						<!--<div class="btns">
+							<button class="layui-btn finishCheck" style="width: 120px;">完成盘点生成单据</button>
+							<ul class="action" style="right: 0;">
+								<li>
+									<a class="jianjishijian" data-type="stockExport" >完成判断生成单据</a>
+								</li>
+								
+								<li>
+									<a class="jianjishijian modelup" data-type="shipanImport">实盘导入</a>
+								</li>
+								
+								<input type="file" id="modelup" style="display: none;"/>
+
+							
+							</ul>
+						</div>
+						-->
+					</div>
+
+				</div>
+				
+				
+				<div style="width: 100%;height: 100%;">
+					
+					<div style="width: 100%;height: 50%;position: relative;" >
+						<span>盘盈</span>
+						<table id="inventoryProfitId" lay-filter="inventoryProfit"></table>
+							<div id="iinventoryProfitPageId">
+						
+							</div>
+					</div>
+					
+					<div style="width: 100%;height: 50%;" class="inventoryLoss">
+						<span>盘亏</span>
+						<table id="inventoryLossId" lay-filter="inventoryLoss"></table>
+							<div id="inventoryLossPageId">
+						
+							</div>
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>
+		<input type="hidden" value="" class="pandianDanHanid"/>
+
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		var  jiazaiIndex;
+		var targetstockid = "";
+		var areaid = "";
+		layui.use(['table', 'jquery', 'laydate', 'laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laypage = layui.laypage;
+
+			var inventoryProfitDataInfo = [];
+			var inventoryLossDataInfo=[];
+			var  h = ($(document.body).height()- 140) / 2 ;//浏览器当前窗口文档body的高度
+			
+			var myDate = new Date();
+
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			
+			var limit1 = 50;
+			var curpage1 = 1;
+			var count1 = 0;
+
+				
+			function inventoryProfit(jumpFlag) {
+				var seachContent = $(".seachContent").val();
+							
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetInventoryProfit?jsoncallback=?",
+					dataType: 'json',
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'txtCondition': seachContent,
+						'num' : limit1,
+						'page':curpage1,
+						'orderNum' : sessionStorage.pandianDanHanid
+
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+				
+						count1 = desData.count;
+						
+						var data =  JSON.parse(desData.data);
+						inventoryProfitDataInfo  = data;
+						
+						inventoryProfitData(data);
+						
+						
+						if(jumpFlag) {
+							inventoryProfitData_pages();
+						}
+					}
+				});
+
+			}
+			
+			
+			
+
+
+			inventoryProfit(true);
+
+			function inventoryProfitData(data) {
+				//展示已知数据
+				table.render({
+					elem: '#inventoryProfitId',
+					data: data,
+					height: h,
+					cols: [
+						[ //标题栏
+						  {
+								field: 'manufacturer',
+								title: '厂家',
+								minWidth: 100
+							},  {
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 100
+
+							},{
+								field: 'producenum',
+								title: '产品编号',
+								minWidth: 100
+							}, {
+								field: 'danwei',
+								title: '产品规格',
+								align: "center",
+								minWidth: 100,
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 100,
+							}, {
+								field: 'realstockcount',
+								title: '库存数',
+								minWidth: 100,
+							}, {
+								field: 'stockcount',
+								title: '账存数',
+								minWidth: 100,
+							}, {
+								field: 'realcount',
+								title: '实盘数',
+								minWidth: 100,
+							}, {
+								field: 'chayicount',
+								title: '差异数',
+								minWidth: 100,
+							}, {
+								field: 'warehousename',
+								title: '所在仓库',
+								minWidth: 100,
+							}, {
+								field: 'areaname',
+								title: '货区',
+								minWidth: 100,
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					limit: limit1 //每页默认显示的数量
+				});
+				
+			}
+			
+			//分页
+			function inventoryProfitData_pages() {
+				laypage.render({
+					elem: 'iinventoryProfitPageId', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50],
+					limit: limit1,
+					curr: curpage1,
+					group: 1,
+					count: count1, //数据总数，从服务端得到
+					jump: function(obj,first) {
+
+						curpage1 = obj.curr;
+						limit1 = obj.limit;
+						
+						if(!first){
+							inventoryProfit(false);
+						}
+						
+					}
+				})
+			}
+			
+			
+			
+			var limit2 = 50;
+			var curpage2 = 1;
+			var count2 = 0;
+
+			function inventoryLoss(jumpFlag) {
+				var seachContent = $(".seachContent").val();
+							
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetInventoryLosses?jsoncallback=?",
+					dataType: 'json',
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'txtCondition': seachContent,			'num' : limit2,
+						'page':curpage2,
+						'orderNum' : sessionStorage.pandianDanHanid
+
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						
+						count2 = desData.count;
+						
+						var data =  JSON.parse(desData.data);
+
+
+						inventoryLossDataInfo = data;
+						inventoryLossData(data);
+						if(jumpFlag) {
+							inventoryLossData_pages();
+						}
+					}
+				});
+
+			}
+			
+			inventoryLoss(true);
+			
+			function inventoryLossData(data) {
+				//展示已知数据
+				table.render({
+					elem: '#inventoryLossId',
+					data: data,
+					height: h-20,
+					cols: [
+						[ //标题栏
+						  {
+								field: 'manufacturer',
+								title: '厂家',
+								minWidth: 100
+							},  {
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 100
+
+							},{
+								field: 'producenum',
+								title: '产品编号',
+								minWidth: 100
+							}, {
+								field: 'danwei',
+								title: '产品规格',
+								align: "center",
+								minWidth: 100,
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 100,
+							}, {
+								field: 'realstockcount',
+								title: '库存数',
+								minWidth: 100,
+							}, {
+								field: 'stockcount',
+								title: '账存数',
+								minWidth: 100,
+							}, {
+								field: 'realcount',
+								title: '实盘数',
+								minWidth: 100,
+							}, {
+								field: 'chayicount',
+								title: '差异数',
+								minWidth: 100,
+							}, {
+								field: 'warehousename',
+								title: '所在仓库',
+								minWidth: 100,
+							}, {
+								field: 'areaname',
+								title: '货区',
+								minWidth: 100,
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+
+					limit: limit2 //每页默认显示的数量
+				});
+				
+			}
+			
+			//分页
+			function inventoryLossData_pages() {
+				laypage.render({
+					elem: 'inventoryLossPageId', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50],
+					limit: limit2,
+					curr: curpage2,
+					group: 1,
+					count: count2, //数据总数，从服务端得到
+					jump: function(obj,first) {
+
+						curpage2 = obj.curr;
+						limit2 = obj.limit;
+						
+						if(!first){
+							inventoryLoss(false);
+						}
+						
+					}
+				})
+			}
+			
+			$(".find").click(function(){
+					inventoryProfit(true);inventoryLoss(true);
+			})
+			
+			
+								
+			$("body").keydown(function(event) {
+					if(event.keyCode == "13") { //keyCode=13是回车键
+						$('.find').click();
+	
+					}
+			});
+	
+		
+		
+		});
+		
+		
+		
+	</script>
+
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>员工管理</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.staffmanagement {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.inputs {
+			margin-bottom: 8px;
+		}
+		
+		.layui-table td,
+		.layui-table th {
+			/*padding: 0 0.5vw !important;*/
+		}
+		
+		.btns button,
+		.find {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="staffmanagement">
+			<div class="layui-tab">
+				<div class="inputs">
+					<div class="btns">
+						<button class="layui-btn">继续保存</button>
+						<button class="layui-btn">取消保存</button>
+					</div>
+				</div>
+				<table id="staffmanagement" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			table.on('checkbox(demo)', function(obj) {
+				console.log(obj)
+			});
+			//展示已知数据
+			function detail(data) {
+				table.render({
+					elem: '#staffmanagement',
+					data: data,
+					height: "full-78",
+					cols: [
+						[ //标题栏
+							{
+								field: "index",
+								title: ' ',
+								width: 40,
+								align: "center",
+								//							sort: true
+							},
+							{
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							},
+							{
+								field: 'num',
+								title: '员工编码',
+								width: 180,
+							}, {
+								field: 'name',
+								title: '姓名',
+								width: 138
+							}, {
+								field: 'sex',
+								title: '性别',
+								width: 40
+							}, {
+								field: 'bumen',
+								title: '所属部门',
+								width: 120
+							}, {
+								field: 'jiaose',
+								title: '角色',
+								width: 120
+							}, {
+								field: 'marry',
+								title: '婚姻状况',
+								width: 120
+							}, {
+								field: 'tel',
+								title: '固定电话',
+								width: 120
+							}, {
+								field: 'email',
+								title: '邮箱',
+								width: 150
+							}, {
+								field: 'ID',
+								title: '身份证号',
+								width: 150
+							}, {
+								field: 'address',
+								title: '地址',
+								width: 150
+							}, {
+								field: 'notes',
+								title: '备注',
+								width: 130
+							},
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [10, 20, 30, 40, 50],
+					limit: 50 //每页默认显示的数量
+				});
+			}
+
+		});
+	</script>
+
+</html>

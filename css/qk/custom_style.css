@@ -1,0 +1,371 @@
+/**
+ * 一般展示页统一样式，按钮及layui修改的样式
+ */
+
+@CHARSET "UTF-8";
+*{
+    padding: 0px;
+    margin: 0px;
+    font-family: "PingFang SC";
+	font-size: 9pt;
+}
+.layui-input-inline select{
+	cursor: pointer;
+}
+
+	tbody tr:not(:last-child):hover {
+		background-color: rgba(137, 207, 240, .6) !important;
+	}
+	
+	
+	/**
+ * 表头背景色
+ */
+.dx-datagrid-headers.dx-datagrid-nowrap {
+	background-color: #E7EFF9 !important;
+}
+td.dx-cell-focus-disabled.dx-datagrid-drag-action {
+	background-color: #E7EFF9 !important;
+}
+tr.dx-row.dx-column-lines.dx-header-row {
+	background-color: #E7EFF9 !important;
+}
+	
+.style_show{
+	color: #2D89DD !important;
+}
+
+
+.style_total_show{
+	color: red !important;
+}
+
+table tbody tr:nth-child(even) {
+    background: #E7EFF9;
+}
+
+	.dx-data-row,
+	.dx-column-lines>td:nth-child(2) {
+		cursor: pointer;
+	}
+
+.layui-laypage .layui-laypage-limits{
+	margin-left: 0px !important;
+}
+
+html,body{
+	height:100%;
+	width: 100%;
+}
+
+body{padding: 0px; margin:0px; line-height:1.6; font-family:"Helvetica Neue","Hiragino Sans GB","Microsoft YaHei","\9ED1\4F53",Arial,sans-serif !important; color: #222;font-size: 9pt;background-color: #fff; overflow:auto
+}
+
+.panel-content{
+	padding: 20px 1.5% 0px 1.5%;
+}
+
+.panel_header{
+	width: 100%;
+	height: auto;
+	margin: 0px 0px 8px 0px;
+}
+
+
+.panel-content .moreAction {
+	background: #FFFFFF !important;
+	border: 1px solid #2D89DD !important;
+	color: #2D89DD !important;
+}
+
+.panel-content .moreAction:hover {
+	border-bottom: none !important;
+}
+
+
+.panel-content .moreAction1 {
+	background: #FFFFFF !important;
+	border: 1px solid #2D89DD !important;
+	color: #2D89DD !important;
+}
+
+.panel-content .moreAction1:hover {
+	border-bottom: none !important;
+}
+
+.panel-content .btns {
+	float: right;
+	display: inline-block;
+	position: relative;
+}
+
+.panel-content .btns button,
+.import {
+	padding: 0;
+	cursor: pointer;
+	border: none;
+	width: 90px;
+	height: 28px;
+	text-align: center;
+	line-height: 28px;
+	border-radius: 2px;
+	background-color: #2D89DD;
+	color: #FFFFFF;
+	margin-left: 8px;
+}
+
+.panel-content .find{
+	padding: 0;
+	cursor: pointer;
+	border: none;
+	width: 76px;
+	height: 28px;
+	text-align: center;
+	line-height: 28px;
+	border-radius: 2px;
+	background-color: #2D89DD;
+	color: #FFFFFF;
+	margin-left: 8px;
+}
+		
+			.cs_input{
+			background-color: white;
+		    font-size: 9pt;
+		    vertical-align: middle;
+		    display: block;
+		    box-sizing: border-box;
+		    border-radius: 2px;
+		    border-width: 1px;
+		    border-style: solid;
+		    border-color: rgb(221, 221, 221);
+		}
+
+.panel-content .action,.action1 {
+	background-color: #CCCCCC;
+	position: absolute;
+	right: 0px;
+	z-index: 10;
+	border: 1px solid #2D89DD;
+	display: none;
+}
+
+
+
+.panel-content .action li a {
+	display: block;
+	color: #232323;
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background-color: #FFFFFF;
+	box-shadow: 2px;
+}
+
+.panel-content .action1 li a {
+	display: block;
+	color: #232323;
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background-color: #FFFFFF;
+	box-shadow: 2px;
+}
+ table{
+	font-size: 9pt;
+}
+
+.panel-content .action li a:hover {
+	border-top: none;
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background: #ACD7FF;
+}
+
+.panel-content .action1 li a:hover {
+	border-top: none;
+	cursor: pointer;
+	width: 88px;
+	line-height: 28px;
+	text-align: center;
+	background: #ACD7FF;
+}
+
+.panel-content div.cs_result_area div.pagination li {
+	margin: 0 5px !important;
+}
+
+
+.cs_container input{
+	font-size: 9pt;
+}
+/**
+ * layui.css修改
+ */
+.panel-content .layui-table-cell {
+	height: auto;   !important;
+	padding: 0 15px;
+	position: relative;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	box-sizing: border-box
+}
+
+.layui-table-fixed .layui-table-body tbody .layui-table-cell{
+		height: 44px;   !important;
+}
+
+.panel-content .layui-tab {
+    margin: 0;
+    text-align: left!important;
+}
+.panel-content .layui-table-cell .layui-form-checkbox[lay-skin=primary] {
+	top: 0px;  !important;
+	vertical-align: middle
+}
+
+
+
+.panel-content .layui-table[lay-skin=row] td, .layui-table[lay-skin=row] th{
+	border-width: 0 1px 0 0;
+}
+
+.panel-content .layui-table-tips .layui-layer-content {
+	display:none;
+}
+
+/*.panel-content .layui-table, .layui-table-view{
+	margin: 0px;
+}*/
+.panel-content .layui-laypage{
+	margin: 0px;
+	position: absolute;
+	bottom: 0px;
+	left: 25px;
+}
+
+.panel-content .layui-laypage a, .layui-laypage span{
+	margin: 0px;
+	height: 25px;
+}
+
+.panel-content .layui-laypage button, .layui-laypage input{
+		height: 25px;
+		line-height: 25px;
+		margin-top: 1.5px;
+}
+
+
+
+.panel-content .layui-laypage select {
+		height: 25px;
+		padding:0px;
+		margin-top: 1.5px;
+}
+#zidingyipage{
+	padding:3px 0px;
+	border-left: 1px solid #e6e6e6;
+	border-right: 1px solid #e6e6e6;
+	border-bottom:  1px solid #e6e6e6;
+}
+
+.panel-content .layui-table thead tr {
+	background-color: #EFF5FF !important;
+}
+
+.panel-content .layui-table tbody tr:nth-child(even) {
+	background-color: #EFF5FF;
+}
+
+.panel-content .layui-table tbody tr:nth-child(odd) {
+	background-color: #FFFFFF;
+}
+.panel-content .layui-input, .layui-select {
+    height: 28px !important;
+    line-height: 28px !important;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #fff;
+    border-radius: 2px;
+}
+
+.layui-table-tool {
+	border-width: 0;
+}
+
+
+    .dx-datagrid-text-content {
+        color: grey;
+    }
+
+
+
+.layui-laypage a, .layui-laypage span{
+	margin: 0px -2px 0px 0px !important;
+	padding: 0px 15px!important;
+}
+.layui-laypage {
+	margin: 0 !important;
+
+}
+
+.layui-laypage .layui-laypage-curr,.layui-laypage-spr{
+	height: 28px !important;
+}
+
+.layui-laypage .layui-laypage-limits{
+	margin-left: 5px !important;
+}
+
+.layui-laypage .layui-laypage-count{
+	padding-left: 0px !important;
+}
+.lendoutcount{
+	  background: #cae1ec  !important;
+}
+
+.lendincount{
+	  background: #d3ecc6  !important;
+}
+
+
+.readycount{
+	  background: #fee9d0  !important;
+}
+
+.realstockcount{
+	  background: #ffc8c8  !important;
+}
+
+.usefulcount{
+	  background: #ffffc0  !important;
+}
+
+
+.fxlock{
+	  background: #e1d5c2  !important;
+}
+.warelock{
+		background-color: rgb(250,224,243) !important;
+}
+
+
+.realcost{
+	  background: #dacfda  !important;
+}
+
+
+.subtotal{
+	  background: #c9f2f1  !important;
+}
+
+.layui-laypage select {
+    height: 22px;
+     padding: 0px !important; 
+    border-radius: 2px;
+    cursor: pointer;
+}

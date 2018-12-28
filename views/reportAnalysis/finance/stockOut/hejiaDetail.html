@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>核价列表</title>
+		<link rel="stylesheet" href="../../../../plugins/layui/css/layui.css">
+	</head>
+	<!--<link rel="stylesheet" type="text/css" href="../../../css/same.css" />-->
+	<style type="text/css">
+
+	</style>
+
+	<body>
+		<div class="OrderList">
+
+			<table id="OrderList" lay-filter="demo"></table>
+		</div>
+	</body>
+	<!--<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>-->
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			//展示已知数据
+			function data() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetQtckTraceBackDetail?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': sessionStorage.cwdzdOrdernum
+					},
+					success: function(res) {
+						//						console.log(res)
+						var desData = JSON.parse(res);
+						detail(desData.NewDataSet[2].Table2);
+					}
+				});
+			}
+			data()
+
+			function detail(data) {
+				table.render({
+					elem: '#OrderList',
+					data: data,
+					cols: [
+						[ //标题栏
+							{
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 150,
+							},
+							{
+								field: 'manufacturer',
+								title: '品牌',
+								minWidth: 100,
+							}, {
+								field: 'danwei',
+								title: '规格',
+								minWidth: 100
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 100
+							}, {
+								field: 'producenum',
+								title: '编号',
+								minWidth: 100
+							}, {
+								field: 'producecount',
+								title: '数量',
+								minWidth: 100
+							}, {
+								field: 'unitprice',
+								title: '单价',
+								minWidth: 100
+							}, {
+								field: 'totalprice',
+								title: '小计',
+								minWidth: 100
+							}
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-247",
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [10, 20, 30, 40, 50],
+					limit: 50 //每页默认显示的数量
+				});
+			}
+		});
+	</script>
+
+</html>

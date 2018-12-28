@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>订单列表</title>
+		<link rel="stylesheet" href="../../../../plugins/layui/css/layui.css">
+	</head>
+	<!--<link rel="stylesheet" type="text/css" href="../../../css/same.css" />-->
+	<style type="text/css">
+
+	</style>
+
+	<body>
+		<div class="OrderList">
+
+			<table id="OrderList" lay-filter="demo"></table>
+		</div>
+	</body>
+	<!--<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>-->
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+
+			function data() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetDdckTraceBackDetail?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': sessionStorage.cwdzdOrdernum
+					},
+					success: function(res) {
+//						console.log(res)
+						var desData = JSON.parse(res);
+						console.log(desData.NewDataSet[1].Table1)
+						detail(desData.NewDataSet[1].Table1);
+//						$("[data-field=accountperiod] div:gt(0)").each(function(i) {
+//							$(this).html($(this).text().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''))
+//						});
+					}
+				});
+			}
+			data()
+			function detail(data) {
+				table.render({
+					elem: '#OrderList',
+					data: data,
+					cols: [
+						[ //标题栏
+							{
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 150,
+							},
+							{
+								field: 'manufacturer',
+								title: '品牌',
+								minWidth: 100,
+							}, {
+								field: 'danwei',
+								title: '规格',
+								minWidth: 100
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 100
+							}, {
+								field: 'producenum',
+								title: '编号',
+								minWidth: 100
+							}, {
+								field: 'producecode',
+								title: '主条码',
+								minWidth: 100
+							}, {
+								field: 'producesubbarcode',
+								title: '副条码',
+								minWidth: 100
+							}, {
+								field: 'produceunit',
+								title: '单位',
+								minWidth: 100
+							}, {
+								field: 'producecount',
+								title: '数量',
+								minWidth: 100
+							}, {
+								field: 'produceusename',
+								title: '通俗名称',
+								minWidth: 100
+							}, {
+								field: 'produceseries',
+								title: '产品系列',
+								minWidth: 100
+							}, {
+								field: 'producematerial',
+								title: '材质',
+								minWidth: 100
+							}, {
+								field: 'registrationcertificatename',
+								title: '注册证号',
+								minWidth: 170
+							}
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-247",
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [10, 20, 30, 40, 50],
+					limit: 50 //每页默认显示的数量
+				});
+			}
+		});
+	</script>
+
+</html>

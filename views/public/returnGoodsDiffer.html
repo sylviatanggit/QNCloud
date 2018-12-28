@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title></title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.lendAndReturnDistinction {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 10px;
+		}
+		
+		.inputs {
+		}
+		
+		.btns button,
+		.find,
+		.import {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt;
+		}
+		
+		.btns {
+			width: 100%;
+			height: 100%;
+		}
+		
+		.btns button {
+			width: 100px;
+			float: right;
+			 margin-bottom: 10px;
+
+		}
+		
+		.layui-table-box, .layui-table-view{
+			    clear: both;
+		
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../css/same.css" />
+
+	<body>
+		<div class="lendAndReturnDistinction">
+			<div class="layui-tab">
+				<div class="inputs">
+				
+					<div class="btns">
+						<button class="layui-btn save" data-type="save">处理</button>
+
+					</div>
+				</div>
+				<table id="lendAndReturnDistinction" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+
+
+			function staffInfo(data) {
+				
+				table.render({
+					elem: '#lendAndReturnDistinction',
+					data: data,
+					height: "full-60",
+					cols: [
+						[ //标题栏
+
+							{
+								checkbox: true,
+//								LAY_CHECKED: true,
+								align: "center",
+								width: 40,
+							},
+							{
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 200
+							}, {
+								field: 'manufacturer',
+								title: '厂家',
+								minWidth: 150
+							},
+							{
+								field: 'danwei',
+								title: '规格',
+								minWidth: 150
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 80
+							}, {
+								field: 'producenum',
+								title: '编号',
+								minWidth: 100
+							}, {
+								field: 'producecode',
+								title: '主条码',
+								minWidth: 100
+							}, {
+								field: 'producesubbarcode',
+								title: '副条码',
+								edit: 'text',
+								minWidth: 100
+							}, {
+								field: 'produceunit',
+								title: '单位',
+								minWidth: 80
+							}, {
+								field: 'iots',
+								title: '批号',
+								edit: 'text',
+								minWidth: 100
+							}, {
+								field: 'productiondate',
+								title: '生产日期',
+								minWidth: 150
+							}, {
+								field: 'indate',
+								title: '有效期',
+								minWidth: 150
+							}, {
+								field: 'qs',
+								title: '合格',
+								//								edit: 'text',
+								minWidth: 80
+							}, {
+								field: 'package',
+								title: '包装',
+								minWidth: 80
+							}
+							, {
+								field: 'storagecondition',
+								title: '存储条件',
+								minWidth: 80
+							},
+							
+							{
+								field: 'producepropertyname',
+								title: '产品种类',
+								minWidth: 60
+						},
+						{
+								field: 'produceseries',
+								title: '系列',
+								minWidth: 120
+						},
+							{
+								field: 'produceusename',
+								title: '通俗名称',
+								minWidth: 80
+							},{
+								field: 'producettypename',
+								title: '产品属性',
+								minWidth: 60
+							},
+						
+						{
+								field: 'manufacturer',
+								title: '品牌',
+								minWidth: 100
+							}
+						,
+							{
+								field: 'produceseries',
+								title: '产品系列',
+								minWidth: 150
+							}, {
+								field: 'producematerial',
+								title: '材质',
+								minWidth: 80
+							},{
+								field: 'manufacturename',
+								title: '厂家',
+								minWidth: 150
+							},
+							{
+							field: 'regproducename',
+							title: '注册证产品名称',
+							minWidth: 150
+						}, {
+								field: 'registrationcertificatename',
+								title: '注册证号',
+								minWidth: 200
+							},{
+								field: 'unbackcount',
+								title: '数量',
+								event: "setSign",
+								fixed: 'right',
+								width: 80
+							}
+							
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: false ,//是否显示分页
+					//						,
+					limits: [1000],
+					limit: 1000 //每页默认显示的数量
+				})
+				
+				$(".lendAndReturnDistinction [data-field=qs] div:gt(0)").each(function(i) {
+				if($(this).html() == 0) {
+					$(this).html("不合格");
+				} else {
+					$(this).html("合格");
+				}
+				
+//				$(".lendAndReturnDistinction [data-field=unbackcount] div:gt(0)").each(function(i) {
+//				
+//				}
+				
+				$("[data-field=unbackcount]").css("background-color","#d3ecc6");
+
+			});
+			
+			}
+			
+		lendAndReturn();
+		
+		function lendAndReturn(){
+			
+			var lendAndReturnData =JSON.parse(sessionStorage.lendAndReturnDistinctData);
+			
+			for (var i=0;i<lendAndReturnData.length;i++) {
+				if(lendAndReturnData[i].instockcount == "0"){
+					lendAndReturnData[i].unbackcount = 0;
+				}
+			}
+			staffInfo(lendAndReturnData);
+			
+		
+			
+
+		}
+
+
+		});
+	</script>
+
+</html>

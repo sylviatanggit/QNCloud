@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>工具组套管理</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.toolManagement {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.toolManagement_header button {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		
+		.toolManagement_header {
+			margin-bottom: 8px;
+		}
+		
+		.tooladd {
+			margin-left: 0px;
+		}
+		
+		.btns button,
+		.find {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			font-size: 9pt;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+			z-index: 5;
+			background-color: #FFFFFF;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="toolManagement">
+			<div class="layui-tab">
+				<div class="toolManagement_header">
+					<div class="inputs">
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						<div class="btns">
+							<button data-type="getCheckDel" class="layui-btn import">确认导入</button>
+						</div>
+					</div>
+				</div>
+				<table id="toolManagement" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery','laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laypage = layui.laypage;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			var limit = 50;
+			var curpage = 1;
+			var count;
+			var off = true;
+			var seachContent = $(".seachContent").val()
+			function toolData() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetToolInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'database': localStorage.database,
+						'txtCondition':seachContent
+					},
+					success: function(res) {
+						var toolData = JSON.parse(res);
+						var data = JSON.parse(toolData.data);
+						count = toolData.count;
+						toolInfo(data, limit);
+						if (off) {
+							off = false;
+							tool_pages();
+						}
+					}
+				});
+			}
+
+			function toolInfo(data,limit) {
+				//展示已知数据
+				table.render({
+					elem: '#toolManagement',
+					data: data,
+					height: "full-105",
+					cellMinWidth:"1000",
+					cols: [
+						[ //标题栏
+							{
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							}, {
+								field: 'name',
+								title: '工具组套名称',
+								event: 'detail',
+//								style: "color:#2D89DD;cursor:pointer",
+								minWidth: 433,
+							}, {
+								field: 'unit',
+								title: '计量单位',
+								minWidth: 300
+							}, {
+								field: 'nomo',
+								title: '备注',
+								minWidth: 300
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					limit:limit
+				});
+			}
+			//分页
+			function tool_pages() {
+				laypage.render({
+					elem: 'toolManagement', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						toolData();
+					}
+				})
+			}
+			toolData();
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				if(obj.event === 'detail') {
+					var id=data.id;
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">工具组套详情</span>',
+						area: ['85%', '90%'],
+						offset: "rb",
+						content: 'views/public/form/toolchange.html',
+						zIndex: parent.layerr.zIndex //重点1
+							,
+						success: function(layero, index) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$('.zt_name', paentIfarame).val(data.name);
+							$('.zt_unit', paentIfarame).val(data.unit);
+							$('.zt_nomo', paentIfarame).val(data.nomo);
+							$('.st_save',paentIfarame).attr("zu_id",data.id);
+							$(".st_save", paentIfarame).click(function() {
+								var name = $('.zt_name', paentIfarame).val();
+								var unit = $('.zt_unit', paentIfarame).val();
+								var nomo = $('.zt_nomo', paentIfarame).val();
+								var master = {
+									'name': '' + name + '',
+									'unit': '' + unit + '',
+									'nomo': '' + nomo + ''
+								};	
+								var slave =[]
+								var length_1 =$(".st_save",paentIfarame).attr("length");
+								length_1=eval(length_1);
+								if(length_1 != undefined && length_1 != 0){
+									for(var i=0;i<length_1;i++){
+										var producecount_text=$(".tooladd .layui-table tbody tr:eq("+i+")",paentIfarame).attr("id_1");
+										var producecount = $(".tooladd .layui-table tbody tr [data-field=producecount] div",paentIfarame).eq(i).text();
+										var slave_obj={
+											"produceid":producecount_text,
+											"producecount":producecount
+										};
+										slave.push(slave_obj);
+									}
+									$.ajax({
+										type: "get",
+										url: localStorage.serIp+"/WebUpdateToolTable?jsoncallback=?",
+										async: true,
+										dataType: 'jsonp',
+										data: {
+											"userId": localStorage.userId,
+											"userPw": localStorage.userPw,
+											'database': localStorage.database,
+											'master': JSON.stringify(master),
+											'id':id,
+											'slave':JSON.stringify(slave)
+											
+										},
+										success: function(res) {
+											var data = JSON.parse(res);
+											if(data.ResultValue == "1"){
+												parent.layer.open({
+													title: "提示",
+													content: '保存成功',	zIndex: parent.layerr.zIndex //重点1
+												});
+											}
+											toolData();
+										}
+									});
+								}else{
+									parent.layer.open({
+										title: "提示",
+										content: '请选择添加工具',	zIndex: parent.layerr.zIndex //重点1
+									});
+								}
+								
+							})
+						}
+					});
+				}
+
+			});
+			//查询
+			$(".find").click(function() {
+				seachContent = $(".seachContent").val();
+				toolData();
+			})
+			//查询回车事件
+			$(".seachContent").bind("keydown",function(e){
+			　　  var theEvent = e || window.event;
+			　　  var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+			　　   if (code == 13) {
+			　　	    off = true;
+					seachContent = $(".seachContent").val();
+					toolData();
+			　　  }
+			});
+			$('.import').on('click', function() {
+				var type = $(this).data('type');
+				active1[type] ? active1[type].call(this) : '';
+			});
+			var active1 = {
+				getCheckDel: function() { //获取选中数据
+					var checkStatus = table.checkStatus('toolManagement'),
+						data = checkStatus.data;
+					var ckid=sessionStorage.chukuID
+					if(data.length >0) {
+						var master="";
+						for(var i=0;i<data.length;i++){
+							master+="'"+data[i].id+"'";
+							if((i+1)!=data.length){
+				      			master += ",";
+				      		}
+						}
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp+"/WebGetToolProduct?jsoncallback=?",
+							async: true,
+							dataType: 'jsonp',
+							data: {
+								"userId": localStorage.userId,
+								"userPw": localStorage.userPw,
+								'database': localStorage.database,
+								'id': master,
+								'warehouseid':ckid
+								
+							},
+							success: function(res) {
+								var data = JSON.parse(res);
+								//添加成功的数据
+								var success=data.NewDataSet[0].Table1;
+								var html="导入成功";
+								if(success != undefined){
+									html="";
+									sessionStorage.cksuccess=JSON.stringify(success);
+									for(var i=0;i<data.NewDataSet[1].Table2.length;i++){
+										html+='<p>'+data.NewDataSet[1].Table2[i].工具数量不足+'</p>';
+									}
+								}else{
+									html="";
+									for(var i=0;i<data.NewDataSet[0].Table2.length;i++){
+										html+='<p>'+data.NewDataSet[0].Table2[i].工具数量不足+'</p>';
+									}
+								}
+								parent.layer.open({
+									title: "提示",
+									content: html,
+									zIndex: parent.layerr.zIndex, //重点1
+									success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+										var  iframeName = $(".iframeName").val();
+									},
+									end: function(){  
+		                    			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+										parent.layer.close(index); //再执行关闭     
+		                  			} 
+								});
+							}
+						});	
+					} else {
+							parent.layer.open({
+							title: "提示",
+							content: '请选择工具组套',
+							zIndex: parent.layerr.zIndex //重点1
+						,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+					}				
+
+				}
+			};
+		});
+	</script>
+
+</html>

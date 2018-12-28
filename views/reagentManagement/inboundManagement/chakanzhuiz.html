@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>订货合约</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+		<script src="../../../js/jquery.js" type="text/javascript"></script>
+        <!-- DevExtreme themes -->
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
+		<link rel="stylesheet" href="../../../devexpresslibrary/css/jquery.my-modal.1.1.winStyle.css">
+	</head> 
+	<style type="text/css">
+		.orderContract {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 10px;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		label {
+			padding: 0 !important;
+			margin-left: 0px;
+		}
+		
+		.btns button,
+		.find,
+		.import {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 90px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px;
+			font-size: 9pt;
+		}
+		
+		.find {
+			width: 76px;
+		}
+		
+		.orderContract_header {
+			margin-bottom: 8px;
+		}
+		
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+		}
+		
+		.cleardata{
+			cursor: pointer;
+		}
+		
+		.cleardata1{
+			cursor: pointer;
+		}
+		
+				.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 5px !important;
+		}
+		
+		.layui-inline{
+			margin-top: 10px;
+		}
+		.logisticDates,.paydate{
+			border: none;
+		}
+		
+		
+			.m-modal {
+		z-index: 9999;
+	}
+
+
+	div#gridModalContainer {
+		height: 300px;
+		position: absolute;
+		top: 20%;
+		left: 25%;
+		width: 800px!important;
+	}
+	</style>
+	
+
+	<body>
+	
+	
+	<div class="m-modal">
+
+		<div id="gridModalContainer"></div>
+
+	</div>
+
+
+
+		<div class="orderContract">
+			<div class="layui-tab">
+				<div class="orderContract_header">
+					<div class="inputs">
+					<div style="width: 100%;height: auto;position: relative;margin-top: 10px;">
+						<div class="layui-inline" >
+							<div class="layui-input-inline">
+								<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')"  class="layui-input seachContent" placeholder="请输入关键字" type="text" style="width: 240px;margin-left: 0;">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						<div class="btns" style="margin-top: 10px;" style="position: relative;">
+							<button class="layui-btn save">保存</button>
+							<button class="layui-btn moreAction">更多操作</button>
+								<ul class="action" style="right: 0px;">
+									<li>
+										<a class="piliang" data-type="combineExport" lay-event='combineExport'>合并导出</a>
+									</li>
+									
+									<li>
+										<a class="jiaRuZhuiZong" data-type="jiaRuZhuiZong" lay-event='jiaRuZhuiZong'>取消追踪</a>
+									</li>
+									
+									
+								</ul>
+							
+							
+						</div>
+
+					</div>	
+				</div>
+				</div>
+				<table id="orderContract" lay-filter="demo">
+					<div id="gridContainer"></div>
+				</table>
+			</div>
+		</div>
+	</body>
+	
+	<!-- DevExtreme library -->
+	<script src="../../../devexpresslibrary/js/dx.all.js"></script>
+
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script src="../../../js/public.js"></script>
+	<!-- 弹框插件 -->
+<script src="../../../devexpresslibrary/js/jquery.my-modal.1.1.js"></script>
+
+	<script>
+		layui.use(['table', 'jquery', 'laydate', 'laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			var laypage = layui.laypage;
+			var oldData = [];
+			
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			
+			
+			var myDate = new Date();
+			var currentMothFirstDay = myDate.getFullYear() + '-' +  (myDate.getMonth() + 1) +"-" + '01';
+			var currentDate =  myDate.getFullYear() + '-' +(myDate.getMonth() + 1)  + '-'+  myDate.getDate();
+			
+	
+			
+			var limit = 50;
+			var curpage = 1;
+			var count;
+		
+             //适配
+		var viewHeight = $(window).height();
+		$('#gridContainer').css('height', viewHeight * 0.88 + 'px');
+			
+		
+				function orderInfo(data){
+				var dataGrid = $("#gridContainer").dxDataGrid({
+				dataSource: data,
+				allowColumnReordering: true,
+				showBorders: true,
+				//keyExpr: "id",
+				editing: {
+					mode:'cell',
+					allowUpdating: true,
+				},
+				columnChooser: {
+					enabled: false,
+					mode: "dragAndDrop",
+				},
+				headerFilter: {
+					visible: false
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				filterRow: {
+					visible: false,
+				},
+				selection: {
+					mode: "multiple",
+				},
+				paging: {
+					pageSize: 20000000,
+				},
+				allowColumnResizing: true,
+				columnFixing: {
+					enabled: false
+				},
+				grouping: {
+					contextMenuEnabled: false,
+					expandMode: "rowClick"
+				},
+				groupPanel: {
+					visible: false
+				},
+				columns: [{
+					dataField: "ordernum",
+					caption: "订货单号",
+					allowEditing: false,
+					width: 200,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div style='color:#2D89DD'> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}
+				,
+				{
+					dataField: "statesname",
+					caption: "操作状态",
+					allowEditing: false,
+					width: 120
+				},	{
+					dataField: "owncompany",
+					caption: "所属公司",
+					allowEditing: false,
+					width: 160
+				},{
+					dataField: "agentname",
+					caption: "业务员",
+					allowEditing: false,
+					width: 120
+				},	{
+					dataField: "companyname",
+					caption: "往来单位",
+					allowEditing: false,
+					width: 160
+				},	{
+					dataField: "procount",
+					caption: "订单总数",
+					allowEditing: false,
+					width: 120
+				},	{
+					dataField: "totalcost",
+					caption: "订单金额",
+					allowEditing: false,
+					width: 120
+				},{
+					dataField: "inordercount",
+					caption: "入库单",
+					allowEditing: false,
+					width: 120,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div style='color:#2D89DD'> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				},{
+					dataField: "inprocount",
+					caption: "入库总数",
+					allowEditing: false,
+					width: 120
+				},
+				{
+					dataField: "alreadypay",
+					caption: "已付金额",
+					//allowEditing: false,
+					dataType:'number',
+					width: 120,
+					cellTemplate: function (container, options) {
+						if(options.value < 0){
+                           options.data.alreadypay = 0;
+                           options.value = 0
+						}
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				},{
+					dataField: "paydate",
+					caption: "付款时间",
+					//allowEditing: false,
+					dataType:'date',
+					format: "yyyy-MM-dd",
+					//dateSerializationFormat:"yyyy-MM-dd",
+					width: 120,
+					cellTemplate:function(container,options){
+						
+						var str;
+						if(!options.value){
+                          str = "";
+						}else{
+							str = options.value;
+			                  str =  str.getFullYear() + '-' + (str.getMonth() + 1) + '-' + str.getDate() + ' '
+                   ;
+
+						}
+                      $("<div>")
+							.append($("<div> " + str + "</div>"))
+							.appendTo(container);
+					}
+				},{
+					dataField: "logisticDates",
+					caption: "物流时间",
+					allowEditing: false,
+					width: 120,
+					cellTemplate:function(container,options){
+						var orderData = options.data.ordertime;
+						var days = diffDay(currentDate,orderData);
+						var str;
+						if(options.data.states == 1){
+                           str = days + '天';
+						}else{
+							str = '已收货'
+						}
+                       $("<div>")
+							.append($("<div> " + str + "</div>"))
+							.appendTo(container);
+					}
+				}
+				],
+				summary: {
+					totalItems: [{
+						column: "procount",
+						summaryType: "sum",
+			
+					}, {
+						column: "totalcost",
+						summaryType: "sum",
+						customizeText: function (data) {
+							var data = data.value;
+							data= data.toFixed(3);
+							return data;
+						}
+					},{
+						column: "inprocount",
+						summaryType: "sum",
+					},{
+						column: "alreadypay",
+						summaryType: "sum",
+					},{
+						column: "inordercount",
+						summaryType: "sum",
+					       customizeText: function (data) {
+							var sum = 0;
+							$.each(oldData,function(v,i,arr){
+                                 sum += i.inordercount;
+							});
+							data = sum.toFixed(3);
+							return data;
+						}
+					}
+					]
+				},
+				onSelectionChanged: function (e) {
+					selectedArray = [];
+					selectedArray = e.selectedRowsData;
+				},
+				onCellClick:function(e){
+				
+                 var data = e.data;
+                  //订货单号
+                     if(e.columnIndex == 1 && e.rowType == 'data'){
+                                             	var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+						parent.layer.close(index); //再执行关闭     
+						
+					parent.tab.tabAdd({
+						icon: '',
+						id: "DHHYXQ" + data.ordernum,
+						title: data.ordernum + '订货合约单详情',
+						url: 'views/purchasingManagement/orderContract/orderDetail.html'
+					});
+                     }
+                     //入库单
+                      if(e.columnIndex == 8 && e.rowType == 'data'){
+					  $.ajax({
+						type: "get",
+						url:  localStorage.serIp + "/WebGetInStoMasterByLastNum?jsoncallback=?",
+						dataType: "jsonp",
+						async: true,
+						data: {
+							'userId': localStorage.userId,
+							'userPw': localStorage.userPw,
+							'database': localStorage.database,
+							'ordernum': data.ordernum
+						},
+						success: function(res) {
+							var orderData = JSON.parse(res);
+							if(orderData.length == 0){
+								parent.layer.open({
+									title: "提示",
+									content: '无入库单数！',
+									zIndex: parent.layer.zIndex //重点1
+								});
+								
+							}else if(orderData.length != 0){
+							
+								var m1 = new MyModal.modal();
+								m1.show();
+						
+						
+							showContainer(orderData)
+								
+//								var html='';
+//								for(var i=0;i<orderData.length;i++){
+//									html+='<p>'+orderData[i].ordernum+'</p>'
+//									
+//								}
+//								parent.layer.open({
+//									title: "提示",
+//									content: html,
+//									zIndex: parent.layer.zIndex //重点1
+//								});
+							}
+						}
+					});
+                     }
+				},
+				onContentReady:function(e){
+       
+                  var data = e.component.getVisibleRows();
+                  var saveData = []
+                  $.each(data,function(v,i,arr){
+                      saveData.push(i.data)
+                  })
+                  oldData = saveData;
+				}
+			}).dxDataGrid('instance');
+			}
+			var selectedArray = [];
+			
+		$("div").delegate("[data-field=paydate] input","change",function(e){
+				var index= $(this).parents("tr").attr("data-index")
+				oldData[index].paydate = $(this).val();
+		});
+		
+		$("div").delegate("[data-field=paydate]","click",function(e){
+			
+			$(this).children("input").attr("type","date");
+		
+		});	
+	
+			
+			orderData(true);
+			
+			
+	function showContainer(data) {
+		//展示已知数据
+		//   Dev Extreme
+		$(function () {
+			var dataGrid = $("#gridModalContainer").dxDataGrid({
+				dataSource: data,
+				allowColumnReordering: false,
+				showBorders: true,
+				keyExpr: "ordernum",
+				headerFilter: {
+					visible: false,
+
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				columnChooser: "enable",
+				selection: {
+					mode: "multiple",
+				},
+				allowColumnResizing: true,
+				columns: [
+					{
+						dataField: "ordernum",
+						caption: "入库单号",
+
+					},
+					{
+						dataField: "companyname",
+				
+						caption: "往来单位",
+					},
+
+
+
+
+				],
+
+
+				onCellClick: function (e) {
+					if (e.columnIndex == 1 && e.rowType != "header") {
+					
+					
+						parent.layer.closeAll();
+						
+						parent.tab.tabAdd({
+						icon: '',
+						id: "RKYSWC" +e.value,
+						title: e.value + '入库验收详情',
+							url: 'views/purchasingManagement/acceptance/RKacceptDetail.html'
+						});
+		
+					
+					
+					}
+				}
+
+			}
+			).dxDataGrid('instance');
+
+
+		});
+
+	};
+	
+	
+			
+					//监听单元格编辑
+		 table.on('edit(demo)', function(obj){
+			    var value = obj.value,	data = obj.data //得到所在行所有键值 //得到修改后的值
+			    ,field = obj.field; //得到字段
+				
+				   if(field == "alreadypay"){  //小计
+				   	
+				  	 	eventFlag = true;
+					   	var re = /^[0-9]+.?[0-9]*$/;
+					   	var getvalue = value;
+					    if (!re.test(value)){
+					    	layer.tips('输入非法!',this);
+							getvalue= "0.00";
+					   	 }
+					
+				        if (getvalue <=0 ){
+				    		 getvalue= "0.00";
+						}
+						
+						getvalue = Number(getvalue).toFixed(2);
+			    		$(this).val(getvalue);	
+			    	  	var index = data.LAY_TABLE_INDEX;
+		
+						oldData[index].alreadypay = getvalue;
+//
+				   }
+			  	 
+			  });
+			  
+			var  jiazaiIndex = "";  
+			
+			parent.layer.open({
+				type: 3,
+				zIndex: parent.layer.zIndex, //重点1
+				success: function (layero, index) {
+					jiazaiIndex = index;
+				}
+			});
+			
+			function orderData(jumpFlag) {
+
+				var seachContent = $(".seachContent").val();
+				
+
+				$.ajax({
+					type: "get",
+					url:  localStorage.serIp + "/WebGetOrderTrackInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'txtCondition': seachContent,
+						'num': limit,
+						'page': curpage,
+						'isorder' : 1,
+					},
+					success: function(res) {
+						parent.layer.close(jiazaiIndex);
+
+						var orderData = JSON.parse(res);
+					
+						count = orderData.count;
+						var data = JSON.parse(orderData.data)
+						oldData = data;
+						
+						orderInfo(data);
+
+
+
+						if(jumpFlag) {
+							order_pages();
+						}
+			
+					}
+				});
+			}
+			
+			
+						//分页
+			function order_pages() {
+				laypage.render({
+					elem: 'orderContract', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj,first) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						
+						if(!first){
+					    	orderData(false);
+
+						}
+					}
+				})
+			}
+			
+			
+			
+			
+			$("body").keydown(function(event) {
+				if(event.keyCode == "13") { //keyCode=13是回车键
+					$('.find').click();
+				}
+			});
+			
+			
+			
+			$(".find").click(function() {
+				orderData(true);
+			})
+			
+			
+		
+
+
+
+			$('.jiaRuZhuiZong').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+			
+			
+			$(".save").click(function(){
+						if(!checkPermissionStatus("订货合约-审核1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}
+					
+					
+				var master=[];
+				for(var i=0;i<oldData.length;i++){
+					var ordernum= oldData[i].ordernum;
+					var alreadypay= oldData[i].alreadypay;
+					var paydate= oldData[i].paydate;
+					var gid=oldData[i].id;
+					
+					if(alreadypay != ""){
+						if(paydate == ""){
+							parent.layer.open({
+								title: "提示",
+								content: '付款时间不能为空！',
+								zIndex: parent.layer.zIndex, //重点1
+								success: function(layero,index) {
+									parent.layer.setTop(layero); //重点2
+								},
+							});
+							return;
+						}
+						
+					}
+					
+					
+					master.push({
+						'ordernum':ordernum,
+						'alreadypay':alreadypay,
+						'paydate':paydate,
+						"id":gid,
+					});
+				}
+				
+				$.ajax({
+					type: "post",
+					url:  localStorage.serIp  +"/WebSaveOrderTrackInfo",
+					async: true,
+					contentType:'application/json; charset=utf-8',
+					crossDomain:true,
+					dataType: 'json',
+					data:  JSON.stringify({
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'master': JSON.stringify(master)
+					}),
+					success: function(res) {
+						var data = JSON.parse(res);
+						if(data.ResultValue == 1){
+							parent.layer.open({
+								title: "提示",
+								content: '保存成功!',
+								zIndex: layer.zIndex ,//重点1,
+								success: function(layero) {
+//									parent.layer.setTop(layero); //重点2
+								
+								}
+							});
+						}else{
+							parent.layer.open({
+								title: "提示",
+								content: '保存失败!',
+								zIndex: layer.zIndex ,//重点1,
+								success: function(layero) {
+//									parent.layer.setTop(layero); //重点2
+								
+								}
+							});
+						}
+					}
+				})
+			})
+			
+		
+		
+					//点击删除
+			var $ = layui.$,
+				active = {
+					combineExport: function() { //获取选中数据
+						
+								if(!checkPermissionStatus("订货合约-导出1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}
+					
+						var checkStatus = table.checkStatus('orderContractId'),
+							data1 = checkStatus.data;
+						var idstr = "";
+						if(selectedArray.length == 0){
+							parent.layer.open({
+								title: "提示",
+								zIndex: parent.layer.zIndex, //重点1,
+								content: '请选择要合并的单据!'
+							});
+							return;
+						}
+						if(checkIsUniqueArray(selectedArray,"companyid")){
+							parent.layer.open({
+								title: "提示",
+								zIndex: parent.layer.zIndex, //重点1,
+								content: '只能选择相同往来单位的单据合并导出!'
+							});
+							return;
+						}
+					    for(var i=0;i<selectedArray.length;i++) { 
+				      		idstr += "'"+selectedArray[i].ordernum + "'";
+		
+				      		if((i+1)!=selectedArray.length){
+				      			idstr += ",";
+				      		}
+						}
+					    var jiazaiIndex;
+						parent.layer.confirm('确定合并导出吗？', {
+							icon: 3,
+							zIndex: parent.layer.zIndex ,//重点1
+							title: '合并导出'
+						}, function(index) {
+							
+							combineExport("DHHY",idstr)
+						});
+					}
+					,
+					jiaRuZhuiZong: function() { //获取选中数据
+						
+								if(!checkPermissionStatus("订货合约-审核1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}
+					
+						var checkStatus = table.checkStatus('orderContractId'),
+							data1 = checkStatus.data;
+						var idstr = "";
+						if(selectedArray.length == 0){
+							parent.layer.open({
+								title: "提示",
+								zIndex: parent.layer.zIndex, //重点1,
+								content: '请选择要取消的单据!'
+							});
+							return;
+						}
+						for(var i=0;i<selectedArray.length;i++) { 
+				      		idstr += selectedArray[i].id;
+		
+				      		if((i+1)!=selectedArray.length){
+				      			idstr += ",";
+				      		}
+						}
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp+"/WebDeleteOrderTrack?jsoncallback=?",
+							async: true,
+							dataType: 'jsonp',
+							data: {
+								"userId": localStorage.userId,
+								"userPw": localStorage.userPw,
+								'database': localStorage.database,
+								'id': idstr
+							},
+							success: function(res) {
+								var res = JSON.parse(res);
+								if(res[0].ResultValue == '0') {
+									
+									parent.layer.open({
+										title: "提示",
+										content: '取消失败！',zIndex: parent.layer.zIndex //重点1
+									});
+								}else{
+									parent.layer.open({
+										title: "提示",
+										content: '取消成功！',zIndex: parent.layer.zIndex //重点1
+											,
+										success: function(layero,index) {
+										parent.layer.setTop(layero); //重点2
+										},
+									});
+									orderData(true)
+								}
+							}
+						});
+					}
+				};
+
+
+			$('.piliang').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+			
+			
+		});
+	</script>
+	
+
+</html>

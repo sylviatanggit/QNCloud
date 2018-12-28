@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>产品分组</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+			<link rel="stylesheet" type="text/css" href="../../../easyui/themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../../../easyui/themes/icon.css" />
+		<script type="text/javascript" src="../../../easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="../../../easyui/jquery.easyui.min.js"></script>
+	</head>
+	<style type="text/css">
+		* {
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+		}
+		
+		.proGroup {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		.proGroup .layui-table td,
+		.layui-table th {
+			font-size: 9pt !important;
+		}
+	
+		.layui-table td,
+		.layui-table th {
+			/*padding: 0 3.5vw !important;*/
+		}
+		
+		.datagrid-header{
+			display: none !important;
+		}
+		
+		.panel-header, .panel-body{
+		     border: 0px solid #CCCCCC !important;
+		}
+		
+		.panel {
+			overflow-y: auto;
+		}
+		
+		.layui-table-body{
+			overflow-x: hidden;
+
+		}
+		
+			
+		#tree11 {
+			float: left;
+			width: 18%;
+			border: 1px solid #CCCCCC;
+			margin-right: -1px;
+			border-right: none;
+			overflow: auto;
+			margin-top: 10px;
+		}
+
+		
+		#tree-view {
+			float: right;
+			width: 82%;
+		}
+		
+		
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="proGroup">
+			<div class="layui-tab">
+				<ul id="tree11" style="float: left;">
+					<table id="tree" class="easyui-treegrid tree"  data-options="" style="width: 100%;">
+						<thead>
+							<tr>
+								<th data-options="field:'name'"  style="width: 100%;">所有产品</th>
+							</tr>
+						</thead>
+					</table>
+				</ul>
+
+				<ul id="tree-view">
+					<table id="proGroup" style="display: block;" lay-filter="demo"></table>
+				</ul>
+			</div>
+		</div>
+	</body>
+
+	<!--<script src="../../../plugins/layui/layui.js"></script>-->
+	<script>
+		layui.use(['table', 'jquery', 'tree'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			
+			var flag = false;
+			
+//------------------------------产品分组-------------------------------------------------------------------------			
+			rightData("p1",1);
+			stockData();
+			
+		
+				
+			function stockData() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp  +"/WebGetChildTypeByFatherID?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+//						'groupCompanyId': localStorage.groupcompanyid,
+						'fatherid': "1",
+
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						
+						
+						var yijilumuData= [{
+							id : "1",
+							name : "所有产品",
+							_parentid:"",
+							children: desData
+						}];
+						
+						//右边树一级目录
+						$("#tree").treegrid({
+							data: yijilumuData,
+							method: 'get',
+							rownumbers: false,
+							idField: 'id',
+							treeField: 'name',
+							onClickRow: function(row) {
+								var typeid = row.id;
+							
+								if(row.deep =="3"){
+									rightData("p1",typeid)
+								}else{
+									rightData("p2",typeid)
+								}
+							
+								if(row.children) {
+									return false;
+								}
+								
+								 getMuluXinXi(row);
+
+							}
+							
+					});
+			
+						
+					}
+				});
+
+			}
+			
+			
+			function getMuluXinXi(row){
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp  +"/WebGetChildTypeByFatherID?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'fatherid': row.id
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						
+						if(data.length == 0) {
+							return false;
+						}
+						$('#tree').treegrid('append', {
+							parent: row.id, 
+							data: data
+						});
+					}
+				});
+			}
+			
+	
+			
+			function rightData(findType,typeId) {
+				
+				
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetInStoreReportData?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"beginTime" :sessionStorage.beginTime,
+						"endTime":sessionStorage.endTime,
+						'type':  findType,
+						"typeId":typeId,
+						'groupCompanyId': localStorage.groupcompanyid
+//						'txtCondition': seachContent
+					},
+					success: function(res) {
+						
+						var desData = JSON.parse(res);
+						productGroupData(desData);
+						$("#tree11").css("height", $(".layui-form").height());
+
+
+					}
+				});
+
+			}
+			
+			
+			function productGroupData(data){
+				table.render({
+					elem: '#proGroup',
+					data: data,
+					height: "full-131",
+					cols: [
+						[ //标题栏
+					
+							{
+								field: 'name',
+								title: '产品名称',
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+
+							}, {
+								field: 'manufacturer',
+								title: '品牌',
+							},
+							{
+								field: 'danwei',
+								title: '规格',
+							}, {
+								field: 'producemodel',
+								title: '型号',
+							},
+							{
+								field: 'producenum',
+								title: '编号',
+							}, {
+								field: 'produceseries',
+								title: '产品系列',
+							},
+							{
+								field: 'producematerial',
+								title: '材质',
+							}, {
+								field: 'sumcount',
+								title: '采购数量',	
+							},
+							{
+								field: 'realstockcount',
+								title: '库存数量',
+
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [50,100],
+					limit: 50 //每页默认显示的数量
+				});
+				
+
+			}
+	
+			
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				if(obj.event === 'detail') {
+		
+					parent.tab.tabAdd({
+						icon: '',
+						id: 'p' + data.produceid,
+						title: '采购统计分析明细：' +data.name,
+						url: 'views/reportAnalysis/purchasingStatistics/purchasingStatisticsDetail.html'
+					});
+				}
+			});
+			
+			
+		});
+	</script>
+
+</html>

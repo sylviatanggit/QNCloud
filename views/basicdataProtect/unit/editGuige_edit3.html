@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="/QNCloud/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	</head>
+	<style type="text/css">
+		.editGuige_edit {
+			font-size: 9pt;
+		}
+		
+		.editGuige_edit legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		.editGuige_edit label {
+			width: 120px !important;
+			font-size: 9 !important;
+			color: #232323 !important;
+		}
+		
+		.editGuige_edit input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 25px !important;
+			margin-top: 1px;
+		}
+		
+		.editGuige_edit select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+			border: 1px solid #ddd;
+		}
+		
+		.editGuige_edit textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+			border: 1px solid #ddd;
+		}
+		
+		.editGuige_edit .layui-form-title {
+			width: 100%;
+			right: 15px;
+
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 0px;
+			padding-top: 5px;
+		}
+		
+		.editGuige_edit button {
+			margin-left: 8px;
+			text-align: center;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 9pt !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+		}
+	
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		.editGuige_edit {
+			margin-bottom: 120px;
+		}
+		
+		#productImgUpload{
+			    margin-left: 8px; 
+		     text-align: center; 
+		     width: 76px; 
+		     height: 28px; 
+		     line-height: 28px; 
+			    font-family: "PingFang" !important;
+			    font-size: 9pt !important;
+			   color: #FFFFFF !important;
+			   background-color: #2D89DD !important;
+			   position: relative;
+			   float: none;
+		}
+		
+		.removeImg6 {
+			cursor: pointer;
+			position: absolute;
+			top: 0px;
+			right: 0px;
+			font-size: 20px !important;
+		}
+		.layui-form-item{
+			padding:8px;
+		}
+		
+	</style>
+
+	<body>
+			
+		<div class="editGuige_edit">
+			<div class="layui-form-item">
+				<button class="layui-btn editGuige_edit_submit">提交</button>
+			</div>
+
+
+
+			<div class="layui-form-item">
+				<label class="layui-form-label"><b style="color: red !important;margin-right: 4px;"></b>原厂家名称:</label>
+				<div class="layui-input-block ">
+					<input type="text"  id="companyName">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">厂家名称修改：</label>
+				<div class="layui-input-block ">
+				   <input type="text" id="changeManufactureName">
+				</div>
+			</div>
+	
+		</div>
+		
+	
+	</body>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+    <script>
+	     $('#companyName').val('');
+		 var name = JSON.parse(sessionStorage.manufactureName);
+		 $('#companyName').val( name );
+	
+	
+	</script>
+
+</html>

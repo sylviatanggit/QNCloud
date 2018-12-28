@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>员工详情</title>
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		.addJurisdiction {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 8px 14px;
+		}
+		
+		.addJurisdiction fieldset {
+			margin: 10px 0;
+			margin-top: 20px;
+		}
+		
+		.addJurisdiction legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		.addJurisdiction_header {
+			margin-top: 20px;
+			margin-bottom: 20px;
+		}
+		
+		.layui-input-inline {
+			width: 400px !important;
+		}
+		
+		.addJurisdiction .layui-form-item label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		.addJurisdiction .layui-form-item .layui-input-inline input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		.addJurisdiction .layui-form-item .layui-input-inline select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+			/*border: 1px solid #DDDDDD !important;*/
+		}
+		
+		.addJurisdiction .layui-form-item .layui-input-inline textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+			/*border: 1px solid #ddd !important;*/
+		}
+		
+		.addJurisdiction .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 10px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 0px;
+		}
+		
+		.addstaff_submit {
+			display: inline-block;
+			text-align: center;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 9pt !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+			margin-right: 20px;
+		}
+		
+		.layui-table tr:nth-child(odd) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(odd) {
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(even) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-form-item .layui-input-inline,
+		.layui-form-item input,
+		.layui-form-item label {
+			line-height: 28px !important;
+			height: 28px !important;
+			min-height: 28px !important;
+		}
+		
+		.layui-form-item .layui-input-inline {
+			width: 235px;
+		}
+		
+		.layui-form-item {
+			margin-bottom: 10px;
+		}
+		
+		.layui-tab-content .layui-form-item label {
+			width: 60px;
+			padding: 0 10px !important;
+		}
+		
+		.layui-form-label {
+			padding: 0 10px;
+		}
+		
+		.layui-table-cell {
+			padding: 0 !important;
+		}
+		
+		.layui-table td,
+		.layui-table th {
+			padding: 0 2.9vw !important;
+		}
+		
+		.caozuo {
+			position: relative;
+		}
+		
+		#tree {
+			position: absolute;
+			top: 30px;
+			width: 180px;
+			display: inline-block;
+		}
+		
+		#tree ul li {
+			width: 100px;
+		}
+		
+		#tree-view {
+			margin-left: 190px;
+			/*border: 1px solid #CCCCCC;*/
+			display: inline-block;
+			width: 70%;
+			height: 360px;
+		}
+		
+		#tree-view .layui-table-view {
+			display: none;
+		}
+		
+		#tree-view .layui-table-view:nth-child(2) {
+			display: block;
+		}
+		
+		#job .layui-form,
+		#stock .layui-form {
+			margin-top: 40px;
+		}
+		
+		.btns_job,
+		.btns_stock {
+			position: relative;
+			float: right;
+		}
+		
+		.moreAction {
+			background: #FFFFFF !important;
+			border: 1px solid #2D89DD !important;
+			color: #2D89DD !important;
+			width: 90px;
+		}
+		
+		.moreAction:hover {
+			border-bottom: none !important;
+		}
+		
+		.action {
+			background-color: #CCCCCC;
+			position: absolute;
+			right: 20px;
+			top: 27px;
+			z-index: 10;
+			border: 1px solid #2D89DD;
+			display: none;
+		}
+		
+		.action li {
+			margin-left: 0 !important;
+		}
+		
+		.action li a {
+			display: block;
+			color: #357BEA;
+			cursor: pointer;
+			width: 88px;
+			line-height: 28px;
+			text-align: center;
+			background-color: #FFFFFF;
+			box-shadow: 2px;
+		}
+		
+		.action li a {
+			color: #232323;
+		}
+		
+		.action:hover {
+			border-top: none;
+		}
+		
+		.action li a:hover {
+			cursor: pointer;
+			width: 88px;
+			line-height: 28px;
+			text-align: center;
+			background: #ACD7FF;
+		}
+		
+		.btns_stock button,
+		.btns_job button {
+			display: inline-block;
+			text-align: center;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 9pt !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+			margin-right: 20px;
+			width: 90px;
+		}
+		.layui-form input[type=checkbox]{
+			display: block !important;
+			margin-top: 5px;
+		}
+		#job .layui-form input[type=checkbox],
+		#stock .layui-form input[type=checkbox]{
+			display: none !important;
+		}
+		#tree{
+			height: 380px;
+			margin-top: 8px;
+			border: 1px solid #ddd;
+		}
+		.layui-tree li a cite{
+			font-size: 9pt;
+		}
+		.layui-form{
+			overflow-x: auto !important;
+		}
+	</style>
+
+	<body>
+		<div class="addJurisdiction">
+			<div class="layui-form-item layui-form-title">
+				<button class="layui-btn addstaff_submit">提交</button>
+			</div>
+			<div>
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+					<legend>基本信息</legend>
+				</fieldset>
+				<div class="layui-form-item ">
+					<div class="layui-inline">
+						<label class="layui-form-label">权限管理：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input quanxian" type="text">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item ">
+					<div class="layui-inline">
+						<label class="layui-form-label">备注：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input nomo" type="text">
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="caozuo">
+				<fieldset class="layui-elem-field layui-field-title">
+					<legend>操作权限</legend>
+				</fieldset>
+				<ul id="tree"></ul>
+
+				<ul id="tree-view">
+					<table id="11" style="display: block;"></table>
+					<table id="12"></table>
+					<table id="13"></table>
+					<table id="14"></table>
+					<table id="15"></table>
+					<table id="130"></table>
+					<table id="16"></table>
+													<table id="230"></table>
+
+					<table id="17"></table>
+					<table id="18"></table>
+					<table id="19"></table>
+					<table id="110"></table>
+					<table id="120"></table>
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script src="../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'element', 'tree', 'laydate'], function() {
+
+			var $ = layui.jquery,
+				element = layui.element,
+				laydate = layui.laydate;
+			var table = layui.table;
+			$('.btns_job .moreAction').hover(function() {
+				$(".btns_job .action").show();
+			}, function() {
+				$(".btns_job .action").hide();
+			});
+			$('.btns_job .action').hover(function() {
+				$(".btns_job .action").show();
+			}, function() {
+				$(".btns_job .action").hide();
+			});
+		
+	
+
+			//操作
+			var data11 = [{
+				"index": "1",
+				"power": "企业信息"
+			}, {
+				"index": "2",
+				"power": "我的员工"
+			}];
+			table.render({
+				elem: '#11',
+				data: data11,
+				height: 300,
+				id: "system",
+				cols: [
+					[{
+						field: 'index',
+						width: 30,align: "center",
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 100,align: "center",
+						title: '功能模块'
+					}, {
+						field: 'look',
+						title: '查看',
+						align: "center",
+						width: 40,
+					}, {
+						field: 'baocun',
+						width: 40,align: "center",
+						title: '保存'
+					}]
+				],
+				skin: 'row' //表格风格
+					,
+				even: true,
+
+			});
+			var data12 = [{
+				"index": "1",
+				"power": "往来单位管理"
+			}, {
+				"index": "2",
+				"power": "购销合同管理"
+			}
+	, {
+				"index": "3",
+				"power": "授权书管理"
+			}
+			];
+			table.render({
+				elem: '#12',
+				data: data12,
+				height: 300,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,align: "center",
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 100,align: "center",
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 40,align: "center",
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 40,align: "center",
+						title: '保存'
+					}, {
+						field: 'daochu',
+						width: 40,align: "center",
+						title: '导出'
+					}, {
+						field: 'shenhe',
+						width: 40,align: "center",
+						title: '审核'
+					}]
+				],
+				limit: 20 //每页默认显示的数量
+			});
+			
+			var data13 = [{
+				"index": "1",
+				"power": "我的产品注册证"
+			}, {
+				"index": "2",
+				"power": "我的所有产品"
+			}
+	, {
+				"index": "3",
+				"power": "工具组套管理"
+			}, {
+				"index": "4",
+				"power": "产品组套管理"
+			}
+			];
+			table.render({
+				elem: '#13',
+				data: data13,
+				height: 300,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,align: "center",
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 100,align: "center",
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 40,align: "center",
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 40,align: "center",
+						title: '保存'
+					}, {
+						field: 'daochu',
+						width: 40,align: "center",
+						title: '导出'
+					}]
+				]
+			});
+			var data14 = [{
+				"index": "1",
+				"power": "订货合约"
+			}, {
+				"index": "2",
+				"power": "入库验收"
+			}, {
+				"index": "3",
+				"power": "采购退货"
+			}, {
+				"index": "4",
+				"power": "赠送入库"
+			}];
+			table.render({
+				elem: '#14',
+				data: data14,
+				height: 300,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,align: "center",
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 100,align: "center",
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 40,align: "center",
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 40,align: "center",
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 40,align: "center",
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 40,align: "center",
+						title: '打印'
+					}, {
+						field: 'daochu',
+						width: 40,align: "center",
+						title: '导出'
+					}, {
+						field: 'zhuizong',
+						width: 40,align: "center",
+						title: '追踪'
+					}]
+				]
+			});
+			
+			
+			var data15 = [{
+				"index": "1",
+				"power": "标准流程-备货申请"
+			}, {
+				"index": "2",
+				"power": "标准流程-手术备货"
+			}, {
+				"index": "3",
+				"power": "标准流程-确认取货"
+			}, {
+				"index": "4",
+				"power": "标准流程-实耗清点"
+			}, {
+				"index": "5",
+				"power": "快捷流程-备库结算"
+			}, {
+				"index": "6",
+				"power": "快捷流程-备库实耗"
+			}, {
+				"index": "7",
+				"power": "其他流程-产品结算"
+			}];
+			
+			table.render({
+				elem: '#15',
+				data: data15,
+				height: 300,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,align: "center",
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 120,align: "center",
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 40,align: "center",
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 40,align: "center",
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 40,align: "center",
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 40,align: "center",
+						title: '打印'
+					},{
+						field: 'daochu',
+						width: 40,align: "center",
+						title: '导出'
+					}]
+				]
+			});
+			
+			
+			var data130 = [
+			{
+				"index": "1",
+				"power": "分销合约"
+			}, {
+				"index": "2",
+				"power": "出库验出"
+			}, {
+				"index": "3",
+				"power": "分销退货"
+			}, {
+				"index": "4",
+				"power": "赠送出库"
+			}];
+			table.render({
+				elem: '#130',
+				data: data130,
+				height: 300,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,align: "center",
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 100,align: "center",
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 40,align: "center",
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 40,align: "center",
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 40,align: "center",
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 40,align: "center",
+						title: '打印'
+					},{
+						field: 'daochu',
+						width: 40,align: "center",
+						title: '导出'
+					}]
+				]
+			});
+			
+			
+			var data16 = [{
+				"index": "1",
+				"power": "借入库理"
+			}, {
+				"index": "2",
+				"power": "借出管理"
+			}
+			];
+			table.render({
+				elem: '#16',
+				data: data16,
+				height: 300,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,align: "center",
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 100,align: "center",
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 40,align: "center",
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 40,align: "center",
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 40,align: "center",
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 40,align: "center",
+						title: '打印'
+					},{
+						field: 'daochu',
+						width: 40,align: "center",
+						title: '导出'
+					}]
+				]
+			});
+				var data230 = [{
+				"index": "1",
+				"power": "试剂入库管理"
+			}, {
+				"index": "2",
+				"power": "试剂出库管理"
+			}];
+			table.render({
+				elem: '#230',
+				data: data230,
+				height: 300,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,align: "center",
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 120,
+						title: '功能模块',align: "center",
+					}, {
+						field: 'look',
+						width: 40,
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 40,align: "center",
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 40,align: "center",
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 40,align: "center",
+						title: '打印'
+					}, {
+						field: 'daochu',
+						width: 40,align: "center",
+						title: '导出'
+					}, {
+						field: 'zhuizong',
+						width: 40,align: "center",
+						title: '追踪'
+					}]
+				]
+			});
+			
+			var data17 = [{
+				"index": "1",
+				"power": "库存初始化"
+			}, {
+				"index": "2",
+				"power": "库存信息查询"
+			}, {
+				"index": "3",
+				"power": "仓库设置管理"
+			}, {
+				"index": "4",
+				"power": "仓库调拨"
+			}, {
+				"index": "5",
+				"power": "盘盈盘亏"
+			}, {
+				"index": "6",
+				"power": "报溢报损"
+			}, {
+				"index": "7",
+				"power": "盘点记录查询"
+			}, {
+				"index": "8",
+				"power": "库存调整建议"
+			}, {
+				"index": "9",
+				"power": "退换货管理"
+			},{
+				"index": "10",
+				"power": "仓库台账记录"
+			}]
+			
+			table.render({
+				elem: '#17',
+				data: data17,
+				height: 300,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,align: "center",
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 100,align: "center",
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 40,align: "center",
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 40,align: "center",
+						title: '保存'
+					}, {
+						field: 'shenhe',
+						width: 40,align: "center",
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 40,align: "center",
+						title: '打印'
+					}, {
+						field: 'daochu',
+						width: 40,align: "center",
+						title: '导出'
+					}, {
+						field: 'duanzhang',
+						width: 40,align: "center",
+						title: '断帐'
+					}, {
+						field: 'buhuo',
+						width: 40,align: "center",
+						title: '补货'
+					}, {
+						field: 'pandian',
+						width: 40,align: "center",
+						title: '盘点'
+					}]
+				],
+				limit: 20 //每页默认显示的数量
+			});
+			var data18 = [{
+				"index": "1",
+				"power": "采购核价"
+			},{
+				"index": "2",
+				"power": "分销核价"
+			},{
+				"index": "3",
+				"power": "直销核价"
+			},{
+				"index": "4",
+				"power": "销售收款单"
+			},{
+				"index": "5",
+				"power": "采购付款单"
+			},{
+				"index": "6",
+				"power": "采购发票签入单"
+			},{
+				"index": "7",
+				"power": "分销发票签出单"
+			},{
+				"index": "8",
+				"power": "直销发票签出单"
+			}]
+			table.render({
+				elem: '#18',
+				height: 300,
+				data: data18,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,align: "center",
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 100,align: "center",
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 40,align: "center",
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 40,align: "center",
+						title: '保存'
+					}, {
+						field: 'chusheng',
+						width: 40,align: "center",
+						title: '初审'
+					}, {
+						field: 'fuhe',
+						width: 40,align: "center",
+						title: '复核'
+					},
+					{
+						field: 'kaipiao',
+						width: 40,align: "center",
+						title: '开票'
+					},{
+						field: 'shenhe',
+						width: 40,align: "center",
+						title: '审核'
+					}, {
+						field: 'print',
+						width: 40,align: "center",
+						title: '打印'
+					}, {
+						field: 'daochu',
+						width: 40,align: "center",
+						title: '导出'
+					}]
+				]
+			});
+			var data19 = [{
+				"index": "1",
+				"power": "财务对账单"
+			}, {
+				"index": "2",
+				"power": "直销单据查询"
+			}, {
+				"index": "3",
+				"power": "资金往来查询"
+			}, {
+				"index": "5",
+				"power": "收支明细查询"
+			}, {
+				"index": "6",
+				"power": "产品批号查询"
+			}, {
+				"index": "7",
+				"power": "产品调拨查询"
+			}, {
+				"index": "8",
+				"power": "采购统计分析"
+			}, {
+				"index": "9",
+				"power": "销售统计分析"
+			}, {
+				"index": "10",
+				"power": "历史成本分析"
+			}, {
+				"index": "11",
+				"power": "产品流向分析"
+			}, {
+				"index": "12",
+				"power": "借货统计分析"
+			}, {
+				"index": "13",
+				"power": "报溢报损统计"
+			}, {
+				"index": "14",
+				"power": "收入成本记录"
+			}
+//			, {
+//				"index": "15",
+//				"power": "进销存汇总"
+//			}
+			]
+			table.render({
+				elem: '#19',
+				height: 300,
+				data: data19,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,align: "center",
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 120,align: "center",
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 30,align: "center",
+						title: '查看',
+					} ,{
+						field: 'daochu',
+						width: 30,align: "center",
+						title: '导出'
+					}]
+				],
+				limit: 20 //每页默认显示的数量
+			});
+			var data110 = [{
+				"index": "1",
+				"power": "库房巡检记录"
+			}, {
+				"index": "2",
+				"power": "库房温度记录"
+			}, {
+				"index": "3",
+				"power": "产品保养记录"
+			}, {
+				"index": "4",
+				"power": "产品销毁记录"
+			}, {
+				"index": "5",
+				"power": "产品召回记录"
+			}, {
+				"index": "6",
+				"power": "员工健康档案"
+			}, {
+				"index": "7",
+				"power": "员工培训记录"
+			}, {
+				"index": "8",
+				"power": "不良事件监测记录"
+			}, {
+				"index": "9",
+				"power": "设施设备维护记录"
+			}, {
+				"index": "10",
+				"power": "质量投诉记录"
+			}];
+			table.render({
+				elem: '#110',
+				height: 300,
+				data: data110,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,align: "center",
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 120,align: "center",
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 30,align: "center",
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 30,align: "center",
+						title: '保存'
+					}]
+				]
+			});
+			var data120 = [{
+				"index": "1",
+				"power": "操作日志查询"
+			}
+			, {
+				"index": "2",
+				"power": "备份账套数据库"
+			}, {
+				"index": "3",
+				"power": "单据编号设置"
+			}
+			];
+			table.render({
+				elem: '#120',
+				height: 300,
+				data: data120,
+				cols: [
+					[{
+						field: 'index',
+						width: 30,align: "center",
+						title: '序号'
+					}, {
+						field: 'power',
+						width: 120,align: "center",
+						title: '功能模块'
+					}, {
+						field: 'look',
+						width: 40,align: "center",
+						title: '查看',
+					}, {
+						field: 'baocun',
+						width: 40,align: "center",
+						title: '保存'
+					}]
+				]
+			});
+			layui.tree({
+				elem: '#tree',
+				nodes: [{ //节点数据
+					name: '全部功能模块',
+					id: 1,
+					spread: true,
+					children: [{
+						name: '我的企业',
+						id: 11
+					}, {
+						name: '往来单位',
+						id: 12
+					}, {
+						name: '我的产品',
+						id: 13
+					}, {
+						name: '采购管理',
+						id: 14
+					}, {
+						name: '直销管理',
+						id: 15
+					}, {
+						name: '分销管理',
+						id: 130
+					}, {
+						name: '借货管理',
+						id: 16
+					}, {
+						name: '试剂管理',
+						id: 230
+					}, {
+						name: '库存管理',
+						id: 17
+					}, {
+						name: '财务管理',
+						id: 18
+					}, {
+						name: '报表分析',
+						id: 19
+					}, {
+						name: '质量管理',
+						id: 110
+					}, {
+						name: '系统管理',
+						id: 120
+					}]
+				}],
+				click: function(node) {
+					$("#" + node.id).next(".layui-table-view").siblings().css("display", "none");
+					$("#" + node.id).next(".layui-table-view").css("display", "block");
+				}
+			});
+			//因为tbody高太高了,所以要减去23
+			jian()
+			function jian(){
+				var jian_height=$(".layui-table-body").height();
+				jian_height=eval(jian_height)-eval(23);
+				$(".layui-table-body").css("height",jian_height)
+			}
+			$(function() {
+					$(".caozuo #tree-view .layui-table tbody [data-field=look] div").each(function() {
+					var checkBox = '<input type="checkbox" />';
+					$(this).html(checkBox);
+				});
+				
+			$(".caozuo #tree-view .layui-table tbody [data-field=baocun] div").each(function() {
+					var checNamekFalg= $(this).parent().parent().find("[data-field=power]").text();
+					var checkBox  ="";
+					
+					if(localStorage.groupcompanyid == 0){
+						if(checNamekFalg == "盘点记录查询" || checNamekFalg == "库存调整建议" || checNamekFalg == "仓库台账记录" || checNamekFalg == "库存信息查询"){
+							checkBox = 'X<input type="checkbox" style="visibility: hidden;"/>';
+						}else{
+							checkBox = '<input type="checkbox" />';
+						}
+					
+					}else{
+						if(checNamekFalg == "盘点记录查询" || checNamekFalg == "库存调整建议" || checNamekFalg == "仓库台账记录" || checNamekFalg == "库存信息查询"|| checNamekFalg == "我的所有产品"){
+						checkBox = 'X<input type="checkbox" style="visibility: hidden;"/>';
+						}else{
+							checkBox = '<input type="checkbox" />';
+						}
+					
+					}
+					
+					
+					$(this).html(checkBox);
+				});
+				
+				
+				$(".caozuo #tree-view .layui-table tbody [data-field=shenhe] div").each(function() {
+//					console.log($(this).parent().parent().find("[data-field=power]").text())
+					var checNamekFalg= $(this).parent().parent().find("[data-field=power]").text();
+					var checkBox  ="";
+					if(checNamekFalg == "购销合同管理" || checNamekFalg == "授权书管理" || checNamekFalg == "我的员工" || checNamekFalg == "仓库设置管理" || checNamekFalg == "盘点记录查询" || checNamekFalg == "库存调整建议" || checNamekFalg == "仓库台账记录"  || checNamekFalg == "库存信息查询"){
+						checkBox = 'X<input type="checkbox" style="visibility: hidden;"/>';
+					}else{
+						checkBox = '<input type="checkbox" />';
+					}
+					
+					$(this).html(checkBox);
+				});
+				$(".caozuo #tree-view .layui-table tbody [data-field=print] div").each(function() {
+					
+					var checNamekFalg= $(this).parent().parent().find("[data-field=power]").text();
+					var checkBox  ="";
+					if(checNamekFalg == "仓库设置管理" || checNamekFalg == "日常盘点" || checNamekFalg == "盘点记录查询" || checNamekFalg == "库存调整建议" || checNamekFalg == "仓库台账记录" || checNamekFalg == "库存信息查询"){
+						checkBox = 'X<input type="checkbox" style="visibility: hidden;"/>';
+					}else{
+						checkBox = '<input type="checkbox" />';
+					}
+					$(this).html(checkBox);
+				});
+				
+			 	$(".caozuo #tree-view .layui-table tbody [data-field=shanchu] div").each(function() {
+					var checkBox = '<input type="checkbox" />';
+					$(this).html(checkBox);
+				});
+				$(".caozuo #tree-view .layui-table tbody [data-field=daochu] div").each(function() {
+					var checNamekFalg= $(this).parent().parent().find("[data-field=power]").text();
+					var checkBox  ="";
+					if(checNamekFalg == "仓库设置管理" || checNamekFalg == "盘点记录查询"){
+						checkBox = 'X<input type="checkbox" style="visibility: hidden;"/>';
+					}else{
+						checkBox = '<input type="checkbox" />';
+					}
+					
+					$(this).html(checkBox);
+				});
+				
+				$(".caozuo #tree-view .layui-table tbody [data-field=zhuizong] div").each(function() {
+						
+					var checNamekFalg= $(this).parent().parent().find("[data-field=power]").text();
+					var checkBox  ="";
+					if(checNamekFalg == "入库验收" || checNamekFalg == "采购退货" || checNamekFalg == "赠送入库" || checNamekFalg == "试剂出库管理"){
+						checkBox = 'X<input type="checkbox" style="visibility: hidden;"/>';
+					}else{
+						checkBox = '<input type="checkbox" />';
+					}
+					
+				
+					$(this).html(checkBox);
+				});
+				
+				
+				$(".caozuo #tree-view .layui-table tbody [data-field=chusheng] div").each(function() {
+						
+					var checNamekFalg= $(this).parent().parent().find("[data-field=power]").text();
+					var checkBox  ="";
+					if(checNamekFalg == "采购核价" || checNamekFalg == "分销核价" || checNamekFalg == "直销核价" || checNamekFalg == "销售收款单" || checNamekFalg == "采购付款单"  || checNamekFalg == "采购发票签入单"){
+						checkBox = 'X<input type="checkbox" style="visibility: hidden;"/>';
+					}else{
+						checkBox = '<input type="checkbox" />';
+					}
+					
+				
+					$(this).html(checkBox);
+				});
+				
+					
+				$(".caozuo #tree-view .layui-table tbody [data-field=fuhe] div").each(function() {
+						
+					var checNamekFalg= $(this).parent().parent().find("[data-field=power]").text();
+					var checkBox  ="";
+					if(checNamekFalg == "采购核价" || checNamekFalg == "分销核价" || checNamekFalg == "直销核价" || checNamekFalg == "销售收款单" || checNamekFalg == "采购付款单"  || checNamekFalg == "采购发票签入单"){
+						checkBox = 'X<input type="checkbox" style="visibility: hidden;"/>';
+					}else{
+						checkBox = '<input type="checkbox" />';
+					}
+					
+				
+					$(this).html(checkBox);
+				});
+				
+				
+				$(".caozuo #tree-view .layui-table tbody [data-field=kaipiao] div").each(function() {
+						
+					var checNamekFalg= $(this).parent().parent().find("[data-field=power]").text();
+					var checkBox  ="";
+					if(checNamekFalg == "采购核价" || checNamekFalg == "分销核价" || checNamekFalg == "直销核价" || checNamekFalg == "销售收款单" || checNamekFalg == "采购付款单"  || checNamekFalg == "采购发票签入单"){
+						checkBox = 'X<input type="checkbox" style="visibility: hidden;"/>';
+					}else{
+						checkBox = '<input type="checkbox" />';
+					}
+					
+				
+					$(this).html(checkBox);
+				});
+				
+				$(".caozuo #tree-view .layui-table tbody [data-field=duanzhang] div").each(function() {
+						
+					var checNamekFalg= $(this).parent().parent().find("[data-field=power]").text();
+					var checkBox  ="";
+					if(checNamekFalg == "库存初始化" || checNamekFalg == "库存信息查询" || checNamekFalg == "仓库调拨" || checNamekFalg == "盘盈盘亏" || checNamekFalg == "报溢报损"  || checNamekFalg == "盘点记录查询" || checNamekFalg == "库存调整建议" || checNamekFalg == "仓库台账记录" || checNamekFalg == "退换货管理"){
+						checkBox = 'X<input type="checkbox" style="visibility: hidden;"/>';
+					}else{
+						checkBox = '<input type="checkbox" />';
+					}
+					
+				
+					$(this).html(checkBox);
+				});
+				
+					
+				$(".caozuo #tree-view .layui-table tbody [data-field=buhuo] div").each(function() {
+						
+					var checNamekFalg= $(this).parent().parent().find("[data-field=power]").text();
+					var checkBox  ="";
+					if(checNamekFalg == "库存初始化" || checNamekFalg == "库存信息查询" || checNamekFalg == "仓库调拨" || checNamekFalg == "盘盈盘亏" || checNamekFalg == "报溢报损"  || checNamekFalg == "盘点记录查询" || checNamekFalg == "仓库设置管理" || checNamekFalg == "仓库台账记录" || checNamekFalg == "退换货管理"){
+						checkBox = 'X<input type="checkbox" style="visibility: hidden;"/>';
+					}else{
+						checkBox = '<input type="checkbox" />';
+					}
+					
+				
+					$(this).html(checkBox);
+				});
+				
+				
+				$(".caozuo #tree-view .layui-table tbody [data-field=jiezhuan] div").each(function() {
+						
+					var checNamekFalg= $(this).parent().parent().find("[data-field=power]").text();
+					var checkBox  ="";
+					if(checNamekFalg == "库存初始化" || checNamekFalg == "库存信息查询" || checNamekFalg == "仓库调拨" || checNamekFalg == "盘盈盘亏" || checNamekFalg == "报溢报损"  || checNamekFalg == "盘点记录查询" || checNamekFalg == "库存调整建议" || checNamekFalg == "仓库台账记录" || checNamekFalg == "退换货管理"){
+						checkBox = 'X<input type="checkbox" style="visibility: hidden;"/>';
+					}else{
+						checkBox = '<input type="checkbox" />';
+					}
+					
+				
+					$(this).html(checkBox);
+				});
+				
+				
+					$(".caozuo #tree-view .layui-table tbody [data-field=pandian] div").each(function() {
+						
+					var checNamekFalg= $(this).parent().parent().find("[data-field=power]").text();
+					var checkBox  ="";
+					if(checNamekFalg == "库存初始化" || checNamekFalg == "库存信息查询" || checNamekFalg == "仓库调拨" || checNamekFalg == "盘盈盘亏" || checNamekFalg == "报溢报损"  || checNamekFalg == "盘点记录查询" || checNamekFalg == "库存调整建议" || checNamekFalg == "仓库台账记录" || checNamekFalg == "退换货管理"){
+						checkBox = 'X<input type="checkbox" style="visibility: hidden;"/>';
+					}else{
+						checkBox = '<input type="checkbox" />';
+					}
+					
+				
+					$(this).html(checkBox);
+				});
+				
+				
+				
+			})
+			//点击保存
+			$(".addstaff_submit").click(function() {
+				//基本信息
+				var quanxian = $('.quanxian').val();
+				var nomo = $('.nomo').val();
+				//操作权限employeeorder
+				var small1="";
+				var arr=[11,12,13,14,15,130,16,230,17,18,19,110,120];
+				var employeeorder="";
+					for(var j=0;j<arr.length;j++){
+					var tr=$("#"+arr[j]).next().find("tbody").find("tr");
+					
+					switch(arr[j])
+					{
+						case 11:
+							for(var i=0;i<tr.length;i++){
+								var text=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+								var true_1=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+								true_1 = true_1==true?1:0;
+								var true_2=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+								true_2 = true_2==true?1:0;
+								
+								small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';';
+							}
+							
+						  break;
+						case 12:
+							for(var i=0;i<tr.length;i++){
+								var text=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+								var true_1=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+								true_1 = true_1==true?1:0;
+								var true_2=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+								true_2 = true_2==true?1:0;
+								var true_3=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+								true_3 = true_3==true?1:0;
+								var true_4=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(5) input").is(':checked')
+								true_4 = true_4==true?1:0;
+								small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'导出'+true_3+';'+text+'-'+'审核'+true_4+';';
+							}
+							
+							break;
+							case 230:
+								for(var i=0;i<tr.length;i++){
+									var text=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+									var true_1=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+									true_1 = true_1==true?1:0;
+									var true_2=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+									true_2 = true_2==true?1:0;
+									var true_3=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+									true_3 = true_3==true?1:0;
+									var true_4=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(5) input").is(':checked')
+									true_4 = true_4==true?1:0;
+
+									var true_5=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(6) input").is(':checked')
+									true_5 = true_5==true?1:0;
+									
+									var true_6=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(7) input").is(':checked')
+									true_6 = true_6==true?1:0;
+									
+									
+									small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'审核'+true_3+';'+text+'-'+'打印'+true_4+';'+text+'-'+'导出'+true_5+';'+text+'-'+'追踪'+true_6+';';
+								}
+								break;
+						case 13:
+							for(var i=0;i<tr.length;i++){
+								var text=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+								var true_1=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+								true_1 = true_1==true?1:0;
+								var true_2=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+								true_2 = true_2==true?1:0;
+								var true_3=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+								true_3 = true_3==true?1:0;
+							
+								small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'导出'+true_3+';';
+							}
+							
+							
+							
+						break;	
+						case 14:
+							for(var i=0;i<tr.length;i++){
+								var text=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+								var true_1=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+								true_1 = true_1==true?1:0;
+								var true_2=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+								true_2 = true_2==true?1:0;
+								var true_3=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+								true_3 = true_3==true?1:0;
+								var true_4=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(5) input").is(':checked')
+								true_4 = true_4==true?1:0;
+
+								var true_5=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(6) input").is(':checked')
+								true_5 = true_5==true?1:0;
+								
+								var true_6=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(7) input").is(':checked')
+								true_6 = true_6==true?1:0;
+								
+								
+								small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'审核'+true_3+';'+text+'-'+'打印'+true_4+';'+text+'-'+'导出'+true_5+';'+text+'-'+'追踪'+true_6+';';
+							}
+							break;
+																	
+						case 17:  //库存管理
+							for(var i=0;i<tr.length;i++){
+								var text=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+								var true_1=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+								true_1 = true_1==true?1:0;
+								var true_2=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+								true_2 = true_2==true?1:0;
+								var true_3=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+								true_3 = true_3==true?1:0;
+								var true_4=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(5) input").is(':checked')
+								true_4 = true_4==true?1:0;
+
+								var true_5=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(6) input").is(':checked')
+								true_5 = true_5==true?1:0;
+								
+								var true_6=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(7) input").is(':checked')
+								true_6 = true_6==true?1:0;
+								
+								var true_7=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(8) input").is(':checked')
+								true_7 = true_7==true?1:0;
+								
+								var true_8=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(9) input").is(':checked')
+								true_8 = true_8==true?1:0;
+							
+								
+								small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'审核'+true_3+';'+text+'-'+'打印'+true_4+';'+text+'-'+'导出'+true_5+';'+text+'-'+'断帐'+true_6+';'+text+'-'+'补货'+true_7+';'+text+'-'+'盘点'+true_8+';';
+							}
+							
+							break;
+											
+							case 18:  //财务
+								for(var i=0;i<tr.length;i++){
+									var text=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+									var true_1=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+									true_1 = true_1==true?1:0;
+									var true_2=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+									true_2 = true_2==true?1:0;
+									var true_3=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+									true_3 = true_3==true?1:0;
+									var true_4=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(5) input").is(':checked')
+									true_4 = true_4==true?1:0;
+
+									var true_5=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(6) input").is(':checked')
+									true_5 = true_5==true?1:0;
+									
+									var true_6=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(7) input").is(':checked')
+									true_6 = true_6==true?1:0;
+									
+									var true_7=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(8) input").is(':checked')
+									true_7 = true_7==true?1:0;
+									
+									var true_8=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(9) input").is(':checked')
+									true_8 = true_8==true?1:0;
+									
+									
+									small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'初审'+true_3+';'+text+'-'+'复核'+true_4+';'+text+'-'+'开票'+true_5+';'+text+'-'+'审核'+true_6+';'+text+'-'+'打印'+true_7+';'+text+'-'+'导出'+true_8+';';
+								}
+								break;
+						case 19:
+							for(var i=0;i<tr.length;i++){
+								var text=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+								var true_1=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+								true_1 = true_1==true?1:0;
+								var true_2=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+								true_2 = true_2==true?1:0;
+								small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';';
+							}
+							
+						  break;
+						  	case 110:
+						  		for(var i=0;i<tr.length;i++){
+								var text=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+								var true_1=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+								true_1 = true_1==true?1:0;
+								var true_2=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+								true_2 = true_2==true?1:0;
+								small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';';
+							}
+							
+						  break;
+						  	case 120:
+						  		for(var i=0;i<tr.length;i++){
+								var text=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+								var true_1=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+								true_1 = true_1==true?1:0;
+								var true_2=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+								true_2 = true_2==true?1:0;
+								small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';';
+							}
+							
+						  break;
+						default:
+						for(var i=0;i<tr.length;i++){
+							var text=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(1)").text();
+							var true_1=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(2) input").is(':checked')
+							true_1 = true_1==true?1:0;
+							var true_2=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(3) input").is(':checked')
+							true_2 = true_2==true?1:0;
+							var true_3=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(4) input").is(':checked')
+							true_3 = true_3==true?1:0;
+							var true_4=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(5) input").is(':checked')
+							true_4 = true_4==true?1:0;
+
+							var true_5=$("#"+arr[j]).next().find("tbody").find("tr:eq("+i+")").find("td:eq(6) input").is(':checked')
+							true_5 = true_5==true?1:0;
+							small1+=text+'-'+'查看'+true_1+';'+text+'-'+'保存'+true_2+';'+text+'-'+'审核'+true_3+';'+text+'-'+'打印'+true_4+';'+text+'-'+'导出'+true_5+';';
+						}
+								
+								
+					}
+			
+			
+				
+					employeeorder=small1;
+				}
+				
+				
+			var jiazaiIndex;
+					parent.layer.open({
+					  type: 3, 
+					  zIndex: parent.layer.zIndex, //重点1,
+					  success: function(layero, index){
+					  		jiazaiIndex = index;
+			  			}
+					});
+								
+				$.ajax({
+					type: "POST",
+					url: localStorage.serIp+"/WebAddEmployeeOrder",
+					async: true,
+					dataType: 'json',
+					crossDomain: true,
+					contentType:'application/json; charset=utf-8',
+					data:JSON.stringify({
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'permissionList': employeeorder,
+						"permissionId":'',
+						'permissionNomo':nomo,
+						'permissionName':quanxian,
+						'g_companyid': localStorage.groupcompanyid,
+					}),
+					success: function(res) {
+						var data = JSON.parse(res);
+							parent.layer.close(jiazaiIndex); 
+						if(data.ResultValue == 1) {
+							parent.layer.open({
+								title: "提示",
+								content: '提交成功',zIndex: parent.layer.zIndex //重点1
+							});
+							
+						var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+							parent.layer.close(index); //再执行关闭     	
+						} else {
+							parent.layer.open({
+								title: "提示",
+								content: '提交失败',zIndex: parent.layer.zIndex //重点1
+							});
+						}
+					},
+									error: function() {
+										parent.layer.close(jiazaiIndex); 		
+										
+									}
+				});
+			})
+		});
+	</script>
+
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加员工健康记录</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		#addRecord {
+			/*width: calc(100vw+17px);*/
+			font-size: 9pt;
+		}
+		
+		#addRecord legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		#addRecord label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		#addRecord .layui-input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		.layui-input-block {
+			min-height: 28px;
+		}
+		
+		#addRecord select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		#addRecord textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+		}
+		
+		#addRecord .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 5px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 0px;
+		}
+		
+		#addRecord button {
+			margin-left: 8px;
+			text-align: center;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		#addRecord {
+			margin-bottom: 80px;
+		}
+	</style>
+
+	<body>
+		<div id="addRecord">
+			<div class="layui-form-item layui-form-title">
+				<button class="layui-btn addRecord_submit">提交</button>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>基本信息</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label">员工名称</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" data-id='' class="layui-input staffName" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">建卡日期</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" id="cardDate" class="layui-input staffCardtime" type="text">
+
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">员工学历</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input staffXueli" type="text" disabled="disabled">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">员工性别</label>
+				<div class="layui-input-block">
+					<select name="" class="layui-input staffSex" disabled="disabled">
+						<option>男</option>
+						<option>女</option>
+					</select>
+				</div>
+			</div>
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+				<legend>体检情况</legend>
+			</fieldset>
+			<div class="layui-form-item">
+				<label class="layui-form-label">体检日期</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" id="examinationDate" class="layui-input staffCheckdate" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">体检医院</label>
+				<div class="layui-input-block">
+					<input autocomplete="off" required="required" class="layui-input staffHospital" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">体检内容</label>
+				<div class="layui-input-block">
+					<textarea name="" rows="" cols="" class="layui-input staffContent" style="height: 80px !important;"></textarea>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">体检结果</label>
+				<div class="layui-input-block">
+					<textarea name="" rows="" cols="" class="layui-input staffResult" style="height: 80px !important;"></textarea>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">备注</label>
+				<div class="layui-input-block">
+					<textarea name="" rows="" cols="" class="layui-input staffNotes" style="height: 80px !important;"></textarea>
+				</div>
+			</div>
+
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'layer', "laydate"], function() {
+			var $ = layui.$, //重点处
+				layer = layui.layer;
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: '#cardDate',
+				value: new Date()
+			});
+			laydate.render({
+				elem: '#examinationDate',
+				value: new Date()
+			});
+			
+			$(".staffName").click(function() {
+				if(sessionStorage.staffNewData) {
+					sessionStorage.removeItem('staffNewData');
+				}
+						
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">员工列表</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/public/staff/staffPublicList.html',
+					zIndex: parent.layer.zIndex, //重点1
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+				
+					},
+					cancel: function() {
+						if(sessionStorage.staffNewData) {
+							if(sessionStorage.staffNewData.length>0 && sessionStorage.staffNewData!= "[]"){
+							var data = JSON.parse(sessionStorage.staffNewData);
+							$(".staffName").val(data[0].employeename);
+							$(".staffName").attr('data-id', data[0].employeesid);
+							$(".staffXueli").val(data[0].culture);
+							$(".staffSex").val(data[0].employeesex);
+			
+							}
+						
+						}
+
+					},
+					end: function(){  
+                    	if(sessionStorage.staffNewData) {
+							if(sessionStorage.staffNewData.length>0 && sessionStorage.staffNewData!= "[]"){
+							var data = JSON.parse(sessionStorage.staffNewData);
+							$(".staffName").val(data[0].employeename);
+							$(".staffName").attr('data-id', data[0].employeesid);
+							$(".staffXueli").val(data[0].culture);
+							$(".staffSex").val(data[0].employeesex);
+			
+							}
+						
+						}
+						
+					}
+				});
+			});
+			
+			
+			$(".addRecord_submit").click(function() {
+				//弹出层转圈圈的那个
+				parent.layer.open({
+				  type: 3, 
+				  zIndex: parent.layer.zIndex, //重点1
+				  success: function(layero, index){
+				  		jiazaiIndex = index;
+						}
+				});
+				var createdate = $('.staffCardtime').val();
+				var employeesid = $('.staffName').attr('data-id');
+				var examinationdate = $('.staffCheckdate').val();
+				var hospital = $(".staffHospital").val();
+				var content = $(".staffContent").val();
+				var result = $(".staffResult").val();
+				var nomo = $(".staffNotes").val();
+				var master = {
+					'createdate': createdate,
+					'employeesid': employeesid,
+					'examinationdate': examinationdate,
+					'hospital': hospital,
+					'content': content,
+					'result': result,
+					'nomo': nomo
+				};
+				if($(".staffName").val() == '') {
+					parent.layer.open({
+						title: "提示",
+						content: '请填写员工名称',
+						zIndex: parent.layer.zIndex, //重点1
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					},
+					});
+					parent.layer.close(jiazaiIndex);
+					return false;
+				}
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebAddPhysicalExamination?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'master': JSON.stringify(master)
+					},
+					success: function(res) {
+						parent.layer.close(jiazaiIndex);
+						var data = JSON.parse(res);
+						if(data.ResultValue == 1) {
+							parent.layer.open({
+								title: "提示",
+								content: '提交成功',
+								zIndex: parent.layer.zIndex, //重点1
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								},
+								end: function(){  
+									var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+									parent.layer.close(index); //再执行关闭     
+								}
+							});
+						} else {
+							parent.layer.open({
+								title: "提示",
+								content: '提交失败',
+								zIndex: parent.layer.zIndex, //重点1
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					},
+							});
+						}
+					}
+				});
+
+			})
+		});
+	</script>
+
+</html>

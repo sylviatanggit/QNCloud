@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+			<title>备份账套数据</title>
+			<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+		</head>
+	</head>
+	<style type="text/css">
+		body {
+			margin: 0;
+			padding: 0;
+			
+		}
+		
+		.backupAccount_title {
+			font-size: 20px;
+			color: #232323;
+			font-weight: bold;
+			margin: 20px 0 20px 48px;
+		}
+		
+		.warning {
+			margin-left: 20px;
+			color: red;
+			font-size: 9pt !important;
+		}
+		
+	
+		
+		.backupAccount_body p {
+			margin-top: 16px;
+			margin-left: 72px;
+			font-size: 9pt;
+			color: #232323;
+		}
+		
+		.backupAccount_body ul {
+			margin-left: 100px;
+			color: #232323;
+			font-size: 12px;
+		}
+		
+		.backupAccount_body ul li {
+			margin-top: 12px;
+		}
+		.backupAccount_footer button{
+			cursor: pointer;
+			float: right;
+			margin-top: 15px;
+			font-size: 9pt;
+		}
+		.layui-layer-btn0 {
+			width: 60px;
+			display: inline;
+			border: 1px solid #357BEA;
+			background-color: #357BEA;
+			color: #fff;
+			border-radius: 2px;
+			line-height: 25px !important;
+		}
+		
+		.layui-layer-btn1 {
+			width: 60px;
+			display: inline;
+			border: 1px solid #357BEA;
+			background-color: #FFFFFF;
+			color: #357BEA;
+			border-radius: 2px;
+			line-height: 25px !important;
+			margin-left: 5px;
+			margin-right: 20px !important;
+		}
+		
+		.layui-form-switch{
+			margin-top: 0px !important;
+		}
+		
+		.layui-input, .layui-select, .layui-textarea{
+			height: 30px;width: 120px;
+		}
+		
+		.layui-form-select dl dd, .layui-form-select dl dt{
+			    line-height: 30px !important;
+
+		}
+		
+		.layui-laydate-list>li{
+			width: 100% !important;
+		}
+		
+		.laydate-btns-now{
+			display: none !important;
+		}
+		
+		option{
+			padding: 15px 5px !important;
+		}
+		
+		
+		.meizhouId ul li input{
+			width: 40px;height: 15px;
+		}
+	</style>
+
+	<body>
+		<div style="margin: 10px 15px;">
+		<div style="height: 60px;font-size: 9pt;width: 100%;">
+			<div style="display: inline-block;">
+				<ul>
+					<li>计划任务(S):</li>
+					<li style="margin-top: 5px;">
+					  <select name="" class="status layui-input">
+                            <option value="0">每天</option>
+                            <option value="1">每周</option>
+                        </select>
+					</li>
+				
+				</ul>
+				
+			</div>	
+			
+			<div style="display: inline-block;margin-left: 10px;">					
+				
+					<ul>
+							<li>开始时间(T):</li>
+							<li style="margin-top: 5px;">
+								 <input autocomplete="off" id="date1" class="layui-input" type="text" style="height: 30px;">
+							</li>
+				
+					</ul>
+			</div>	
+			<div style="display: inline-block;float: right;margin-top: 15px;" id="kaiGuanId">
+						<form class="layui-form" action="">
+
+								<input type="checkbox" name="close" lay-skin="switch" lay-text="ON|OFF" lay-filter="filter" class="isKaiGuan">
+								</form>
+				<!--<span style="background:#357BEA ;color: #fff; border-radius: 2px;cursor: pointer;width: 40px;height: 18px;display: inline-block;text-align: center;vertical-align: middle;padding-top: 10px;">开启</span>	<span style="background:#357BEA ;color: #fff; border-radius: 2px;cursor: pointer;width: 40px;height: 18px;display: inline-block;text-align: center;vertical-align: middle;padding-top: 10px;">关闭</span>-->			
+		</div>	
+		</div>
+		<div class="backupAccount_body">
+					
+				 <fieldset  style="width:545px;height:250px;border:1px #fff groove;font-size: 9pt !important">
+				    <legend id="meitianId">每天计划任务</legend>
+				 		<!--<div style="display: inline-block;float: left;margin-right: 40px;margin-top: 10px;">
+				 			每(E)<input type="number"  class="layui-input meijitian"  style="height: 30px;display: inline-block;width: 80px;margin: 0px 5px;"/><span id="tianId">天</span>
+				 		</div>-->
+				 		
+						<div style="display:none;float: left;margin-top:10px;" class="meizhouId">	
+							
+							<ul>
+							<li>
+								<input type="checkbox" value="1"/>星期一
+							</li>
+							<li>
+								<input type="checkbox" value="2"/>星期二
+							</li>
+							
+								<li>
+								<input type="checkbox" value="3"/>星期三
+							</li>
+							
+								<li>
+								<input type="checkbox" value="4"/>星期四
+							</li>
+								<li>
+								<input type="checkbox" value="5"/>星期五
+							</li>
+							
+								<li>
+								<input type="checkbox" value="6"/>星期六
+							</li>
+						<li>
+								<input type="checkbox" value="7"/>星期天
+							</li>
+							</ul>
+					
+					
+				 		
+				 		</div>
+				 
+				  </fieldset>
+			<ul>
+			
+			</ul>
+		</div>
+
+		</div>
+	</body>
+
+</html>
+	<script src="../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+	
+	layui.use(['table', 'jquery','form', 'laydate', ], function() {
+ 			var form = layui.form
+			var $ = layui.jquery;
+            var laydate = layui.laydate;
+
+	
+			
+			if(localStorage.autobakup == "1"){
+				$("#kaiGuanId em").click()
+
+			}
+			
+			laydate.render({ 
+			  elem: '#date1'
+
+					  ,type: 'time',
+			  format: 'HH:mm'
+			   ,ready: function(date){
+			   	
+			   	$(".laydate-time-list>li:gt(0)").css("display","none")
+				 
+				  }
+			});
+	
+		
+		$(".status").change(function(){
+			if($(this).val() == 1){
+				$("#meitianId").text("每周计划任务");
+				$("#tianId").text("周，在");
+				$(".meizhouId").css("display","inline-block");
+				
+			}else{
+				$("#meitianId").text("每天计划任务");
+				$("#tianId").text("天");
+				$(".meizhouId").css("display","none");
+				 $('input[type="checkbox"]').removeAttr('checked');
+			}
+		})
+		
+		
+		
+		 $(function(){
+	        $(':checkbox[type="checkbox"]').each(function(){
+	            $(this).click(function(){
+
+	               		$(".meizhouId ul li:gt("+(Number($(this).parent("li").index())) +")").children("input").removeAttr('checked');
+	                  	$(".meizhouId ul li:lt("+(Number($(this).parent("li").index())) +")").children("input").removeAttr('checked');
+
+	                    $(this).attr('checked','checked');
+	                  
+	              
+	            });
+      	  });
+	    });
+			
+	
+		
+		form.on('switch(filter)', function(data){
+			var type = 0;
+			var showData = "确定关闭定时备份吗?";
+			var flag = data.elem.checked;
+	 		if(data.elem.checked){
+	 			type = 1;
+	 			showData = "确定开启定时备份吗?";
+	 		}
+	 		
+	 		var str = "";
+		 	if(type == 1){
+		 		var status =  $(".status").val();
+		 		var date1 = $("#date1").val();
+		 		if(date1 == ""){
+		 			
+					parent.layer.open({
+						title: "提示",
+						content: '开始时间不能为空!',	zIndex: parent.layer.zIndex //重点1
+					});
+					
+					data.elem.checked = !flag;
+					form.render();
+					return ;
+		 		}
+	
+		 		
+		 		var zhou = "0";
+		 		if(status ==1){
+		 			zhou =  $('input[checked="checked"]').val();
+		 			
+		 			if(typeof(zhou) == "undefined"){
+		 					parent.layer.open({
+								title: "提示",
+								content: '请选择星期几!',	zIndex: parent.layer.zIndex //重点1
+							});
+							
+							 data.elem.checked = !flag;
+							 form.render();
+							return ;
+		 			}
+		 			
+		 		}
+		 		
+		 		
+		 		
+		 	
+	
+				str = status + "-" + zhou + "-"+  date1;
+		 	}
+	 		
+		
+			
+			var jiazaiIndex;
+			parent.layer.open({
+			  type: 3, 
+			  zIndex: parent.layer.zIndex, //重点1,
+			  success: function(layero, index){
+			  		jiazaiIndex = index;
+				}
+			});
+			
+			parent.layer.confirm(showData, {
+					icon: 3,
+					zIndex: parent.layer.zIndex ,//重点1
+				title: '备份'
+			}, function(index) {
+				
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebOpenOrCloseTimesThreadSingle?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					'type': type,
+					'setofbooksstate':str
+
+				},
+				success: function(res) {
+					parent.layer.close(jiazaiIndex);
+		
+					var res = JSON.parse(res);
+					if(res.ResultValue == '1') {
+						data.elem.checked = flag;
+						 form.render();
+					
+						localStorage.autobakup =type;
+						
+						
+						parent.layer.open({
+							title: "提示",
+							content: '设置成功！',zIndex: parent.layer.zIndex //重点1
+								,
+							success: function(layero,index) {
+							parent.layer.setTop(layero); //重点2
+						
+							},
+							
+						});
+							
+				
+					}else{
+							 data.elem.checked = !flag;
+							 form.render();	
+						parent.layer.open({
+							title: "提示",
+							content: '设置失败！',zIndex: parent.layer.zIndex //重点1
+						});
+						
+						
+							
+					}
+					
+				},
+				error: function(res) {
+							 data.elem.checked = !flag;
+							 form.render();
+					parent.layer.close(jiazaiIndex);
+					
+				}
+			});
+			
+		}
+			
+			,
+			 function(index) {
+			 		parent.layer.close(jiazaiIndex);
+				 	if(data.elem.checked){
+				 				 data.elem.checked = !flag;
+							 form.render();
+			 				
+			 		}else{
+			 					 data.elem.checked = flag;
+							 form.render();
+			 				
+			 		}
+				parent.layer.close(index);
+		
+			
+
+				return;
+			}
+			 );
+
+		});
+						
+	})
+
+</script>

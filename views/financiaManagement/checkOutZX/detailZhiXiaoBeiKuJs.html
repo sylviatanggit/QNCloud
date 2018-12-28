@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加直销备库核价</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	</head>
+	<style type="text/css">
+		input,
+		section,
+		button,
+		select {
+			border-radius: 2px;
+		}
+		
+		.addReturn {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.layui-input-block,
+		.layui-input-block input,
+		.layui-input-block label,
+		.layui-input-block select {
+			line-height: 28px !important;
+			height: 28px !important;
+			min-height: 28px !important;
+		}
+		
+		.layui-form-label {
+			line-height: 28px !important;
+		}
+		
+		.layui-input-block input,
+		.layui-input-block select {
+			width: 150px;
+		}
+		
+		.layui-input-block select {
+			cursor: pointer;
+		}
+		
+		.layui-input-block option {
+			cursor: pointer;
+		}
+		
+		.addReturn .layui-table td,
+		.layui-table th {
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+		}
+		
+		.btns {
+			margin-bottom: 12px;
+			position: absolute;
+			right: 20px;
+			top: 114px;
+		}
+		
+		.addReturn_header1_two {
+			margin-bottom: 12px;
+		}
+		
+		.btns button {
+			cursor: pointer;
+			border: none;
+			width: 90px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.addReturn_header1 {
+			padding-bottom: 40px;
+			border-bottom: 1px solid #F2F2F2;
+		}
+		
+		.addReturn_header1 ul {
+			float: right;
+		}
+		
+		.addReturn_header1 ul li {
+			margin-left: 8px;
+			margin-top: -50px;
+			display: inline-block;
+			width: 150px;
+		}
+		
+		.addReturn_header1 ul li label {
+			display: block;
+			padding: 0 !important;
+			text-align: left;
+			margin-bottom: 4px;
+		}
+		
+		.addReturn_header1 .layui-input-block {
+			margin-left: 0px !important;
+		}
+		
+		.addReturn_header1_two {
+			margin-left: 0px;
+			margin-top: 12px;
+		}
+		
+		.addReturn_header1_two .layui-form-item {
+			display: inline-block !important;
+			margin-bottom: 0 !important;
+		}
+		
+		.addReturn_header1_two .layui-form-item label {
+			margin-left: 12px;
+			display: block;
+			padding: 0 !important;
+			text-align: left;
+			margin-bottom: 4px;
+		}
+		
+		.layui-form-item .layui-input-inline {
+			width: 150px;
+		}
+		
+		.layui-input-block {
+			min-height: 22px;
+		}
+		
+		.two_inputs {
+			padding-top: 12px;
+			background-color: #EFF5FF;
+			margin-top: 50px;
+			padding-bottom: 5px;
+		}
+		
+		.moreAction {
+			width: 90px !important;
+		}
+		
+		.action {
+			width: 88px !important;
+			right: 0;
+		}
+		
+		.show,
+		.hide {
+			padding: 1px 10px;
+			background-color: #1E9FFF;
+			text-align: center;
+			position: absolute;
+			top: 138px;
+			right: 50%;
+			cursor: pointer;
+		}
+		
+		.hide {
+			display: none;
+		}
+		
+		.title {
+			margin-top: 12px;
+		}
+		
+
+		
+		.layui-form select {
+			display: block;
+		}
+		
+		.productiondate,
+		.indate {
+			border: none;
+			height: 20px;
+			padding: 0;
+		}
+		
+		.cs_container,
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		.cs_container input{
+			font-size: 9pt !important;
+
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 4px !important;
+		}
+		
+		.layui-form select {
+			display: block;
+		}
+		.layui-form-label {
+			padding-top: 0px;
+		}
+		
+				
+		.layui-form select {
+			display: block;
+		}
+		.fixStyle ul{
+			border: 1px solid #ccc;
+		}
+		
+		input{
+			font-size: 9pt;
+		}
+		.fixStyle ul li{
+			float: left;
+			padding-left: 6px;
+		}
+		
+	.waitList1 .layui-hide{
+		display: inline-block !important; */
+	}	
+	</style>
+
+	<body>
+		<div class="addReturn">
+			<div class="layui-tab">
+				<div class="addReturn_header1">
+					<p style="color: #232323 !important;font-size: 24px !important;margin-top: 30px;">直销备库<img style="margin-left: 0px;" class="dsh" src="../../../image/dsh.png" alt="" /> <img style="margin-left: 0px;" class="ysh" src="../../../image/ysh.png" alt="" /></p>
+					<ul>
+						<li>
+							<label class="layui-form-label">直销备库日期</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off" id="addSettlementDate" class="layui-input" type="text">
+							</div>
+						</li>
+						<li>
+							<label class="layui-form-label">直销备库单号</label>
+							<div class="layui-input-block">
+								<input disabled name="title" lay-verify="title" autocomplete="off" class="layui-input zx_ordernum" type="text">
+							</div>
+						</li>
+						<input style="display: none;" type="text" class="lastnum" />
+						<li>
+							<label class="layui-form-label">自定义单号</label>
+							<div class="layui-input-block">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input mynum" type="text">
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="addReturn_header1_two">
+					<div class="btns">
+						<button class="layui-btn addProduct"  style="display: none;">添加产品</button>
+						<button class="layui-btn scanCodeOut"  style="display: none;">扫码出库</button>
+						<button class="layui-btn quotation"  style="display: none;">添加报价单</button>
+						<button class="layui-btn preserve"  style="display: none;">保存</button>
+						<button class="layui-btn shenhe"  style="display: none;">审核</button>
+						<button class="layui-btn noshenhe"  style="display: none;">反审核</button>
+						<button class="layui-btn moreAction"  style="display: none;">更多操作</button>
+						<ul class="action" style="display: none;">
+							<li>
+								<a class="del" data-type="getCheckDel" lay-event='del'>打印直销</a>
+							</li>
+							<li>
+								<a class="del" data-type="getCheckDel" lay-event='del'>打印实耗</a>
+							</li>
+									<li>
+								<a class="huojiaChuku" data-type="huojiaChuku" lay-event='huojiaChuku'>货架出库</a>
+							</li>
+							<li>
+								<a class="addDianJiEvent" data-type="del" lay-event='del'>批量删除</a>
+							</li>
+						</ul>
+					</div>
+					<div class="two_inputs">
+							<div  class="layui-inline" style="width: 323px;">
+							<label class="layui-form-label" style="margin-right: 0px;padding-right: 7px;">往来单位</label>
+							<div>
+								<input name="title" lay-verify="title" value="" autocomplete="off" id="unit" class="layui-input unit" type="text" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+						</div>
+				
+						
+						<div class="layui-inline">
+							<label class="layui-form-label" style="padding-left: 15px;padding-right: 0px;">主刀医生</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input doctor" type="text" style="width: 80px;">
+							</div>
+						</div>
+						
+						<div  class="layui-inline">
+							<label class="layui-form-label"  style="padding-left: 15px;padding-right: 0px;">手术时间</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input surgeryDate" type="text" id="operationDate" style="width:93px;">
+							</div>
+						</div>
+						
+								
+						<div  class="layui-inline">
+							<label class="layui-form-label"  style="padding-left: 15px;padding-right: 0px;">助手1</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input help1" type="text" style="width: 80px;">
+							</div>
+						</div>
+						<div  class="layui-inline">
+							<label class="layui-form-label"  style="padding-left: 15px;padding-right: 0px;">助手2</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input help2" type="text" style="width: 80px;">
+							</div>
+						</div>
+					
+					
+					
+						<br>
+						
+								<div  class="layui-inline" style="width: 323px;">
+							<label class="layui-form-label"  style="padding-right: 7px;">备货仓库</label>
+							<div style="height: 37px;">
+								<input id="warehouse" data-id='' value="" class="layui-input warehouse" type="text" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+						</div>
+						
+						
+						<div  class="layui-inline" style="width: 329px;">
+							<label class="layui-form-label" style="margin-right: 0px;padding-right: 10px;">备货货区</label>
+							<div style="height: 37px;" id="stockareaId">
+								<input name="title" lay-verify="title" value="" data-id=''  autocomplete="off" id="duiyingstockareaId" class="layui-input stockarea" type="text" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+						</div>
+						<div  class="layui-inline" style="width: 329px;">
+							<label class="layui-form-label" style="margin-right: 0px;padding-right: 10px;padding-left: 10px;">备货货架</label>
+							<div style="height: 37px;" id="goodsshelvesId">
+								<input name="title" lay-verify="title" value="" autocomplete="off" id="duiyinggoodsshelvesId" class="layui-input goodsshelves" type="text" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+						</div>
+						
+						<br />
+						<div class="layui-form-item" >
+							<label class="layui-form-label"  style="margin-left: 15px;">患者姓名</label>
+							<div class="layui-input-inline" style="width: 80px;">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input patientName" type="text" style="width: 80px;">
+							</div>
+						</div>
+						
+						<div class="layui-form-item" >
+							<label class="layui-form-label">性别</label>
+							<div class="layui-input-inline" style="width: 40px;">
+								<select name="" class="patientSex layui-input" style="width: 40px;">
+									<option value="0">男</option>
+									<option value="1">女</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">年龄</label>
+							<div class="layui-input-inline" style="width: 50px;">
+								<input name="title" lay-verify="title"  style="width: 50px;" autocomplete="off" class="layui-input patientAge" type="number">
+							</div>
+						</div>
+						
+				
+				
+						<div class="layui-form-item">
+							<label class="layui-form-label">床号</label>
+							<div class="layui-input-inline" style="width: 40px;">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input patientBed" type="text" style="width: 40px;">
+							</div>
+						</div>
+						
+							
+						<div class="layui-form-item">
+							<label class="layui-form-label">住院号</label>
+							<div class="layui-input-inline" style="width: 80px;">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input hospital" type="text" style="width: 80px;">
+							</div>
+						</div>
+						
+										
+						<div class="layui-form-item">
+							<label class="layui-form-label" style="margin-left: 15px;">手术名称</label>
+							<div class="layui-input-inline" style="width: 120px;" >
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input surgeryName" type="text" style="width: 120px;">
+							</div>
+						</div>
+							<div class="layui-form-item">
+							<label class="layui-form-label">诊断</label>
+							<div class="layui-input-inline" style="width: 120px;">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input diagnosis" type="text" style="width: 120px;">
+							</div>
+						</div>
+
+						<br />
+						
+						<div  class="layui-inline" style="width: 323px;">
+							<label class="layui-form-label" style="margin-right: 0px;padding-right: 7px;width: 48px;">业务员</label>
+							<div>
+								<input name="title" lay-verify="title" value="" autocomplete="off" id="salesman" class="layui-input salesman" type="text" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+						</div>
+						
+						<div  class="layui-inline" style="width: 323px;">
+							<label class="layui-form-label" style="margin-right: 0px;padding-right: 7px;">跟台人员</label>
+							<div>
+								<input name="title" lay-verify="title" value="" autocomplete="off" id="followMan" class="layui-input followMan" type="text" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+						</div>
+					
+						<div  class="layui-inline" style="width: auto">
+							<label class="layui-form-label" style="padding-right: 0px;">备注</label>
+							<div class="layui-input-inline">
+								<input name="title" lay-verify="title" autocomplete="off" class="layui-input notes" type="text" style="width: 228px;">
+							</div>
+						</div>
+					</div>
+				</div>
+				<ul class="layui-tab-title">
+					<li class="layui-this shihao">直销实耗详情</li>
+					<li class="hejia">直销核价详情</li>
+					
+				</ul>
+				<div class="content">
+					
+					<div class="waitList1" >
+						<table id="houselist1" lay-filter="demo"></table>
+						<div style="position: absolute;bottom: 0px;right: 22px;" class="fixStyle">
+							<ul style="height: 24px;text-align: left;vertical-align: middle;line-height: 24px;">
+							 	<li style="width: 75px;height: 22px;border-right:1px solid #ccc ;"  id="totalCountId1"></li>
+						 		<li style="width: 75px;height: 22px;border-right:1px solid #ccc ;" id="totalrealCostId1"></li>
+						 		<li style="width: 75px;height: 22px;" id="totalCostId1"></li>
+							 </ul>
+						</div>
+					</div>
+					
+					<div class="waitList" style="display: none;">
+						<table id="houselist" lay-filter="demo"></table>
+						<div style="position: absolute;bottom: 0px;right: 22px;" class="fixStyle">
+							<ul style="height: 24px;text-align: left;vertical-align: middle;line-height: 24px;">
+							 	<li style="width: 74px;height: 22px;border-right:1px solid #ccc ;"  id="totalCountId"></li>
+						 		<li style="width: 74px;height: 22px;border-right:1px solid #ccc ;" id=""></li>
+						 		<li style="width: 74px;height: 22px;border-right:1px solid #ccc ;" id="totalrealCostId"></li>
+						 		<li style="width: 74px;height: 22px;border-right:1px solid #ccc ;" id=""></li>
+						 		<li style="width: 74px;height: 22px;" id="totalCostId"></li>
+							 </ul>
+						</div>
+					</div>
+					
+					
+				</div>
+				
+			</div>
+		</div>
+		
+			
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script src="../../../js/public.js"></script>
+	<script>
+		var scanCodeOutStore;
+		layui.use(['table', 'jquery', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;var oldData;
+			var proData;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$(".addDianJiEvent").attr("name","2")
+			$(".hejia").click(function() {
+				$(".hejia").addClass("layui-this");
+				$(".shihao").removeClass("layui-this");
+				$(".waitList1").hide();
+				$(".waitList").show();
+				$(".addDianJiEvent").attr("name","1")
+			})
+			$(".shihao").click(function() {
+				$(".hejia").removeClass("layui-this");
+				$(".shihao").addClass("layui-this");
+				$(".waitList").hide();
+				$(".waitList1").show();
+				$(".addDianJiEvent").attr("name","2")
+			})
+			laydate.render({
+				elem: "#addSettlementDate"
+			});
+			laydate.render({
+				elem: "#operationDate"
+			})
+			
+			var ordernum=	$(".layui-show", parent.document).attr("lay-item-id");
+			ordernum=ordernum.substring(6,ordernum.length);	
+			
+			
+			$(function() {
+				function staffList() {
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp+"/WebGetEmployeeDropDownList?jsoncallback=?",
+						async: true,
+						dataType: 'jsonp',
+						data: {
+							"userId": localStorage.userId,
+							"userPw": localStorage.userPw,
+							'database': localStorage.database,
+							'groupCompanyId': localStorage.groupcompanyid
+						},
+						success: function(res) {
+							var data = JSON.parse(res);
+							$('#salesman').bComboSelect({
+								showField: 'employeename',
+								keyField: 'employeesid',
+								data: data
+							});
+						}
+					});
+				}
+			staffList();
+		
+			
+			stockList(1);
+				
+		   getunit(5)
+			 
+			 
+			 			
+			var cleckFlag = false;
+							 	
+			$("body").delegate(".warehouse","click",function(){
+				if(proData.length == 0){
+					cleckFlag = true;
+					return;
+				}
+				
+				
+				parent.layer.confirm('更改仓库将删除列表中已选择的产品！', {
+						icon: 3,
+						title: '提示'
+				}, function(index) {
+				
+					proData = [];
+					shihaodatail(proData);
+					cleckFlag= true;
+					everyFun();
+					parent.layer.close(index);	
+
+					return;
+				},
+				 function(index) {
+					 $(".cs_result_area").css("display","none");
+					 	cleckFlag = false;	 			 
+					 			
+					parent.layer.close(index);
+			
+				
+
+					return;
+				}
+				);
+	
+				
+			})
+	
+			 
+			 
+			 $(".huojiaChuku").click(function(){
+			 	var warehouse = $('#warehouse').val() ? $('#warehouse').val() : $('.warehouse').attr('data-id');
+				if (warehouse === undefined || warehouse == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请选备货仓库!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					return;
+				}
+		
+				var stockarea = $('#duiyingstockareaId').val() ? $('#duiyingstockareaId').val() : $('.stockarea').attr('data-id');
+				if (stockarea === undefined || stockarea == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请选备货货区!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					return;
+				}
+				
+				var goodsshelves = $('#duiyinggoodsshelvesId').val() ? $('#duiyinggoodsshelvesId').val() : $('.goodsshelves').attr('data-id');
+				goodsshelves=goodsshelves==undefined?"":goodsshelves;
+				
+				if (goodsshelves === undefined || goodsshelves == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请选备货货架!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					
+				return;
+				}
+			 	
+			 		$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetStockTableProduceInOrders?jsoncallback=?",
+					dataType: 'jsonp',
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'brand':"",
+						"property":"",
+						'series': "",
+						'num':10000,
+						'page':1,
+						'targetstockId':warehouse,'goodsshelves_id':goodsshelves,
+						'stockarea': stockarea,
+						'groupCompanyId': localStorage.groupcompanyid,
+						"showType":1,
+						"infoType" :0,
+						'txtCondition':""
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						
+						var chanpin_datas = JSON.parse(desData.data);
+						
+						
+						for(var j = 0; j < chanpin_datas.length; j++) {
+							if(typeof(chanpin_datas[j].referprice)=="undefined"  ){
+									chanpin_datas[j].referprice = "0.00";
+									chanpin_datas[j].referpricetotal = "0.00";
+							}
+									
+								chanpin_datas[j].referpricetotal = eval(chanpin_datas[j].referprice * chanpin_datas[j].realstockcount);
+								chanpin_datas[j].producecount  = chanpin_datas[j].realstockcount
+							
+						}	
+						//去重
+						proData=uniqueArrayZX(chanpin_datas,2)
+						
+						shihaodatail(proData);
+				
+						everyFun1();
+						
+			
+					}
+				});
+			 })
+			 
+			 
+			 $("body").delegate(".stockarea","click",function(){
+				
+					if(proData.length == 0){
+						cleckFlag = true;
+					return;
+				}
+				
+				parent.layer.confirm('更改货区将删除列表中已选择的产品！', {
+						icon: 3,
+						title: '提示'
+				}, function(index) {
+				
+					proData = [];
+					shihaodatail(proData);
+					everyFun();
+					change = true;
+					cleckFlag= true;
+					parent.layer.close(index);	
+
+					return;
+				},
+				 function(index) {
+					 $(".cs_result_area").css("display","none");
+					cleckFlag= false;
+					parent.layer.close(index);
+			
+				
+
+					return;
+				}
+				);
+	
+				
+			})
+			 
+			 
+			 $("body").delegate(".goodsshelves","click",function(){
+				
+					if(proData.length == 0){
+						cleckFlag = true;
+					return;
+				}
+				
+				parent.layer.confirm('更改货架将删除列表中已选择的产品！', {
+						icon: 3,
+						title: '提示'
+				}, function(index) {
+				
+					proData = [];
+					shihaodatail(proData);
+					everyFun();
+					cleckFlag= true;
+					parent.layer.close(index);	
+					change = true;
+					return;
+				},
+				 function(index) {
+					 $(".cs_result_area").css("display","none");
+					cleckFlag= false;
+					parent.layer.close(index);
+			
+				
+
+					return;
+				}
+				);
+	
+				
+			})
+			 
+			 	
+			$("body").delegate(".warehouse","change",function(){
+				
+				if(cleckFlag){
+					var bandstr = '<input name="title" lay-verify="title" value="" autocomplete="off" id="duiyingstockareaId" class="layui-input stockarea" type="text" style="width: 250px;height: 28px;line-height: 28px;">';
+					
+					$("#stockareaId").empty();
+					$("#stockareaId").append(bandstr);
+					
+					var produceseriesstr = '<input name="title" lay-verify="title" value="" autocomplete="off" id="duiyinggoodsshelvesId" class="layui-input goodsshelves" type="text" style="width: 250px;height: 28px;line-height: 28px;">';
+				
+					$("#goodsshelvesId").empty();
+					$("#goodsshelvesId").append(produceseriesstr);
+					
+					getStockarea($("#warehouse").val());
+					
+				}
+				
+			})
+			$("body").delegate(".stockarea","change",function(){
+				
+					if(cleckFlag){
+						
+						var produceseriesstr = '<input name="title" lay-verify="title" value="" autocomplete="off" id="duiyinggoodsshelvesId" class="layui-input goodsshelves" type="text" style="width: 250px;height: 28px;line-height: 28px;">';
+					
+						$("#goodsshelvesId").empty();
+						$("#goodsshelvesId").append(produceseriesstr);
+						
+						getgoodsshelves($("#duiyingstockareaId").val());
+						
+				}
+				
+			})
+		
+			})
+			
+			
+			//直销核价详情
+			
+			$(function() {
+				function staffList1() {
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp +"/WebGetEmployeeDropDownList?jsoncallback=?",
+						async: true,
+						dataType: 'jsonp',
+						data: {
+							"userId": localStorage.userId,
+							"userPw": localStorage.userPw,
+							'database': localStorage.database,
+							'groupCompanyId': localStorage.groupcompanyid
+						},
+						success: function(res) {
+							var data = JSON.parse(res);
+							$('#followMan').bComboSelect({
+								showField: 'employeename',
+								keyField: 'employeesid',
+								data: data
+							});
+						}
+					});
+				}
+				staffList1()
+
+			})
+			
+			receiptData(ordernum);
+			//展示已知数据
+			function receiptData(ordernum) {
+				
+				change = false;
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp +"/WebGetOutSettlementDtInfoAndRealUseInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': ordernum
+					},
+					success: function(res) {
+						var orderData = JSON.parse(res);
+						var data = orderData.NewDataSet[3].table4;
+						var data2 = orderData.NewDataSet[1].table2;
+						var panduan=orderData.NewDataSet[1].table2[0].checkstate;
+						if(panduan == 0){
+							$(".dsh,.shenhe,.addProduct,.scanCodeOut,.quotation,.preserve,.huojiaChuku,.addDianJiEvent").show();
+
+							$(".ysh,.noshenhe").hide();
+						}else if(panduan == 1){
+							
+							$(".ysh").show();
+							$(".dsh,.shenhe,.addProduct,.scanCodeOut,.quotation,.preserve,.huojiaChuku,.addDianJiEvent").hide();
+							$("input").attr("disabled",true)
+						}
+						
+						//出库仓库
+						$(".warehouse").attr('data-id',data[0].targetstockid);
+						$(".warehouse").val(data[0].warehousename+'('+data[0].naturename+')');
+						//出库货区
+						$(".stockarea").attr('data-id',data[0].stockarea)
+						$(".stockarea").val(data[0].areaname)
+						
+						
+						if(data[0].targetstockid != "" && data[0].targetstockid != null){
+							getStockarea(data[0].targetstockid);
+						}else{
+							getStockarea('-1');
+						}
+						
+						//出库货架
+						$(".goodsshelves").attr('data-id',data[0].goodsshelves_id);
+						$(".goodsshelves").val(data[0].goodsshelves_name);
+						if(data[0].stockarea != "" && data[0].stockarea != null){
+							getgoodsshelves(data[0].stockarea)
+						}else{
+							getgoodsshelves('-1')
+						}
+						
+								//发票状态
+//						var check=orderData[0].nextinvoicestate;
+//						if(check ==0){
+//							$(".nextinvoicestate").prop("checked",true);
+//						}
+//						
+				
+//						$('#addSettlementDate').val(data[0].outsettlementdate.slice(0, 10));
+						
+						$(".doctor").val(data[0].masterdoctorname);
+						$(".zx_ordernum").val(data[0].ordernum);
+						$(".lastnum").val(data[0].lastnum)
+						
+						$(".mynum").val(data2[0].mynum)
+
+						$(".unit").val(data[0].companyname);
+						$(".unit").attr("data-id",data[0].companyid);
+						
+						
+						$(".surgeryName").val(data[0].surgery);
+						$(".surgeryDate").val(data[0].standby1);
+						$(".help1").val(data[0].assistantonename);
+						$(".help2").val(data[0].assistanttwoname);
+						$(".patientName").val(data[0].patienname);
+						$(".patientAge").val(data[0].patientage);
+						$(".patientSex").val(data[0].patientsex);
+						$(".totalprice").val(data[0].totalprice);
+						$(".hospital").val(data[0].patienthospitalnum);
+						$(".notes").val(data[0].nomo);
+						$(".diagnosis").val(data[0].diagnose) 
+						
+						$(".salesman").val(data[0].agentname)
+						$(".salesman").attr("data-id",data[0].agent)
+					
+						$(".followMan").val(data[0].follownamename)
+						$(".followMan").attr("data-id",data[0].followname)
+						$(".patientBed").val(data[0].patientbednum)
+						
+						
+				
+						
+						$('#addSettlementDate').val(data2[0].outsettlementdate.slice(0, 10));
+						receiptData1(ordernum);//直销实耗详情
+						receiptData2(ordernum);//直销核价
+//						receiptDataGetF();
+					}
+				});
+
+			}
+		
+//			
+//			function receiptDataGetF() {
+//				$.ajax({
+//					type: "get",
+//					url: localStorage.serIp +"/WebGetOutSettlementAnRealUseInfoByOrderNum?jsoncallback=?",
+//					dataType: "jsonp",
+//					async: true,
+//					data: {
+//						'userId': localStorage.userId,
+//						'userPw': localStorage.userPw,
+//						'database': localStorage.database,
+//						'orderNum': sessionStorage.zxbhOrder
+//					},
+//					success: function(res) {
+//						var orderData = JSON.parse(res);
+//				
+//					}
+//				});
+//
+//			}
+			var a = true;
+			$(".detail").click(function() {
+				if(a) {
+					$(".order").show();
+					$(".detail").css("right", $(".order").width());
+				} else {
+					$(".order").hide();
+					$(".detail").css("right", 0);
+				}
+				a = !a;
+			})
+			$(".quotation").click(function() {
+				if($(".unit").val() == '') {
+					parent.layer.open({
+						title: "提示",
+						content: '请选择往来单位！！！'
+					});
+					return false;
+				}
+				sessionStorage.conId=$(".unit").attr("data-id");
+				if(sessionStorage.direct2_data) {
+					sessionStorage.removeItem('direct2_data');
+				}
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">报价单</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/financiaManagement/settlement/directQuotation.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero, index) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						$(".import", paentIfarame).css("display", 'block');
+					},
+					end: function() {
+						change = true;
+						if(sessionStorage.direct2_data) {
+							var data = JSON.parse(sessionStorage.direct2_data);
+							for(var i=0;i<data.length;i++){
+								data[i].producecount = "1";
+								data[i].heji = 	data[i].producecount * data[i].medicareprice;
+								data[i].totalprice = data[i].producecount * data[i].bidprice;
+								oldData.push(data[i])
+							}
+							oldData=uniqueArrayZX(oldData,5)
+							datail1(oldData);
+						}
+
+					}
+				});
+			});
+            $(".preserve").click(function() {
+            	mark=0;check=0;
+				saveFun(false)				
+			})
+			var mark=0;
+			var check=0;
+			function saveFun(flag){
+				var outSlave = [];
+				var outMaster;
+				var realSlave = [];
+				var realMaster;
+				var directMaster;
+				var companyID =$("#unit").val()?$("#unit").val():$(".unit").attr('data-id');
+				var totalprice = 0;
+				var operatorsid = localStorage.userId;
+				var agent = $("#salesman").val() ? $("#salesman").val() :  $(".salesman").attr("data-id");
+				var nomo = $('.notes').val();
+				var mynum = $(".mynum").val();
+				var discount = '';
+				var coupon = '';
+				var outsettlementdate = $("#addSettlementDate").val();
+				var patienName = $(".patientName").val();
+				var patientAge = $(".patientAge").val();
+				var patientSex = $(".patientSex").val();
+				var patientBedNum = $(".patientBed").val();
+				var patientHospitalNum = $(".hospital").val();
+				var diagnose = $(".diagnosis").val();
+				var surgery = $(".surgeryName").val();
+				var masterDoctorName = $('.doctor').val();
+				var assistantOneName = $(".help1").val();
+				var assistantTwoName = $(".help2").val();
+				var followName = $("#followMan").val() ? $("#followMan").val() :  $(".followMan").attr("data-id");
+				var standby1 = $(".surgeryDate").val(); //手术时间
+				
+//				var nextinvoicestate;
+//				var a = $("input[type='checkbox']").is(':checked');
+//				if(a == true) {
+//					nextinvoicestate = 0;
+//				} else {
+//					nextinvoicestate = 2;
+//				}
+				//仓库
+				var targetstockid =  $('#warehouse').val() ? $('#warehouse').val() : $('.warehouse').attr('data-id');
+				//货区
+				var stockarea=$("#duiyingstockareaId").val()? $("#duiyingstockareaId").val() :$(".stockarea").attr("data-id");
+				//货架
+				var goodsshelves = $('#duiyinggoodsshelvesId').val() ? $('#duiyinggoodsshelvesId').val() : $('.goodsshelves').attr('data-id');
+			
+				//获取lastnum,页面中没有,隐藏的
+				var lastnum=$(".zx_ordernum").val()==undefined?'':$(".zx_ordernum").val();
+				
+				//实耗信息
+				realMaster = {
+					'mynum': mynum,
+					'realusedate': outsettlementdate,
+					'lasttype': 1,
+					'companyid': companyID,
+					'lastnum': lastnum,
+					'agent': agent,
+					'operatorsid': operatorsid,
+					'nomo': nomo,
+					'targetstockid': targetstockid,
+					'stockarea':stockarea,
+					'goodsshelves':goodsshelves
+				}
+				
+				
+				//直销核价详情(中标号那些东西)
+				var zhongbiao=$(".waitList tbody tr").length/2;
+				for(var i = 0; i < zhongbiao; i++) {
+					var name=$(".waitList tbody tr:eq("+i+") [data-field='name'] div").text();
+					var id=$(".waitList tbody tr:eq("+i+")").attr("z_id");
+					var producecount=$(".waitList .layui-table-fixed tbody tr:eq("+i+") [data-field='producecount'] div").text();
+					var bidnum=$(".waitList tbody tr:eq("+i+") [data-field='bidnum'] div").text();
+					var medicarenum=$(".waitList tbody tr:eq("+i+") [data-field='medicarenum'] div").text();
+					var bidprice=$(".waitList .layui-table-fixed tbody tr:eq("+i+") [data-field='bidprice'] div").text();
+					var medicareprice=$(".waitList .layui-table-fixed tbody tr:eq("+i+") [data-field='medicareprice'] div").text();
+					var produceunit=$(".waitList tbody tr:eq("+i+") [data-field='unitmodel'] div").text();
+					totalprice=parseInt(totalprice)+parseInt($(".waitList tbody tr:eq("+i+") [data-field='totalprice'] div").text());
+					outSlave.push({
+						"name": '' + name + '',
+						"producecount": '' + producecount + '',
+						"bidnum": '' + bidnum + '',
+						"medicarenum": '' + medicarenum + '',
+						"bidprice": '' + bidprice + '',
+						"medicareprice": medicareprice,
+						"produceid": '',
+						'id':id,
+						"produceunit": produceunit
+					});
+				}
+				//实耗产品信息
+				var waitList1=$(".waitList1 tbody tr").length/2;
+				for(var i = 0; i < waitList1; i++) {
+					var produceid=$(".waitList1 tbody tr:eq("+i+")").attr("produceid");
+					var producecount=$(".waitList1 .layui-table-fixed  tbody tr:eq("+i+") [data-field='producecount'] div").text()
+					var iots=$(".waitList1 tbody tr:eq("+i+") [data-field='iots'] div").text();
+					var indate=$(".waitList1 tbody tr:eq("+i+") [data-field='indate'] div").text();
+					var productiondate=$(".waitList1 tbody tr:eq("+i+") [data-field='productiondate'] div").text();
+					var qs=$(".waitList1 tbody tr:eq("+i+") [data-field='qs'] div").text();
+					if(qs == "合格"){
+						qs=1;
+					}else{
+						qs=0;
+					}
+					var package=$(".waitList1 tbody tr:eq("+i+") [data-field='package'] div").text();
+					var storagecondition=$(".waitList1 tbody tr:eq("+i+") [data-field='storagecondition'] div").text();
+					var producesubbarcode=$(".waitList1 tbody tr:eq("+i+") [data-field='producesubbarcode'] div").text();
+					realSlave.push({
+						'produceid': produceid,
+						'producecount': producecount,
+						'iots': iots,
+						'indate': indate,
+						'productiondate': productiondate,
+						'qs': qs,
+						'stockarea': stockarea,
+						'package': package,
+						'storagecondition': storagecondition,
+						'producesubbarcode': producesubbarcode
+					});
+				}
+				var totalprice1=$("#totalCostId1").text()==undefined?'0':$("#totalCostId1").text()
+				//直销信息
+				directMaster = {
+					'companyID': '' + companyID + '',
+					'totalprice': '' + totalprice1 + '',
+					'operatorsid': operatorsid,
+					'agent': agent,
+					'patienName': patienName,
+					'patientAge': patientAge,
+					'patientSex': patientSex,
+					'patientBedNum': patientBedNum,
+					'patientHospitalNum': patientHospitalNum,
+					'diagnose': diagnose,
+					'surgery': surgery,
+					'tool': '',
+					'masterDoctorName': masterDoctorName,
+					'assistantOneName': assistantOneName,
+					'assistantTwoName': assistantTwoName,
+					'followName': followName,
+					'abnormalsituation': '',
+					'standby1': standby1,
+					'nomo': '' + nomo + '',
+					'targetstockid': targetstockid,
+					'stockarea':stockarea,
+					'goodsshelves':goodsshelves
+				};
+				//结算信息（核价）
+				var totalprice=$("#totalCostId").text()==undefined?'0':$("#totalCostId").text();
+				var outMaster = {
+					'ordernum': $(".zx_ordernum").val(),
+					'mynum': mynum,
+					'lasttype': 6,
+					'lastnum': lastnum,
+//					'nextinvoicestate': nextinvoicestate,
+					'totalprice': totalprice,
+					'discount': discount,
+					'coupon': coupon,
+					'noinvoce': totalprice,
+					'companyid': companyID,
+					'outsettlementdate': outsettlementdate,
+					'operatorsid': operatorsid,
+					'agent': agent,
+					'nomo': nomo,
+					'servicename': '',
+					'salediscount': '',
+					'serviceprice': '',
+					'targetstockid': targetstockid,
+					'stockarea':stockarea,
+					'goodsshelves':goodsshelves
+				};
+
+				if(flag){
+					
+			
+							
+					if(masterDoctorName == ""){
+						parent.layer.open({
+							title: "提示",
+							content: '请填写主刀医生'
+						});
+						return false;
+					}
+					
+							
+					if(patienName == ""){
+						parent.layer.open({
+							title: "提示",
+							content: '请填写患者姓名'
+						});
+						return false;
+					}
+				
+					if(realSlave == '') {
+						parent.layer.open({
+							title: "提示",
+							content: '请添加产品信息'
+						});
+						return false;
+					} 
+					
+					if(outSlave == '') {
+						parent.layer.open({
+							title: "提示",
+							content: '请添加报价单'
+						});
+						return false;
+					} 
+					
+					if(standby1 == ""){
+						parent.layer.open({
+							title: "提示",
+							content: '请填写手术时间'
+						});
+						return false;
+						}
+					
+							if(totalprice ==0 || totalprice ==""){
+						parent.layer.open({
+							title: "提示",
+							content: '总金额必须大于0!'
+						});
+						return false;
+					}
+				}
+				
+				if(agent == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请填写业务员'
+					});
+					return false;
+				}
+				if(followName == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请填跟台人员'
+					});
+					return false;
+				}
+				
+				
+						
+				var jiazaiIndex;
+				//弹出层转圈圈的那个
+				parent.layer.open({
+				  type: 3, 
+				  zIndex: parent.layer.zIndex, //重点1
+				  success: function(layero, index){
+				  		jiazaiIndex = index;
+					}
+				});
+				
+
+					$.ajax({
+						type: "POST",
+						url: localStorage.serIp +"/WebOperateOutSettlementAnRealUseTable",
+						async: true,
+						dataType: 'json',
+						crossDomain: true,
+						contentType:'application/json; charset=utf-8',
+						data:JSON.stringify({
+							"userId": localStorage.userId,
+							"userPw": localStorage.userPw,
+							'database': localStorage.database,
+							'groupCompanyId': localStorage.groupcompanyid,
+							'outMaster': JSON.stringify(outMaster), //结算信息
+							'outSlave': JSON.stringify(outSlave), //结算产品信息
+							'directMaster': JSON.stringify(directMaster), //直销信息
+							'realMaster': JSON.stringify(realMaster), //实耗信息
+							'realSlave': JSON.stringify(realSlave), //实耗产品信息
+							'checkstate': check,
+							'mark':mark
+						}),
+						success: function(res) {
+													parent.layer.close(jiazaiIndex);
+
+							change=false;
+							sessionStorage.removeItem('operation_data');
+							var data = JSON.parse(res);
+							switch(data.SaveState.state)
+							{
+							case 0:
+								parent.layer.open({
+									title: "提示",
+									content: data.SaveState.result,
+									zIndex: layer.zIndex ,//重点1,
+									success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+									}
+								});
+								return;
+								break;
+							case 1:								
+								if(data.CheckState.state == 2) {  //保存
+									parent.layer.open({
+										title: "提示",
+										content: '保存成功',
+										zIndex: layer.zIndex //重点1
+										,
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+									 receiptData($(".zx_ordernum").val()) ;
+									return;
+								} 
+								if(data.CheckState.state == 1) {
+									parent.layer.open({
+										title: "提示",
+										content: '审核成功',
+										zIndex: layer.zIndex //重点1
+										,
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});	
+									 receiptData($(".zx_ordernum").val()) ;
+									
+									return;
+								} 
+								if(data.CheckState.state == 0) {
+									parent.layer.open({
+										title: "提示",
+										content: '审核失败',
+										zIndex: layer.zIndex //重点1
+										,
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+									return;
+								} 
+								if(data.CheckState.state == 3) {
+									if(sessionStorage.shengheErrorData) {
+										if(sessionStorage.shengheErrorData.length>0 && sessionStorage.shengheErrorData!= "[]"){
+											sessionStorage.removeItem("shengheErrorData")
+										}
+									}
+									sessionStorage.shengheErrorData = data.CheckState.result;
+									parent.layer.open({
+										type: 2 
+											,
+										title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">信息</span>',
+										area: ['60%', '65%'],
+					
+										content: 'views/public/shengheerror.html',	
+										zIndex: layer.zIndex //重点1
+											,
+										success: function(layero,index) {
+											parent.layer.setTop(layero); //重点2
+											var body = layer.getChildFrame('body', 'index');
+											paentIfarame = layero.find("iframe")[0].contentWindow.document;
+														
+										}
+									});
+									return;
+								} 
+							break;
+							case 9:
+								if(sessionStorage.shouyingzizhiData) {
+									if(sessionStorage.shouyingzizhiData.length>0 && sessionStorage.shouyingzizhiData!= "[]"){
+										sessionStorage.removeItem("shouyingzizhiData")
+									}
+								}
+								sessionStorage.shouyingzizhiData = data.SaveState.result;
+								parent.layer.open({
+									type: 2 
+										,
+									title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">首营资质</span>',
+									area: ['60%', '65%'],
+				
+									content: 'views/public/shouYingZiZhi.html',	
+				
+									zIndex: layer.zIndex //重点1
+										,
+									success: function(layero,index) {
+										parent.layer.setTop(layero); //重点2
+										var body = layer.getChildFrame('body', 'index');
+										paentIfarame = layero.find("iframe")[0].contentWindow.document;
+										$(".save", paentIfarame).click(function() {
+											mark=1;
+											saveFun();
+											parent.layer.close(index); //再执行关闭     
+										})
+									}
+								});
+						  	break;
+							}
+						}
+				,error: function(res) {
+						parent.layer.close(jiazaiIndex);
+
+				}
+					});
+				
+			}
+            $(".shenhe").click(function(){
+            	if(change){
+					parent.layer.open({
+						title: "提示",
+						content: '内容发生变化请先保存!'
+					});
+					return false;
+				}
+            	
+            	
+            	check=1;
+
+            	saveFun(true);
+            })
+            //反审核
+			$(".noshenhe").click(function() {
+				if($('.ysh').css('display') == 'none') {
+					parent.layer.open({
+						title: "提示",
+						content: '此状态无法进行反审核'
+					});
+					return false;
+				}
+				parent.layer.confirm('确定进行反审核操作？', {
+					icon: 3,
+					title: '提示'
+				}, function(index) {
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp+"/WebCheckReturnSaveState?jsoncallback=?",
+						dataType: "jsonp",
+						async: true,
+						data: {
+							'userId': localStorage.userId,
+							'userPw': localStorage.userPw,
+							'database': localStorage.database,
+							'orderNum': $('.zx_ordernum').val()
+						},
+						success: function(res) {
+							var data = JSON.parse(res);
+							switch(data.type)
+							{
+								case 1:
+									parent.layer.open({
+									title: "提示",
+									content: '反审核成功',
+									zIndex: layer.zIndex, //重点1
+									success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+									 	receiptData($(".zx_ordernum").val()) ;
+									}
+								});
+							  break;
+								case 0:
+									parent.layer.open({
+										title: "提示",
+										content: data.data,
+										zIndex: layer.zIndex, //重点1
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+							  break;
+							  case 2:
+							  		var infoData = JSON.parse(data.data);
+									var  info = infoData[0].info;			  		
+									parent.layer.open({
+									title: "提示",
+									content: info,
+									zIndex: layer.zIndex, //重点1
+									success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+									}
+								});
+							  break;
+							}
+							parent.layer.close(index);
+							return;
+						}
+					});
+					layer.close(index);
+				});
+			})
+			
+			
+            function receiptData2(ordernum) {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp +"/WebGetOutSettlementDtInfoAndRealUseInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': ordernum
+					},
+					success: function(res) {
+						var orderData = JSON.parse(res);
+						oldData=orderData.NewDataSet[0].table1;
+						for(var i=0;i<oldData.length;i++){
+							oldData[i]['contractprice_bidnum']=oldData[i].bidnum;
+							
+							oldData[i].heji = oldData[i].medicareprice * oldData[i].producecount;
+							oldData[i].totalprice = oldData[i].bidprice * oldData[i].producecount;
+						}
+						datail1(oldData);
+					}
+				});
+
+			}
+		
+			
+			//直销核价详情
+			function datail1(data) {
+				//展示已知数据
+				table.render({
+					elem: '#houselist',
+					data: data,
+					id: 'houselistId',
+					cols: [
+						[ //标题栏
+							{
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							},
+							{
+								field: 'bidnum',
+								title: '中标编号',
+								width: 100,
+							}, {
+								field: 'name',
+								title: '收费名称',
+								minWidth: 100
+							},
+							{
+								field: 'unitmodel',
+								title: '规格型号',
+								minWidth: 140
+							}, {
+								field: 'medicarenum',
+								title: '医保编号',
+								width: 100
+							}, {
+								field: 'producecount',
+								title: '数量',
+//								edit: 'text',
+								event: "setSign",
+								fixed: 'right',
+								width: 80
+							}, {
+								field: 'medicareprice',
+								title: '医保单价',
+								fixed: 'right',
+								width: 80
+							}, {
+								field: 'heji',
+								title: '医保合计',
+								fixed: 'right',
+								width: 80
+							}, {
+								field: 'bidprice',
+								title: '收费单价',
+								fixed: 'right',
+								width: 80
+							}, {
+								field: 'totalprice',
+								title: '合计',
+								fixed: 'right',
+								width: 80
+							}
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-410",
+					even: true,
+					page: false //是否显示分页
+						,
+					limit: 500000 //每页默认显示的数量
+				});
+				if(data != null && data.length != 0){
+					for(var i=0;i<data.length;i++){
+						$(".waitList tbody tr:eq("+i+")").attr('z_id',data[i].id);
+					}
+				}
+//				$(".waitList [data-field=producecount] div:gt(0)").each(function(i) {
+//					if($(this).text() == ""){
+//						$(this).text('1')
+//					}
+//				});
+				$(".waitList [data-field=unitmodel] div:gt(0)").each(function(i) {
+					if($(this).text() == ""){
+						$(this).text(data[i].produceunit)
+					}
+				});
+				$(".waitList [data-field=qs] div").each(function(i){
+					if($(this).text()==0){
+						$(this).text('不合格');
+					}else{
+						$(this).text('合格');
+					}
+				})
+				$("[data-field=producecount]").css("background-color","#d3ecc6");
+				$("[data-field=medicareprice]").css("background-color","#fee9d0");
+				$("[data-field=heji]").css("background-color","#ffc8c8");
+				$("[data-field=bidprice]").css("background-color","#f2ffd1");
+				$("[data-field=totalprice]").css("background-color","#acd7ff");
+//				$("[data-field=producecount] div:gt(0)").each(function(i) {
+//					if($(this).html() == ""){
+//						$(this).html("1")
+//					}
+//				});
+				everyFun();
+			}
+            
+            function receiptData1(ordernum) {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp +"/WebGetOutSettlementDtInfoAndRealUseInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': ordernum
+					},
+					success: function(res) {
+						var orderData = JSON.parse(res);
+						proData=orderData.NewDataSet[2].table3;
+						shihaodatail(orderData.NewDataSet[2].table3);
+					}
+				});
+			}
+			function shihaodatail(data) {
+				
+				table.render({
+					elem: '#houselist1',
+					data: data,
+					id: 'houselist1Id',
+					cols: [
+						[ //标题栏
+
+							{
+								checkbox: true,
+//								LAY_CHECKED: true,
+								align: "center",
+								width: 40,
+							},
+							{
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 200
+							}, {
+								field: 'manufacturer',
+								title: '厂家',
+								minWidth: 150
+							},
+							{
+								field: 'danwei',
+								title: '规格',
+								minWidth: 150
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 80
+							}, {
+								field: 'producenum',
+								title: '编号',
+								minWidth: 100
+							}, {
+								field: 'producecode',
+								title: '主条码',
+								minWidth: 100
+							}, {
+								field: 'producesubbarcode',
+								title: '副条码',
+								edit: 'text',
+								minWidth: 100
+							}, {
+								field: 'produceunit',
+								title: '单位',
+								minWidth: 80
+							}, {
+								field: 'iots',
+								title: '批号',
+								edit: 'text',
+								minWidth: 100
+							}, {
+								field: 'productiondate',
+								title: '生产日期',
+								minWidth: 150
+							}, {
+								field: 'indate',
+								title: '有效期',
+								minWidth: 150
+							}, {
+								field: 'qs',
+								title: '合格',
+								//								edit: 'text',
+								minWidth: 80
+							}, {
+								field: 'package',
+								title: '包装',
+								minWidth: 80
+							}
+							, {
+								field: 'storagecondition',
+								title: '存储条件',
+								minWidth: 80
+							},
+							
+							{
+								field: 'producepropertyname',
+								title: '产品种类',
+								minWidth: 60
+						},
+						{
+								field: 'produceseries',
+								title: '系列',
+								minWidth: 120
+						},
+							{
+								field: 'produceusename',
+								title: '通俗名称',
+								minWidth: 80
+							},{
+								field: 'producettypename',
+								title: '产品属性',
+								minWidth: 60
+							},
+						
+						{
+								field: 'manufacturer',
+								title: '品牌',
+								minWidth: 100
+							}
+						,
+							{
+								field: 'produceseries',
+								title: '产品系列',
+								minWidth: 150
+							}, {
+								field: 'producematerial',
+								title: '材质',
+								minWidth: 80
+							},{
+								field: 'manufacturename',
+								title: '厂家',
+								minWidth: 150
+							},
+							{
+							field: 'regproducename',
+							title: '注册证产品名称',
+							minWidth: 150
+						}, {
+								field: 'referencenum',
+								title: '注册证号',
+								minWidth: 200
+							},{
+								field: 'productcertificate',
+								title: '产品生产许可证编号',
+								minWidth: 150
+							},{
+								field: 'producecount',
+								title: '数量',
+								edit: 'text',
+								event: "setSign",
+								fixed: 'right',
+								width: 80
+							}, {
+								field: 'referprice',
+								title: '参考未税成本',
+								fixed: 'right',
+								width: 100
+							}, {
+								field: 'referpricetotal',
+								title: '小计',
+								fixed: 'right',
+								width: 100
+							}
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-410",
+					even: true,
+					page: false //是否显示分页
+						,
+					limit: 500000 //每页默认显示的数量
+				});
+				
+				if(data != null && data.length != 0){
+					$(".content .layui-table-body").height("318");
+					for(var i=0;i<data.length;i++){
+//						$(".waitList1 tbody tr:eq("+i+")").attr('hq_id',data[i].stockarea);
+						$(".waitList1 tbody tr:eq("+i+")").attr('produceid',data[i].produceid);
+					}
+					$(".waitList1 [data-field=qs] div").each(function(i){
+						if($(this).text()==0){
+							$(this).text('不合格');
+						}else{
+							$(this).text('合格');
+						}
+					})
+					everyFun1()
+				}
+				$(".layui-table-body").height($(".layui-table-box").height()-24)
+				$("[data-field=producecount]").css("background-color","#d3ecc6");
+				$("[data-field=referprice]").css("background-color","#fee9d0");
+				$("[data-field=referpricetotal]").css("background-color","#ffc8c8");
+				
+				
+							
+				if(localStorage.isshow == 1){
+					
+					if(localStorage.viewrealcost==0){
+						$("[data-field=referprice]").css("display","none");
+						$("[data-field=referpricetotal]").css("display","none");
+						
+						$("#totalrealCostId1").css("display","none");
+						$("#totalCostId1").css("display","none");
+					}
+					
+				}else{
+					$("[data-field=referprice]").css("display","none");
+					$("[data-field=referpricetotal]").css("display","none");
+					
+					$("#totalrealCostId1").css("display","none");
+					$("#totalCostId1").css("display","none");
+				}
+				
+			
+			}
+			//点击新增
+			$(".addSettlement1").click(function() {
+				var  num  = randomString();
+				parent.tab.tabAdd({
+					icon: '',
+					id: 'xindan' + num,
+					title: '新增直销备库结算',
+					url: 'views/financiaManagement/settlement/newaddSettlement.html'
+				});
+			});
+			//实耗
+			$(".addProduct").click(function(){
+				
+	 			var warehouse = $('#warehouse').val() ? $('#warehouse').val() : $('.warehouse').attr('data-id');
+				if (warehouse === undefined || warehouse == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请选择备货仓库!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					return;
+				}
+		
+				var stockarea = $('#duiyingstockareaId').val() ? $('#duiyingstockareaId').val() : $('.stockarea').attr('data-id');
+				if (stockarea === undefined || stockarea == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请选择备货货区!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					return;
+				}
+				var goodsshelves = $('#duiyinggoodsshelvesId').val() ? $('#duiyinggoodsshelvesId').val() : $('.goodsshelves').attr('data-id');
+				goodsshelves=goodsshelves==undefined?"":goodsshelves;
+				if(sessionStorage.stockProductData || sessionStorage.stockProductData!= "[]") {
+					sessionStorage.removeItem('stockProductData');
+				}
+				
+				if(sessionStorage.newData || sessionStorage.newData!= "[]") {
+					sessionStorage.removeItem('newData');
+				}
+			 	
+			 	
+				
+				var yuanbenoldData = proData;
+
+					
+				sessionStorage.stockProductData = JSON.stringify(yuanbenoldData);
+				
+				sessionStorage.stockId = warehouse;
+				
+				sessionStorage.stockareagoodsshelvesId =goodsshelves;
+				
+				sessionStorage.stockareaId = stockarea;
+					
+				
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">库存列表</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/public/stock/choicesStockPublicList.html',
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+						
+				
+					},
+		
+					end: function(){  
+						
+						change = true;
+               		if(sessionStorage.newData) {
+						if(sessionStorage.newData.length>0 && sessionStorage.newData!= "[]"){
+
+						var productDatas = JSON.parse(sessionStorage.newData);
+					
+
+						for(var j = 0; j < productDatas.length; j++) {
+									if(typeof(productDatas[j].referprice)=="undefined"  ){
+										productDatas[j].referprice = "0.00";
+										productDatas[j].referpricetotal = "0.00";
+									}
+									
+								productDatas[j].referpricetotal = eval(productDatas[j].referprice * productDatas[j].outcount);
+								productDatas[j].producecount  = productDatas[j].outcount
+								yuanbenoldData.push(productDatas[j])
+						}	
+						//去重
+						proData=uniqueArray(yuanbenoldData)
+						
+						shihaodatail(proData);
+						
+						
+						everyFun1();
+	
+						sessionStorage.removeItem('newData');		
+						} else {
+							layer.closeAll();
+						}
+					}
+           		
+           		    
+           		    	if(sessionStorage.stockProductData || sessionStorage.stockProductData!= "[]") {
+								sessionStorage.removeItem('stockProductData');
+							}
+					
+					}
+				});
+			
+			})
+			//计算总价
+			function everyFun(){
+				var all_zong=0;
+				var totalCountId=0;
+				var totalrealCostId=0;
+				for(var i=0;i<oldData.length;i++){
+					var producecount =oldData[i].producecount;
+					var heji = oldData[i].heji;
+					var totalprice = oldData[i].totalprice;
+
+					if(producecount != ""&& producecount !=0 &&  producecount != undefined){
+						totalCountId= totalCountId  + Number(producecount);
+					}
+					
+					if(heji != ""&& heji !=0 &&  heji != undefined){
+						totalrealCostId= totalrealCostId  + Number(heji);
+					}
+					
+					if(totalprice != "" && totalprice !=0 && totalprice != undefined){
+						all_zong= all_zong  + Number(totalprice);
+					}
+						
+				}
+				
+				$("#totalCostId").text(all_zong)
+				$("#totalCountId").text(totalCountId)
+				$("#totalrealCostId").text(totalrealCostId)
+			}
+			
+			
+			function everyFun1(){
+				var totalprice=0;
+				var totalCount =0;
+			
+			
+				for(var i=0;i<proData.length;i++){
+					var currentprice =proData[i].referpricetotal;
+					var currentCount = proData[i].producecount;
+					
+					if( currentprice != ""&& currentprice !=0 &&  currentprice != undefined){
+						totalprice= totalprice  + Number(currentprice);
+					}
+					
+					if( currentCount != ""&& currentCount !=0 && currentCount != undefined){
+						totalCount= totalCount  + Number(currentCount);
+					}
+					
+				}
+	
+				
+				$(".fixStyle #totalCountId1").text(totalCount)
+	
+				$(".fixStyle #totalCostId1").text(totalprice.toFixed(2))
+			}
+			table.on('edit(demo)', function(obj) {
+				var value = obj.value //得到修改后的值
+				,
+				data = obj.data //得到所在行所有键值
+				,
+				field = obj.field; //得到字段
+				if(field == 'producecount') { //数量
+					//判断是整数
+					var zs = /^[0-9]+$/ ;
+					var re = /^[0-9]+.?[0-9]*$/;
+					if (!re.test(value) || isNaN(value) || !zs.test(value)) {
+						layer.tips('输入非法!',this);
+						value=1;	
+					}
+					var undefined1=obj.data.bidnum;
+					if(undefined1 == undefined){
+						 var getvalue = value;
+						if (value <=0 ){
+				    		getvalue= "1";
+						}
+						if (Number(value) > Number(data.usefulcount)){
+				         	layer.tips('不能大于可用数量!',this);
+				    		getvalue= data.usefulcount;
+						}
+						
+			    		$(this).val(getvalue);	
+			    	  	var index = data.LAY_TABLE_INDEX;
+			    	  	var totalcost = (getvalue * data.referprice).toFixed(2);
+						$(".layui-table-body table tbody [data-index="+index+"] [data-field=referpricetotal] div").html(totalcost);
+						for (var i=0;i< proData.length;i++) {
+							if((proData[i].produceid == data.produceid) &&(proData[i].producesubbarcode == data.producesubbarcode)){
+								proData[i].referprice = data.referprice;
+								proData[i].referpricetotal = totalcost;
+							}
+						}
+						if (value < data.usefulcount || value == data.usefulcount){
+							everyFun1();
+						}else{
+							$(".fixStyle #totalCountId1").text(getvalue)
+						}
+						
+					}else{
+						var getvalue = value;
+						if (value <=0 ){
+				    		getvalue= "1";
+						}
+						$(this).val(getvalue);	
+						
+						var index = data.LAY_TABLE_INDEX;
+			    	  	var yibaoheji = (getvalue * data.medicareprice).toFixed(2);
+			    	  	 var hejicount = (getvalue * data.bidprice).toFixed(2);
+			    	  	 
+						$(".waitList .layui-table-body table tbody [data-index="+index+"] [data-field=heji] div").html(yibaoheji);
+						$(".waitList .layui-table-body table tbody [data-index="+index+"] [data-field=totalprice] div").html(hejicount);
+					
+						for (var i=0;i< oldData.length;i++) {
+							if(oldData[i].bidnum == data.bidnum){
+								oldData[i].heji = yibaoheji;
+								oldData[i].totalprice = hejicount;
+								oldData[i].producecount = getvalue;
+							}
+						}
+						
+						everyFun()
+					}
+					
+				}
+			})
+			//删除
+			$(".addDianJiEvent").click(function() {
+				var type = $(this).data('type');
+				active1[type] ? active1[type].call(this) : '';
+			}) 
+			//入库验收详情操作	
+			var active1 = {
+				//删除
+				del : function(){
+					var get_name=$(".addDianJiEvent").attr("name");
+					if(get_name == '2'){
+						var checkStatus = table.checkStatus('houselist1Id'),
+						data = checkStatus.data;
+					}else{
+						var checkStatus = table.checkStatus('houselistId'),
+						data = checkStatus.data;
+					}
+					if (data.length ==0){
+						parent.layer.open({
+							title: "提示",
+							content: '请选择产品',
+							zIndex: layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return;
+					}
+					
+					change = true;
+					if(data.length >0) {
+						var data_arr=[];
+						if(get_name == '2'){
+							proData =  deleteUniqueArray(proData,data);
+							shihaodatail(proData); //直销实耗
+						}else{
+							for(var i=0;i<data.length;i++){
+								var contractprice_bidnum=data[i].contractprice_bidnum==undefined?data[i].bidnum:data[i].contractprice_bidnum;
+								data_arr.push(contractprice_bidnum)
+							}
+							oldData =  deleteUniqueDelArrayId(oldData,data_arr,1);
+							datail1(oldData);  //直销核价
+						}
+						
+						
+					}
+				}		
+			};
+			//扫码出库
+			$(".scanCodeOut").click(function() {
+				var warehouse = $('#warehouse').val() ? $('#warehouse').val() : $('.warehouse').attr('data-id');
+				if (warehouse === undefined || warehouse == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请选备货仓库!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					return;
+				}
+		
+				var stockarea = $('#duiyingstockareaId').val() ? $('#duiyingstockareaId').val() : $('.stockarea').attr('data-id');
+				if (stockarea === undefined || stockarea == ""){
+					parent.layer.open({
+						title: "提示",
+						content: '请选备货货区!',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					});
+				
+					return;
+				}
+				
+				var goodsshelves = $('#duiyinggoodsshelvesId').val() ? $('#duiyinggoodsshelvesId').val() : $('.goodsshelves').attr('data-id');
+				goodsshelves=goodsshelves==undefined?"":goodsshelves;
+				
+				
+				sessionStorage.scanCodeOutStockId = warehouse;
+			
+				sessionStorage.scanCodeOutstockareaId = stockarea;
+					
+				sessionStorage.scanCodeOutgoodsshelvesId = goodsshelves;
+				
+				
+				parent.layer.open({
+					
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">扫码出库</span>',
+					area: ['700px', '90%'],
+					offset: "rb",
+					content: 'views/public/scanCode/scanCodeOut.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+						sessionStorage.scanCodeOutStockId = warehouse;
+					},
+							
+					end: function(){ 
+						if(sessionStorage.scanCodeOutStockId){
+							sessionStorage.removeItem("scanCodeOutStockId")
+						}
+						
+						if(sessionStorage.scanCodeOutstockareaId){
+							sessionStorage.removeItem("scanCodeOutstockareaId")
+						}
+						if(sessionStorage.scanCodeOutgoodsshelvesId){
+							sessionStorage.removeItem("scanCodeOutgoodsshelvesId")
+						}
+				
+					}
+				});
+				
+				
+			});
+			var eventFlag;
+			$(function(){
+				
+		scanCodeOutStore =function scanCodeRetrunData(data){
+					    eventFlag = true;
+					var index =0;
+					if(proData.length == 0){
+							index= 0;
+	
+							proData.push(data[0]);
+					}else{
+						var flag = false;
+						
+						for(var i=0;i< proData.length;i++){
+							
+							if((proData[i].produceid == data[0].produceid) && (proData[i].producesubbarcode == data[0].producesubbarcode) && (proData[i].stockarea == data[0].stockarea)  && (proData[i].targetstockid == data[0].targetstockid)&& (proData[i].goodsshelves_id == data[0].goodsshelves_id)){
+						
+								 index = i;
+								 flag = true;
+								break;
+							}
+						
+						}
+						
+						if(flag){
+							
+						
+								var count  = eval(proData[index].producecount) +1;
+								
+								proData[index].referpricetotal = count * proData[index].referprice;
+
+								proData[index].producecount = count;
+								
+						
+						
+							
+						}else{
+							
+							
+							proData.push(data[0]);
+							
+							index = Number(proData.length) - 1;
+						}
+					
+					}
+		
+						
+					shihaodatail(proData)
+					$(".layui-table-view .layui-table-box .layui-table-body tbody tr:eq("+index+")").css("border","1px solid red");
+
+					everyFun();
+				
+				
+		}
+		
+		})
+		});
+	</script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+	<script>
+		
+		function scanCodeOutStoreData(data){
+
+			scanCodeOutStore(data)
+	
+		}
+	</script>
+</html>

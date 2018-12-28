@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title></title>
+
+		<!--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/2.3.2/css/bootstrap.min.css" />-->
+<!--		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+-->		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+			<link rel="stylesheet" type="text/css" href="../../../css/public_style.css" />
+
+	</head>
+	<style type="text/css">
+		::-webkit-scrollbar {
+			width: 0px;
+			height: 1px;
+		}
+		
+		::-webkit-scrollbar-thumb {
+			border-radius: 5px;
+			-webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+			background: rgba(0, 0, 0, 0.2);
+		}
+		*{
+			font-size: 9pt;
+		}
+		.editChanpin {
+			margin-left: 10px;
+		}
+		
+		.editChanpin label {
+			width: 100px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		.editChanpin input {
+			width: 180px !important;
+			height: 28px !important;
+		}
+		
+		.editChanpin select {
+			width: 180px !important;
+			height: 28px !important;
+			display: block;
+		}
+		
+		legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		.editChanpin #content .layui-form-item b {
+			color: red !important;
+			font-size: 12px !important;
+		}
+		
+		.editChanpin .layui-form-title {
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			position: fixed;
+			line-height: 32px;
+			top: 6px;
+			right: 20px;
+		}
+		
+		.editChanpin .layui-form-title button {
+			width: 90px;
+			height: 32px;
+			line-height: 32px;
+			font-family: "PingFang";
+			font-size: 9pt;
+			color: #FFFFFF !important;
+			background-color: #2D89DD;
+		}
+		
+		input,
+		textarea,
+		select {
+			/*border: none;*/
+			/*border: 1px solid #888 !important;*/
+			font-size: 9pt;
+		}
+		
+		.editChanpin .addChangjia {
+			display: inline-block;
+			color: #FFFFFF !important;
+			float: right;
+			margin-right: 100px;
+			border-radius: 2px;
+			padding: 0 15px;
+			line-height: 30px;
+			background-color: #007DDB;
+		}
+		
+		.guanlian {
+			display: inline-block;
+			color: #FFFFFF !important;
+			float: right;
+			margin-top: -20px;
+			margin-right: 120px;
+			padding: 0 15px;
+			line-height: 30px;
+			background-color: #007DDB;
+			font-size: 9pt !important;
+			cursor: pointer
+		}
+		
+		#xinzheng,
+		#laozheng {
+			margin-left: 50px;
+		}
+		
+		#xinzheng p,
+		#laozheng p {
+			font-size: 9pt !important;
+			margin-top: 10px;
+		}
+		
+		#xinzheng a,
+		#laozheng a {
+			color: #357BEA !important;
+			font-size: 9pt !important;
+		}
+		
+		#xinzheng a:hover,
+		#laozheng a:hover {
+			cursor: pointer;
+			color: #FF9600 !important;
+		}
+		
+		#chooseImg>input {
+			display: none;
+		}
+		
+		#chooseImg img {
+			width: 154px;
+			height: 98px;
+		}
+		
+		#upload .photoadd,
+		#upload .photobtn {
+			border: none;
+			height: 30px;
+			line-height: 30px;
+			color: white;
+		}
+		
+		.uploadImg3 {
+			margin-left: 15px;
+			margin-top: 10px;
+			position: relative;
+		}
+		
+		.removeImg3 {
+			cursor: pointer;
+			position: absolute;
+			font-size: 20px !important;
+		}
+		
+		.uploadImg4 {
+			margin-left: 15px;
+			position: relative;
+		}
+		
+		.removeImg4 {
+			cursor: pointer;
+			position: absolute;
+			font-size: 20px !important;
+		}
+		#test3,#test4{
+			background-color: #007DDB;
+			line-height: 28px;
+			height: 28px;
+			width: 78px;
+		}
+		.editChanpin textarea{
+			padding: 8px 8px !important;
+		}
+		
+		.removeImg6 {
+			cursor: pointer;
+			position: absolute;
+			top: 0px;
+			right: 0px;
+			font-size: 20px !important;
+		}
+		
+		.layui-form-item{
+			display: inline-block !important; 
+			margin-bottom: 0px !important;
+		}
+	
+	</style>
+
+	<body>
+		<div class="editChanpin">
+			<div class="layui-form" action="" style="margin-bottom: 120px;">
+				<div class="layui-form-item layui-form-title ">
+					<button class="layui-btn submit" lay-filter="demo1">保存</button>
+				</div>
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 35px;">
+					<legend>产品信息</legend>
+				</fieldset>
+				
+						<div class="layui-form-item">
+							<label class="layui-form-label">产品名称：</label>
+							<div class="layui-input-block ">
+								<input class="xzcp_name layui-input" readonly="readonly" required="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">品牌：</label>
+							<div class="layui-input-block ">
+								<input class="brand layui-input" readonly="readonly" required="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">产品规格：</label>
+							<div class="layui-input-block ">
+								<input class="danwei layui-input" name=""  readonly="readonly" relay-verify="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+		
+						<div class="layui-form-item">
+							<label class="layui-form-label">产品型号：</label>
+							<div class="layui-input-block ">
+								<input class="producemodel layui-input" name=""  readonly="readonly" relay-verify="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">产品编号：</label>
+							<div class="layui-input-block ">
+								<input class="producenum layui-input" name=""  readonly="readonly" relay-verify="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+			
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">产品主条码：</label>
+							<div class="layui-input-block ">
+								<input class="producecode layui-input" name=""  readonly="readonly" relay-verify="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						
+					  <div class="layui-form-item">
+							<label class="layui-form-label">产品单位：</label>
+							<div class="layui-input-block ">
+								<input class="produceunit layui-input" name=""  readonly="readonly" relay-verify="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						  <div class="layui-form-item">
+							<label class="layui-form-label">通俗名称：</label>
+							<div class="layui-input-block ">
+								<input class="produceusename layui-input" name=""  readonly="readonly" relay-verify="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+				  		<div class="layui-form-item">
+							<label class="layui-form-label">产品系列：</label>
+							<div class="layui-input-block ">
+								<input class="produceseries layui-input" name=""  readonly="readonly" relay-verify="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						
+						  <div class="layui-form-item">
+							<label class="layui-form-label">产品材质：</label>
+							<div class="layui-input-block ">
+								<input class="producematerial layui-input" name=""  disabled="disabled" relay-verify="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						
+				
+						
+
+						
+						
+						<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+							<legend>录入信息</legend>
+						</fieldset>
+			
+						 <div class="layui-form-item">
+							<label class="layui-form-label">产品批号：</label>
+							<div class="layui-input-block ">
+								<input class="iots layui-input" name=""   relay-verify="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						 <div class="layui-form-item">
+							<label class="layui-form-label">产品数量：</label>
+							<div class="layui-input-block ">
+								<input class="producecount layui-input" name=""  class="layui-input" type="number" value="">
+							</div>
+						</div>		
+			
+					
+				
+						<div class="layui-form-item">
+							<label class="layui-form-label">生成时间：</label>
+							<div class="layui-input-block ">
+								<input class="productiondate layui-input" id="xinzheng_regtime" name="" lay-verify="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">有效期：</label>
+							<div class="layui-input-block ">
+								<input class="indate layui-input" id="xinzheng_regfailtime" name="" lay-verify="required" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						
+						 <div class="layui-form-item">
+							<label class="layui-form-label">副条码：</label>
+							<div class="layui-input-block ">
+								<input class="producesubbarcode layui-input" name=""   relay-verify="required" autocomplete="off" class="layui-input" type="text" value="">
+							</div>
+						</div>
+						
+						
+						 <div class="layui-form-item">
+							<label class="layui-form-label">货区：</label>
+							<div class="layui-input-block ">
+								
+								<input class="areaname layui-input" name=""  disabled="disabled" relay-verify="required" autocomplete="off" class="layui-input" type="text" value="">
+
+								<!--<select class="areaname layui-input" lay-verify="required" disabled="disabled">
+									<option selected="selected" value=""></option>
+		
+								</select>					-->
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">合格：</label>
+							<div class="layui-input-block">
+
+								<select class="qs layui-input" lay-verify="required"  style="display: block;">
+									<option  value="1">不合格</option>
+									<option selected="selected" value="0">合格</option>
+								</select>
+							</div>
+						</div>
+						
+							<div class="layui-form-item">
+				<label class="layui-form-label">包装：</label>
+				<div class="layui-input-block">
+					<select name="" class="layui-input package">
+						<option selected="selected">灭菌包装</option>
+						<option>非灭菌包装</option>
+					</select>
+				</div>
+			</div>
+			
+				<div class="layui-form-item">
+				<label class="layui-form-label">存储方式：</label>
+				<div class="layui-input-block">
+					<select name="" class="layui-input storagecondition">
+						<option selected="selected">常温</option>
+						<option>冷藏</option>
+					</select>
+				</div>
+			</div>
+
+			
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'layer', 'laydate'], function() {
+
+			var $ = layui.$,
+			layer = layui.layer;
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: '.productiondate'
+			});
+			laydate.render({
+				elem: '.indate'
+			});
+		
+
+	
+					
+		})
+	</script>
+
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>	
+
+</html>

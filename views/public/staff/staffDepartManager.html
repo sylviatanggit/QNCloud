@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>往来单位分组</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link rel="stylesheet" type="text/css" href="../../../easyui/themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="../../../easyui/themes/icon.css" />
+		<script type="text/javascript" src="../../../easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="../../../easyui/jquery.easyui.min.js"></script>
+	</head>
+	<style type="text/css">
+		.group {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		.layui-tab {
+			margin-top: 14px;
+		}
+		
+		.group .layui-table td,
+		.layui-table th {
+			font-size: 9pt !important;
+		}
+		
+		.group_header button {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 22px;
+			text-align: center;
+			line-height: 22px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.layui-table tr:nth-child(odd) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(odd) {
+			background-color: #EFF5FF !important;
+		}
+		
+		.layui-table tbody tr:nth-child(even) {
+			background-color: #FFFFFF !important;
+		}
+		
+		.layui-table td,
+		.layui-table th {
+			padding: 0 3.5vw !important;
+		}
+		
+		.group_header {
+			/*margin-top: -10px;*/
+			margin-bottom: 13px;
+		}
+	</style>
+
+	<body>
+		<div class="group">
+			<div class="layui-tab">
+				<div class="group_header">
+					<button class="layui-btn groupadd" style="margin-left: 20px;">新增</button>
+					<button class="layui-btn groupchange">修改</button>
+					<button class="layui-btn groupdel">删除</button>
+					<!--<button class="layui-btn bumendown">部门下载</button>
+					<button class="layui-btn bumenup">部门导入</button>-->
+					<input type="file" id="bumenup" style="display: none;" />
+				</div>
+				<div id="demo2" style="margin-left:20px ;margin-right: 20px;">
+					<table id="tree" class="easyui-treegrid tree" style="width:100%;height:600px;" data-options="">
+						<thead>
+							<tr>
+								<th data-options="field:'name'" style="width:100%;">部门名称</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'layer','element'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var layer = layui.layer;
+
+			var rows;
+			var flag = false;
+			getstaffDep();
+			function getstaffDep(){
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetEmployeegrouptable?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid
+
+					},
+					success: function(res) {
+						var staffData = JSON.parse(res);
+						staffDepTree(staffData);
+					}
+				});
+				
+			}
+			function staffDepTree(data){
+				$("#tree").treegrid({
+					data: data,
+					idField: 'id',
+					treeField: 'name',
+					onClickRow: function(row) {
+						rows = row;	
+						flag= true;
+					},
+				});
+
+			}
+			$('.groupdel').click(function() {
+//				$('#tree').treegrid('loadData', { total: 0, rows: [] });
+				if(rows) {
+					if(flag && rows.id == 1){
+						parent.layer.open({
+						content: "该节点不能删除",
+						
+						zIndex: parent.layer.zIndex //重点1
+							,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+						})
+						return;
+					}
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp+"/WebDeleteEmployeegrouptable?jsoncallback=?",
+						dataType: "jsonp",
+						async: true,
+						data: {
+							'userId': localStorage.userId,
+							'userPw': localStorage.userPw,
+							'database': localStorage.database,
+							"groupCompanyId": localStorage.groupcompanyid,
+							"id" : rows.id
+	
+						},
+						success: function(res) {
+							var data = JSON.parse(res);
+							if(data[0].ResultValue == 1) {
+								parent.layer.open({
+									title: "提示",
+									content: '删除成功',
+									zIndex: parent.layer.zIndex //重点1
+									,
+									success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+										$('#tree').treegrid('remove', rows.id);
+
+									},
+								});
+							}else{
+								parent.layer.open({
+								title: "提示",
+									content: '删除失败,'+data[0].Message,
+									zIndex: parent.layer.zIndex //重点1
+										,
+									success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+									},
+												
+								});
+							}
+						}
+					});			
+				} else {
+					parent.layer.open({
+						content: "请选择子节点",
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					}
+					})
+				}
+
+			});
+			
+			
+			$('.groupadd').click(function() {
+				if(rows) {
+					if(flag && rows.id != 1){
+						parent.layer.open({
+						content: "只能选择根节点添加子节点",
+						
+						zIndex: parent.layer.zIndex //重点1
+							,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+						})
+						return;
+					}
+				}else{
+					parent.layer.open({
+					content: "请选择根节点",
+					
+					zIndex: parent.layer.zIndex ,//重点1
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					}
+					})
+					return;
+				}
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">部门详情</span>',
+					area: ['360px', '200px'],
+					content: 'views/public/staff/departGroupadd.html',
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero, index) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+
+						$(".fatherGroup", paentIfarame).val("所有部门");
+						$(".addGoods_true", paentIfarame).click(function() {
+							var sonGroup = $(".sonGroup", paentIfarame).val();
+							var company={
+								'GroupName':sonGroup,
+								'FatherID':1,
+								'nomo':""
+							}
+							$.ajax({
+								type: "get",
+								url: localStorage.serIp+"/WebAddEmployeegrouptable?jsoncallback=?",
+								dataType: "jsonp",
+								async: true,
+								data: {
+									'userId': localStorage.userId,
+									'userPw': localStorage.userPw,
+									'database': localStorage.database,
+									"groupCompanyId": localStorage.groupcompanyid,
+									'company': JSON.stringify(company)
+								},
+								success: function(res) {
+									var data = JSON.parse(res);
+									if(data[0].ResultValue == 1) {
+										parent.layer.open({
+											title: "提示",
+											content: '添加成功',
+											zIndex: parent.layer.zIndex, //重点1
+											success: function(layero) {
+												parent.layer.setTop(layero); //重点2
+												getstaffDep()
+//												var Orow = {
+//												'id': 120,
+//												'name': sonGroup,
+//												'_parentId': 1,
+//				
+//												}
+//												$('#tree').treegrid('append', {
+//													parent: rows._parentId,
+//													data: [Orow]
+//												});
+											},
+										});
+									}else{
+										parent.layer.open({
+										title: "提示",
+										content: '添加失败',
+										zIndex: parent.layer.zIndex, //重点1
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										},
+														
+										});
+									}
+								}
+							});
+							parent.layer.close(index);
+						});
+					}
+				});
+
+			});
+			
+			
+			$('.groupchange').click(function() {
+				if(rows) {
+					if(flag && rows.id == 1){
+						parent.layer.open({
+						content: "该节点不能修改",
+						
+						zIndex: parent.layer.zIndex, //重点1
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+						})
+						return;
+					}
+					
+					if(flag && rows.id == 2){
+						parent.layer.open({
+						content: "未分组不能修改!",
+						
+						zIndex: parent.layer.zIndex //重点1
+							,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+						})
+						return;
+					}
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">分组详情</span>',
+						area: ['360px', '200px'],
+						content: 'views/public/staff/departGroupaedit.html',
+						zIndex: parent.layer.zIndex, //重点1
+						success: function(layero, index) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$(".fatherGroup1", paentIfarame).val($("#datagrid-row-r2-2-" + rows._parentId).text());
+							$(".sonGroup1", paentIfarame).val(rows.name);
+							$(".addGoods_true1", paentIfarame).click(function() {
+								var sonGroup = $(".sonGroup1", paentIfarame).val();
+								var master={
+									'GroupName':sonGroup,
+									'FatherID':1,
+									'nomo':""
+								}
+								$.ajax({
+									type: "get",
+									url: localStorage.serIp+"/WebUpdateEmployeegrouptable?jsoncallback=?",
+									dataType: "jsonp",
+									async: true,
+									data: {
+										'userId': localStorage.userId,
+										'userPw': localStorage.userPw,
+										'database': localStorage.database,
+										"groupCompanyId": localStorage.groupcompanyid,
+										'master': JSON.stringify(master),
+										"id" : rows.id
+									},
+									success: function(res) {
+										var data = JSON.parse(res);
+										if(data[0].ResultValue == 1) {
+											parent.layer.open({
+												title: "提示",
+												content: '修改成功',
+												zIndex: parent.layer.zIndex, //重点1
+												success: function(layero) {
+													parent.layer.setTop(layero); //重点2
+													getstaffDep()
+//													$('#tree').treegrid('update', {
+//														id: rows.id,
+//														row: {
+//															'name': sonGroup,
+//														}
+//													});
+												},
+											});
+										}else{
+											parent.layer.open({
+												title: "提示",
+												content: '修改失败',
+												zIndex: parent.layer.zIndex, //重点1
+												success: function(layero) {
+													parent.layer.setTop(layero); //重点2
+												},			
+											});
+										}
+		
+									}
+								});
+								parent.layer.close(index);
+							});
+						}
+					});
+				} else {
+					parent.layer.open({
+						content: "请选择子节点",
+						zIndex: parent.layer.zIndex, //重点1
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						}
+					})
+				}
+			});
+		});
+	</script>
+	<!--模板下载-->
+	<script src="/QNCloud/js/excelImportJS/shim.js"></script>
+	<script src="/QNCloud/js/excelImportJS/jszip.js"></script>
+	<script src="/QNCloud/js/excelImportJS/xlsx.js"></script>
+	<script src="/QNCloud/js/excelImport.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		//模板下载
+		$(document).on("click", ".bumendown", function() {
+			window.location.href = encodeURI("/QNCloud/templetDown/员工部门导入.xlsx");
+		})
+		//模板导入
+		$(".bumenup").click(function(){
+			$("#bumenup").click();
+		})
+		$("body").delegate("#bumenup", "change", function(e) {
+			parent.layer.open({
+			  type: 3, 
+			  success: function(layero, index){
+			  		jiazaiIndex=index;
+	  			}
+			});
+		})
+		function excel_ajax(output) {
+			if(typeof(output) == "object"){
+				layui.use(['jquery', 'layer'], function() {
+					var layer = layui.layer;
+					parent.layer.open({
+						content: '上传数据为空',	
+						zIndex: parent.layer.zIndex //重点1
+					});
+				})
+				
+				return;
+			}
+//			alert(output)
+			registrationOrProductImport(output)
+		}
+		var xlf = document.getElementById('bumenup');
+		if(xlf.addEventListener) xlf.addEventListener('change', handleFile, false);
+		function registrationOrProductImport(output){
+			$.ajax({
+				type: "post",
+				url: localStorage.serIp+'/WebImportEmployeeGroupInfo',
+				dataType: 'json',
+				contentType:'application/json; charset=utf-8',
+				async: true,
+				data: JSON.stringify({
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					"database": localStorage.database,
+					"master": output
+				}),
+				success: function(res) {
+					var data = JSON.parse(res);
+					parent.layer.close(jiazaiIndex); 		
+					if(data.ResultValue == 0) {
+						layui.use(['layer'], function() {
+							var layer = layui.layer;
+							parent.layer.open({
+								content: '上传失败',
+								zIndex: parent.layer.zIndex //重点1
+							});
+						})
+	
+					} else if(data.ResultValue == 1) {
+						layui.use(['jquery', 'layer'], function() {
+							var layer = layui.layer;
+							parent.layer.open({
+								content: '上传成功',
+								zIndex: parent.layer.zIndex+99 ,//重点1
+								yes: function(index, layero) {
+									parent.layer.close(index); //如果设定了yes回调，需进行手工关闭
+									//框架的数量
+									var if_length=window.parent.frames.length;
+									for(var i=0;i<if_length;i++){
+										//拿到当前页面所有框架src
+										var href=window.parent.frames[i].location.pathname;
+										//把src以/拆分,判断文件名是不是你要刷新的那个
+										var src_arr=window.parent.frames[i].location.pathname.split("/")
+										//获取文件名
+										if_name=window.parent.frames[i].location.pathname.split("/")[src_arr.length-1]
+										if("staffDepartManager.html" == if_name){
+											window.parent.frames[i].location.reload();
+										}
+									}
+								}
+							});
+							
+						})
+	
+					} 
+				},
+				error: function() {
+					parent.layer.close(jiazaiIndex); 		
+					layui.use(['jquery', 'layer'], function() {
+						var $ = layui.$ //重点处
+							,
+							layer = layui.layer;
+						parent.layer.open({
+							content: '服务器响应失败，请刷新重新上传',	zIndex: parent.layer.zIndex //重点1
+						});
+					})
+				}
+			});
+		}
+	</script>
+	<!--模板下载结束-->
+</html>

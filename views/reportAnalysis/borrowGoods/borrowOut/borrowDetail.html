@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>借入详情</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+
+	</style>
+
+	<body>
+		<div class="detail">
+	<div class="layui-tab">
+		<div class="detail_header1_two">
+				<div class="layui-inline">
+					<div class="layui-input-inline">
+						<input autocomplete="off" placeholder="请输入关键字" class="layui-input seachContent" type="text" style="margin-left: 0;width: 240px;">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<button class="layui-btn find" style="margin-left: 10px;">查询</button>
+				</div>
+		<div class="borrowDetail">
+			<table id="borrowDetail" lay-filter="demo"></table>
+		</div>
+</div>
+</div>
+	</body>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			function data() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp  +"/WebGetLendInReportDetail?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'txtCondition': $('.seachContent').val(),
+						'orderNum': sessionStorage.borrowOut_order
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						
+						var lendData = null;
+
+						try
+						 {
+						 	lendData = desData.NewDataSet[0].Table1;
+
+						 }
+						catch(err)
+						 {
+						 	lendData = null;
+						 }
+						 
+					
+						detail(lendData);
+					}
+				});
+
+			}
+			data();
+			$(".find").click(function() {
+		
+				data();
+			});
+			
+							
+			$("body").keydown(function(event) {
+				if(event.keyCode == "13") { //keyCode=13是回车键
+					$('.find').click();
+				}
+			});
+
+			function detail(data) {
+				table.render({
+					elem: '#borrowDetail',
+					data: data,
+					cols: [
+						[ //标题栏
+							 {
+								field: 'ordernum',
+								title: '单号',
+								minWidth: 150,
+							},
+							{
+								field: 'companyname',
+								title: '往来单位',
+								minWidth: 150,
+							}, {
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 150,
+							},
+							{
+								field: 'manufacturer',
+								title: '厂家',
+								minWidth: 100,
+							}, {
+								field: 'danwei',
+								title: '规格',
+								minWidth: 100
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 100
+							}, {
+								field: 'producenum',
+								title: '编号',
+								minWidth: 100
+							}, {
+								field: 'producecount',
+								title: '借出数量',
+								minWidth: 100
+							}, {
+								field: 'produceunit',
+								title: '单位',
+								minWidth: 100
+							}, {
+								field: 'iots',
+								title: '批号',
+								minWidth: 100
+							}, {
+								field: 'productiondate',
+								title: '生产日期',
+								minWidth: 100
+							}, {
+								field: 'indate',
+								title: '有效期',
+								minWidth: 100
+							}, {
+								field: 'lenddate',
+								title: '借出时间',
+								minWidth: 100
+							}, {
+								field: 'warehousename',
+								title: '仓库',
+								minWidth: 100
+							}, {
+								field: 'areaname',
+								title: '货区',
+								minWidth: 100
+							}, {
+								field: 'goodsshelves_name',
+								title: '货架',
+								minWidth: 100
+							}
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-115",
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [50,100],
+					limit: 50 //每页默认显示的数量
+				});
+			}
+		});
+	</script>
+
+</html>

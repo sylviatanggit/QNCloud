@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>选择产品</title>
+	<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href="../../../easyui/themes/icon.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+	<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/qk/custom_style.css"> -->
+</head>
+<style>
+	 body{
+		height: 95%!important;
+	}
+
+	 .content{
+		 height: 100%;
+		 padding: 10px;
+		 box-sizing: border-box;
+	 } 
+	 .content .search input{
+		 width: 262px;
+		 border: 1px solid #DDDDDD;
+		 margin-right: 15px;
+		 height: 26px;
+		
+	 }
+     .fl{
+		 float: left;
+		 line-height: 40px;
+		margin-left: 15px;
+	 }
+	 .clearfloat:after{
+	   display:block;
+	   clear:both;
+	   content:"";
+	   visibility:hidden;
+	   height:0;
+	   }
+	   #gridModalContainer{
+		   height: 80%;
+	   }
+   .clearfloat{
+	   zoom:1;
+	   }
+	    .cs_container,
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 262px !important;
+		} 
+	  .pagination ul li{
+		  float: left;
+	  }
+	  .layui-layer-content{
+		  font-size: 10px;
+		  padding-left: 10px;
+	  }
+	  colgroup>col:first-child {
+		width: 120px!important;
+		border-right:0.2px !important;
+	}
+
+	.dx-col-fixed:nth-child(1) {
+		width: 120px!important;
+		
+	}
+	.layui-layer-content{
+		font-size: 14px;
+		/* padding-left: 35px; */
+	}
+	.changjiazhezhao{
+		border-radius: 2px;
+	}
+</style>
+
+<body>
+	<div class="content ">
+		<div class="search clearfloat">
+				
+				<div class="manufacturename fl xuanzechangjia">
+						<span>选择厂家</span>
+						<input   class="zhezhao" id="manufacturerId">
+					</div>
+					<div class="productname fl xuanzepinpai">
+						   <span>选择品牌</span>
+						    <input class="pinpaizhezhao " id="brandId">
+					</div>
+				
+					<div class="producenum fl">
+						   <span>输入编号</span>
+						<input class="changjiazhezhao">
+					</div>
+				
+		</div>
+		<div id="gridModalContainer"></div>
+	</div>
+
+</body>
+<script src="../../../js/jquery.js" type="text/javascript"></script>
+<script src="../../../plugins/layui/layui.js"></script>
+<script src="../../../js/public.js"></script>
+<script type="text/javascript" src="../../../js/comboselect.js"></script>
+<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+
+<script type="text/javascript" src="../../../easyui/jquery.easyui.min.js"></script>
+<!-- DevExtreme library -->
+<script src="../../../devexpresslibrary/js/dx.all.js"></script>
+<script>
+	layui.use(['table', 'jquery', 'laypage', 'tree'], function () {
+
+		// 弹出框获取厂家下拉框
+		function getManu() {
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetManufactorInfo?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					'groupCompanyId': localStorage.groupcompanyid
+				},
+				success: function (res) {
+					var data = JSON.parse(res);
+					$('#manufacturerId').bComboSelect({
+						showField: 'manufacturename',
+						keyField: 'manufacturename',
+						data: data,
+						pageSize: 10 
+					});
+
+				}
+			});
+		}
+		getManu();
+
+		// 弹出框获取品牌数据
+		function getBrand(manufactName) {
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetProductManufacturer?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					'manufacturename': manufactName
+				},
+				success: function (res) {
+					var data = JSON.parse(res);
+                    console.log(data);
+					$('#brandId').bComboSelect({
+						showField: 'manufacturer',
+						keyField: 'manufacturer',
+						data: data
+					});
+
+				}
+			});
+		}
+
+		getBrand();
+       
+
+	
+
+		// 厂家
+		$("#manufacturerId").change(function () {
+			
+			$('.xuanzepinpai').remove();
+            var bandStr = '<div class="productname fl xuanzepinpai"><span>选择品牌</span><input class="pinpaizhezhao" id="brandId" style=" width: 260px;border: 1px solid #DDDDDD;margin-right: 15px;height: 26px;"></div>'
+			$('.xuanzechangjia').after(bandStr);
+			// 品牌和编号
+			var manufacturename = $('.zhezhao').val();
+         
+			getBrand(manufacturename);
+		});
+		$("#manufacturerId").focus(function(){
+            gridModalContainerOnly();
+		})
+
+		
+
+
+
+		$(document).unbind();
+		$(document).keyup(function (event) {
+			if (event.keyCode == 13) {
+				// 品牌
+				var manufacturer = $('.pinpaizhezhao').val();
+
+				//编号
+				var manufacturename = $('.changjiazhezhao').val();
+		
+                if(manufacturer && manufacturename){
+                    getProductInfoByProducenumAndBrand(manufacturename, manufacturer);
+				}
+
+				
+
+			}
+
+		});
+
+
+
+
+
+		// 根据编号及品牌获取产品信息
+		function getProductInfoByProducenumAndBrand(producenum, manufacturer) {
+			$(".changjiazhezhao").val('');
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetProduceInfoByNumAndManufacturer?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'database': localStorage.database,
+					'producenum': producenum,
+					'manufacturer': manufacturer
+				},
+				success: function (res) {
+					
+					var newData = JSON.parse(res);
+					
+				
+					if (newData.length == 0) {
+	
+                         
+						layer.open({
+							type: 1,
+							content: '匹配失败,未查找到请求的数据',
+							area: ['34%', '30%'],
+							btn: ['确定'],
+							success: function (layero, index) {
+								this.enterConfirm = function (event) {
+									if (event.keyCode === 13) {
+										$(".layui-layer-btn0").click();
+										return false; //阻止系统默认回车事件
+									}
+								};
+								$(document).on('keydown', this.enterConfirm); //监听键盘事件
+
+								// 点击确定按钮回调事件
+								// $(".layui-layer-btn0").on("click", function () {
+								// 	console.log("peace and love");
+								// })
+							},
+							end: function () {
+								$(document).off('keydown', this.enterConfirm); //解除键盘事件
+							}
+						});
+
+
+						return;
+					}
+					    gridModalContainerOnly();
+						gridModalContainerOnly(newData);
+						sessionStorage.GetProduceInfo = JSON.stringify(newData);
+				}
+
+			})
+		}
+
+
+	})
+
+	gridModalContainerOnly();
+
+	
+
+
+    	//适配
+		var viewHeight = $(window).height();
+
+$('#gridModalContainer').css('height', viewHeight * 0.66 + 'px');
+
+	function gridModalContainerOnly(data) {
+		//展示已知数据
+		//   Dev Extreme
+		$(function () {
+			var dataGrid = $("#gridModalContainer").dxDataGrid({
+				dataSource: data,
+				allowColumnReordering: false,
+				showBorders: true,
+				key: "produceid",
+				headerFilter: {
+					visible: false,
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				columnChooser: "enable",
+				selection: {
+					mode: "single",
+				},
+				allowColumnResizing: true,
+				columns: [{
+					dataField: "producename",
+					caption: "产品名称",
+					width: 160
+				}
+				,
+				{
+					dataField: "danwei",
+					caption: "规格",
+
+				},
+				{
+					dataField: "producemodel",
+					caption: "型号",
+				}
+					,
+				{
+					dataField: "producenum",
+					caption: "编号",
+					width: 100
+
+				}, {
+					dataField: "producecode",
+					caption: "主条码",
+                    width: 100
+				},
+		
+				{
+					dataField: "manufacturer",
+					caption: "品牌",
+                    
+				}, 
+				{
+					dataField: "manufacturename",
+					caption: "厂家",
+                  
+				},
+				],
+			
+
+			}
+			).dxDataGrid('instance');
+		});
+	};
+
+</script>
+
+</html>

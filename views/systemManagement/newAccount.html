@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+			<title>新开账套</title>
+			<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+		</head>
+	</head>
+	<style type="text/css">
+		body {
+			margin: 0;
+			padding: 0;
+		}
+		
+		.newAccount_title {
+			font-size: 20px;
+			color: #232323;
+			font-weight: bold;
+			margin: 20px 0 20px 48px;
+		}
+		
+		.warning {
+			margin-left: 20px;
+			color: red;
+			font-size: 14px !important;
+		}
+		
+		.newAccount_body {
+			height: 190px;
+			border-top: 1px solid #C5C5C5;
+			border-bottom: 1px solid #C5C5C5;
+		}
+		
+		.newAccount_body p {
+			margin-top: 12px;
+			margin-left: 72px;
+			font-size: 16px;
+			color: #232323;
+		}
+		
+		.newAccount_body ul {
+			margin-left: 100px;
+			color: #232323;
+			font-size: 12px;
+			margin-bottom: 30px;
+		}
+		
+		.newAccount_body ul li {
+			margin-top: 10px;
+		}
+		
+		.newAccount_footer {
+			font-size: 12px;
+			padding-top: 20px;
+		}
+		
+		.layui-layer-btn0 {
+			font-size: 9pt;
+			margin-left: 190px !important;
+			width: 60px;
+			display: inline;
+			border: 1px solid #357BEA;
+			background-color: #357BEA;
+			color: #fff;
+			border-radius: 2px;
+			line-height: 25px !important;
+			cursor: pointer;
+		}
+		
+		.layui-layer-btn1 {
+			font-size: 9pt;
+			cursor: pointer;
+			width: 60px;
+			display: inline;
+			border: 1px solid #357BEA;
+			background-color: #FFFFFF;
+			color: #357BEA;
+			border-radius: 2px;
+			line-height: 25px !important;
+			margin-left: 5px;
+		}
+		
+		.newAccount_footer input {
+			width: 90px;
+			border: none;
+			border: 1px solid #8C8C8C;
+			border-radius: 2px;
+			margin-left: 20px;
+			line-height: 26px !important;
+		}
+		
+		.newAccount_footer label {
+			margin-left: 20px;
+			line-height: 26px !important;
+		}
+	</style>
+
+	<body>
+		<div class="newAccount_header">
+			<h2 class="newAccount_title">新开账套</h2>
+		</div>
+		<div class="newAccount_body">
+			<p>提示：</p>
+			<ul>
+				<li>1.默认无法新开账套，如需多账套，请联系青囊工作人员</li>
+				<li>2.新开账套不影响原账套使用</li>
+				<li>3.新开账套不包括原账套单据等业务信息</li>
+			</ul>
+		</div>
+		<div class="newAccount_footer">
+			<label for="">新开账套名称</label><input type="text" name="" id="" value="" />
+			<button class="layui-layer-btn0">确认</button>
+			<button class="layui-layer-btn1">关闭</button>
+		</div>
+	</body>
+	<script src="../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'laydate'], function() {
+			var table = layui.table;
+			var laydate = layui.laydate;
+			var $ = layui.jquery;
+//			$(".layui-layer-btn1").click(function() {
+////				var index = layer.open();
+//				layer.closeAll();
+//			});
+		});
+	</script>
+
+</html>

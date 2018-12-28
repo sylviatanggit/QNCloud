@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>发票</title>
+		<link rel="stylesheet" href="../../../../plugins/layui/css/layui.css">
+	</head>
+	<!--<link rel="stylesheet" type="text/css" href="../../../css/same.css" />-->
+	<style type="text/css">
+
+	</style>
+
+	<body>
+		<div class="invoice">
+
+			<table id="invoice" lay-filter="demo"></table>
+		</div>
+	</body>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+
+			function data() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetCgrkInvoiceTraceBackDetail?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': sessionStorage.cwdzdOrdernum
+					},
+					success: function(res) {
+						console.log(res)
+						var desData = JSON.parse(res);
+						detail(desData);
+					}
+				});
+			}
+			data()
+			function detail(data) {
+				table.render({
+					elem: '#invoice',
+					data: data,
+					cols: [
+						[ //标题栏
+							{
+								field: 'invoicessid',
+								title: '发票号',
+								minWidth: 100,
+							},
+							{
+								field: 'actiondate',
+								title: '开票日期',
+								minWidth: 100,
+							}, {
+								field: 'price',
+								title: '不含税金额',
+								minWidth: 100
+							}, {
+								field: 'tax',
+								title: '税额',
+								minWidth: 100
+							}, {
+								field: 'paymoney',
+								title: '含税金额',
+								minWidth: 100
+							}
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-247",
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [10, 20, 30, 40, 50],
+					limit: 50 //每页默认显示的数量
+				});
+			}
+		});
+	</script>
+
+</html>

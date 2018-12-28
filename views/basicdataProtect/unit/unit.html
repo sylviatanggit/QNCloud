@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title></title>
+	<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/qk/custom_style.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	<!-- DevExtreme themes -->
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
+</head>
+<style type="text/css">
+table thead td {
+    padding: 0;
+    border-left: 1px solid #CAD3DA;
+    background: #DFEBFB;
+}
+
+.clearfix:after {
+      content: '.';
+      height: 0;
+      display: block;
+      clear: both;
+  }
+ 
+	#lay-ignore {
+      height: 25px;
+      width: 60px;
+    
+    }
+     #lay-ignore {
+      height: 25px;
+      width: 60px;
+     
+	}
+
+		.dx-data-row,.dx-column-lines:not(:first-child) > td:nth-child(2) {
+		cursor: pointer;
+	 }
+
+        .option>.dx-selectbox {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .layui-input{
+            color: #000000;
+		}
+
+	.unitDocument,
+	.hospitalID {
+		font-family: "PingFang SC" !important;
+		font-size: 9pt !important;
+		color: #232323 !important;
+		margin: 0 20px;
+		padding-top: 10px;
+	}
+
+	.unitDocument,
+	.hospitalID .layui-table td,
+	.layui-table th {
+		font-size: 9pt !important;
+
+	}
+	
+
+	.layui-form-label {
+		line-height: 28px;
+		padding: 0 !important;
+		margin-right: 0px;
+	}
+
+	.unitDocument_header .layui-btn {
+		padding: 0;
+		cursor: pointer;
+		border: none;
+		width: 76px;
+		height: 28px;
+		text-align: center;
+		line-height: 28px;
+		border-radius: 2px;
+		background-color: #2D89DD;
+		color: #FFFFFF;
+		margin-left: 8px !important;
+	}
+
+	.unitDocument_header {
+		margin-bottom: 8px;
+		padding-top: 0px;
+	}
+
+	#tree {
+		float: left;
+		width: 220px;
+		border: 1px solid #CCCCCC;
+		border-right: none;
+		overflow: auto;
+	}
+
+	#tree-view {
+		margin-left: 20px;
+	}
+
+	.layui-table tr:nth-child(odd) {
+		background-color: #EFF5FF !important;
+	}
+
+	.layui-table tbody tr:nth-child(even) {
+		background-color: #EFF5FF !important;
+	}
+
+	.layui-table tbody tr:nth-child(odd) {
+		background-color: #FFFFFF !important;
+	}
+
+	.btns {
+		float: right;
+	}
+
+	.btns button {
+		width: 90px !important;
+	}
+
+	label {
+		margin-left: 20px;
+	}
+
+	.layui-inline {
+		margin-top: 10px;
+	}
+
+	.action {
+		background-color: #CCCCCC;
+		position: absolute;
+		right: 0px !important;
+		z-index: 10;
+		border: 1px solid #2D89DD;
+		display: none;
+	}
+	.dx-button{
+		border: none !important;
+		
+	}
+    .dx-button .dx-button-content {
+    padding: 13px !important;
+} 
+   #allInfoId{
+	   margin-top:  5px;
+   }
+   #unitDocumentpageId{
+	   margin-top: 8px;
+	  
+   }
+   .companyname{
+	   border: none;
+   }
+</style>
+
+
+<body>
+	<div class="unitDocument">
+		<div class="layui-tab">
+			<div class="unitDocument_header">
+				<div class="layui-inline" id="fengongsiId" style="margin-right: 20px;">
+					<label class="layui-form-label" style="margin-left: 0px;">所属公司</label>
+					<div class="layui-input-inline">
+						<select name="" class="layui-input companytypeid" style="width: 200px;">
+							<option value="-1">全部</option>
+
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline" style="margin-right: 20px;">
+					<label class="layui-form-label" style="margin-left: 0px;">公司类别</label>
+					<div class="layui-input-inline">
+						<select name="" class="layui-input typeid">
+							<option value="1">全部</option>
+
+						</select>
+					</div>
+				</div>
+
+
+				<div class="layui-inline" style="margin-right: 20px;">
+					<label class="layui-form-label" style="margin-left: 0px;">审核状态</label>
+					<div class="layui-input-inline">
+						<select name="" class="layui-input auditstate">
+							<option value="1">已审核</option>
+							<option value="0">待审核</option>
+						</select>
+					</div>
+				</div>
+
+
+				<div class="layui-inline">
+					<div class="layui-input-inline">
+						<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" class="layui-input seachContent"
+						 placeholder="请输入关键字" type="text" style="width: 240px;height: 28px;margin-left: 0;">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<button class="layui-btn find">查询</button>
+				</div>
+				<div class="layui-inline btns">
+					<button class="layui-btn add">新增</button>
+					<button class="layui-btn moreAction">更多操作</button>
+					<ul class="action">
+						<li>
+							<a class="del" data-type="gengGaifenZu" lay-event='fenzu'>更改分组</a>
+						</li>
+						<li>
+							<a class="del" data-type="getCheckDel" lay-event='del' id="gridDeleteSelected">批量删除</a>
+						</li><li>
+							<a class="changeNameEvent" data-type="getCheckDel" lay-event='del' id="gridDeleteSelected">修改名称</a>
+						</li>
+						<input type="file" id="modelup" style="display: none;" />
+					</ul>
+				</div>
+			</div>
+
+
+			<div id="allInfoId" style="width: 100%;">
+				<table id="unitDocument" lay-filter="demo">
+					<div id="gridContainer1"></div>
+				</table>
+				<!--全部-->
+                   
+				<div id="unitDocumentpageId">
+
+				</div>
+
+			</div>
+
+		
+			<div id="hospitalInfoID" style="width: 100%;">
+				<table id="hospitalID" lay-filter="demo"></table> <!--医院-->
+				<div id="gridContainer2"></div>
+					<div id="hospitalPageId">
+					
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</body>
+    <script src="../../../js/jquery.js" type="text/javascript"></script>
+	<!-- DevExtreme library -->
+	<script src="../../../devexpresslibrary/js/dx.all.js"></script>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script src="../../../js/public.js"></script>
+<script>
+	layui.use(['table', 'jquery', 'tree', 'laypage', 'laydate'], function () {
+		var table = layui.table;
+		var $ = layui.jquery;
+		$('.moreAction').hover(function () {
+			$(".action").show();
+		}, function () {
+			$(".action").hide();
+		});
+		$('.action').hover(function () {
+			$(".action").show();
+		}, function () {
+			$(".action").hide();
+		});
+		var seachContent = $(".seachContent").val();
+		var laypage = layui.laypage;
+		var laydate = layui.laydate;
+		var myDate = new Date();
+		var myYear = myDate.getFullYear();
+		var myMonth = myDate.getMonth() + 1;
+		laydate.render({
+			elem: '#date1',
+			value: myYear + '-' + myMonth + "-" + '01'
+		});
+		laydate.render({
+			elem: '#date2',
+			value: myDate
+		});
+		var limit = 50;
+		var currentPage = 1;
+		var count;
+
+		if (localStorage.groupcompanyid != "0") {
+			$("#fengongsiId").css("display", "none");
+			rightData(true);
+		} else {
+			dataFun1();
+		}
+
+		//获取公司信息
+		function dataFun1() {
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetAllGroupCompany?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'database': localStorage.database,
+					"groupCompanyId": localStorage.groupcompanyid
+				},
+				success: function (res) {
+					var desData = JSON.parse(res);
+					var optionsStr = "";
+					for (var i = 0; i < desData.length; i++) {
+						var id = desData[i].myg_companyid;
+						var name = desData[i].companyname;
+
+
+						if (id == localStorage.groupcompanyid) {
+							optionsStr += "<option value='" + id + "' selected='selected'>" + name + "</option>";
+
+						} else {
+							optionsStr += "<option value='" + id + "'>" + name + "</option>";
+
+						}
+
+
+
+					}
+					$(".companytypeid").append(optionsStr);
+
+				}
+			});
+
+		}
+
+
+
+	
+
+
+		$(".find").click(function () {
+			rightData(true);
+		})
+		$(".companytypeid").change(function () {
+			sessionStorage.companytypeid = $(".companytypeid").val();
+			rightData(true);
+		})
+
+		//查询回车事件
+		$(".seachContent").bind("keydown", function (e) {
+			var theEvent = e || window.event;
+			var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+			if (code == 13) {
+				rightData(true);
+			}
+		});
+
+
+		$(".typeid").change(function () {
+			rightData(true);
+		})
+
+
+
+		$(".auditstate").change(function () {
+			rightData(true);
+		})
+
+		//获取公司类别
+		function dataFun() {
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetCompanyGroup?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'database': localStorage.database,
+					'txtCondition': seachContent
+				},
+				success: function (res) {
+					var desData = JSON.parse(res);
+					var optionsStr = "";
+					for (var i = 0; i < desData.length; i++) {
+						var id = desData[i].id;
+						var name = desData[i].name;
+
+						if (id == sessionStorage.companytype) {
+							optionsStr += "<option value='" + id + "' selected='selected'>" + name + "</option>";
+
+						} else {
+							optionsStr += "<option value='" + id + "'>" + name + "</option>";
+
+						}
+
+					}
+					$(".typeid").append(optionsStr);
+
+					if (localStorage.groupcompanyid != "0") {
+						$(".typeid option[value='2']").remove();
+					}
+
+					rightData(true);
+				}
+			});
+
+		}
+
+
+		dataFun();
+		var totalInfo = '';
+        var oldData;
+		function rightData(jumpFlag) {
+			var seachContent = $('.seachContent').val();
+			var typeid = $('.typeid option:selected').val() != "" ? $('.typeid option:selected').val() : sessionStorage.companytype;
+			var companytypeid = "";
+			if (localStorage.groupcompanyid == "0") {
+				companytypeid = $('.companytypeid option:selected').val();
+				type = 0;
+			} else {
+				companytypeid = localStorage.groupcompanyid;
+				type = 1;
+			}
+
+			var auditstate = $('.auditstate option:selected').val();
+
+			var jiazaiIndex;
+			parent.layer.open({
+				type: 3,
+				zIndex: parent.layer.zIndex, //重点1
+				success: function (layero, index) {
+					jiazaiIndex = index;
+				}
+			});
+
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetCompanyInfoByGroupId?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'companyName': seachContent,
+					'database': localStorage.database,
+					'id': typeid ? typeid : '',
+					"groupCompanyId": companytypeid,
+					'txtCondition': seachContent,
+					'num': limit,
+					'page': curpage,
+					'type': type,
+					'auditstate': auditstate
+				},
+				success: function(res) {
+																		parent.layer.close(jiazaiIndex);
+
+						var desData = JSON.parse(res);
+						var data = JSON.parse(desData.data);
+						count = desData.count;
+						switch(typeid)
+						{
+							case "5": //医院
+								$("#allInfoId").css("display","none");
+								$("#hospitalInfoID").css("display","inline-block");
+								hospital(data);
+								oldData = data
+								if(jumpFlag) {
+									wait_pages1();
+								}
+							break;
+							default: //全部
+								$("#allInfoId").css("display","inline-block");
+								$("#hospitalInfoID").css("display","none");
+								dataInfo(data);
+								oldData = data
+								if(jumpFlag) {
+									wait_pages();
+								}	
+							
+							break;
+						}
+						
+				
+					}
+					,
+				error: function (res) {
+					parent.layer.close(jiazaiIndex);
+
+					parent.layer.open({
+						title: "提示",
+						content: '服务器异常!',
+						zIndex: parent.layer.zIndex //重点1
+
+					});
+
+
+				}
+			});
+
+		}
+
+        var curpage = 1;
+        // 根据可视区的高度判断
+	    var viewHeight = $(window).height();
+		$('#gridContainer1,#gridContainer2').css('height', viewHeight * 0.87 + 'px');
+
+        var connectingTwoTable = false;
+		function dataInfo(data) {  //全部，供应商，经销商，子公司
+		//   数据信息
+		$(function () {
+			// 删除
+			var employeesStore = new DevExpress.data.ArrayStore({
+			      data: data
+		});
+		var deleteButton = $("#gridDeleteSelected").dxButton({
+        text: "删除产品",
+        onClick: function () {
+			if (!checkPermissionStatus("往来单位管理-保存1")) {
+				parent.layer.open({
+					title: "提示",
+					content: localStorage.jurisdictionTips,
+					zIndex: layer.zIndex //重点1
+					,
+					success: function (layero) {
+						parent.layer.setTop(layero); //重点2
+					}
+				});
+				return;
+			}
+				if (dataGrid.getSelectedRowKeys().length == 0) {
+					parent.layer.open({
+						title: "提示",
+						zIndex: parent.layer.zIndex, //重点1
+						content: '请选择要删除的数据!'
+					});
+					return;
+				}
+				
+                var key = dataGrid.getSelectedRowKeys();
+				key = key.join(',');
+				parent.layer.confirm('确定删除？', {
+						icon: 3,
+						zIndex: parent.layer.zIndex ,//重点1
+						title: '删除'
+					}, function(index) {
+								var  jiazaiIndex;
+								parent.layer.open({
+								  type: 3,  zIndex: parent.layer.zIndex,
+								  success: function(layero, index){
+								  	jiazaiIndex = index;
+						  			}
+								});
+								
+								
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp+"/WebDeleteCompanyTableByID?jsoncallback=?",
+							async: true,
+							dataType: 'jsonp',
+							data: {
+								"userId": localStorage.userId,
+								"userPw": localStorage.userPw,
+								'database': localStorage.database,
+								'id': key
+							},
+							success: function(res) {
+								var data = JSON.parse(res);
+								var num1=0;
+								var num2=0;
+								for(var i=0;i<data.length;i++){
+									var panduan=data[i].ResultValue;
+									if(panduan == 1){
+										++num1;
+									}else{
+										++num2;
+									}
+								}
+								parent.layer.close(jiazaiIndex); 
+								parent.layer.open({
+									title: "提示",
+									content: num1+'个成功 ，'+num2+'个失败',		
+									zIndex: parent.layer.zIndex, //重点1
+									success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+									}
+								});
+								rightData(true);
+								parent.layer.close(index);
+							}
+						});
+					});
+				
+			}
+
+
+
+
+		}).dxButton("instance"); 
+
+			var dataGrid = $("#gridContainer1").dxDataGrid({
+				dataSource: data,
+				keyExpr: "id",
+				allowColumnReordering: true,
+				showBorders: true,
+				paging: {
+					pageSize: 200,
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				selection: {
+					mode: "multiple"
+				},
+			
+				allowColumnResizing: true,
+			
+
+				columns: [{
+					dataField: "companyname",
+					width: 160,
+					fixed:true,
+					css:'companyname',
+					caption: "名称",
+				}
+				,
+				{
+					dataField: "companysid",
+					width: 70,
+					caption: "简码",
+				},
+				{
+					dataField: "companygroupname",
+					width: 70,
+					caption: "所属分组"
+				},
+				{
+					dataField: "employeedepname",
+					width: 100,
+					caption: "所属部门"
+				},
+				{
+					dataField: "owncompanyname",
+					width: 160,
+					caption: "所属公司",
+				},
+				{
+					dataField: "companytel",
+					width: 100,
+					caption: "电话",
+				},
+				{
+					dataField: "companyaddress",
+					caption: "地址",
+					width: 200
+				}, 
+				{
+					dataField: 'companynaturename',
+					caption: '公司属性',
+					width: 100
+				}, 
+				{
+					dataField: 'companypropertyname',
+					caption: '公司类型',
+					width: 100
+				}, {
+					dataField: 'isshowonappname',
+					caption: '手机端显示',
+					width: 80,
+					alignment:'left',
+				},
+				{
+					dataField: 'nomo',
+					caption: '备注',
+					width: 180,
+				},
+				{
+					dataField: 'submittername',
+					caption: '提交人',
+					width: 60,
+				},
+				{
+					dataField: 'submitdate',
+					caption: '提交时间',
+					width: 90,
+				},{
+					dataField: 'auditorname',
+					caption: '审核人',
+					width: 60,
+				},{
+					dataField: 'auditdate',
+					caption: '审核时间',
+					width: 90,
+				},{
+					dataField: 'conclusion',
+					caption: '审核结论',
+					width: 100,
+				},{
+					dataField: 'auditstatename',
+					caption: '状态',
+					width: 80,
+				},{
+					dataField: 'isdisable',
+					caption: '是否停用',
+					width: 80,
+					alignment:'left',
+					fixed:true,
+					fixedPosition:'right',
+					cellTemplate: function (container, options) {
+						if(options.value == 0){
+							$("<div>")
+								.append($("<div style='color:#2D89DD'>"+ '启用中' +"</div>"))
+								.appendTo(container);
+						}else{
+							$("<div>")
+								.append($("<div style='color:red'>"+ '停用中' +"</div>"))
+								.appendTo(container);
+						}
+							
+					
+					}
+				},
+				],
+				onSelectionChanged:function(e){
+					selectedRowsData = [];
+				   if(e.currentSelectedRowKeys && e.currentSelectedRowKeys.length > 0){
+                     connectingTwoTable = true;
+				   }
+				   selectedRowsData = e.selectedRowsData;
+				},
+				onCellClick: function (e) {
+					var data = e.data;
+					if (e.columnIndex == 18 && e.rowType != "header") {
+					//    是否停用
+					if (!checkPermissionStatus("往来单位管理-审核1")) {
+
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: parent.layer.zIndex //重点1
+								,
+								success: function (layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							return
+
+						};
+						//
+						if (data.companytype == 2) {
+							return;
+						}
+						var isdisable = data.isdisable; //0未停用，1已停用
+						var id = data.id;
+						var str = "";
+				if (isdisable == 0) {
+					isdisable = 1;
+					str = "停用中";
+				} else {
+					isdisable = 0;
+					// str = "启用中";
+
+				}
+						$.ajax({
+					type: "get",
+					url: localStorage.serIp + "/WebChangeIsdisable?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'state': isdisable,
+						"companyid": id
+					},
+					success: function (res) {
+						var res = JSON.parse(res);
+
+
+						if (res.ResultValue == '1') {
+							parent.layer.open({
+								title: "提示",
+								content: '成功！', zIndex: parent.layer.zIndex //重点1
+							});
+
+
+							rightData(currentPage, limit, totalInfo);
+						}
+
+						if (res.ResultValue == '0') {
+							parent.layer.open({
+								title: "提示",
+								content: '失败！', zIndex: parent.layer.zIndex //重点1
+							});
+						}
+
+
+
+
+					}
+				});
+					}
+					if (e.columnIndex == 1 && e.rowType != "header") {
+						//往来单位详情
+						if (data.myg_companyid == '0') {
+					return;
+				}
+				var id = data.id;
+				sessionStorage.companyGroupId = data.companytype;
+				sessionStorage.unit_id = id;
+				sessionStorage.auditstate = data.auditstate;
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+					,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">往来单位详情</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/basicdataProtect/unit/unitEdit.html',
+					zIndex: parent.layer.zIndex //重点1
+					,
+					success: function (layero, index11) {
+
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+
+						if (data.auditstate == 1) {
+							$('.print', paentIfarame).css("display", "inline-block");
+						}
+
+						$(".company_name", paentIfarame).val(data.companyname);
+						$(".company_shortName", paentIfarame).val(data.companysid);
+						$(".company_tel", paentIfarame).val(data.companytel);
+						$(".company_address", paentIfarame).val(data.companyaddress);
+						$(".company_notes", paentIfarame).val(data.nomo);
+
+
+						//所属分组
+						
+
+						$('#companynature', paentIfarame).find("option[value='" + data.companynature + "']").attr("selected", "true");
+						$('#companyproperty', paentIfarame).find("option[value='" + data.companyproperty + "']").attr("selected", "true");
+						$('#employeedep', paentIfarame).val(data.employeedep);
+						$('.employeedep', paentIfarame).val(data.employeedepname);
+
+						if (data.isshowonapp == 1) {
+
+							$(".isshowonapp", paentIfarame).attr("checked", true)
+
+						} else {
+
+							$(".isshowonapp", paentIfarame).removeAttr("checked")
+
+						}
+
+
+
+						//判断是否医院
+						if (data.companytype == "5") {
+							layero.find("iframe")[0].contentWindow.hospitalInfoOprate();
+						} else {
+							layero.find("iframe")[0].contentWindow.companyInfoOprate();
+
+						}
+
+						$(".hospitalnature", paentIfarame).val(data.hospitalnature);
+						$(".hospitalgrade", paentIfarame).val(data.hospitalgrade);
+						$(".hospitalprovince", paentIfarame).val(data.hospitalprovince);
+						$(".hospitalsupplymaterial", paentIfarame).val(data.hospitalsupplymaterial);
+						$(".hospitalusebrand", paentIfarame).val(data.hospitalusebrand);
+						$(".hospitaldoctor", paentIfarame).val(data.hospitaldoctor);
+						$(".hospitalcharacteristic", paentIfarame).val(data.hospitalcharacteristic);
+						$(".hospitalaccountperiod", paentIfarame).val(data.hospitalaccountperiod);
+						$(".hospitaldiscount", paentIfarame).val(data.hospitaldiscount);
+
+
+
+						//修改点击保存
+						$(".addunit_submit", paentIfarame).click(function () {
+							if (!checkPermissionStatus("往来单位管理-保存1")) {
+
+								parent.layer.open({
+									title: "提示",
+									content: localStorage.jurisdictionTips,
+									zIndex: parent.layer.zIndex //重点1
+									,
+									success: function (layero) {
+										parent.layer.setTop(layero); //重点2
+									}
+								});
+								return
+
+							}
+
+							var company_name = $(".company_name", paentIfarame).val();
+							if (company_name == "" || !company_name) {
+								parent.layer.open({
+									title: "提示",
+									content: '公司全称不能为空!',
+									zIndex: parent.layer.zIndex //重点1
+									,
+									success: function (layero) {
+										parent.layer.setTop(layero); //重点2
+									}
+								});
+
+								return;
+							}
+
+							var jiazaiIndex;
+							parent.layer.open({
+								type: 3, zIndex: parent.layer.zIndex,	//重点1
+								success: function (layero, index) {
+									jiazaiIndex = index;
+								}
+							});
+
+							//所属分组
+							var company_group = $(".company_group option:selected", paentIfarame).val();
+
+
+							var company_notes = $(".company_notes", paentIfarame).val();
+							var company_shortName = $(".company_shortName", paentIfarame).val();
+							var company_tel = $(".company_tel", paentIfarame).val();
+							var company_address = $(".company_address", paentIfarame).val();
+
+
+
+							var companynature = $('#companynature option:selected', paentIfarame).val(); //公司属性
+							var companyproperty = $('#companyproperty  option:selected', paentIfarame).val(); //公司类型
+							var employeedep = $("#employeedep", paentIfarame).val() ? $("#employeedep", paentIfarame).val() : ""; //所属部门
+							var isshowonapp = $('.isshowonapp', paentIfarame).is(':checked'); // 是否在手机端上显示
+							isshowonapp = isshowonapp == true ? 1 : 0;
+
+
+
+
+							var hospitalnature = $(".hospitalnature", paentIfarame).val() ? $(".hospitalnature", paentIfarame).val() : "";
+							var hospitalgrade = $(".hospitalgrade", paentIfarame).val() ? $(".hospitalgrade", paentIfarame).val() : "";
+							var hospitalprovince = $(".hospitalprovince", paentIfarame).val() ? $(".hospitalprovince", paentIfarame).val() : "";
+							var hospitalsupplymaterial = $(".hospitalsupplymaterial", paentIfarame).val() ? $(".hospitalsupplymaterial", paentIfarame).val() : "";
+							var hospitalusebrand = $(".hospitalusebrand", paentIfarame).val() ? $(".hospitalusebrand", paentIfarame).val() : "";
+							var hospitaldoctor = $(".hospitaldoctor", paentIfarame).val() ? $(".hospitaldoctor", paentIfarame).val() : "";
+							var hospitalcharacteristic = $(".hospitalcharacteristic", paentIfarame).val() ? $(".hospitalcharacteristic", paentIfarame).val() : "";
+							var hospitalaccountperiod = $(".hospitalaccountperiod", paentIfarame).val() ? $(".hospitalaccountperiod", paentIfarame).val() : "";
+							var hospitaldiscount = $(".hospitaldiscount", paentIfarame).val() ? $(".hospitaldiscount", paentIfarame).val() : "";
+
+
+
+							var slave = {
+								'companyName': '' + company_name + '',
+								'companySID': '' + company_shortName + '',
+								'companyTel': '' + company_tel + '',
+								'companyAddress': company_address,
+								'companytype': company_group,
+								'nomo': company_notes,
+								'hospitalnature': hospitalnature,
+								'hospitalgrade': hospitalgrade,
+								'hospitalprovince': hospitalprovince,
+								'hospitalsupplymaterial': '' + hospitalsupplymaterial + '',
+								'hospitalusebrand': '' + hospitalusebrand + '',
+								'hospitaldoctor': '' + hospitaldoctor + '',
+								'hospitalcharacteristic': '' + hospitalcharacteristic + '',
+								'hospitalaccountperiod': '' + hospitalaccountperiod + '',
+								'hospitaldiscount': '' + hospitaldiscount + '',
+								'isshowonapp': '' + isshowonapp + '',
+								'companynature': '' + companynature + '',
+								'companyproperty': '' + companyproperty + '',
+								'employeedep': '' + employeedep + '',
+								'isdirecttraffic': 1
+							};
+
+
+							$.ajax({
+								type: "post",
+								url: localStorage.serIp + "/WebUpdateCompanyTable?jsoncallback=?",
+								async: true,
+								dataType: 'jsonp',
+								data: {
+									"userId": localStorage.userId,
+									"userPw": localStorage.userPw,
+									'database': localStorage.database,
+									'groupCompanyId': localStorage.groupcompanyid,
+									'slave': JSON.stringify(slave),
+									'id': id
+								},
+								success: function (res) {
+									var data = JSON.parse(res);
+									parent.layer.close(jiazaiIndex);
+									if (data.ResultValue == 1) {
+
+										parent.layer.open({
+											title: "提示",
+											content: '修改成功',
+											zIndex: parent.layer.zIndex, //重点1
+
+										});
+
+										parent.layer.close(index11); //再执行关闭     
+
+									} else {
+										parent.layer.open({
+											title: "提示",
+											content: '修改失败', zIndex: parent.layer.zIndex, //重点1
+
+										});
+									}
+								},
+								error: function () {
+									parent.layer.close(jiazaiIndex);
+
+								}
+							});
+						})
+					},
+					end: function () {
+
+						if (sessionStorage.unit_id) {
+							sessionStorage.removeItem("unit_id")
+						}
+						if (sessionStorage.companyGroupId) {
+							sessionStorage.removeItem("companyGroupId")
+						}
+						if (sessionStorage.auditstate) {
+							sessionStorage.removeItem("auditstate")
+						}
+						rightData(currentPage, limit, totalInfo);
+					}
+				});
+						// 闭合
+					}
+				},
+				onSelectionChanged:function(e){
+					//    修改名称;
+					produceidArray = [];
+						$.each(e.selectedRowsData, function (currentValue, v, array) {
+							produceidArray.push(v);
+						});
+						selectedRowsData = [];
+				   if(e.currentSelectedRowKeys && e.currentSelectedRowKeys.length > 0){
+                     connectingTwoTable = true;
+				   }
+				   selectedRowsData = e.selectedRowsData;
+
+				}
+			 
+			}).dxDataGrid('instance');
+		});
+
+		}
+		
+		var produceidArray = [];
+		var selectedRowsData = []
+		$('.changeNameEvent').on('click', function () {
+
+			if(produceidArray.length == 0){
+				parent.layer.open({
+								title: "提示",
+								content: '请选择需要修改的厂家名称!',
+								zIndex: parent.layer.zIndex //重点1
+								,
+								success: function (layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							return;
+			}
+			if(produceidArray.length > 1){
+				parent.layer.open({
+								title: "提示",
+								content: '请单个修改!',
+								zIndex: parent.layer.zIndex //重点1
+								,
+								success: function (layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							return;
+			}
+			if(produceidArray.length == 1){
+                  if(produceidArray[0].companygroupname == '子公司'){
+					parent.layer.open({
+								title: "提示",
+								content: '子公司不能修改!',
+								zIndex: parent.layer.zIndex //重点1
+								,
+								success: function (layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							return;
+				  }
+			}
+            var manufactureName = produceidArray[0].companyname;
+			sessionStorage.manufactureName = JSON.stringify(manufactureName);
+			// 弹框
+			parent.layer.open({
+				type: 2 //此处以iframe举例
+				,
+				title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">修改公司名称</span>',
+				area: ['700px', '40%'],
+				// offset: "rb",
+				content: 'views/basicdataProtect/unit/editGuige_edit3.html',
+				zIndex: parent.layer.zIndex //重点1
+				,
+				success: function (layero, index11) {
+					parent.layer.setTop(layero); //重点2
+
+					var paentIfarame = layero.find("iframe")[0].contentWindow.document;
+					
+					var id =  produceidArray[0].id;
+					
+					$(".editGuige_edit .editGuige_edit_submit", paentIfarame).click(function () {
+						var produceName = $("#changeManufactureName", paentIfarame).val();
+			
+						if (produceName == "" || produceName.length == 0) {
+							parent.layer.open({
+								title: "提示",
+								content: '尚未修改公司名称!',
+								zIndex: parent.layer.zIndex //重点1
+								,
+								success: function (layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							return;
+						}
+
+				
+				
+
+						var jiazaiIndex;
+						parent.layer.open({
+							type: 3, zIndex: parent.layer.zIndex,	//重点1
+							success: function (layero, index) {
+								jiazaiIndex = index;
+							}
+						});
+
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp + "/WebUpdateCompanyName",
+							async: true,
+							dataType: 'json',
+							contentType: 'application/json; charset=utf-8',
+							crossDomain: true,
+							data: {
+								"userId": localStorage.userId,
+								"userPw": localStorage.userPw,
+								'database': localStorage.database,
+								'id': id,
+								"companyname":produceName
+							},
+							success: function (res) {
+								
+								var data = JSON.parse(res);
+								parent.layer.close(jiazaiIndex);
+
+								if (data.ResultValue == "1") {
+									parent.layer.open({
+										title: "提示",
+										content: '修改成功',
+										zIndex: parent.layer.zIndex //重点1
+										,
+										success: function (layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+									rightData(true);
+									parent.layer.close(index11); //再执行关闭
+								} else {
+									parent.layer.open({
+										title: "提示",
+										content: '修改失败：' + data.ResultValue,
+										zIndex: parent.layer.zIndex //重点1
+										,
+										success: function (layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+								}
+
+							},
+							error: function () {
+								parent.layer.close(jiazaiIndex);
+
+							}
+						});
+
+					})
+
+
+				},
+				end: function () {
+					// allguige(true)
+					sessionStorage.removeItem("manufactureName");
+				}
+			});
+
+
+
+
+		});
+		
+			//分页
+			function wait_pages() {
+				laypage.render({
+					elem: 'unitDocumentpageId', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100],
+					limit: limit,
+					curr: curpage,
+					group: 2,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj,first) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						if(!first){
+							rightData(false);
+
+						}
+					}
+				})
+			}
+			
+			
+			function wait_pages1() {
+				laypage.render({
+					elem: 'hospitalPageId', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100],
+					limit: limit,
+					curr: curpage,
+					group: 2,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj,first) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						if(!first){
+							rightData(false);
+
+						}
+					}
+				})
+			}
+			
+        
+
+		function hospital(data) {  //医院
+				//   Dev Extreme
+				$(function () {
+			var employeesStore = new DevExpress.data.ArrayStore({
+					data: data
+		});
+		var deleteButton = $("#gridDeleteSelected").dxButton({
+        text: "删除产品",
+        onClick: function () {
+			if (!checkPermissionStatus("往来单位管理-保存1")) {
+				parent.layer.open({
+					title: "提示",
+					content: localStorage.jurisdictionTips,
+					zIndex: layer.zIndex //重点1
+					,
+					success: function (layero) {
+						parent.layer.setTop(layero); //重点2
+					}
+				});
+				return;
+			}
+				if (dataGrid.getSelectedRowKeys().length == 0) {
+					parent.layer.open({
+						title: "提示",
+						zIndex: parent.layer.zIndex, //重点1
+						content: '请选择要删除的数据!'
+					});
+					return;
+				}
+				
+                var key = dataGrid.getSelectedRowKeys();
+				key = key.join(',');
+				parent.layer.confirm('确定删除？', {
+						icon: 3,
+						zIndex: parent.layer.zIndex ,//重点1
+						title: '删除'
+					}, function(index) {
+								var  jiazaiIndex;
+								parent.layer.open({
+								  type: 3,  zIndex: parent.layer.zIndex ,
+								  success: function(layero, index){
+								  	jiazaiIndex = index;
+						  			}
+								});
+								
+								
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp+"/WebDeleteCompanyTableByID?jsoncallback=?",
+							async: true,
+							dataType: 'jsonp',
+							data: {
+								"userId": localStorage.userId,
+								"userPw": localStorage.userPw,
+								'database': localStorage.database,
+								'id': key
+							},
+							success: function(res) {
+								var data = JSON.parse(res);
+								var num1=0;
+								var num2=0;
+								for(var i=0;i<data.length;i++){
+									var panduan=data[i].ResultValue;
+									if(panduan == 1){
+										++num1;
+									}else{
+										++num2;
+									}
+								}
+								parent.layer.close(jiazaiIndex); 
+								parent.layer.open({
+									title: "提示",
+									content: num1+'个成功 ，'+num2+'个失败',		
+									zIndex: parent.layer.zIndex, //重点1
+									success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+									}
+								});
+								rightData(true);
+								parent.layer.close(index);
+							}
+						});
+					});
+				
+			}
+		}).dxButton("instance"); 
+			var dataGrid = $("#gridContainer2").dxDataGrid({
+				dataSource: data,
+				keyExpr: "id",
+				allowColumnReordering: true,
+				showBorders: true,
+				paging: {
+					pageSize: 200,
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				selection: {
+					mode: "multiple"
+				},
+				filterRow: {
+					visible: false,
+					applyFilter: "auto"
+				},
+				headerFilter: {
+					visible: false
+				},
+				allowColumnResizing: true,
+				columnFixing: {
+					enabled: false
+				},
+
+				columns: [{
+					dataField: "companyname",
+					width: 160,
+					caption: "名称",
+					fixed: true,
+				}
+					,
+				{
+					dataField: "companysid",
+					width: 70,
+					caption: "简码",
+				},
+				{
+					dataField: "companygroupname",
+					width: 70,
+					caption: "所属分组"
+				},
+				{
+					dataField: "employeedepname",
+					width: 180,
+					caption: "所属部门"
+				},
+				{
+					dataField: "owncompanyname",
+					width: 70,
+					caption: "所属公司",
+				},
+				{
+					dataField: "companyaddress",
+					caption: "地址",
+					width:100
+				}, 
+				 {
+					dataField: 'isshowonappname',
+					caption: '手机端显示',
+					width: 100
+				},
+				{
+					dataField: 'hospitalnature',
+					caption: '医院性质',
+					width: 100,
+				},
+				{
+					dataField: 'hospitalgrade',
+					caption: '医院等级',
+					width: 180,
+				},
+				{
+					dataField: 'hospitalprovince',
+					caption: '所属省市',
+					width: 100,
+				},{
+					dataField: 'hospitalsupplymaterial',
+					caption: '供货方式',
+					width: 100,
+				},{
+					dataField: 'hospitalusebrand',
+					caption: '常用品牌',
+					width: 100,
+				},{
+					dataField: 'hospitalcharacteristic',
+					caption: '医院特点',
+					width: 100,
+				},{
+					dataField: 'hospitalaccountperiod',
+					caption: '医院账期',
+					width: 100,
+				},{
+					dataField: 'hospitaldiscount',
+					caption: '医院折扣',
+					width: 80,
+				},{
+					dataField: 'submittername',
+					caption: '提交人',
+					width: 80,
+				},{
+					dataField: 'submitdate',
+					caption: '提交时间',
+					width: 100,
+				},{
+					dataField: 'auditorname',
+					caption: '审核人',
+					width: 100,
+				},{
+					dataField: 'auditdate',
+					caption: '审核时间',
+					width: 100,
+				},{
+					dataField: 'conclusion',
+					caption: '结论',
+					width: 100,
+				},{
+					dataField: 'auditstatename',
+					caption: '状态',
+					width: 80,
+				},
+				],
+				onCellClick: function (e) {
+					var data = e.data;
+					if (e.columnIndex == 18 && e.rowType != "header") {
+					//    是否停用
+					if (!checkPermissionStatus("往来单位管理-审核1")) {
+
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: parent.layer.zIndex //重点1
+								,
+								success: function (layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							return
+
+						};
+						//
+						if (data.companytype == 2) {
+							return;
+						}
+						var isdisable = data.isdisable; //0未停用，1已停用
+						var id = data.id;
+						var str = "";
+				if (isdisable == 0) {
+					isdisable = 1;
+					str = "停用中";
+				} else {
+					isdisable = 0;
+					// str = "启用中";
+
+				}
+						$.ajax({
+					type: "get",
+					url: localStorage.serIp + "/WebChangeIsdisable?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'state': isdisable,
+						"companyid": id
+					},
+					success: function (res) {
+						var res = JSON.parse(res);
+
+
+						if (res.ResultValue == '1') {
+							parent.layer.open({
+								title: "提示",
+								content: '成功！', zIndex: parent.layer.zIndex //重点1
+							});
+
+
+							rightData(false);
+						}
+
+						if (res.ResultValue == '0') {
+							parent.layer.open({
+								title: "提示",
+								content: '失败！', zIndex: parent.layer.zIndex //重点1
+							});
+						}
+
+
+
+
+					}
+				});
+					}
+					if (e.columnIndex == 1 && e.rowType != "header") {
+						//往来单位详情
+						if (data.myg_companyid == '0') {
+					return;
+				}
+				var id = data.id;
+				sessionStorage.companyGroupId = data.companytype;
+				sessionStorage.unit_id = id;
+				sessionStorage.auditstate = data.auditstate;
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+					,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">往来单位详情</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/basicdataProtect/unit/unitEdit.html',
+					zIndex: parent.layer.zIndex //重点1
+					,
+					success: function (layero, index11) {
+
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+
+						if (data.auditstate == 1) {
+							$('.print', paentIfarame).css("display", "inline-block");
+						}
+
+						$(".company_name", paentIfarame).val(data.companyname);
+						$(".company_shortName", paentIfarame).val(data.companysid);
+						$(".company_tel", paentIfarame).val(data.companytel);
+						$(".company_address", paentIfarame).val(data.companyaddress);
+						$(".company_notes", paentIfarame).val(data.nomo);
+
+
+						//所属分组
+						
+
+						$('#companynature', paentIfarame).find("option[value='" + data.companynature + "']").attr("selected", "true");
+						$('#companyproperty', paentIfarame).find("option[value='" + data.companyproperty + "']").attr("selected", "true");
+						$('#employeedep', paentIfarame).val(data.employeedep);
+						$('.employeedep', paentIfarame).val(data.employeedepname);
+
+						if (data.isshowonapp == 1) {
+
+							$(".isshowonapp", paentIfarame).attr("checked", true)
+
+						} else {
+
+							$(".isshowonapp", paentIfarame).removeAttr("checked")
+
+						}
+
+
+
+						//判断是否医院
+						if (data.companytype == "5") {
+							layero.find("iframe")[0].contentWindow.hospitalInfoOprate();
+						} else {
+							layero.find("iframe")[0].contentWindow.companyInfoOprate();
+
+						}
+
+						$(".hospitalnature", paentIfarame).val(data.hospitalnature);
+						$(".hospitalgrade", paentIfarame).val(data.hospitalgrade);
+						$(".hospitalprovince", paentIfarame).val(data.hospitalprovince);
+						$(".hospitalsupplymaterial", paentIfarame).val(data.hospitalsupplymaterial);
+						$(".hospitalusebrand", paentIfarame).val(data.hospitalusebrand);
+						$(".hospitaldoctor", paentIfarame).val(data.hospitaldoctor);
+						$(".hospitalcharacteristic", paentIfarame).val(data.hospitalcharacteristic);
+						$(".hospitalaccountperiod", paentIfarame).val(data.hospitalaccountperiod);
+						$(".hospitaldiscount", paentIfarame).val(data.hospitaldiscount);
+
+
+
+						//修改点击保存
+						$(".addunit_submit", paentIfarame).click(function () {
+							if (!checkPermissionStatus("往来单位管理-保存1")) {
+
+								parent.layer.open({
+									title: "提示",
+									content: localStorage.jurisdictionTips,
+									zIndex: parent.layer.zIndex //重点1
+									,
+									success: function (layero) {
+										parent.layer.setTop(layero); //重点2
+									}
+								});
+								return
+
+							}
+
+							var company_name = $(".company_name", paentIfarame).val();
+							if (company_name == "" || !company_name) {
+								parent.layer.open({
+									title: "提示",
+									content: '公司全称不能为空!',
+									zIndex: parent.layer.zIndex //重点1
+									,
+									success: function (layero) {
+										parent.layer.setTop(layero); //重点2
+									}
+								});
+
+								return;
+							}
+
+							var jiazaiIndex;
+							parent.layer.open({
+								type: 3, zIndex: parent.layer.zIndex,	//重点1
+								success: function (layero, index) {
+									jiazaiIndex = index;
+								}
+							});
+
+							//所属分组
+							var company_group = $(".company_group option:selected", paentIfarame).val();
+
+
+							var company_notes = $(".company_notes", paentIfarame).val();
+							var company_shortName = $(".company_shortName", paentIfarame).val();
+							var company_tel = $(".company_tel", paentIfarame).val();
+							var company_address = $(".company_address", paentIfarame).val();
+
+
+
+							var companynature = $('#companynature option:selected', paentIfarame).val(); //公司属性
+							var companyproperty = $('#companyproperty  option:selected', paentIfarame).val(); //公司类型
+							var employeedep = $("#employeedep", paentIfarame).val() ? $("#employeedep", paentIfarame).val() : ""; //所属部门
+							var isshowonapp = $('.isshowonapp', paentIfarame).is(':checked'); // 是否在手机端上显示
+							isshowonapp = isshowonapp == true ? 1 : 0;
+
+
+
+
+							var hospitalnature = $(".hospitalnature", paentIfarame).val() ? $(".hospitalnature", paentIfarame).val() : "";
+							var hospitalgrade = $(".hospitalgrade", paentIfarame).val() ? $(".hospitalgrade", paentIfarame).val() : "";
+							var hospitalprovince = $(".hospitalprovince", paentIfarame).val() ? $(".hospitalprovince", paentIfarame).val() : "";
+							var hospitalsupplymaterial = $(".hospitalsupplymaterial", paentIfarame).val() ? $(".hospitalsupplymaterial", paentIfarame).val() : "";
+							var hospitalusebrand = $(".hospitalusebrand", paentIfarame).val() ? $(".hospitalusebrand", paentIfarame).val() : "";
+							var hospitaldoctor = $(".hospitaldoctor", paentIfarame).val() ? $(".hospitaldoctor", paentIfarame).val() : "";
+							var hospitalcharacteristic = $(".hospitalcharacteristic", paentIfarame).val() ? $(".hospitalcharacteristic", paentIfarame).val() : "";
+							var hospitalaccountperiod = $(".hospitalaccountperiod", paentIfarame).val() ? $(".hospitalaccountperiod", paentIfarame).val() : "";
+							var hospitaldiscount = $(".hospitaldiscount", paentIfarame).val() ? $(".hospitaldiscount", paentIfarame).val() : "";
+
+
+
+							var slave = {
+								'companyName': '' + company_name + '',
+								'companySID': '' + company_shortName + '',
+								'companyTel': '' + company_tel + '',
+								'companyAddress': company_address,
+								'companytype': company_group,
+								'nomo': company_notes,
+								'hospitalnature': hospitalnature,
+								'hospitalgrade': hospitalgrade,
+								'hospitalprovince': hospitalprovince,
+								'hospitalsupplymaterial': '' + hospitalsupplymaterial + '',
+								'hospitalusebrand': '' + hospitalusebrand + '',
+								'hospitaldoctor': '' + hospitaldoctor + '',
+								'hospitalcharacteristic': '' + hospitalcharacteristic + '',
+								'hospitalaccountperiod': '' + hospitalaccountperiod + '',
+								'hospitaldiscount': '' + hospitaldiscount + '',
+								'isshowonapp': '' + isshowonapp + '',
+								'companynature': '' + companynature + '',
+								'companyproperty': '' + companyproperty + '',
+								'employeedep': '' + employeedep + '',
+								'isdirecttraffic': 1
+							};
+
+
+							$.ajax({
+								type: "post",
+								url: localStorage.serIp + "/WebUpdateCompanyTable?jsoncallback=?",
+								async: true,
+								dataType: 'jsonp',
+								data: {
+									"userId": localStorage.userId,
+									"userPw": localStorage.userPw,
+									'database': localStorage.database,
+									'groupCompanyId': localStorage.groupcompanyid,
+									'slave': JSON.stringify(slave),
+									'id': id
+								},
+								success: function (res) {
+									var data = JSON.parse(res);
+									parent.layer.close(jiazaiIndex);
+									if (data.ResultValue == 1) {
+
+										parent.layer.open({
+											title: "提示",
+											content: '修改成功',
+											zIndex: parent.layer.zIndex, //重点1
+
+										});
+
+										parent.layer.close(index11); //再执行关闭     
+
+									} else {
+										parent.layer.open({
+											title: "提示",
+											content: '修改失败', zIndex: parent.layer.zIndex, //重点1
+
+										});
+									}
+								},
+								error: function () {
+									parent.layer.close(jiazaiIndex);
+
+								}
+							});
+						})
+					},
+					end: function () {
+
+						if (sessionStorage.unit_id) {
+							sessionStorage.removeItem("unit_id")
+						}
+						if (sessionStorage.companyGroupId) {
+							sessionStorage.removeItem("companyGroupId")
+						}
+						if (sessionStorage.auditstate) {
+							sessionStorage.removeItem("auditstate")
+						}
+						rightData(currentPage, limit, totalInfo);
+					}
+				});
+						// 闭合
+					}
+				},
+			 
+			 
+			}).dxDataGrid('instance');
+		});
+			
+		}
+
+
+
+
+
+	
+
+
+
+
+
+	
+		//点击删除
+		var $ = layui.$,
+			active = {
+				
+				gengGaifenZu: function () { //获取选中数据
+					if (!checkPermissionStatus("往来单位管理-审核1")) {
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: layer.zIndex //重点1
+							,
+							success: function (layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+
+					}
+
+					var checkStatus = table.checkStatus('idTest'),
+						data1 = checkStatus.data;
+
+
+
+
+					var idstr = "";
+					if (selectedRowsData.length == 0) {
+						parent.layer.open({
+							title: "提示",
+							zIndex: parent.layer.zIndex, //重点1,
+							content: '请选择要更改分组的往来单位!'
+						});
+						return;
+					}
+
+
+					if (selectedRowsData.length > 1) {
+						parent.layer.open({
+							title: "提示",
+							zIndex: parent.layer.zIndex, //重点1,
+							content: '每次只能更改一个往来单位分组!'
+						});
+						return;
+					}
+
+
+					var companytype = selectedRowsData[0].companytype;
+
+					if (!(companytype == "3" || companytype == "4")) {
+						parent.layer.open({
+							title: "提示",
+							zIndex: parent.layer.zIndex, //重点1,
+							content: '该操作只能将供应商或经销商更改为双向合作商!'
+						});
+						return;
+					}
+
+
+
+
+					for (var i = 0; i < selectedRowsData.length; i++) {
+						idstr += selectedRowsData[i].id;
+						if ((i + 1) != selectedRowsData.length) {
+							idstr += ",";
+						}
+					}
+					parent.layer.confirm('此操作不可逆，确定更改分组为双向合作商吗？', {
+						icon: 3,
+						zIndex: parent.layer.zIndex,//重点1
+						title: '更改分组'
+					}, function (index) {
+						$.ajax({
+							type: "get",
+							url: localStorage.serIp + "/WebUpdateCompanycompanyType",
+							async: true,
+							dataType: 'json',
+							crossDomain: true,
+							data: {
+								'userId': localStorage.userId,
+								'userPw': localStorage.userPw,
+								'database': localStorage.database,
+								'id': idstr,
+							},
+							success: function (res) {
+								var data = JSON.parse(res);
+								if (data.ResultValue == 1) {
+									parent.layer.open({
+										title: "提示",
+										content: '更改成功',
+										zIndex: layer.zIndex //重点1
+										,
+										success: function (layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+
+									rightData(true);
+								}
+								else {
+									parent.layer.open({
+										title: "提示",
+										content: '服务器提出一个问题!',
+										zIndex: layer.zIndex //重点1
+										,
+										success: function (layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+								}
+
+							}
+							,
+							error: function (res) {
+
+								parent.layer.open({
+									title: "提示",
+									content: '服务器异常!',
+									zIndex: parent.layer.zIndex //重点1
+
+								});
+
+
+							}
+						});
+
+					});
+				}
+			};
+		$('.del').on('click', function () {
+			var type = $(this).data('type');
+			active[type] ? active[type].call(this) : '';
+		});
+
+
+
+
+
+		//点击新增
+		$(".add").click(function () {
+			if (!checkPermissionStatus("往来单位管理-保存1")) {
+
+				parent.layer.open({
+					title: "提示",
+					content: localStorage.jurisdictionTips,
+					zIndex: layer.zIndex //重点1
+					,
+					success: function (layero) {
+						parent.layer.setTop(layero); //重点2
+					}
+				});
+				return
+
+			}
+
+			parent.layer.open({
+				type: 2 //此处以iframe举例
+				,
+				title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">往来单位新增</span>',
+				area: ['80%', '90%'],
+				offset: "rb",
+				content: 'views/basicdataProtect/unit/unitadd.html',
+				zIndex: parent.layer.zIndex //重点1
+				,
+				success: function (layero) {
+					parent.layer.setTop(layero); //重点2
+				},
+				cancel: function () {
+				},
+				end: function () {
+
+					rightData(true);
+				}
+			});
+		});
+	});
+</script>
+<!--模板下载-->
+<script src="/QNCloud/js/excelImportJS/shim.js"></script>
+<script src="/QNCloud/js/excelImportJS/jszip.js"></script>
+<script src="/QNCloud/js/excelImportJS/xlsx.js"></script>
+<script src="/QNCloud/js/excelImport.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+	//模板下载
+	$(document).on("click", ".modeldown", function () {
+		window.location.href = encodeURI("/QNCloud/templetDown/往来单位导入.xlsx");
+	})
+	//模板导入
+	$(".modelup").click(function () {
+		$("#modelup").click();
+	})
+	$("body").delegate("#modelup", "change", function (e) {
+		parent.layer.open({
+			type: 3, Index: parent.layer.zIndex, //重点1
+			success: function (layero, index) {
+				jiazaiIndex = index;
+			}
+		});
+	})
+	function excel_ajax(output) {
+		if (typeof (output) == "object") {
+			layui.use(['jquery', 'layer'], function () {
+				var layer = layui.layer;
+				parent.layer.open({
+					content: '上传数据为空', zIndex: parent.layer.zIndex, //重点1
+
+				});
+			})
+			return;
+		}
+		registrationOrProductImport(output)
+	}
+	var xlf = document.getElementById('modelup');
+	if (xlf.addEventListener) xlf.addEventListener('change', handleFile, false);
+	function registrationOrProductImport(output) {
+		$.ajax({
+			type: "post",
+			url: localStorage.serIp + '/WebImportCompanyInfo',
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
+			async: true,
+			data: JSON.stringify({
+				"userId": localStorage.userId,
+				"userPw": localStorage.userPw,
+				"database": localStorage.database,
+				"master": output
+			}),
+			success: function (res) {
+				var data = JSON.parse(res);
+				parent.layer.close(jiazaiIndex);
+				if (data.ResultValue == 0) {
+					layui.use(['layer'], function () {
+						var layer = layui.layer;
+						parent.layer.open({
+							content: '上传失败', zIndex: parent.layer.zIndex, //重点1
+
+						});
+					})
+				} else if (data.ResultValue == 1) {
+					layui.use(['jquery', 'layer'], function () {
+						var layer = layui.layer;
+						parent.layer.open({
+							content: '上传成功', zIndex: parent.layer.zIndex, //重点1
+
+							yes: function (index, layero) {
+								parent.layer.close(index); //如果设定了yes回调，需进行手工关闭
+								//框架的数量
+								var if_length = window.parent.frames.length;
+								for (var i = 0; i < if_length; i++) {
+									//拿到当前页面所有框架src
+									var href = window.parent.frames[i].location.pathname;
+									//把src以/拆分,判断文件名是不是你要刷新的那个
+									var src_arr = window.parent.frames[i].location.pathname.split("/")
+									//获取文件名
+									if_name = window.parent.frames[i].location.pathname.split("/")[src_arr.length - 1]
+									if ("unit.html" == if_name) {
+										window.parent.frames[i].location.reload();
+									}
+								}
+							}
+						});
+					})
+
+				}
+			},
+			error: function () {
+				parent.layer.close(jiazaiIndex);
+				layui.use(['jquery', 'layer'], function () {
+					var $ = layui.$ //重点处
+						,
+						layer = layui.layer;
+					parent.layer.open({
+						content: '服务器响应失败，请刷新重新上传', zIndex: parent.layer.zIndex, //重点1
+
+					});
+				})
+			}
+		});
+	}
+</script>
+<!--模板下载结束-->
+
+</html>

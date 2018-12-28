@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加公司</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+		#addcompany {
+			/*width: calc(100vw+17px);*/
+			font-size: 9pt;
+		}
+		
+		#addcompany legend {
+			font-family: "PingFang" !important;
+			font-size: 14px !important;
+			color: #2D89DD !important;
+			font-weight: 800 !important;
+		}
+		
+		.layui-input-inline {
+			width: 400px !important;
+		}
+		
+		#addcompany .layui-form-item label {
+			width: 120px !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+		}
+		
+		#addcompany .layui-form-item .layui-input-inline input {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+		}
+		
+		#addcompany .layui-form-item .layui-input-inline select {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 28px !important;
+			/*border: 1px solid #DDDDDD !important;*/
+		}
+		
+		#addcompany .layui-form-item .layui-input-inline textarea {
+			font-size: 9pt !important;
+			width: 400px !important;
+			height: 80px;
+			/*border: 1px solid #ddd !important;*/
+		}
+		
+		#addcompany .layui-form-title {
+			width: 100%;
+			right: 15px;
+			padding-top: 10px;
+			margin-bottom: -20px;
+			position: fixed;
+			z-index: 100;
+			background-color: #FFFFFF !important;
+			line-height: 32px;
+			top: 0px;
+		}
+		
+		.addcompany_submit,
+		.changeRange,
+		.addbankAccount,
+		.delbankAccount,
+		.addcontacts,
+		.dengji,
+		.delcontacts {
+			display: inline-block;
+			text-align: center;
+			height: 28px;
+			line-height: 28px;
+			float: right;
+			font-family: "PingFang" !important;
+			font-size: 9pt !important;
+			color: #FFFFFF !important;
+			background-color: #2D89DD !important;
+			margin-right: 20px;
+		}
+		
+		.delbankAccount,
+		.delcontacts {
+			margin-right: 12px;
+		}
+		
+		.current {
+			background-color: #357BEA;
+		}
+		
+		.layui-form {
+			margin: 0 20px;
+			margin-top: 40px;
+		}
+		
+		.layui-form-item {
+			margin-bottom: 0;
+		}
+		
+		.uploadImg {
+			margin-left: 15px;
+			position: relative;
+		}
+		
+		.removeImg {
+			cursor: pointer;
+			position: absolute;
+			/*top: 100px;*/
+			font-size: 20px !important;
+		}
+		
+		#test2 {
+			background-color: #2D89DD;
+			line-height: 28px;
+			height: 28px;
+			width: 90px;
+		}
+		
+		.panel-body {
+			border-color: #DDDDDD
+		}
+		.datagrid-body{
+			height: 300px !important;
+		}
+		select{
+			border: 1px solid #ddd;
+		}
+		.span span{
+			margin-left: 20px;
+			color:#2D89DD;cursor:pointer
+		}
+	</style>
+	<body>
+		<div id="addcompany">
+			<div class="layui-form-item layui-form-title">
+				<!--<button class="layui-btn addcompany_submit">提交</button>-->
+				<!--<button class="layui-btn addshouquan dengji">新增授权</button>-->
+				<!--<button class="layui-btn baocunshouquan dengji">保存授权</button>-->
+			</div>
+			<div>
+			<div class="">
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 48px;">
+					<legend>基础信息</legend>
+				</fieldset>
+				<div class="layui-form-item ">
+					<div class="layui-inline">
+						<label class="layui-form-label">厂家：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input unit" type="text">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label change_name">授权产品：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input chanpin" type="text">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item ">
+					<div class="layui-inline">
+						<label class="layui-form-label">有效期起：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" id="startDate" class="layui-input changeCompany_startDate" type="text">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">有效期终：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" id="stopDate" class="layui-input changeCompany_stopDate" type="text">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item ">
+					<div class="layui-inline span">
+						<label class="layui-form-label">关联新授权：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input newguanlian" type="text">
+						</div>
+						<!--<span class="guanliannew">关联新授权</span><span>查看</span><span class="remove">取消</span>-->
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">关联旧授权：</label>
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input oldguanlian" type="text">
+						</div>
+					</div>
+				</div>
+				<div id="shouquan">
+					
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'tree', 'laydate'], function() {
+			var $ = layui.jquery,
+				element = layui.element,
+				laydate = layui.laydate;
+			var table = layui.table;
+			laydate.render({
+				elem: "#startDate"
+			})
+			laydate.render({
+				elem: "#stopDate"
+			})
+			var jyfwTreeData;
+			var data2 = [{
+				"index": "1",
+				"name": "杜甫",
+				"pinpai": "品牌"
+			}]
+			table.render({
+				elem: '#com',
+				data: data2,
+				cols: [
+					[{
+						field: 'index',
+						width: 40,
+						title: '序号',
+						align: 'center'
+					}, {
+						field: 'name',
+						width: 347,
+						title: '管理编号'
+					}, {
+						field: 'pinpai',
+						width: 347,
+						title: '管理名称',
+					}]
+				]
+			});
+			var num=0;
+			var num_ZH=['一','二','三','四','五','六','七','八','九','十']
+			//获取从表信息
+			getData()
+			function getData(){
+				$.ajax({
+					type: "POST",
+					url: localStorage.serIp+"/WebGetAuthorizationSlave",
+					async: true,
+					dataType: 'json',
+					crossDomain: true,
+					contentType:'application/json; charset=utf-8',
+					data:JSON.stringify({
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"id":sessionStorage.zhuid
+					}),
+					success: function(res) {
+						var staffData = JSON.parse(res);
+						for(var i=0;i<staffData.length;i++){
+							if(staffData[i].authorizationslave_begin_time.length>10){
+								staffData[i]['authorizationslave_begin_time']=staffData[i].authorizationslave_begin_time.slice(0,10);
+							}
+							if(staffData[i].authorizationslave_end_time.length>10){
+								staffData[i]['authorizationslave_end_time']=staffData[i].authorizationslave_end_time.slice(0,10);
+							}
+//							var dengji=num_ZH[num];
+							var dengji=staffData[i].authorizationslave_level-1;
+							dengji=num_ZH[dengji];
+							putCong(dengji,staffData[i])
+							++num;
+						}
+					}
+				});
+			}
+			//存放从表信息
+			function putCong(dengji,info){
+				$("#shouquan").append("<div class='sqremove'><fieldset class='layui-elem-field layui-field-title'><legend>"+dengji+"级授权</legend></fieldset><div class='layui-form-item '><div class='layui-inline'><label class='layui-form-label'>发起企业：</label><div class='layui-input-inline'><input autocomplete='off' class='layui-input wanglai faqiqiye' id=A_"+num+" type='text' data-id="+info.authorizationslave_initiatecompanyid+" value="+info.initiatecompanyname+"></div></div><div class='layui-inline'><label class='layui-form-label'>目标企业：</label><div class='layui-input-inline'><input autocomplete='off' class='layui-input qiye_stop wanglai mubiaoqiye' id=B_"+num+" type='text' value="+info.targetcompanyname+" data-id="+info.authorizationslave_targetcompanyid+"></div></div></div><div class='layui-form-item '><div class='layui-inline'><label class='layui-form-label'>授权时段起：</label><div class='layui-input-inline'><input autocomplete='off' id=shiduanK_"+num+" class='layui-input shiduan_startDate shiduandate' type='text' value="+info.authorizationslave_begin_time+"></div><span class=guoqi>已过期</span></div><div class='layui-inline'><label class='layui-form-label'>授权时段终：</label><div class='layui-input-inline'><input autocomplete='off' id=shiduanJ_"+num+" class='layui-input shiduan_stopDate' type='text' value="+info.authorizationslave_end_time+"></div><span class=guoqi>已过期</span></div></div><p style='margin-left: 75px;height: 24px;'><input type='checkbox' class='login'> 是否长期</p><div class='layui-form-item'><div class='layui-inline'><label class='layui-form-label'>上传图片：</label><div class='layui-input-inline'><div class='layui-upload'><button type='button' class='layui-btn' id='test2'>上传图片</button><blockquote class='layui-elem-quote layui-quote-nm' style='margin-top: 10px;'>预览图：<div class='layui-upload-list' id='demo2'></div></blockquote></div></div></div></div></div>")
+				if(info.authorizationslave_islong == 1){
+					$(".login").prop("checked",true);
+				}
+				if(info.authorizationslave_end_time){
+					var old_c=info.authorizationslave_end_time;
+					old_c=Date.parse(new Date(old_c))/ 1000;
+					var new_c=Date.parse(new Date())/1000;
+					if(old_c < new_c){
+						$(".guoqi").css("color","#FF0202")
+					}
+				}
+				$(".removeurl").click(function(){
+					var cong_id=$(this).attr("cong");
+					removeCong(cong_id)
+				})
+				$(".wanglai").click(function(){
+					var clas=$(this).attr("id")
+					publicDanwei('#'+clas)
+				})
+				var id_dateK='#shiduanK_'+num;
+				var id_dateJ='#shiduanJ_'+num;
+				laydate.render({
+					elem: id_dateK
+				})
+				laydate.render({
+					elem: id_dateJ
+				})
+				//禁止修改
+				$('input').attr("disabled",true)
+				$(".newguanlian").attr("disabled",false)
+			}
+			//点击图片实现选择文件的效果
+			layui.use('upload', function() {
+				var $ = layui.jquery,
+				upload = layui.upload;
+				upload.render({
+					elem: '#test2',
+					url: 'http://www.gudaiwang.com/QingNangServer/UploadImageServlet?manuId=0',
+					multiple: true,
+					before: function(obj) {
+						controllDel = false;
+						//预读本地文件示例，不支持ie8
+						obj.preview(function(index, file, result) {
+							$('#demo2').append('<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img uploadImg" style="width:120px;height:140px;"><span class="removeImg">X</span>')
+							$(".removeImg").click(function(){
+								$('#demo2').empty();
+							})
+						});
+					},
+					done: function(res) {
+						if(res.errorDesc) {
+							layui.use(['jquery', 'layer'], function() {
+								var $ = layui.$ //重点处
+									,
+									layer = layui.layer;
+								layer.open({
+									content: '上传失败'
+								});
+							})
+							$(".uploadImg").eq($(".uploadImg").length - 1).remove();
+							$(".removeImg").eq($(".removeImg").length - 1).remove();
+							return;
+						}
+						imgChanJiaArr.push({
+							imgUrl: res.Img
+						});
+
+						controllDel = true;
+					},
+					error: function(e) {
+
+					}
+				})
+			});
+			//清空新授权
+			$(".remove").click(function(){
+				$(".newguanlian").val('');
+			})
+			//关联新new 选择产品
+			$(".newguanlian").click(function() {
+				publicGuanlian(".newguanlian")
+				
+			});			
+			//关联新产品
+			function publicGuanlian(clas){
+				sessionStorage.guanlianId="";
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">供货授权书</span>',
+					area: ['85%', '90%'],
+					offset: "rb",
+					content: 'views/basicdataProtect/authorization/authorizationList.html',
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero, index) {
+						parent.layer.setTop(layero); //重点2
+						var body = layer.getChildFrame('body', 'index');
+						paentIfarame = layero.find("iframe")[0].contentWindow.document;
+					},
+					end: function() {
+						if(sessionStorage.guanlianId){
+							var data_x=JSON.parse(sessionStorage.guanlianId);
+							$(clas).val(data_x[1]);
+							$(clas).attr('data-id',data_x[0]);
+						}
+					}
+				});
+			}
+		});
+	</script>
+</html>

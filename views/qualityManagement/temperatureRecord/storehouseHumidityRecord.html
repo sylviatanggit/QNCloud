@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>库房温度记录</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+	</head>
+	<style type="text/css">
+		.orderContract {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		label {
+			padding: 0 !important;
+			margin-left: 20px;
+		}
+		
+		.btns button,
+		.find,
+		.import {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 90px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px;
+			font-size: 9pt;
+		}
+		
+		.action {
+			right: 0px !important;
+		}
+		
+		.find {
+			width: 76px;
+		}
+		
+		.inputs {
+			margin-bottom: 8px;
+		}
+		
+		.cs_container {
+			width: 250px !important;
+		}
+		
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 5px !important;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+		}
+		
+				.cleardata{
+			cursor: pointer;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+	<body>
+		<div class="orderContract">
+			<div class="layui-tab">
+				<div class="orderContract_header">
+					<div class="inputs">
+						<div class="layui-inline">
+							<label class="layui-form-label" style="margin-left: 0;margin-right: 12px;">库房名称</label>
+							<div class="layui-input-inline">
+								<input  autocomplete="off" class="layui-input warehouse" id="warehouse" type="text" style="width: 250px;">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">日期范围</label>
+							<div class="layui-input-inline">
+								<input autocomplete="off" id="orderdate1" class="layui-input" type="text">
+							</div>
+							-
+							<div class="layui-input-inline">
+								<input autocomplete="off" id="orderdate2" class="layui-input" type="text" style="margin-left: 0;">
+							</div>
+						</div>
+						<br />
+						<div class="layui-inline" style="margin-top: 18px;">
+							<div class="layui-input-inline">
+								<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+						<div class="layui-inline" style="margin-top: 18px;">
+							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+						</div>
+						<div class="btns" style="position: relative;margin-top: 18px;">
+							<button class="layui-btn addTemperatureRecord">新增</button>
+							<button class="layui-btn moreAction">更多操作</button>
+							<ul class="action">
+								<li>
+									<a class="del" data-type="getCheckDel" lay-event='del'>批量删除</a>
+								</li>
+
+							</ul>
+						</div>
+					</div>
+
+				</div>
+				<table id="orderContract" lay-filter="demo"></table>
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+		<script src="../../../js/public.js"></script>
+
+	<script>
+		layui.use(['table', 'jquery', 'laydate', 'laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			var laypage = layui.laypage;
+			var laydate = layui.laydate;
+			var myDate = new Date();
+			var currentMothFirstDay = myDate.getFullYear() + '-' +  (myDate.getMonth() + 1) +"-" + '01';
+			var currentDate =  myDate.getFullYear() + '-' +(myDate.getMonth() + 1)  + '-'+  myDate.getDate();
+			
+			laydate.render({
+				elem: '#orderdate1',
+				value: currentMothFirstDay
+			});
+			laydate.render({
+				elem: '#orderdate2',
+				value: currentDate
+			});
+			
+			$(".warehouse").click(function() {
+		
+					$('.warehouse').val("");
+					$('#warehouse').val("");
+	
+				})
+			
+			$(function() {
+				function staffList() {
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp+"/WebGetWarehouseDropDownList?jsoncallback=?",
+						async: true,
+						dataType: 'jsonp',
+						data: {
+							"userId": localStorage.userId,
+							"userPw": localStorage.userPw,
+							'database': localStorage.database,
+							'groupCompanyId': localStorage.groupcompanyid
+						},
+						success: function(res) {
+							var data = JSON.parse(res);
+							//							console.log(data)
+							$('#warehouse').bComboSelect({
+								showField: 'warehousename',
+								keyField: 'id',
+								data: data
+							});
+						}
+					});
+				}
+				staffList()
+			})
+			var limit = 50;
+			var curpage = 1;
+			var count;
+		
+
+			function getSHHR(jumpFlag) {
+				
+			var seachContent = $(".seachContent").val();
+			var warehouse = $('#warehouse').val();
+			var beginTime = $('#orderdate1').val() != "" ?   $('#orderdate1').val() : currentMothFirstDay;
+			var endTime = $('#orderdate2').val() != "" ? $('#orderdate2').val() : currentDate;
+			
+			
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetWarehouseHumitureRecordInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'database': localStorage.database,
+						'warehouseid': warehouse,
+						"beginTime": beginTime,
+						"txtCondition" : seachContent,
+						'endTime': endTime
+					},
+					success: function(res) {
+						var temData = JSON.parse(res);
+						var data = JSON.parse(temData.data);
+						count = temData.count;
+						detail(data, limit);
+						if(jumpFlag) {
+							pages();
+						}
+					}
+				});
+
+			}
+			getSHHR(true);
+
+			function detail(data, limit) {
+				//展示已知数据
+				table.render({
+					elem: '#orderContract',
+					data: data,
+					height: "full-150",
+					id:'idTest',
+					cols: [
+						[ //标题栏
+					 {
+								checkbox: true,
+								LAY_CHECKED: false,
+								width: 40,
+							}, {
+								field: 'warehousename',
+								title: '库房名称',
+								minWidth: 200,
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+								//								templet: '<div><span ondblclick="checkProSell({{=JSON.stringify(d)}})" class="layui-table-link">{{d.warehousename}}</span></div>'
+							},
+							{
+								field: 'recordername',
+								title: '记录人',
+								minWidth: 100,
+							}, {
+								field: 'recorddate',
+								title: '登记日期',
+								minWidth: 100
+							}, {
+								field: 'suithumidity',
+								title: '适应湿度',
+								minWidth: 100
+							}, {
+								field: 'suittemperature',
+								title: '适应温度',
+								minWidth: 100
+							}, {
+								field: 'forenoonchecktime',
+								title: '上午检查时间',
+								minWidth: 100,
+							}, {
+								field: 'afternoonchecktime',
+								title: '下午检查时间',
+								minWidth: 100,
+							}, {
+								field: 'forenooncheckhumidity',
+								title: '上午检查湿度',
+								minWidth: 100,
+							}, {
+								field: 'forenoonchecktemperature',
+								title: '上午检查温度',
+								minWidth: 100,
+							}, {
+								field: 'forenoonmaintenance',
+								title: '上午维护措施',
+								minWidth: 100,
+							}, {
+								field: 'forenoondisposetemperature',
+								title: '上午处理后温度',
+								minWidth: 100,
+							}, {
+								field: 'forenoondisposehumidity',
+								title: '上午处理后湿度',
+								minWidth: 100,
+							}, {
+								field: 'afternooncheckhumidity',
+								title: '下午检查湿度',
+								minWidth: 100,
+							}, {
+								field: 'afternoonchecktemperature',
+								title: '下午检查温度',
+								minWidth: 100,
+							}, {
+								field: 'afternoonmaintenance',
+								title: '下午养护措施',
+								minWidth: 100,
+							}, {
+								field: 'afternoondisposehumidity',
+								title: '下午处理后湿度',
+								minWidth: 100,
+							}, {
+								field: 'afternoondisposetemperature',
+								title: '下午处理后温度',
+								minWidth: 100,
+							}
+						]
+					],
+					skin: 'row' //表格风格
+						,
+					even: true,
+					limit: limit //每页默认显示的数量
+				});
+			}
+			//分页
+			function pages() {
+				laypage.render({
+					elem: 'orderContract', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						getSHHR(false);
+					}
+				})
+			}
+			table.on('tool(demo)', function(obj1, index) {
+				var obj = obj1.data;
+				var id = obj.id;
+				if(obj1.event === 'detail') {
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">库房温湿度记录</span>',
+						area: ['700px', '90%'],
+						offset: "rb",
+						content: 'views/qualityManagement/temperatureRecord/addRecord.html',
+						zIndex: layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							$(".warehouse", paentIfarame).val(obj.warehousename)
+							$("#warehouse", paentIfarame).val(obj.warehouseid)
+							$(".addRecord_man", paentIfarame).val(obj.recordername)
+							$("#salesman", paentIfarame).val(obj.recorder)
+							$(".addRecord_logindate", paentIfarame).val(obj.recorddate)
+							$(".addRecord_shidu", paentIfarame).val(obj.suithumidity)
+							$(".addRecord_tem", paentIfarame).val(obj.suittemperature)
+							$(".addRecord_morTime", paentIfarame).val(obj.forenoonchecktime)
+							$(".addRecord_morShidu", paentIfarame).val(obj.forenooncheckhumidity)
+							$(".addRecord_morTem", paentIfarame).val(obj.forenoonchecktemperature)
+							$(".addRecord_yanghu", paentIfarame).val(obj.forenoonmaintenance)
+							$(".addRecord_shidu1", paentIfarame).val(obj.forenoondisposehumidity)
+							$(".addRecord_tem1", paentIfarame).val(obj.forenoondisposetemperature)
+							$(".addRecord_afterTime", paentIfarame).val(obj.afternoonchecktime)
+							$(".addRecord_afterShidu", paentIfarame).val(obj.afternooncheckhumidity)
+							$(".addRecord_afterTem", paentIfarame).val(obj.afternoonchecktemperature)
+							$(".addRecord_afterYanghu", paentIfarame).val(obj.afternoonmaintenance)
+							$(".addRecord_afterShidu1", paentIfarame).val(obj.afternoondisposehumidity)
+							$(".addRecord_afterTem1", paentIfarame).val(obj.afternoondisposetemperature)
+							//新增或修改
+							$(".addRecord_submit", paentIfarame).click(function() {
+									if(!checkPermissionStatus("库房温度记录-保存1")){
+					
+												parent.layer.open({
+													title: "提示",
+													content: localStorage.jurisdictionTips,
+													zIndex: parent.layer.zIndex //重点1
+													,
+													success: function(layero) {
+														parent.layer.setTop(layero); //重点2
+													}
+												});
+												return
+												
+											}
+								
+								
+								
+								//弹出层转圈圈的那个
+								parent.layer.open({
+								  type: 3, 
+								  zIndex: parent.layer.zIndex, //重点1
+								  success: function(layero, index){
+								  		jiazaiIndex = index;
+										}
+								});
+								var warehouseid = $('#warehouse', paentIfarame).val();
+								var recorder = $('#salesman', paentIfarame).val();
+								var recorddate = $(".addRecord_logindate", paentIfarame).val();
+								var suithumidity = $(".addRecord_shidu", paentIfarame).val();
+								var suittemperature = $(".addRecord_tem", paentIfarame).val();
+								var forenoonchecktime = $(".addRecord_morTime", paentIfarame).val();
+								var forenooncheckhumidity = $(".addRecord_morShidu", paentIfarame).val();
+								var forenoonchecktemperature = $(".addRecord_morTem", paentIfarame).val();
+								var forenoonmaintenance = $(".addRecord_yanghu", paentIfarame).val();
+								var forenoondisposehumidity = $(".addRecord_shidu1", paentIfarame).val();
+								var forenoondisposetemperature = $(".addRecord_tem1", paentIfarame).val();
+								var afternoonchecktime = $(".addRecord_afterTime", paentIfarame).val();
+								var afternooncheckhumidity = $(".addRecord_afterShidu", paentIfarame).val();
+								var afternoonchecktemperature = $(".addRecord_afterTem", paentIfarame).val();
+								var afternoonmaintenance = $(".addRecord_afterYanghu", paentIfarame).val();
+								var afternoondisposehumidity = $(".addRecord_afterShidu1", paentIfarame).val();
+								var afternoondisposetemperature = $(".addRecord_afterTem1", paentIfarame).val();
+								var master = {
+									'warehouseid': warehouseid,
+									'recorder': recorder,
+									'recorddate': recorddate,
+									'suithumidity': suithumidity,
+									'suittemperature': suittemperature,
+									'forenoonchecktime': forenoonchecktime,
+									'forenooncheckhumidity': forenooncheckhumidity,
+									'forenoonchecktemperature': forenoonchecktemperature,
+									'forenoonmaintenance': forenoonmaintenance,
+									'forenoondisposehumidity': forenoondisposehumidity,
+									'forenoondisposetemperature': forenoondisposetemperature,
+									'afternoonchecktime': afternoonchecktime,
+									'afternooncheckhumidity': afternooncheckhumidity,
+									'afternoonchecktemperature': afternoonchecktemperature,
+									'afternoonmaintenance': afternoonmaintenance,
+									'afternoondisposehumidity': afternoondisposehumidity,
+									'afternoondisposetemperature': afternoondisposetemperature
+								};
+								if($("#warehouse", paentIfarame).val() == '') {
+									parent.layer.open({
+										title: "提示",
+										content: '请填写库房名称'
+									});
+									parent.layer.close(jiazaiIndex);
+									return false;
+								} else if($("#salesman", paentIfarame).val() == '') {
+									parent.layer.open({
+										title: "提示",
+										content: '请填写养护员'
+									});
+									parent.layer.close(jiazaiIndex);
+									return false;
+								}
+								$.ajax({
+									type: "get",
+									url: localStorage.serIp+"/WebUpdateWarehouseHumitureRecord?jsoncallback=?",
+									async: true,
+									dataType: 'jsonp',
+									data: {
+										"userId": localStorage.userId,
+										"userPw": localStorage.userPw,
+										'database': localStorage.database,
+										'id': id,
+										'master': JSON.stringify(master)
+									},
+									success: function(res) {
+										parent.layer.close(jiazaiIndex);
+										var data = JSON.parse(res);
+										if(data.ResultValue == 1) {
+											parent.layer.open({
+												title: "提示",
+												content: '提交成功',
+												end: function(){  
+													parent.layer.close(index); //再执行关闭     
+												}
+											});
+										} else {
+											parent.layer.open({
+												title: "提示",
+												content: '提交失败'
+											});
+										}
+										getSHHR(true);
+									}
+								});
+
+							})
+						}
+					});
+				}
+
+			});
+			$(".find").click(function() {
+
+				getSHHR(true);
+			})
+			//点击新增
+			$(".addTemperatureRecord").click(function() {
+					if(!checkPermissionStatus("库房温度记录-保存1")){
+					
+												parent.layer.open({
+													title: "提示",
+													content: localStorage.jurisdictionTips,
+													zIndex: parent.layer.zIndex //重点1
+													,
+													success: function(layero) {
+														parent.layer.setTop(layero); //重点2
+													}
+												});
+												return
+												
+											}
+					
+					
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">添加库房温湿度记录</span>',
+					area: ['700px', '90%'],
+					offset: "rb",
+					content: 'views/qualityManagement/temperatureRecord/newaddRecord.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					},
+					end:function(){
+						pages()
+					}
+				});
+			});
+			//点击删除
+			var $ = layui.$,
+				active = {
+					getCheckDel: function() { //获取选中数据
+						
+							if(!checkPermissionStatus("库房温度记录-保存1")){
+					
+												parent.layer.open({
+													title: "提示",
+													content: localStorage.jurisdictionTips,
+													zIndex: parent.layer.zIndex //重点1
+													,
+													success: function(layero) {
+														parent.layer.setTop(layero); //重点2
+													}
+												});
+												return
+												
+											}
+						var checkStatus = table.checkStatus('idTest'),
+							data1 = checkStatus.data;
+						var idstr = "";
+						// 判断删除是否为空
+						if(data1.length == 0){
+							parent.layer.open({
+								title: "提示",
+								zIndex: parent.layer.zIndex, //重点1,
+								content: '请选择要删除的数据!!!'
+							});
+							return;
+						}
+					    for(var i=0;i<data1.length;i++) { 
+				      		idstr += "'"+data1[i].id + "'";
+		
+				      		if((i+1)!=data1.length){
+				      			idstr += ",";
+				      		}
+						} 
+						parent.layer.confirm('确定删除记录？', {
+							icon: 3,
+							title: '删除'
+						}, function(index) {
+							$.ajax({
+								type: "get",
+								url: localStorage.serIp+"/WebDeleteWarehouseHumitureRecord?jsoncallback=?",
+								async: true,
+								dataType: 'jsonp',
+								data: {
+									"userId": localStorage.userId,
+									"userPw": localStorage.userPw,
+									'database': localStorage.database,
+									'id': idstr
+								},
+								success: function(res) {
+									var data = JSON.parse(res);
+									if(data.ResultValue == 1) {
+											parent.layer.open({
+												title: "提示",
+												content: '删除成功'
+											});
+										} else {
+											parent.layer.open({
+												title: "提示",
+												content: '删除失败'
+											});
+										}
+									getSHHR(true);
+								}
+							});
+							parent.layer.close(index);
+						});
+					}
+				};
+
+			$('.del').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+			
+				$("body").keydown(function(event) {
+				if(event.keyCode == "13") { //keyCode=13是回车键
+					$('.find').click();
+
+				}
+		});
+		
+		});
+
+
+		
+		
+	</script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+
+</html>

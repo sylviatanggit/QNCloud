@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>已完成列表</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+	<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+	<!-- DevExtreme themes -->
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+</head>
+
+<style type="text/css">
+	table thead td {
+		padding: 0;
+		border-left: 1px solid #CAD3DA;
+		background: #DFEBFB;
+	}
+
+	table tbody tr:nth-child(even) {
+		background: #E7EFF9;
+	}
+
+	.dx-datagrid-text-content {
+		color: grey;
+	}
+
+	.clearfix:after {
+		content: '.';
+		height: 0;
+		display: block;
+		clear: both;
+	}
+
+	.layui-laypage-limits {
+		font-size: 12px;
+		display: none;
+		float: left;
+		margin-top: 7px;
+	}
+
+	#lay-ignore {
+		height: 25px;
+		width: 60px;
+
+	}
+
+	#lay-ignore {
+		height: 25px;
+		width: 60px;
+
+	}
+
+	tbody tr:not(:last-child):hover {
+		background-color: rgba(137, 207, 240, .6) !important;
+	}
+
+	.dx-datagrid-rowsview .dx-selection.dx-row>td {
+		background-color: yellow !important;
+	}
+
+	colgroup>col:first-child {
+		width: 45px !important;
+	}
+
+	.dx-col-fixed:nth-child(1) {
+		width: 45px !important;
+	}
+
+	.M-box2 {
+		display: inline-block;
+		padding: 0 15px;
+		height: 28px;
+		color: #333;
+		font-size: 12px;
+		margin-top: 6px;
+	}
+
+	.M-box2 a {
+		margin-left: 15px;
+		padding: 0 15px;
+		text-decoration: none;
+		background-color: #ffffff;
+		color: #000000;
+	}
+
+	.M-box2 .active {
+		margin-left: 5px;
+		padding: 0 15px;
+		color: #ffffff;
+		width: 100%;
+		height: 100%;
+		background-color: #2D89DD;
+		border: 1px solid #e2e2e2;
+	}
+
+	.jump-ipt {
+		float: none;
+		margin-left: 5px;
+		margin-left: 11px;
+		width: 60px;
+		border: 1px solid #e6e6e6;
+		height: 20px !important;
+	}
+
+	.dx-data-row,
+	.dx-column-lines:not(:first-child)>td:nth-child(2) {
+		cursor: pointer;
+	}
+
+	.dx-widget {
+		font-size: 9pt !important;
+		line-height: 17px;
+	}
+
+	.option>.dx-selectbox {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.layui-input {
+		color: #000000;
+	}
+
+	.dx-column-lines>td:nth-child(2) {
+		color: #2D89DD;
+	}
+
+	.dx-data-row,
+	.dx-column-lines>td:nth-child(2) {
+		cursor: pointer;
+	}
+
+	.totalInfo {
+		width: 100px;
+		height: 20px;
+		float: left;
+		margin-top: 12px;
+	}
+
+	.fl {
+		float: left;
+	}
+
+	.fr {
+		float: right;
+	}
+
+	/* 原来的页面 */
+	/* .inputs {
+		margin-bottom: 6px;
+	} */
+
+	.find {
+		margin-left: 10px;
+		cursor: pointer;
+		border: none;
+		width: 76px;
+		height: 28px;
+		line-height: 28px;
+		border-radius: 2px;
+		background-color: #2D89DD;
+		color: #FFFFFF;
+	}
+
+	.layui-form-label {
+		padding: 0;
+	}
+
+	.action {
+		right: 20px;
+	}
+
+	.cs_container_open .cs_input,
+	.cs_result_area {
+		width: 250px !important;
+	}
+
+	div.cs_result_area div.pagination li {
+		margin: 0 5px !important;
+	}
+
+	.layui-laypage {
+		margin: 0;
+		position: absolute;
+		bottom: 0px;
+		left: 25px;
+		z-index: 5;
+	}
+
+	.layui-inline {
+		margin-top: 10px;
+		margin-right: 15px;
+	}
+
+	.layui-inline .layui-form-label {
+		padding-left: 0px;
+		margin-left: 0px;
+	}
+</style>
+
+<body>
+	<div class="YCWTable">
+		<div class="inputs" style="margin-left: 14px;margin-bottom: 8px;">
+			<div style="width: 100%;height: auto;">
+
+
+				<div class="layui-inline" style="margin-right: 15px;width: 320px;">
+					<label class="layui-form-label" style="margin-right: 10px;">往来单位</label>
+					<div id="append_group">
+						<input autocomplete="off" class="layui-input unit" type="text" id="unit" style="width: 250px;height: 28px;line-height: 28px;">
+					</div>
+
+				</div>
+
+				<div class="layui-inline">
+					<label class="layui-form-label">日期范围</label>
+					<div class="layui-input-inline">
+						<input autocomplete="off" id="date1" class="layui-input" type="text">
+					</div>
+					-
+					<div class="layui-input-inline">
+						<input autocomplete="off" id="date2" class="layui-input" type="text" style="margin-left: 0;">
+					</div>
+				</div>
+
+
+
+
+
+			</div>
+			<div style="width: 100%;height: auto;position: relative;">
+				<div class="layui-inline" style="margin-right: 15px;">
+					<label class="layui-form-label">单据状态</label>
+					<div class="layui-input-inline">
+						<select name="" class="layui-input checkstate">
+							<option value="1">已审核</option>
+							<option value="2">已作废</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="layui-inline" style="margin-right: 10px;">
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 0px;width: 240px;">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<button class="layui-btn find" style="margin-left: 0px;">查询</button>
+				</div>
+				<div class="btns" style="margin-top: 8px;">
+					<button class="layui-btn moreAction" style="margin-right: 20px;">更多操作</button>
+					<ul class="action">
+
+						<li>
+							<a class="piliang" data-type="combineExport" lay-event='combineExport'>合并导出</a>
+						</li>
+
+
+
+					</ul>
+				</div>
+			</div>
+		</div>
+		<table id="YCWTable" lay-filter="demo">
+			<div class="demo-container">
+				<div id="gridContainer"></div>
+			</div>
+		</table>
+		<div class="footer .clearfix">
+			<div class="totalInfo fl"></div>
+			<div class="M-box2 fl"></div>
+			<span class="layui-laypage-limits">
+				<select id="lay-ignore">
+					<option value="50" selected>50</option>
+					<option value="100">100</option>
+					<option value="200">200</option>
+				</select>
+				<span>条/页</span>
+			</span>
+		</div>
+	</div>
+</body>
+
+
+<script type="text/javascript">
+	var limit = 50;
+	var currentPage = 1;
+	var totalInfo = '';
+	var count;
+
+
+
+	layui.use(['table', 'jquery', 'element', 'laydate'], function () {
+		var table = layui.table;
+		var $ = layui.jquery;
+		var laydate = layui.laydate;
+		$('.moreAction').hover(function () {
+			$(".action").show();
+		}, function () {
+			$(".action").hide();
+		});
+		$('.action').hover(function () {
+			$(".action").show();
+		}, function () {
+			$(".action").hide();
+		});
+		var laypage = layui.laypage;
+		var laydate = layui.laydate;
+		var myDate = new Date();
+
+		var currentMothFirstDay = getCurrentMothFirstDay();
+		var currentDate = myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate();
+		dyiKaiPiaoData(currentPage, limit, totalInfo);
+		var groupcompanyid = localStorage.groupcompanyid;
+
+
+
+		//获取公司信息
+		function dataFun1() {
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetAllGroupCompany?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'database': localStorage.database,
+					"groupCompanyId": localStorage.groupcompanyid
+				},
+				success: function (res) {
+					var desData = JSON.parse(res);
+					var optionsStr = "";
+					for (var i = 0; i < desData.length; i++) {
+						var id = desData[i].myg_companyid;
+						var name = desData[i].companyname;
+
+
+						if (id == localStorage.groupcompanyid) {
+							optionsStr += "<option value='" + id + "' selected='selected'>" + name + "</option>";
+
+						} else {
+							optionsStr += "<option value='" + id + "'>" + name + "</option>";
+
+						}
+
+
+
+					}
+					$(".companytypeid").append(optionsStr);
+
+					dyiKaiPiaoData(currentPage, limit, totalInfo);
+				}
+			});
+
+		}
+
+
+
+
+		getunit(-1,0);
+
+		$(".companytypeid").change(function () {
+
+			dyiKaiPiaoData(currentPage, limit, totalInfo);
+
+
+			//业务员跟这变
+			groupcompanyid = $(".companytypeid").val();
+			groupcompanyid = groupcompanyid == -1 ? '' : groupcompanyid;
+			var bandstr = '<input autocomplete="off" class="layui-input salesman" id="salesman" type="text" style="width: 250px;height: 28px;line-height: 28px;">';
+			$("#append_sale").empty().append(bandstr);
+			staffList();
+
+			//往来单位跟这变
+			var append_group = '<input autocomplete="off" class="layui-input unit" type="text" id="unit" style="width: 250px;height: 28px;line-height: 28px;">';
+			$("#append_group").empty().append(append_group);
+			getunitByConfident(-1, groupcompanyid,0);
+
+		})
+
+		laydate.render({
+			elem: '#date1',
+			value: currentMothFirstDay
+		});
+		laydate.render({
+			elem: '#date2',
+			value: new Date()
+		});
+
+
+
+
+		function staffList() {
+			$.ajax({
+				type: "post",
+				url: localStorage.serIp + "/WebGetEmployeeDropDownList?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					'groupCompanyId': groupcompanyid
+				},
+				success: function (res) {
+					var data = JSON.parse(res);
+					$('#salesman').bComboSelect({
+						showField: 'employeename',
+						keyField: 'employeesid',
+						data: data
+					});
+
+				}
+			});
+		}
+		staffList();
+
+
+
+
+		function dyiKaiPiaoData(jumpFlag) {
+
+			var unit = $('#unit').val();
+			var agentId = $("#salesman").val();
+			var orderNum = $(".seachContent").val();
+
+			var beginTime = $('#date1').val() != '' ? $('#date1').val() : currentMothFirstDay;
+			var endTime = $('#date2').val() != '' ? $('#date2').val() : currentDate;
+
+			var checkstate = $(".checkstate").val();
+			if (localStorage.groupcompanyid == "0") {
+				companytypeid = $('.companytypeid option:selected').val();
+			} else {
+				companytypeid = localStorage.groupcompanyid;
+			}
+
+			var jiazaiIndex;
+			parent.layer.open({
+				type: 3,
+				zIndex: parent.layer.zIndex, //重点1
+				success: function (layero, index) {
+					jiazaiIndex = index;
+				}
+			});
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetOutinvoiceInfo?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'num': limit,
+					'page': currentPage,
+					'orderNum': orderNum,
+					'agentId': agentId,
+					'companyId': unit,
+					'beginTime': beginTime,
+					'endTime': endTime,
+					'database': localStorage.database,
+					'groupCompanyId': localStorage.groupcompanyid,
+					'checkState': checkstate,
+					'lasttype': 81
+				},
+				success: function (res) {
+					$('.totalInfo').children().remove();
+					parent.layer.close(jiazaiIndex);
+					var resdata = JSON.parse(res);
+					dataSource = JSON.parse(resdata.data);
+
+					totalInfo = resdata.count;
+
+					var totalInfoTag = '<span>' + '共' + totalInfo + '条' + '</span>';
+					$('.totalInfo').append(totalInfoTag);
+					complete(dataSource, limit);
+					pagination(currentPage, limit, totalInfo);
+					$('.layui-laypage-limits').css('display', 'block');
+
+
+				}
+				,
+				error: function (res) {
+					parent.layer.close(jiazaiIndex);
+
+					parent.layer.open({
+						title: "提示",
+						content: '服务器异常!',
+						zIndex: parent.layer.zIndex //重点1
+
+					});
+
+
+				}
+			});
+
+		}
+
+
+// invoiceDetailExport发票明细导出
+
+
+		function complete(data, limit) {
+			$(function () {
+				var dataGrid = $("#gridContainer").dxDataGrid({
+					dataSource: dataSource,
+					keyExpr: "ordernum",
+					allowColumnReordering: true,
+					showBorders: true,
+					paging: {
+						pageSize: 200,
+					},
+					sorting: {
+						mode: "none"//none
+					},
+					selection: {
+						mode: "multiple"
+					},
+					filterRow: {
+						visible: false,
+						applyFilter: "auto"
+					},
+					headerFilter: {
+						visible: false
+					},
+					allowColumnResizing: true,
+					columnFixing: {
+						enabled: false
+					},
+
+					columns: [{
+						dataField: "ordernum",
+						width: 160,
+						caption: "发票签出单号",
+						fixed: true,
+					}
+						,
+					{
+						dataField: "companyname",
+						width: 180,
+						caption: "往来单位",
+					},
+					{
+						dataField: "invoicenum",
+						width: 160,
+						caption: "发票号"
+					},
+					{
+						dataField: "totalprice",
+						width: 120,
+						caption: "不含税金额",
+						format: {
+							type: "fixedPoint",
+							precision: 2
+						},
+						customizeText: function (arg) {
+							return arg.valueText;
+						}
+					},
+					{
+						dataField: "totaltax",
+						width: 70,
+						caption: "税额",
+					},
+
+					{
+						dataField: "totalmoney",
+						width: 90,
+						caption: "含税金额",
+						format: {
+							type: "fixedPoint",
+							precision: 2
+						},
+						customizeText: function (arg) {
+							return arg.valueText;
+						}
+					},{
+					dataField: "taxpercentage",
+					width: 70,
+					caption: "税率",
+				},{
+					dataField: "outtickettypename",
+					width: 100,
+					caption: "票种",
+				},
+					{
+						dataField: "outinvoicedate",
+						width: 90,
+						caption: "签出日期",
+					}, {
+						dataField: "agentname",
+						width: 70,
+						caption: "开票员",
+					},
+
+					{
+						dataField: 'operatorsidname',
+						caption: '制单人',width: 70,
+						
+					}, {
+						dataField: 'actiondate',
+						caption: '制单日期',
+						format: "yyyy-MM-dd",
+						dataType: "date",
+						width: 90
+						
+					}, {
+						dataField: 'checkername',
+						caption: '审核人',width: 70,
+						
+					}, {
+						dataField: 'checkdate',
+						caption: '审核日期',
+						format: "yyyy-MM-dd",
+						dataType: "date",
+						width: 90
+					},
+					{
+						dataField: 'nomo',
+						caption: '备注',
+						 width: 100,
+					}
+					]
+					,
+					onSelectionChanged: function (obj) {
+						var exportCompanyarr = [];
+
+						//  导出
+
+						var selectedRowsData = obj.selectedRowsData;
+						var ordernumList = '';
+						var arrForOderNum = [];
+						for (var i = 0; i < selectedRowsData.length; i++) {
+							var danhao =  selectedRowsData[i].ordernum;
+							danhao = "\'" + danhao + "\'";
+							arrForOderNum.push(danhao);
+							ordernumList = arrForOderNum.join(",");
+							var companyideach = selectedRowsData[i].companyid;
+							if (exportCompanyarr.indexOf(companyideach) == -1) {
+								exportCompanyarr.push(companyideach);
+							}
+						}
+
+						$('.piliang').dxButton({
+	
+							onClick: function () {
+								
+		if(!checkPermissionStatus("分销发票签出单-导出1")){
+					
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: parent.layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							return
+							
+				}
+								
+								
+								if (exportCompanyarr.length == 0) {
+									parent.layer.open({
+										title: "提示",
+										zIndex: parent.layer.zIndex, //重点1,
+										content: '请选择要导出的单据!'
+									});
+								}
+								if (exportCompanyarr.length > 1) {
+									parent.layer.open({
+										title: "提示",
+										content: '往来单位完全一致才允许合并导出!',
+										zIndex: layer.zIndex //重点1
+										,
+										success: function (layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+								}
+								if (exportCompanyarr.length == 1) {
+									parent.layer.confirm('确定导出吗？', {
+										icon: 3,
+										zIndex: parent.layer.zIndex,//重点1
+										title: '合并导出'
+									}, function (index) {
+
+										combineExport("FXFPQK", ordernumList);
+
+									}
+									);
+								}
+							}
+						});
+
+						dataGrid.refresh();
+
+					},
+					summary: {
+						totalItems: [{
+							name: "SelectedRowsSummary",
+							showInColumn: "totalprice",
+							summaryType: "custom",
+						}
+							,
+						{
+							name: "SelectedRowsSummarry",
+							showInColumn: "totalmoney",
+							summaryType: "custom",
+						}
+						],
+						calculateCustomSummary: function (options) {
+							if (options.name === "SelectedRowsSummary") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.ordernum)) {
+										options.totalValue = options.totalValue + options.value.totalprice;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+									}
+								}
+							}
+
+							if (options.name === "SelectedRowsSummarry") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.ordernum)) {
+										options.totalValue = options.totalValue + options.value.totalmoney;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+									}
+								}
+							}
+
+						},
+
+					},
+					onCellClick:function(e){
+						
+				
+						if(e.columnIndex == 1){
+										
+				if(!checkPermissionStatus("分销发票签出单-审核1")){
+					
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: parent.layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							return
+							
+						}
+
+						  parent.tab.tabAdd({
+					        icon: '',
+					        id: 'FPQCXQ' + e.data.ordernum,
+					        title: e.data.ordernum + '发票签出单',
+							url: 'views/financiaManagement/checkOut/checkoutfinishDetail.html'
+					    });
+   
+
+					}
+			}
+				
+				}).dxDataGrid('instance');
+			});
+		}
+
+		//分页
+		function pagination(currentPage, limit, totalInfo) {
+			$('.M-box2').empty();
+
+			if (totalInfo == 0) {
+				return;
+			}
+			$('.M-box2').pagination({
+				current: currentPage,
+				totalData: totalInfo,
+				showData: limit,
+				pageCount: Math.floor(totalInfo / limit),
+				mode: 'fixed',
+				isHide: true,
+				jump: true,
+				callback: function (api) {
+					currentPage = api.getCurrent();
+					dyiKaiPiaoData(currentPage, limit, totalInfo);
+				}
+			});
+		}
+		$('#lay-ignore').change(function () {
+			limit = $(this).children('option:selected').val();
+			dyiKaiPiaoData(currentPage, limit, totalInfo);
+		});
+
+
+		$(".find").click(function () {
+			dyiKaiPiaoData(currentPage, limit, totalInfo);
+		})
+		$(".checkstate").change(function () {
+			dyiKaiPiaoData(currentPage, limit, totalInfo);
+		})
+
+
+		$("body").keydown(function (event) {
+			if (event.keyCode == "13") { //keyCode=13是回车键
+				$('.find').click();
+			}
+		});
+
+
+
+       		 //适配
+		 var viewHeight = $(window).height();
+		 if (viewHeight == 855) {
+			 $('#gridContainer').css('height', 650 + 'px'); //855*0.76
+		 } else {
+			 $('#gridContainer').css('height', viewHeight * 0.7 + 'px');
+		 }
+		 
+
+	});
+</script>
+
+
+</html>

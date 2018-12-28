@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<input type="radio" name="sex" value="男" checked="checked" />男
+		<input type="radio" name="sex" value="女" />女
+	</body>
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<script type="text/javascript">
+		$('input:radio[name="sex"]').change(function() {
+			if($(this).is(":checked")) {
+				alert($(this).val());
+			} else {
+				alert(0);
+			}
+		});
+	</script>
+	<span id="keleyivisitorip"></span>
+	<script type="text/javascript" src="http://tool.keleyi.com/ip/visitoriphost/"></script>
+	<script type="text/javascript">
+		var wwip = "";
+		$(function() {
+			$(document).ready(function() {
+				$.getJSON("http://smart-ip.net/geoip-json?callback=?",
+					function(data) {
+						console.log(data)
+						alert(data.host);
+						wwip = data.host;
+					}
+				);
+			});
+		});
+	</script>
+	sessionStorage.borrowIn_checkstate = data.checkstate;
+	<img class="dsh" src="../../../image/dsh.png" alt="" /> <img class="ysh" src="../../../image/ysh.png" alt="" />
+	if(sessionStorage.treasury_checkstate == 0) {
+							$(".dsh").css("display", 'inline-block');
+							$(".ysh").css("display", 'none');
+						} else {
+							$(".ysh").css("display", 'inline-block');
+							$(".dsh").css("display", "none");
+							$("input").attr('disabled', 'disabled')
+						}
+</html>

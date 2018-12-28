@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+			<title>备份账套数据</title>
+			<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+		</head>
+	</head>
+	<style type="text/css">
+		body {
+			margin: 0;
+			padding: 0;
+			
+		}
+		
+		.backupAccount_title {
+			font-size: 20px;
+			color: #232323;
+			font-weight: bold;
+			margin: 20px 0 20px 48px;
+		}
+		
+		.warning {
+			margin-left: 20px;
+			color: red;
+			font-size: 14px !important;
+		}
+		
+		.backupAccount_body {
+			height: 180px;
+			border-top: 1px solid #C5C5C5;
+			border-bottom: 1px solid #C5C5C5;
+		}
+		
+		.backupAccount_body p {
+			margin-top: 16px;
+			margin-left: 72px;
+			font-size: 16px;
+			color: #232323;
+		}
+		
+		.backupAccount_body ul {
+			margin-left: 100px;
+			color: #232323;
+			font-size: 12px;
+		}
+		
+		.backupAccount_body ul li {
+			margin-top: 12px;
+		}
+		.backupAccount_footer button{
+			cursor: pointer;
+			float: right;
+			margin-top: 15px;
+			font-size: 9pt;
+		}
+		.layui-layer-btn0 {
+			width: 60px;
+			display: inline;
+			border: 1px solid #357BEA;
+			background-color: #357BEA;
+			color: #fff;
+			border-radius: 2px;
+			line-height: 25px !important;
+		}
+		
+		.layui-layer-btn1 {
+			width: 60px;
+			display: inline;
+			border: 1px solid #357BEA;
+			background-color: #FFFFFF;
+			color: #357BEA;
+			border-radius: 2px;
+			line-height: 25px !important;
+			margin-left: 5px;
+			margin-right: 20px !important;
+		}
+		
+		.layui-form-switch{
+			margin-top: 0px !important;
+		}
+	</style>
+
+	<body>
+		<form class="layui-form" action="">
+		<div class="backupAccount_header">
+			<h2 class="backupAccount_title">备份账套数据<span class="warning">（注意：备份过程中请勿关闭系统）</span></h2>
+		</div>
+		<div class="backupAccount_body">
+			<p>提示：</p>
+			<ul>
+				<li>1.备份账套数据库前请做好前期准备</li>
+				<li>2.备份过程中请勿断开网络</li>
+				<li>3.备份过程中请勿重复点击备份按钮</li>
+				<li>4.备份过程中青耐心等待备份</li>
+			</ul>
+		</div>
+		<div class="backupAccount_footer" style="height: 57px;display: none;">
+			<div style="display: inline-block;float: left;height: 57px;line-height: 57px;margin-left: 20px;font-size: 9pt;">
+				 定时备份<span style="color: red;font-size: 11pt;cursor: pointer;" class="setting">设置</span>
+				  <!--是否开启定时备份 <input type="checkbox" name="close" lay-skin="switch" lay-text="ON|OFF" lay-filter="filter">-->
+				
+			</div>
+			<div style="display: inline-block;float: right;">
+				<button class="layui-layer-btn1">关闭</button>
+			<button class="layui-layer-btn0">备份</button>
+			</div>
+			
+			
+		</div>
+</form>
+	</body>
+
+</html>
+	<script src="../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+	
+	layui.use(['table', 'jquery','form'], function() {
+ 			var form = layui.form
+			var $ = layui.jquery;
+			
+			if(localStorage.userId == "admin"){
+				$(".backupAccount_footer").css("display","block")
+			}
+			
+//			if(localStorage.autobakup == "1"){
+//				$(".backupAccount_footer em").click()
+//
+//			}
+			
+			
+			
+				$(".setting").click(function() {
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">备份设置</span>',
+						area: ['600px', '400px'],
+						content: 'views/systemManagement/BeiFenSetting.html',
+						zIndex: parent.layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+							parent.layer.setTop(layero); //重点2
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							
+						}
+					});
+				});
+			
+			
+			
+			
+			
+			
+//			form.on('switch(filter)', function(data){
+//				var jiazaiIndex;
+//				parent.layer.open({
+//				  type: 3, 
+//				  zIndex: parent.layer.zIndex, //重点1,
+//				  success: function(layero, index){
+//				  		jiazaiIndex = index;
+//					}
+//				});
+//	 			
+//	 		var type = 0;
+//	 		if(data.elem.checked){
+//	 			type = 1;
+//	 		}
+//
+//			$.ajax({
+//				type: "get",
+//				url: localStorage.serIp + "/WebOpenOrCloseTimesThreadSingle?jsoncallback=?",
+//				async: true,
+//				dataType: 'jsonp',
+//				data: {
+//					"userId": localStorage.userId,
+//					"userPw": localStorage.userPw,
+//					'database': localStorage.database,
+//					'type': type
+//
+//				},
+//				success: function(res) {
+//					parent.layer.close(jiazaiIndex);
+//		
+//					var res = JSON.parse(res);
+//					if(res.ResultValue == '1') {
+//						
+//					
+//						localStorage.autobakup =type;
+//						
+//						
+//						parent.layer.open({
+//							title: "提示",
+//							content: '设置成功！',zIndex: parent.layer.zIndex //重点1
+//								,
+//							success: function(layero,index) {
+//							parent.layer.setTop(layero); //重点2
+//						
+//							},
+//							
+//						});
+//							
+//				
+//					}else{
+//						
+//						parent.layer.open({
+//							title: "提示",
+//							content: '设置失败！',zIndex: parent.layer.zIndex //重点1
+//						});
+//						
+//						
+//							
+//					}
+//					
+//				},
+//				error: function(res) {
+//					parent.layer.close(jiazaiIndex);
+//					
+//				}
+//			});
+//	
+//	
+//	
+//			
+//			
+//
+//			});
+						
+	})
+
+</script>

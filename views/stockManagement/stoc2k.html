@@ -1,0 +1,2371 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>库存信息查询</title>
+	<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href="../../easyui/themes/default/easyui.css" />
+	<link rel="stylesheet" type="text/css" href="../../easyui/themes/icon.css" />
+	<script type="text/javascript" src="../../easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../css/comboselect.css" />
+	<link rel="stylesheet" type="text/css" href="../../css/demo.css" />
+	<link href="../../css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../../css/qk/custom_style.css">
+
+	<!-- DevExtreme themes -->
+	<link rel="stylesheet" href="../../devexpresslibrary/css/dx.common.css">
+	<link rel="stylesheet" href="../../devexpresslibrary/css/dx.light.css">
+	<!-- confirm -->
+	<link rel="stylesheet" href="../../devexpresslibrary/css/jquery.my-modal.1.1.winStyle.css">
+</head>
+<style>
+	.dx-column-lines>td:nth-child(2) {
+		color: #2D89DD;
+	}
+
+	.dx-datagrid-text-content {
+		color: grey;
+	}
+
+	.totalInfo {
+		width: 100px;
+		height: 20px;
+		float: left;
+		margin-top: 30px;
+	}
+
+
+	.clearfix:after {
+		content: '.';
+		height: 0;
+		display: block;
+		clear: both;
+	}
+
+	.footer {
+		padding-left: 30px !important;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		/*z-index: 123424;*/
+	}
+
+	.layui-laypage-limits {
+		font-size: 12px;
+		display: none;
+		float: left;
+		margin-top: 16px;
+		margin-left: 10px;
+	}
+
+	.layui-laypage-limits span {
+		margin-top: 11px;
+
+	}
+
+	#lay-ignore {
+		height: 25px;
+		width: 60px;
+	}
+
+
+.lendoutcount{
+	  background: #cae1ec;
+}
+
+.lendincount{
+	  background: #d3ecc6;
+}
+
+
+.readycount{
+	  background: #fee9d0;
+}
+
+.realstockcount{
+	  background: #ffc8c8;
+}
+
+.usefulcount{
+	  background: #ffffc0;
+}
+
+
+.fxlock{
+	  background: #e1d5c2;
+}
+.warelock{
+		background-color: rgb(250,224,243) !important;
+}
+
+
+.realcost{
+	  background: #dacfda;
+}
+
+
+.subtotal{
+	  background: #c9f2f1;
+}
+
+
+
+
+table tbody tr:nth-child(even) {
+    background: #E7EFF9;
+}
+
+
+.dx-datagrid .dx-datagrid-rowsview .dx-datagrid-content ..dx-datagrid-table-fixed table tr  td:nth-child(27) {
+    background:#cae1ec !important;
+}
+
+
+	.dx-col-fixed:nth-child(26) {
+		background-color: rgb(211, 236, 198)!important;
+	}
+
+
+	.dx-col-fixed:nth-child(27) {
+		background-color: rgb(202, 225, 236)!important;
+	}
+	
+
+
+	.dx-col-fixed:nth-child(28) {
+		background-color: rgb(218, 207, 218) !important;
+	}
+	
+	
+	.dx-col-fixed:nth-child(29) {
+		background-color: rgb(201, 242, 241) !important;
+	}
+	
+	
+    .dx-col-fixed:nth-child(30) {
+		background-color: rgb(254, 233, 208)!important;
+	}
+ 
+ 
+	.dx-col-fixed:nth-child(31) {
+		background-color: rgb(254, 233, 208)!important;
+	}
+
+
+	.dx-col-fixed:nth-child(31) {
+		background-color: rgb(202, 225, 236)!important;
+	}
+
+
+	.dx-col-fixed:nth-child(32) {
+		background-color: rgb(218, 207, 218)!important;
+	}
+
+
+
+	.dx-col-fixed:nth-child(33) {
+		background-color: rgb(201, 242, 241)!important;
+	}
+
+	/* .dx-col-fixed:nth-child(25) {
+		background-color: rgb(255, 233, 208) !important; 
+		
+	} */
+
+	.dx-col-fixed:nth-child(24) {
+		background-color: rgb(225, 213, 194) !important;
+	}
+	.dx-col-fixed:nth-child(25) {
+		background-color: rgb(250,224,243) !important;
+	}
+
+
+	.dx-col-fixed:nth-child(23) {
+		background-color: rgb(255, 255, 192) !important;
+	}
+
+	.dx-col-fixed:nth-child(22) {
+		background-color: rgb(255, 200, 200) !important;
+	}
+
+	/* 表格样式 */
+
+	table thead td {
+		padding: 0;
+		border-left: 1px solid #CAD3DA;
+		background: #DFEBFB;
+	
+	}
+
+	.dx-datagrid .dx-datagrid-content  table td{
+			cursor: pointer;
+	}
+
+
+	/* 调整宽度 */
+
+	colgroup>col:first-child {
+		width: 45px!important;
+	}
+
+	.dx-col-fixed:nth-child(1) {
+		width: 45px !important;
+	}
+
+	/* 表格hover效果 */
+
+	tbody tr:not(:last-child):hover {
+		background-color: rgba(137, 207, 240, .6)!important;
+	}
+
+	.dx-datagrid-rowsview .dx-selection.dx-row>td {
+		background-color: yellow!important;
+	}
+
+	.dx-command-select {
+		width: 5px!important;
+	}
+
+	.dx-editor-inline-block {
+		width: 30px !important;
+	}
+
+	body {
+		line-height: 0!important;
+	}
+
+	.kit-tab .layui-tab-title {
+		margin-bottom: 20px !important;
+	}
+
+
+
+	/* 原页面 */
+
+	.inventoryProfit .layui-laypage {
+		margin: 0;
+		position: absolute;
+		bottom: -35px;
+		left: 0px;
+	}
+
+	.panel-content {
+		padding: 10px 1.5% 0px 1.5%;
+	}
+
+	.panel_header {
+		margin: 0px;
+		padding: 0px;
+	}
+
+	#tree11 {
+		float: left;
+		width: 18%;
+		border: 1px solid #CCCCCC;
+		margin-right: -1px;
+		border-right: none;
+		overflow: auto;
+		margin-top: 10px;
+	}
+
+
+	label {
+		padding: 0 !important;
+		margin-left: 0px;
+	}
+
+	.panel-content .layui-table-cell {
+		height: auto;
+		padding: 0 5px;
+		position: relative;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		box-sizing: border-box;
+	}
+
+	.cs_container,
+	.cs_container_open .cs_input,
+	.cs_result_area {
+		width: 250px !important;
+	}
+
+	div.cs_result_area div.pagination li {
+		margin: 0 5px !important;
+	}
+
+	.datagrid-header {
+		display: none !important;
+	}
+
+	.panel-header,
+	.panel-body {
+		border: 0px solid #CCCCCC !important;
+	}
+
+
+	.btns button,
+	.find,
+	.import {
+		padding: 0;
+		cursor: pointer;
+		border: none;
+		width: 76px;
+		height: 28px;
+		text-align: center;
+		line-height: 28px;
+		border-radius: 2px;
+		background-color: #2D89DD;
+		color: #FFFFFF;
+		margin-left: 8px;
+	}
+
+	.inventoryLoss input {
+		height: 46px;
+	}
+
+	.inventoryLoss .layui-table-edit {
+		height: 46px !important;
+	}
+
+	.fixStyle ul {
+		border: 1px solid #ccc;
+	}
+
+	.fixStyle ul li {
+		float: left;
+		padding-left: 6px;
+	}
+
+	input {
+		font-size: 9pt;
+
+	}
+
+	.layui-table-fixed .layui-table-body tbody .layui-table-cell {
+		line-height: 44px !important;
+	}
+
+	.layui-form-label {
+		line-height: 28px !important;
+	}
+
+	#tree-view .panel-content .layui-table thead tr {
+		height: 24px !important;
+	}
+
+	#gridContainer {
+		margin-top: 5px;
+		transform: -50%, -50%;
+	}
+
+	.dx-datagrid-headers.dx-datagrid-nowrap {
+		margin-top: 10px;
+	}
+
+	/* 分页插件 */
+
+	.M-box2 {
+		display: inline-block;
+		padding: 0 15px;
+		height: 28px;
+		line-height: 28px;
+		color: #333;
+		font-size: 12px;
+		margin-top: 12px;
+	}
+
+	.M-box2 a {
+		margin-left: 15px;
+		padding: 0 15px;
+		text-decoration: none;
+		background-color: #ffffff;
+		color: #000000;
+	}
+
+	.M-box2 .active {
+		margin-left: 5px;
+		padding: 0 15px;
+		color: #ffffff;
+		width: 100%;
+		height: 100%;
+		background-color: #2D89DD;
+		border: 1px solid #e2e2e2;
+	}
+
+	.jump-ipt {
+		float: none;
+		margin-left: 5px;
+		margin-left: 11px;
+		width: 60px;
+		border: 1px solid #e6e6e6;
+		height: 20px!important;
+	}
+
+	#lay-ignore {
+		height: 25px;
+		width: 60px;
+	}
+
+
+
+	span {
+		/*float: right;*/
+		cursor: pointer;
+	}
+
+	.title {
+		border-bottom: 1px #ccc solid;
+		text-align: center;
+		font-weight: bold;
+		padding: 5px 0 10px 0;
+	}
+
+	.login ul li {
+		margin-top: 15px;
+		line-height: 10px;
+	}
+
+	#inventoryProfitId {
+		height: 650px;
+	}
+
+
+
+	.m-modal {
+		z-index: 9999;
+	}
+
+
+	div#gridModalContainer {
+		height: 350px;
+		position: absolute;
+		top: 23%;
+		left: 25%;
+		width: 500px!important;
+	}
+
+
+	/* try */
+	
+	
+</style>
+
+<body style="overflow: hidden;">
+	<!--
+        	描述：下面为模板
+		-->
+
+	<div class="m-modal">
+
+		<div id="gridModalContainer"></div>
+
+	</div>
+
+	<div class="panel-content" id="profitLossIid" style="margin-top: 10px;">
+		<div class="layui-tab">
+
+			<div class="panel_header">
+
+				<div class="inputs">
+					<div style="width: 100%;height: auto;">
+						<div class="layui-inline" id="fengongsiId" style="margin-right: 15px;">
+							<label class="layui-form-label" style="margin-left: 0px;margin-right: 10px;">所属公司</label>
+							<div class="layui-input-inline" style="height: 37px;">
+								<select name="" class="layui-input companytypeid" style="width: 200px;">
+									<option value="-1">全部</option>
+
+								</select>
+							</div>
+						</div>
+
+
+						<div class="layui-inline" style="margin-right: 15px;width: 310px;height: 37px;">
+							<label class="layui-form-label" style="margin-right: 10px;padding-left: 0px;">对应仓库</label>
+							<div style="height: 37px;" id="duiywarehouseId">
+								<input value="" data-id="" autocomplete="off" id="warehouseId" class="layui-input warehouse" type="text" style="width: 250px !important;;height: 26px !important;line-height: 26px !important;padding-left: 0px !important;">
+							</div>
+						</div>
+
+
+						<div class="layui-inline" style="margin-right: 15px;width: 310px;height: 37px;">
+							<label class="layui-form-label" style="margin-right: 10px;padding-left: 0px;">对应货区</label>
+							<div style="height: 37px;" id="stockareaId">
+								<input value="" data-id="" autocomplete="off" id="duiyingstockareaId" class="layui-input stockarea" type="text"
+								 style="width: 250px;height: 26px !important;line-height: 26px !important;padding-left: 0px !important;">
+							</div>
+						</div>
+
+						<div class="layui-inline" style="margin-right: 15px;width: 310px;height: 37px;">
+							<label class="layui-form-label" style="margin-right: 10px;padding-left: 0px;">对应货架</label>
+							<div style="height: 37px;" id="goodsshelvesId">
+								<input value="" data-id="" autocomplete="off" id="duiyinggoodsshelvesId" class="layui-input goodsshelves" type="text"
+								 style="width: 250px;height: 26px !important;line-height: 26px !important;padding-left: 0px !important;">
+							</div>
+						</div>
+
+
+
+					</div>
+			
+					
+
+					<div style="width: 100%;height: auto;position: relative;margin-top: 10px;">
+						
+						<div class="layui-inline" style="margin-right: 15px;">
+							<label class="layui-form-label" style="margin-left: 0px;margin-right: 10px;">状态</label>
+							<div class="layui-input-inline">
+								<select name="" class="layui-input  infoType" style="width: 80px;">
+									<option value="0">全部</option>
+									<option value="1">实库</option>
+									<option value="5">调拨</option>
+									<option value="2">备货</option>
+									<option value="4">借入</option>
+									<option value="3">借出</option> 
+								</select>
+							</div>
+					</div>
+					
+					
+						<div class="layui-inline">
+							<div class="layui-input-inline">
+								<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" placeholder="请输入关键字" class="layui-input seachContent"
+								 type="text" style="margin-left: 0;width: 240px;">
+							</div>
+						</div>
+
+						<div class="layui-inline">
+							<button class="layui-btn find" style="margin-left: 15px;">查询</button>
+						</div>
+
+						<div class="btns" style="margin-top: 0px;position: relative;">
+							<button class="layui-btn moreAction">更多操作</button>
+							<ul class="action" style="right: 0px !important;">
+								<li>
+									<a class="export" data-type="combineExport" lay-event='del'>全部导出</a>
+								</li>
+								<li style="height: 28px;background: #fff;" id="combinetongji">
+									<a class="quchongType" data-type="quchongType" lay-event='del'>
+										<input type="checkbox" class="quchong" style="width: 18px;height: 28px;margin-left: 3px;background-color: #fff;float: left;">
+										<p style="float: left;display: inline-block;">合并统计
+						</div>
+						</a>
+						</li>
+						</ul>
+					</div>
+				</div>
+
+			</div>
+
+
+
+		</div>
+
+
+		<div style="width: 100%;height: 100%;">
+
+			<div style="width: 100%;height: 70%;position: relative;" class="inventoryProfit">
+
+				<ul id="tree11" style="float: left;">
+					<table id="tree" class="easyui-treegrid tree" data-options="" style="width: 100%;">
+						<thead>
+							<tr id="allProductId">
+								<th data-options="field:'name'" style="width:80%;">所有产品</th>
+								<th id="totalCount" data-options="field:'realstockcount'" style="width: 40%;"></th>
+							</tr>
+						</thead>
+					</table>
+				</ul>
+
+
+				<ul id="tree-view">
+					<table id="inventoryProfitId" lay-filter="inventoryProfit">
+						<div class="demo-container">
+							<div id="gridContainer"></div>
+						</div>
+					</table>
+
+
+
+
+			</div>
+			</ul>
+
+			<div class="footer .clearfix">
+				<div class="totalInfo fl"></div>
+				<div class="M-box2 fl"></div>
+				<span class="layui-laypage-limits">
+					<select id="lay-ignore">
+						<option value="50" selected>10</option>
+					</select>
+					<span>条/页</span>
+				</span>
+
+			</div>
+
+
+		</div>
+
+	</div>
+
+
+	</div>
+	</div>
+
+
+	<div style="position: absolute;bottom: 5px;right: 22px;display: none;" class="fixStyle">
+		<ul style="height: 24px;text-align: left;vertical-align: middle;line-height: 24px;">
+			<span style="display: inline-block;position: relative;color: #888;">仓库总值</span>
+			<li style="width: 200px;height: 22px;" id="totalMoneyId"></li>
+		</ul>
+
+	</div>
+
+	<input type="hidden" value="" class="pandianDanHanid" />
+
+
+</body>
+<!-- DevExtreme library -->
+<script src="../../devexpresslibrary/js/dx.all.js"></script>
+
+<!-- 分页插件 -->
+<script src="../../devexpresslibrary/js/pagination/jquery.pagination.js"></script>
+<script src="../../devexpresslibrary/js/pagination/highlight.min.js"></script>
+
+<script src="../../plugins/layui/layui.js"></script>
+<script src="../../js/public.js"></script>
+<script type="text/javascript" src="../../js/comboselect.js"></script>
+<script type="text/javascript" src="../../js/b.comboselect.js"></script>
+
+<!-- 弹框插件 -->
+<script src="../../devexpresslibrary/js/jquery.my-modal.1.1.js"></script>
+
+<script>
+
+	brand1 = '';
+	property1 = '';
+	series1 = '';
+	var limit1 = 10;
+	var curpage1 = 1;
+	var companytypeid = "";
+
+	layui.use(['table', 'jquery', 'laypage', 'tree'], function () {
+		var table = layui.table;
+		var $ = layui.jquery;
+		var laypage = layui.laypage;
+		var layer = layui.layer;
+
+		var inventoryProfitDataInfo = [];
+		var inventoryLossDataInfo = [];
+
+
+		$('.moreAction').hover(function () {
+			$(".action").show();
+		}, function () {
+			$(".action").hide();
+		});
+		$('.action').hover(function () {
+			$(".action").show();
+		}, function () {
+			$(".action").hide();
+		});
+
+		$("#combinetongji").mouseover(function () {
+			$(this).css("background-color", "#ACD7FF");
+		});
+
+		$("#combinetongji").mouseout(function () {
+			$(this).css("background-color", "#fff");
+		});
+
+
+		var jiazaiIndex;
+
+		if (localStorage.isshow == 1 && localStorage.groupcompanyid == 0 && localStorage.viewrealcost == 1) {
+			$(".fixStyle").css("display", "inline-block");
+		}
+		
+		
+		if (localStorage.groupcompanyid != "0") {
+			$("#fengongsiId").css("display", "none");
+			stockList();
+		} else {
+			dataFun1();
+		}
+
+
+
+		$(".quchong").click(function () {
+
+			brand1 = '';
+			property1 = '';
+			series1 = '';
+			stockData();
+			rightProductData(curpage1, limit1, totalInfo);
+		})
+
+		//获取仓库
+		function stockList() {
+
+			if (localStorage.groupcompanyid == "0") {
+				companytypeid = $('.companytypeid option:selected').val();
+			} else {
+				companytypeid = localStorage.groupcompanyid;
+			}
+
+			$.ajax({
+				type: "post",
+				url: localStorage.serIp + "/WebGetWarehouseListByDropDown?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					'groupCompanyId': companytypeid,
+					'type': 1
+				},
+				success: function (res) {
+					var data = JSON.parse(res);
+					var warehouseDate = [];
+					for (var i = 0; i < data.length; i++) {
+						var slve = {};
+
+						slve.warehouse_id = data[i].warehouse_id;
+						slve.warehousename = data[i].warehousename + "(" + data[i].naturename + ")";
+
+						warehouseDate.push(slve);
+					}
+
+					$('#warehouseId').bComboSelect({
+						showField: 'warehousename',
+						keyField: 'warehouse_id',
+						data: warehouseDate
+					});
+
+				}
+			});
+		}
+
+
+
+		//获取货区
+		function getStockarea(id) {
+
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetGoodsareaListByDropDown?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'database': localStorage.database,
+					"warehouseId": id,
+					'type': 1
+
+				},
+				success: function (res) {
+					var data = JSON.parse(res);
+					$('#duiyingstockareaId').bComboSelect({
+						showField: 'areaname',
+						keyField: 'houseareaid',
+						data: data
+					});
+
+				}
+			});
+		}
+
+		getStockarea("-1");
+
+
+		//获取货架
+		function getgoodsshelves(id) {
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetGoodsShelves?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'database': localStorage.database,
+					"goodsareaid": id,
+					'txtCondition': "",
+					'num': "10000",
+					'page': "1"
+				},
+				success: function (res) {
+					var data = JSON.parse(res);
+					var goodsshelvesdata = JSON.parse(data.data);
+					$('#duiyinggoodsshelvesId').bComboSelect({
+						showField: 'goodsshelves_name',
+						keyField: 'goodsshelves_id',
+						data: goodsshelvesdata
+					});
+
+				}
+			});
+		}
+
+		getgoodsshelves("-1");
+
+
+		$("body").delegate("#duiywarehouseId .cs_over", "mousedown", function () {
+
+			var bandstr = '<input value="" data-id="" autocomplete="off" id="duiyingstockareaId" class="layui-input stockarea" type="text" style="width: 250px;height: 26px !important;line-height: 26px !important;padding-left: 0px !important;">';
+
+			$("#stockareaId").empty();
+			$("#stockareaId").append(bandstr);
+
+			var produceseriesstr = '<input value="" data-id="" autocomplete="off" id="duiyinggoodsshelvesId" class="layui-input goodsshelves" type="text" style="width: 250px;height: 26px !important;line-height: 26px !important;padding-left: 0px !important;">';
+
+			$("#goodsshelvesId").empty();
+			$("#goodsshelvesId").append(produceseriesstr);
+
+			getStockarea($(this).attr("pkey"));
+			brand1 = '';
+			property1 = '';
+			series1 = '';
+
+
+		})
+
+
+
+
+		$(".companytypeid").change(function () {
+
+			var warehouse = '<input  value="" data-id=""  autocomplete="off" id="warehouseId" class="layui-input warehouse" type="text" style="width: 250px !important;;height: 26px !important;line-height: 26px !important;padding-left: 0px !important;">';
+
+			$("#duiywarehouseId").empty();
+			$("#duiywarehouseId").append(warehouse);
+
+			stockList();
+
+			var bandstr = '<input value="" data-id="" autocomplete="off" id="duiyingstockareaId" class="layui-input stockarea" type="text" style="width: 250px;height: 26px !important;line-height: 26px !important;padding-left: 0px;;">';
+			$("#stockareaId").empty();
+			$("#stockareaId").append(bandstr);
+
+			var produceseriesstr = '<input value="" data-id="" autocomplete="off" id="duiyinggoodsshelvesId" class="layui-input goodsshelves" type="text" style="width: 250px;height: 26px !important;line-height: 26px !important;padding-left: 0px;;">';
+			$("#goodsshelvesId").empty();
+			$("#goodsshelvesId").append(produceseriesstr);
+
+			brand1 = '';
+			property1 = '';
+			series1 = '';
+
+		})
+
+		$("body").delegate("#stockareaId .cs_over", "mousedown", function () {
+
+
+			$("#selectStockFlagId").val($(this).text());
+			$("#selectStockFlagId").attr('data-id', $(this).attr("pkey"));
+
+
+
+			var produceseriesstr = '<input value="" data-id="" autocomplete="off" id="duiyinggoodsshelvesId" class="layui-input goodsshelves" type="text" style="width: 250px;height: 26px !important;line-height: 26px !important;padding-left: 0px !important;">';
+
+			$("#goodsshelvesId").empty();
+			$("#goodsshelvesId").append(produceseriesstr);
+
+
+
+			getgoodsshelves($(this).attr("pkey"));
+			brand1 = '';
+			property1 = '';
+			series1 = '';
+		});
+
+
+		$("body").delegate(".goodsshelves", "change", function () {
+			brand1 = '';
+			property1 = '';
+			series1 = '';
+
+
+		});
+
+
+
+
+		function stockData() {
+			if (localStorage.groupcompanyid == "0") {
+				companytypeid = $('.companytypeid option:selected').val();
+			} else {
+				companytypeid = localStorage.groupcompanyid;
+			}
+
+			targetstockId = $("#warehouseId").val();
+			stockarea = $("#duiyingstockareaId").val();
+			goodsshelves_id = $("#duiyinggoodsshelvesId").val();
+				var infoType = $(".infoType").val();;
+
+			$.ajax({
+				type: "get",
+				url: localStorage.serImportIp + "/WebGetStockLeftTreeData?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'database': localStorage.database,
+					'targetstockId': targetstockId,
+					'stockarea': stockarea,
+					'goodsshelves_id': goodsshelves_id,
+					'groupCompanyId': companytypeid,'infoType':infoType
+				},
+				success: function (res) {
+					var desData = JSON.parse(res);
+
+
+
+
+					//右边树一级目录
+					$("#tree").treegrid({
+						data: desData,
+						idField: 'id',
+						treeField: 'name',
+						onClickRow: function (row) {
+
+							if (row.id == 1) {
+								property1 = "";
+							} else {
+								property1 = row.date;
+							}
+							brand1 = row.nameOne;
+							series1 = row.nameThree;
+
+							rightProductData(curpage1, limit1, totalInfo);
+
+						}
+
+					});
+
+
+
+
+				}
+
+			});
+
+		}
+
+		//获取公司信息
+		function dataFun1() {
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetAllGroupCompany?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'database': localStorage.database,
+					"groupCompanyId": localStorage.groupcompanyid
+				},
+				success: function (res) {
+					var desData = JSON.parse(res);
+					var optionsStr = "";
+					for (var i = 0; i < desData.length; i++) {
+						var id = desData[i].myg_companyid;
+						var name = desData[i].companyname;
+
+
+						if (id == localStorage.groupcompanyid) {
+							optionsStr += "<option value='" + id + "' selected='selected'>" + name + "</option>";
+
+						} else {
+							optionsStr += "<option value='" + id + "'>" + name + "</option>";
+
+						}
+
+
+
+					}
+					$(".companytypeid").append(optionsStr);
+					stockList();
+				}
+			});
+
+		}
+
+		
+
+		var productData = [];
+		var selectData = [];
+
+
+
+
+
+		var totalInfo = '';
+		var targetstockId = '';
+		var stockarea = '';
+		var goodsshelves_id = '';
+
+		var type;
+		function rightProductData(curpage1, limit1, dataSource) {
+			parent.layer.open({
+				type: 3,
+				zIndex: parent.layer.zIndex, //重点1
+				success: function (layero, index) {
+					jiazaiIndex = index;
+				}
+			});
+			var seachContent = $(".seachContent").val();
+			seachContent = getJieXiData(seachContent);
+			var infoType = $(".infoType").val(); // 查询类别：0全部 1实库 2备库 3借出 4借入5调拨
+
+
+
+			if (localStorage.groupcompanyid == "0") {
+				companytypeid = $('.companytypeid option:selected').val();
+			} else {
+				companytypeid = localStorage.groupcompanyid;
+			}
+
+			targetstockId = $("#warehouseId").val();
+			stockarea = $("#duiyingstockareaId").val();
+			goodsshelves_id = $("#duiyinggoodsshelvesId").val();
+			
+            
+         
+			if ($(".quchong").is(":checked")) {
+				type = 1
+			} else {
+				type = 0
+			}
+
+
+			//type0有批号生成日期的
+			$.ajax({
+				type: "get",
+				url: localStorage.serImportIp + "/WebGetInventoryStoreReportInfo?jsoncallback=?",
+				dataType: 'jsonp',
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'database': localStorage.database,
+					'brand': brand1,
+					"property": property1,
+					'series': series1,
+					'num': limit1,
+					'page': curpage1,
+					'targetstockId': targetstockId,
+					'stockarea': stockarea,
+					'goodsshelves_id': goodsshelves_id,
+					'groupCompanyId': companytypeid,
+					"type": type,
+					"infoType": infoType,
+					'txtCondition': seachContent
+				},
+				success: function (res) {
+					$('.totalInfo').children().remove();
+					parent.layer.close(jiazaiIndex);
+					var desData = JSON.parse(res);
+				
+					if (desData == null) {
+						inventoryProfitData1(desData);
+						pagination(curpage1, limit1, totalInfo);
+						$('.layui-laypage-limits').css('display', 'block');
+						return;
+					}
+
+                    $('#totalMoneyId').text(desData.totalPrice);
+
+					totalInfo = desData.count;
+					var totalInfoTag = '<span>' + '共' + totalInfo + '条' + '</span>';
+					$('.totalInfo').append(totalInfoTag);
+					var chanpin_datas = JSON.parse(desData.data);
+
+					inventoryProfitData1(chanpin_datas);
+					pagination(curpage1, limit1, totalInfo);
+
+				}
+			});
+
+		}
+
+
+
+		// 根据可视区的高度判断
+		var viewHeight = $(window).height();
+		if (viewHeight == 855) {
+			$('#gridContainer').css('height', 694 + 'px'); //855*0.81
+			$("#tree11").css("height", 694 + 'px');
+		} else {
+			$('#gridContainer').css('height', viewHeight * 0.75 + 'px');
+			$("#tree11").css("height", viewHeight * 0.735 + 'px');
+		}
+
+
+
+		// 未选中的时候
+		function inventoryProfitData1(data) {
+			//展示已知数据
+			//   Dev Extreme
+			$(function () {
+				var dataGrid = $("#gridContainer").dxDataGrid({
+					dataSource: data,
+					allowColumnReordering: false,
+					showBorders: true,
+					keyExpr: "id",
+					headerFilter: {
+						visible: false
+					},
+					sorting: {
+						mode: "none"//none
+					},
+					columnChooser: "enable",
+					paging: {
+						pageSize: 200,
+					},
+					selection: {
+						mode: "multiple",
+					},
+					allowColumnResizing: true,
+					columns: [
+						{
+							dataField: "producename",
+							caption: "产品名称",
+							width: 160,
+						}
+						,
+						{
+							dataField: " ",
+							width: 90,
+							caption: "规格/型号",
+							cellTemplate: function (container, options) {
+								var str;
+								if (options.data.producemodel !== "" && options.data.danwei !== "") {
+									str = options.data.danwei + ' <br/> ' + options.data.producemodel;
+								} else {
+									str = options.data.danwei + options.data.producemodel;
+								}
+								$("<div>")
+									.append(str)
+									.appendTo(container)
+							}
+						},
+						{
+							dataField: "producesubbarcode",
+							width: 160,
+							caption: "副条码",
+						}
+						,
+						{
+							dataField: "iots",
+							width: 90,
+							caption: "批号",
+
+						}, {
+							dataField: "productiondate",
+							width: 90,
+							caption: "生产日期",
+
+						},
+						{
+							dataField: "indate",
+							width: 100,
+							caption: "有效期",
+						}, {
+							dataField: "producenum",
+							width: 160,
+							caption: "产品编号",
+						}, {
+							dataField: "producecode",
+							width: 160,
+							caption: "主条码",
+						},
+						{
+							dataField: "warehousename",
+							width: 160,
+							caption: "仓库",
+						},
+						{
+							dataField: "areaname",
+							width: 100,
+							caption: "货区",
+						},
+						{
+							dataField: "goodsshelves_name",
+							width: 100,
+							caption: "货架",
+						},
+						{
+							dataField: " ",
+							width: 100,
+							caption: "单位/包装",
+							cellTemplate: function (container, options) {
+								var str;
+								if (options.data.package !== "" && options.data.produceunit !== "" ) {
+									str = options.data.produceunit + '<br/>' + options.data.package
+								} else {
+									str = options.data.produceunit + options.data.package
+								}
+								$("<div>")
+									.append(str)
+									.appendTo(container)
+							}
+						},
+						{
+							dataField: "producepropertyname",
+							width: 100,
+							caption: "产品种类",
+						},
+						{
+							dataField: "produceseries",
+							width: 150,
+							caption: "系列",
+						},
+						{
+							dataField: "produceusename",
+							width: 100,
+							caption: "通俗名称",
+						},
+						{
+							dataField: "producematerial",
+							width: 100,
+							caption: "材质",
+						},
+						{
+							dataField: "producettypename",
+							width: 100,
+							caption: "产品属性",
+						},
+						{
+							dataField: " ",
+							width: 250,
+							caption: "品牌/厂家",
+							cellTemplate: function (container, options) {
+								container.addClass("chart-cell");
+								var str;
+								if (options.data.manufacturename !== "") {
+									str = options.data.manufacturer + '<br/>' + options.data.manufacturename
+
+
+								} else {
+									str = options.data.manufacturer + options.data.manufacturename;
+								}
+								$("<div>")
+									.append(str)
+									.appendTo(container)
+
+
+							}
+
+						},
+						{
+							dataField: "",
+							width: 300,
+							caption: "注册证产品名称/注册证号",
+							cellTemplate: function (container, options) {
+								container.addClass("chart-cell");
+								var str;
+								if (options.data.referencenum !== "" && options.data.regproducename !== "" ) {
+									str = options.data.regproducename + '<br/>' + options.data.referencenum
+								} else {
+									str = options.data.regproducename + options.data.referencenum;
+								}
+								$("<div>")
+									.append(str)
+									.appendTo(container)
+							}
+
+						},{
+							dataField: "productcertificate",
+							width: 150,
+							caption: "产品生产许可证编号",
+						},
+						{
+							dataField: "",
+							width: 160,
+							caption: "存储方式／仓库类型",
+							cellTemplate: function (container, options) {
+								container.addClass("chart-cell");
+								var str;
+								if (options.data.naturename !== "" && options.data.storagecondition !== "") {
+									str = options.data.storagecondition + '<br/>' + options.data.naturename
+
+								} else {
+									str = options.data.storagecondition + options.data.naturename;
+								}
+
+								$("<div>")
+									.append(str)
+									.appendTo(container)
+
+
+							}
+						},
+						{
+							dataField: " ",
+							width: 160,
+							caption: "养护要求/运输要求",
+							cellTemplate: function (container, options) {
+								var str;
+								if (options.data.conservationcategoryname !== "" && options.data.transportationname !== "" ) {
+									str = options.data.conservationcategoryname + '<br/>' + options.data.transportationname
+
+								} else {
+									str = options.data.conservationcategoryname + options.data.transportationname;
+								}
+								$("<div>")
+									.append(str)
+									.appendTo(container)
+
+							}
+
+						},
+						{
+							dataField: "safecount",
+							width: 100,
+							caption: "安全库存",
+						},
+						{
+							dataField: "lowerlimit",
+							width: 100,
+							caption: "安全库存下限",
+						},
+						{
+							dataField: "upperlimit",
+							width: 100,
+							caption: "安全库存上限",
+						},
+						{
+							dataField: "realstockcount",
+							width: 50,
+							fixed: true,
+							fixedPosition: 'right',cssClass:'realstockcount',
+							caption: "实库",
+						},{
+							dataField: "usefulcount",
+							width: 50,
+							fixed: true,
+							fixedPosition: 'right',cssClass:'usefulcount',
+							caption: "可用",
+						},{
+							dataField: "fxlock",
+							width: 50,
+							fixed: true,
+							fixedPosition: 'right',cssClass:'fxlock',
+							caption: "锁定",
+						},{
+							dataField: "warelock",
+							width: 50,
+							fixed: true,
+							fixedPosition: 'right',cssClass:'warelock',
+							caption: "调拨",
+						},
+						{
+							dataField: "readycount",
+							width: 50,
+							fixed: true,
+							fixedPosition: 'right',cssClass:'readycount',
+							caption: "备货",
+						},
+						{
+							dataField: "lendincount",
+							width: 50,
+							fixed: true,
+							fixedPosition: 'right',cssClass:'lendincount',
+							caption: "借入",
+						},
+						{
+							dataField: "lendoutcount",
+							width: 50,
+							fixed: true,
+							fixedPosition: 'right',cssClass:'lendoutcount',
+							caption: "借出",
+
+						},
+						{
+							dataField: "realcost",
+							width: 90,
+							fixed: true,
+							fixedPosition: 'right',cssClass:'realcost',
+							caption: "未税成本",
+						},
+						{
+							dataField: "subtotal",
+							width: 100,
+							fixed: true,
+							fixedPosition: 'right',cssClass:'subtotal',
+							caption: "小计",
+							alignment: "right",
+							format: {
+								type: "fixedPoint",
+								precision: 3
+							},
+							customizeText: function (arg) {
+								return arg.valueText;
+							}
+						},
+					],
+					onSelectionChanged: function () {
+						dataGrid.refresh();
+					},
+					summary: {
+						totalItems: [{
+							name: "SelectedRowsSummary",
+							showInColumn: "subtotal",
+							summaryType: "custom",
+						}, {
+							name: "SelectedRowsSummarry",
+							showInColumn: "lendoutcount",
+							summaryType: "custom",
+						}, {
+							name: "SelectedRowsSummarrry",
+							showInColumn: "lendincount",
+							summaryType: "custom",
+						},
+						{
+							name: "SelectedRowsSummarrrry",
+							showInColumn: "readycount",
+							summaryType: "custom",
+						}, {
+							name: "SelectedRowsSummarrrrry",
+							showInColumn: "realstockcount",
+							summaryType: "custom",
+						},{
+							name: "usefulcount",
+							showInColumn: "usefulcount",
+							summaryType: "custom",
+						},{
+							name: "fxlock",
+							showInColumn: "fxlock",
+							summaryType: "custom",
+						},{
+							name: "warelock",
+							showInColumn: "warelock",
+							summaryType: "custom",
+						}
+
+						],
+
+						calculateCustomSummary: function (options) {
+							if (options.name === "SelectedRowsSummary") {
+
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								}
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										var num1 = parseFloat(options.totalValue);
+										var num2 = parseFloat(options.value.subtotal);
+										options.totalValue = (num1 + num2);
+
+										options.totalValue = Math.round(options.totalValue * 1000) / 1000;
+										options.totalValue = options.totalValue.toFixed(3);
+									}
+								}
+							};
+							if (options.name === "SelectedRowsSummarry") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										options.totalValue = options.totalValue + options.value.lendoutcount;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+
+									}
+								}
+							};
+							if (options.name === "SelectedRowsSummarrry") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										options.totalValue = options.totalValue + options.value.lendincount;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+
+									}
+								}
+							};
+							if (options.name === "SelectedRowsSummarrrry") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										options.totalValue = options.totalValue + options.value.readycount;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+									}
+								}
+							};
+							if (options.name === "SelectedRowsSummarrrrry") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										options.totalValue = options.totalValue + options.value.realstockcount;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+
+									}
+								}
+							};
+							if (options.name === "usefulcount") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										options.totalValue = options.totalValue + options.value.usefulcount;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+
+									}
+								}
+							};
+							if (options.name === "lockstockcount") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										options.totalValue = options.totalValue + options.value.fxlock;
+										options.totalValue = Math.round(options.totalValue * 100) / 100;
+
+									}
+								}
+							};
+							if (options.name === "warelock") {
+								if (options.summaryProcess === "start") {
+									options.totalValue = 0;
+								};
+								if (options.summaryProcess === "calculate") {
+									if (options.component.isRowSelected(options.value.id)) {
+										options.totalValue = options.totalValue + options.value.warelock;
+										
+
+									}
+								}
+							};
+
+
+						}
+
+					},
+					onCellClick: function (e) {
+                       
+                       
+                 
+                  
+					
+					 if(type == 0){
+					    	
+					   if(localStorage.purchasestate == "1"){
+						   	//实库
+	                     	if (e.columnIndex == 26 && e.rowType != "header") {
+								
+								var userId = e.data.userId
+								var userPw = e.data.userPw;
+								var produceid = e.data.produceid;
+								var iots = e.data.iots;
+								var producesubbarcode = e.data.producesubbarcode;
+								var indate = e.data.indate;
+								var productiondate = e.data.productiondate;
+								var stockarea = e.data.stockarea;
+								var goodsshelves_id = e.data.goodsshelves_id;
+								var database = e.data.database;
+								var realstockcount =  e.data.realstockcount;
+								stockInProductData(produceid,iots,producesubbarcode,indate,productiondate,stockarea,goodsshelves_id,realstockcount);
+								
+								return
+							}
+
+					  }
+	                     	
+	                     	
+                        // index == 26
+						if (e.columnIndex == 28 && e.rowType != "header") {
+						
+						var userId = e.data.userId
+						var userPw = e.data.userPw;
+						var produceid = e.data.produceid;
+						var iots = e.data.iots;
+						var producesubbarcode = e.data.producesubbarcode;
+						var indate = e.data.indate;
+						var productiondate = e.data.productiondate;
+						var stockarea = e.data.stockarea;
+						var goodsshelves_id = e.data.goodsshelves_id;
+						var database = e.data.database;
+						stockUpProductData(produceid,iots,producesubbarcode,indate,productiondate,stockarea,goodsshelves_id)
+					}
+						if (e.columnIndex == 27 && e.rowType != "header") {
+						//    alert('调拨')
+								 var userId = e.data.userId
+								 var userPw = e.data.userPw;
+								 var produceid = e.data.produceid;
+								 var iots = e.data.iots;
+								 var producesubbarcode = e.data.producesubbarcode;
+								 var indate = e.data.indate;
+								 var productiondate = e.data.productiondate;
+								 var stockarea = e.data.stockarea;
+								 var goodsshelves_id = e.data.goodsshelves_id;
+								 var database = e.data.database;
+								 getAllocateData(produceid,iots,producesubbarcode,indate,productiondate,stockarea,goodsshelves_id)
+							 }
+
+							 if (e.columnIndex == 30  && e.rowType != "header") {
+								 //借出 
+							var produceid = e.data.produceid
+							var iots = e.data.iots;
+							var producesubbarcode = e.data.producesubbarcode;
+							var indate = e.data.indate;
+							var productiondate = e.data.productiondate;
+							var targetstockId = e.data.targetstockid;
+							var stockarea = e.data.stockarea;
+							var goodsshelves_id = e.data.goodsshelves_id;
+							getInfoByClickLoanOut(produceid, iots, producesubbarcode, indate, productiondate, targetstockId, stockarea, goodsshelves_id);
+
+						}
+
+
+						 }else{
+						 
+						   if(localStorage.purchasestate == "1"){
+							   	//实库
+		                     	if (e.columnIndex == 22 && e.rowType != "header") {
+									
+									var userId = e.data.userId
+									var userPw = e.data.userPw;
+									var produceid = e.data.produceid;
+									var iots = e.data.iots;
+									var producesubbarcode = e.data.producesubbarcode;
+									var indate = e.data.indate;
+									var productiondate = e.data.productiondate;
+									var stockarea = e.data.stockarea;
+									var goodsshelves_id = e.data.goodsshelves_id;
+									var database = e.data.database;
+									var realstockcount =  e.data.realstockcount;
+
+									stockInProductData(produceid,iots,producesubbarcode,indate,productiondate,stockarea,goodsshelves_id,realstockcount);
+									
+									return
+								}
+						
+						
+						
+						   }
+	                    
+						
+						
+						 }
+					 
+
+
+					},
+
+
+					onContentReady: function (e) {
+						// 权限判断
+						
+						if (localStorage.isshow == 1) {
+							if (localStorage.groupcompanyid == 0) {
+								if (localStorage.viewrealcost == 0) {
+									e.component.deleteColumn("未税成本");
+									e.component.deleteColumn("小计");
+								}
+							}
+						} else {
+							e.component.deleteColumn("未税成本");
+							e.component.deleteColumn("小计");
+						}
+                      
+						if (type == 1) {
+							e.component.deleteColumn("副条码");
+							e.component.deleteColumn("批号");
+							e.component.deleteColumn("生产日期");
+							e.component.deleteColumn("有效期");
+						}else{
+							e.component.deleteColumn("可用");
+							e.component.deleteColumn("锁定");
+							
+						}
+					
+
+
+					}
+
+
+
+
+
+				}
+				).dxDataGrid('instance');
+
+
+
+
+
+
+			});
+
+
+		};
+
+
+
+
+		//分页
+		function pagination(curpage1, limit, totalInfo) {
+			$('.M-box2').empty();
+			if (totalInfo == 0) {
+				return;
+			}
+			$('.M-box2').pagination({
+				current: curpage1,
+				totalData: totalInfo,
+				showData: limit,
+				pageCount: Math.floor(totalInfo / limit),
+				mode: 'fixed',
+				isHide: true,
+				jump: true,
+				callback: function (api) {
+					curpage1 = api.getCurrent();
+					rightProductData(curpage1, limit1, totalInfo);
+				}
+			});
+		}
+
+
+
+
+
+
+
+
+
+		$(".find").click(function () {
+			stockData();
+			rightProductData(curpage1, limit1, totalInfo);
+		})
+
+
+
+		$("body").keydown(function (event) {
+			if (event.keyCode == "13") { //keyCode=13是回车键
+				$('.find').click();
+			}
+		});
+
+
+		var type;
+		//导出全部
+		$(".export").click(function () {
+			
+				if(!checkPermissionStatus("库存信息查询-导出1")){
+					
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+				}
+
+			parent.layer.confirm('确定导出全部吗？', {
+				icon: 3,
+				zIndex: parent.layer.zIndex,//重点1
+				title: '导出全部'
+			}, function (index) {
+
+				parent.layer.open({
+					type: 3,
+					zIndex: parent.layer.zIndex, //重点1,
+					success: function (layero, index) {
+						jiazaiIndex = index;
+					}
+				});
+
+				var seachContent = $(".seachContent").val();
+				var infoType = $(".infoType").val(); // 查询类别：0全部 1实库 2备库 3借出 4借入,5调拨
+
+
+				if (localStorage.groupcompanyid == "0") {
+					companytypeid = $('.companytypeid option:selected').val();
+				} else {
+					companytypeid = localStorage.groupcompanyid;
+				}
+
+				targetstockId = $("#warehouseId").val();
+				stockarea = $("#duiyingstockareaId").val();
+				goodsshelves_id = $("#duiyinggoodsshelvesId").val();
+
+
+				if ($(".quchong").is(":checked")) {
+					type = 1
+				} else {
+					type = 0
+				}
+
+
+				var myDate = new Date();
+				var currentDate = myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate();
+
+				var timestamp = new Date().getTime();
+
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp + "/WebExportStockInfo?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'brand': brand1,
+						"property": property1,
+						'series': series1,
+						'targetstockId': targetstockId,
+						'stockarea': stockarea,
+						'goodsshelves_id': goodsshelves_id,
+						'groupCompanyId': companytypeid,
+						"type": type,
+						"infoType": infoType,
+						'txtCondition': seachContent,
+						'filename': "库存信息" + timestamp + ".xls"
+					},
+					success: function (res) {
+						parent.layer.close(jiazaiIndex);
+
+						var res = JSON.parse(res);
+						if (res.ResultValue == '0') {
+
+							parent.layer.open({
+								title: "提示",
+								content: '导出失败！', zIndex: parent.layer.zIndex //重点1
+							});
+
+
+
+
+
+						} else {
+
+							var downurl = "\\" + res.ResultValue
+							while (true) {
+								var isExists = 0;
+								$.ajax({
+									url: downurl,
+									async: false,
+									type: 'HEAD',
+									error: function () {
+										isExists = 0;
+
+									},
+									success: function () {
+										isExists = 1;
+
+									}
+								});
+
+
+								if (isExists == 1) {
+									parent.layer.close(jiazaiIndex);
+									window.location.href = downurl;
+
+									break;
+								}
+
+
+							}
+							parent.layer.open({
+								title: "提示",
+								content: '导出成功！', zIndex: parent.layer.zIndex //重点1
+								,
+								success: function (layero, index) {
+									parent.layer.setTop(layero); //重点2
+
+
+								},
+
+							});
+
+
+						}
+
+					},
+					error: function (res) {
+						parent.layer.close(jiazaiIndex);
+
+					}
+				});
+
+			});
+		})
+
+
+
+
+
+
+		// 点击借出弹出模态框
+		function getInfoByClickLoanOut(produceid, iots, producesubbarcode, indate, productiondate, targetstockId, stockarea, goodsshelves_id) {
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetLendInAndOutInfoByStockProduceInfo?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					'groupCompanyId': companytypeid,
+					"targetstockid": targetstockId,
+					"stockarea": stockarea,
+					"goodsshelves_id": goodsshelves_id,
+					"produceid": produceid,
+					"iots": iots,
+					"producesubbarcode": producesubbarcode,
+					"indate": indate,
+					"productiondate": productiondate,
+					"states": 0 //0 借用中,1已完结
+				},
+				success: function (res) {
+                
+					$('.login > ul').empty();
+					var ordernuminlist = " ";
+					var appendnewli;
+					var res = JSON.parse(res);
+					if (res.length == 0) {
+						return;
+
+					} else {
+
+						var m1 = new MyModal.modal();
+
+						m1.show();
+						gridModalContainer(res);
+
+					}
+
+				}
+
+			})
+		}
+
+
+	});
+
+
+	function gridModalContainer(data) {
+		//展示已知数据
+		//   Dev Extreme
+		$(function () {
+			var dataGrid = $("#gridModalContainer").dxDataGrid({
+				dataSource: data,
+				allowColumnReordering: false,
+				showBorders: true,
+				keyExpr: "id",
+				headerFilter: {
+					visible: false,
+
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				columnChooser: "enable",
+				selection: {
+					mode: "multiple",
+				},
+				allowColumnResizing: true,
+				columns: [
+					{
+						dataField: "ordernum",
+			
+						caption: "借出单号",
+
+					},
+					{
+						dataField: "companyname",
+
+						caption: "公司名称",
+					},
+
+
+
+
+				],
+
+
+				onCellClick: function (e) {
+					if (e.columnIndex == 1 && e.rowType != "header") {
+						parent.tab.tabAdd({
+							icon: '',
+							id: "JHKC"+e.value,
+							title: e.value + '借货出库详情',
+							url: 'views/loanManagement/lendIn/borrowOutOprate.html'
+						});
+					
+					}
+				}
+
+			}
+			).dxDataGrid('instance');
+
+
+		});
+
+	};
+
+   	  //点击实库
+	  function stockInProductData(produceid,iots,producesubbarcode,indate,productiondate,stockarea,goodsshelves_id,realstockcount){
+				$.ajax({
+			    type: "post",
+				url: localStorage.serIp + "/WebGetStockAge?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					'groupCompanyId': companytypeid,
+					// 获取数据
+					'produceid': produceid,
+					"iots": iots,
+					"realstockcount" : realstockcount,
+					"producesubbarcode": producesubbarcode,
+					"indate": indate,
+					"productiondate": productiondate,
+					"stockarea": stockarea,
+					"goodsshelves_id": goodsshelves_id
+				},
+				success: function (res) {
+					var res = JSON.parse(res);
+					if (res.length == 0) {
+						return;
+
+					} else {
+
+						var m1 = new MyModal.modal();
+						m1.show();
+						stockInProductContainer(res);
+
+					}
+				
+				}
+
+		     })
+
+
+			 }
+               
+
+
+ 	function stockInProductContainer(data) {
+	
+		$(function () {
+			var dataGrid = $("#gridModalContainer").dxDataGrid({
+				dataSource: data,
+				allowColumnReordering: false,
+				showBorders: true,
+				keyExpr: "ordernum",
+				headerFilter: {
+					visible: false,
+
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				columnChooser: "enable",
+				selection: {
+					mode: "multiple",
+				},
+				allowColumnResizing: true,
+				columns: [
+					{
+						dataField: "ordernum",
+						caption: "入库单号",
+
+					},
+					{
+						dataField: "producecount",
+						width: 80,
+						caption: "数量",	alignment: "left", 
+					},
+				{
+						dataField: "date",
+						width: 100,
+						caption: "入库时间",
+					alignment: "left", 
+						     dataType : 'date',						format: "yyyy-MM-dd",
+					},
+{
+						dataField: "stockage",
+						width: 100,
+						caption: "库龄",	alignment: "left", 
+						cellTemplate:function(element,info){
+							  element.append("<div>" + info.text + "天"+ "</div>")
+						}
+					},
+
+
+
+
+				],
+
+
+				onCellClick: function (e) {
+	
+    
+					if (e.columnIndex == 1 && e.rowType != "header") {
+					
+						 if( e.data.typeof == 0){
+							parent.tab.tabAdd({
+							icon: '',
+							id: "RKYSWC" + e.value,
+							title: e.value + '入库验收详情',
+								url: 'views/purchasingManagement/acceptance/RKacceptDetail.html'
+							});
+						}else{
+								parent.tab.tabAdd({
+							icon: '',
+							id: "RKYSWC" +  e.value,
+							title: e.value + '入库验收详情',
+								url: 'views/purchasingManagement/acceptance/wuDingDanRuKu.html'
+							});
+						}
+					
+					}
+				}
+
+			}
+			).dxDataGrid('instance');
+
+
+		});
+
+	};
+
+
+   
+           //点击备货弹框
+		   function stockUpProductData(produceid,iots,producesubbarcode,indate,productiondate,stockarea,goodsshelves_id){
+				$.ajax({
+			    type: "post",
+				url: localStorage.serIp + "/WebGetDirectSellingInfoByStockProduce?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					'groupCompanyId': companytypeid,
+					// 获取数据
+					'produceid': produceid,
+					"iots": iots,
+					"producesubbarcode": producesubbarcode,
+					"indate": indate,
+					"productiondate": productiondate,
+					"stockarea": stockarea,
+					"goodsshelves_id": goodsshelves_id
+				},
+				success: function (res) {
+					var res = JSON.parse(res);
+					if (res.length == 0) {
+						return;
+
+					} else {
+
+						var m1 = new MyModal.modal();
+						m1.show();
+						stockUpProductContainer(res);
+
+					}
+				
+				}
+
+		     })
+
+
+			 }
+               
+
+
+ 	function stockUpProductContainer(data) {
+		//展示已知数据
+		//   Dev Extreme
+		$(function () {
+			var dataGrid = $("#gridModalContainer").dxDataGrid({
+				dataSource: data,
+				allowColumnReordering: false,
+				showBorders: true,
+				keyExpr: "id",
+				headerFilter: {
+					visible: false,
+
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				columnChooser: "enable",
+				selection: {
+					mode: "multiple",
+				},
+				allowColumnResizing: true,
+				columns: [
+					{
+						dataField: "ordernum",
+						caption: "备货单号",
+
+					},
+					{
+						dataField: "producecount",
+						width: 100,
+						caption: "备货数量",
+					},
+
+
+
+
+				],
+
+
+				onCellClick: function (e) {
+					if (e.columnIndex == 1 && e.rowType != "header") {
+						// 手术备货已完成详情页面
+						parent.tab.tabAdd({
+						icon: '',
+						id: 'ZXSSBH'+ e.value,
+						title: e.value + '备货详情',
+						url: 'views/salesManagement/operation/addOperation.html'
+					});
+					
+					
+					
+					}
+				}
+
+			}
+			).dxDataGrid('instance');
+
+
+		});
+
+	};
+     
+
+    //  调拨接口
+	 function getAllocateData(produceid,iots,producesubbarcode,indate,productiondate,stockarea,goodsshelves_id){
+		$.ajax({
+			    type: "post",
+				url: localStorage.serIp + "/WebGetWarehouseAllotByStockProduce?jsoncallback=?",
+				async: true,
+				dataType: 'jsonp',
+				data: {
+					"userId": localStorage.userId,
+					"userPw": localStorage.userPw,
+					'database': localStorage.database,
+					// 'groupCompanyId': companytypeid,
+					// 获取数据
+					'produceid': produceid,
+					"iots": iots,
+					"producesubbarcode": producesubbarcode,
+					"indate": indate,
+					"productiondate": productiondate,
+					"stockarea": stockarea,
+					"goodsshelves_id": goodsshelves_id
+				},
+				success: function (res) {
+					var res = JSON.parse(res);
+				
+					if (res.length == 0) {
+						return;
+
+					} else {
+
+						var m1 = new MyModal.modal();
+						m1.show();
+						allocateProductContainer(res);
+
+					}
+				
+				}
+
+		     })
+
+	 }
+	 
+	 
+	//  调拨展示
+
+		function allocateProductContainer(data) {
+		//展示已知数据
+		//   Dev Extreme
+		$(function () {
+			var dataGrid = $("#gridModalContainer").dxDataGrid({
+				dataSource: data,
+				allowColumnReordering: false,
+				showBorders: true,
+				keyExpr: "id",
+				headerFilter: {
+					visible: false,
+
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				columnChooser: "enable",
+				selection: {
+					mode: "multiple",
+				},
+				allowColumnResizing: true,
+				columns: [
+					{
+						dataField: "ordernum",
+						caption: "调拨单号",
+
+					},
+					{
+						dataField: "producecount",
+						width: 100,
+						caption: "调拨数量",
+					},
+
+
+
+
+				],
+
+
+				onCellClick: function (e) {
+					if (e.columnIndex == 1 && e.rowType != "header") {
+						  // 仓库调拨详情
+						parent.tab.tabAdd({
+							icon: '',
+							id: "DBLB" + e.value,
+							title: e.value + '仓库调拨',
+							url: 'views/stockManagement/allocation/allocationDetail.html'
+						});
+					
+					
+					}
+				}
+
+			}
+			).dxDataGrid('instance');
+
+
+		});
+
+	};
+  
+</script>
+
+</html>

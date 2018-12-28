@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>添加公司</title>
+		<link rel="stylesheet" type="text/css" href="views/basicdataProtect/companyManagement/easyui/themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="views/basicdataProtect/companyManagement/easyui/themes/icon.css">
+		<script type="text/javascript" src="views/basicdataProtect/companyManagement/easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="views/basicdataProtect/companyManagement/easyui/jquery.easyui.min.js"></script>
+	</head>
+	<style type="text/css">
+
+	</style>
+
+	<body>
+		<div id="demo1" style="margin-bottom: 50px;margin-top: 10px;">
+			<table id="tree123" class="easyui-treegrid tree1" style="width: 322px; height:800px" data-options="">
+				<thead>
+					<tr>
+						<th data-options="field:'name'" width="250">名称</th>
+						<th data-options="field:'realstockcount'" width="70">数量</th>
+					</tr>
+					<tr>
+						<th data-options="field:'name'" width="250">所有产品</th>
+						<th id="totalCount" data-options="field:'realstockcount'" width="70"></th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</body>
+	<!--<script src="plugins/layui/layui.js"></script>-->
+	<script type="text/javascript">
+		var totalCount = 0;
+
+		function stockData() {
+			$.ajax({
+				type: "get",
+				url: "http://192.168.0.196:11525/ByuWCFService/WebGetStockLeftListMan?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'database': localStorage.database,
+					'groupCompanyId': localStorage.groupcompanyid,
+					'targetstockId': '',
+					'stockarea': '',
+				},
+				success: function(res) {
+					var desData = JSON.parse(res);
+					console.log(desData.length)
+					for(var i = 0; i < desData.length; i++) {
+						totalCount = totalCount + desData[i].realstockcount;
+					}
+					$("#tree123").treegrid({
+						data: desData,
+						method: 'get',
+						rownumbers: false,
+						idField: 'id',
+						treeField: 'name',
+						onClickRow: function(row) {
+							console.log("厂家：" + row);
+							var node = $('#tree123').treegrid('getSelected');
+							if(row.id) {
+								$.ajax({
+									type: "get",
+									url: "http://192.168.0.196:11525/ByuWCFService/WebGetStockLeftListSerByManId?jsoncallback=?",
+									dataType: "jsonp",
+									async: true,
+									data: {
+										'userId': localStorage.userId,
+										'userPw': localStorage.userPw,
+										'database': localStorage.database,
+										'groupCompanyId': localStorage.groupcompanyid,
+										'targetstockId': '',
+										'stockarea': '',
+										'manId': row.id
+									},
+									success: function(res2) {
+										console.log("系列：" + res2)
+										var data2 = JSON.parse(res2);
+										$('#tree123').treegrid('append', {
+											parent: row.id, // the node has a 'id' value that defined through 'idField' property
+											data: data2
+										});
+										console.log(data2)
+										if(data2) {
+											console.log(row.id)
+											$.ajax({
+												type: "get",
+												url: "http://192.168.0.196:11525/ByuWCFService/WebGetStockLeftListProduceBySerId?jsoncallback=?",
+												dataType: "jsonp",
+												async: true,
+												data: {
+													'userId': localStorage.userId,
+													'userPw': localStorage.userPw,
+													'database': localStorage.database,
+													'groupCompanyId': localStorage.groupcompanyid,
+													'targetstockId': '',
+													'stockarea': '',
+													'serId': row.id
+												},
+												success: function(res3) {
+													console.log("产品：" + res3)
+													var data3 = JSON.parse(res3);
+													$('#tree123').treegrid('append', {
+														parent: row.id, // the node has a 'id' value that defined through 'idField' property
+														data: data3
+													});
+												}
+											});
+										}
+									}
+								});
+							}
+
+						},
+					});
+					$("#totalCount span").eq(0).html(totalCount);
+				}
+			});
+
+		}
+		stockData()
+	</script>
+
+</html>

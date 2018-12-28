@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>已完成列表</title>
+		<link rel="stylesheet" href="../../../../plugins/layui/css/layui.css">
+	</head>
+	<style type="text/css">
+
+	</style>
+
+	<body>
+		<div class="completeList">
+
+			<table id="completelist" lay-filter="demo"></table>
+		</div>
+	</body>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'laydate'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			function receiptData() {
+				$.ajax({
+					type: "get",
+					url: "http://192.168.0.196:11525/ByuWCFService/WebGetOutSettlementDtInfoAndRealUseInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						'orderNum': sessionStorage.cpph_bkjs
+					},
+					success: function(res) {
+						var orderData = JSON.parse(res);
+						shihaodatail(orderData.NewDataSet[2].table3);
+					}
+				});
+
+			}
+			receiptData()
+			function shihaodatail(data) {
+				table.render({
+					elem: '#completelist',
+					data: data,
+					cols: [
+						[ //标题栏
+							{
+								field: "index",
+								title: ' ',
+								width: 40,
+								align: "center",
+								//							sort: true
+							}, {
+								purchasebox: true,
+								LAY_purchaseED: false,
+								align: "center",
+								width: 40,
+							}, {
+								field: 'producename',
+								title: '产品名称',
+								width: 100,
+							},
+							{
+								field: 'manufacturer',
+								title: '厂家',
+								width: 100,
+							}, {
+								field: 'danwei',
+								title: '规格',
+								width: 100
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								width: 100
+							}, {
+								field: 'producenum',
+								title: '编号',
+								width: 100
+							}, {
+								field: 'producecode',
+								title: '主条码',
+								width: 100
+							}, {
+								field: 'produceunit',
+								title: '单位',
+								width: 100
+							}, {
+								field: 'producecount',
+								title: '数量',
+								width: 100
+							}, {
+								field: 'iots',
+								title: '批号',
+								width: 100
+							},{
+								field: 'productiondate',
+								title: '生产日期',
+								width: 100
+							}, {
+								field: 'indate',
+								title: '有效期',
+								width: 100
+							}, {
+								field: 'areaname',
+								title: '货区',
+								width: 100
+							}, {
+								field: 'qs',
+								title: '合格',
+								width: 100
+							}, {
+								field: 'package',
+								title: '包装',
+								width: 100
+							}, {
+								field: 'storagecondition',
+								title: '存储条件',
+								width: 100
+							}, {
+								field: 'registrationcertificatename',
+								title: '注册证号',
+								width: 100
+							}
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-382",
+					even: true,
+					page: true //是否显示分页
+						,
+					limits: [10, 20, 30, 40, 50],
+					limit: 5 //每页默认显示的数量
+				});
+			}
+		});
+	</script>
+
+</html>

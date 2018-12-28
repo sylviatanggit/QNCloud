@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>直销发票待申请</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+		</head>
+		<style type="text/css">
+		.purchase {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			/*margin-top: 10px;*/
+		}
+		
+		.btns {
+			float: right;
+			margin-top: 18px;
+		}
+		
+		label {
+			padding: 0 !important;
+			margin-left: 0px;
+		}
+		
+		.btns button,
+		.find,
+		.import {
+			padding: 0;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			text-align: center;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+			margin-left: 8px;
+			font-size: 9pt;
+		}
+		
+		.btns button {
+			width: 90px;
+		}
+		
+		.purchase_header {
+			/*margin-top: -10px;*/
+			margin-bottom: 8px;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+		}
+		
+		
+		
+		.cs_container,
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 5px !important;
+		}
+		
+			
+		.cleardata{
+			cursor: pointer;
+		}
+		
+		.cleardata1{
+			cursor: pointer;
+		}
+		
+		.layui-inline{
+			margin-top: 10px;
+		}
+		
+	
+		
+		</style>
+		<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+		
+		<body>
+		<div class="purchase">
+			<div class="layui-tab">
+				<div class="purchase_header">
+					<div class="inputs" style="margin-left: 14px;margin-bottom: 8px;">
+					<div style="width: 100%;height: auto;">	
+					<div class="layui-inline" id="fengongsiId" style="margin-right: 15px;">
+							<label class="layui-form-label" style="margin-left: 0px;">所属公司</label>
+							<div class="layui-input-inline">
+								<select name="" class="layui-input companytypeid" style="width: 200px;">
+									<option value="-1">全部</option>
+									
+								</select>
+							</div>
+					</div>
+					
+						<div class="layui-inline" style="width: 308px;margin-right: 15px;">
+							<label class="layui-form-label" style="margin-right: 10px;">往来单位</label>
+							<div id="append_group">
+								<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,'')" class="layui-input unit" type="text" id="unit" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+			
+						</div>
+						<div class="layui-inline" style="margin-right: 15px;width: 296px;">
+							<label class="layui-form-label" style="margin-right: 10px;">业务员</label>
+							<div id="append_sale">
+								<input autocomplete="off" class="layui-input salesman" id="salesman" type="text" style="width: 250px;height: 28px;line-height: 28px;">
+							</div>
+						</div>
+				
+			         <!--<div class="layui-inline">
+                    <label class="layui-form-label" style="margin-left: 0px;">日期范围</label>
+                    <div class="layui-input-inline">
+                        <input autocomplete="off" id="date1" class="layui-input" type="text">
+                    </div>
+                    -
+                    <div class="layui-input-inline">
+                        <input autocomplete="off" id="date2" class="layui-input" type="text" style="margin-left: 0;">
+                    </div>
+                </div>-->
+				</div>
+				<div style="width: 100%;height: auto;position: relative;margin-top: 8px;">
+		
+				
+			<div class="layui-inline" style="margin-right: 15px;">
+					<label class="layui-form-label">仓库类型</label>
+					<div class="layui-input-inline">
+						<select name="" class="layui-input applymodel" style="margin-left: 10px;">
+							<option value="1">联动仓</option>
+							<option value="0">自营仓</option>
+						</select>
+					</div>
+				</div>
+				
+				
+				<div class="layui-inline" style="margin-right: 10px;">
+					<div class="layui-input-inline">
+						<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 0px;width: 240px;">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<button class="layui-btn find" style="margin-left: 0px;">查询</button>
+				</div>
+				<div class="btns" style="margin-top: 8px;">
+					<button class="layui-btn moreAction" style="margin-right: 20px;">更多操作</button>
+					<ul class="action">
+						<li>
+							<a class="FPSQ" data-type="FPSQ" lay-event='FPSQ'>发票申请</a>
+						</li>
+					</ul>
+				</div>
+					</div>
+			</div>
+
+			<table id="ZXDSQTable" lay-filter="demo"></table>
+		</div>
+
+	</body>
+	<script src="../../../js/public.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'laydate', 'laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+	
+			var laypage = layui.laypage;
+			var laydate = layui.laydate;
+			var myDate = new Date();
+			var currentMothFirstDay = getCurrentMothFirstDay();
+			var currentDate =  myDate.getFullYear() + '-' +(myDate.getMonth() + 1)  + '-'+  myDate.getDate();
+			
+//			laydate.render({
+//				elem: '#date1',
+//				value: currentMothFirstDay
+//			});
+//			laydate.render({
+//				elem: '#date2',
+//				value: new Date()
+//			});
+			getunit(5);
+			var groupcompanyid=localStorage.groupcompanyid;
+
+			
+			
+			var limit = 50;
+			var curpage = 1;
+			var count;
+
+			function staffList() {
+				$.ajax({
+					type: "post",
+					url: localStorage.serIp  +"/WebGetEmployeeDropDownList?jsoncallback=?",
+					async: true,
+					dataType: 'jsonp',
+					data: {
+						"userId": localStorage.userId,
+						"userPw": localStorage.userPw,
+						'database': localStorage.database,
+						'groupCompanyId': groupcompanyid
+					},
+					success: function(res) {
+						var data = JSON.parse(res);
+						$('#salesman').bComboSelect({
+							showField: 'employeename',
+							keyField: 'employeesid',
+							data: data
+						});
+
+					}
+				});
+			}
+			staffList();
+			//所属公司
+			if(localStorage.groupcompanyid != "0"){
+				$("#fengongsiId").css("display","none");
+				waitData(true)
+			}else{
+				dataFun1();
+			}
+			
+			//获取公司信息
+			function dataFun1() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebGetAllGroupCompany?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'database': localStorage.database,
+						"groupCompanyId": localStorage.groupcompanyid
+					},
+					success: function(res) {
+						var desData = JSON.parse(res);
+						var optionsStr = "";
+						for(var i=0;i<desData.length;i++){
+							var id= desData[i].myg_companyid;
+							var name= desData[i].companyname;
+							if(id == localStorage.groupcompanyid){
+								optionsStr+= "<option value='"+id+"' selected='selected'>"+name+"</option>";
+							}else{
+								optionsStr+= "<option value='"+id+"'>"+name+"</option>";
+							}
+						}
+						$(".companytypeid").append(optionsStr);
+						waitData(true)
+					}
+				});
+			
+			}
+			$(".companytypeid").change(function() {
+				$('.unit').val("");
+				$("#unit").val("");
+				waitData(true)
+				//业务员跟这变
+				groupcompanyid=$(".companytypeid").val();
+				groupcompanyid=groupcompanyid==-1?'':groupcompanyid;
+				var bandstr = '<input autocomplete="off" class="layui-input salesman" id="salesman" type="text" style="width: 250px;height: 28px;line-height: 28px;">';
+				$("#append_sale").empty().append(bandstr);
+				staffList();
+			
+				//往来单位跟这变
+				var append_group = '<input autocomplete="off" onkeyup="value=value.replace(/(^\s*)|(\s*$)/g,"")" class="layui-input unit" type="text" id="unit" style="width: 250px;height: 28px;line-height: 28px;">';
+				$("#append_group").empty().append(append_group);
+				getunitByConfident(5,groupcompanyid);
+			
+			})
+
+			$(".applymodel").change(function(){
+				waitData(true);
+			})
+			
+			function waitData(jumpFlag) {
+				
+				
+				var  unit = $('#unit').val();
+				var agentId = $("#salesman").val();
+				var orderNum = $(".seachContent").val();
+				if(localStorage.groupcompanyid == "0"){
+					companytypeid = $('.companytypeid option:selected').val();
+				}else{
+					companytypeid = localStorage.groupcompanyid;
+				}
+//				var beginTime = $('#date1').val() !='' ? $('#date1').val() :currentMothFirstDay;
+//				var endTime = $('#date2').val() != '' ? $('#date2').val() : currentDate;
+				
+				var applymodel =  $(".applymodel").val();
+				
+						var jiazaiIndex;
+			parent.layer.open({
+			  type: 3, 
+			  zIndex: parent.layer.zIndex, //重点1
+			  success: function(layero, index){
+			  		jiazaiIndex = index;
+	  			}
+			});
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp  +"/WebGetDirectOutSettlementInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'num': limit,
+						'page': curpage,
+						'orderNum': orderNum,
+						'agentId': agentId,
+						'companyId': unit,
+//						'beginTime': beginTime,
+//						'endTime': endTime,
+						'database': localStorage.database,
+						'groupCompanyId':companytypeid,
+						'checkState': 1,
+						'lastType': 9,
+						'applymodel' :applymodel
+					},
+					success: function(res) {
+												parent.layer.close(jiazaiIndex);
+
+						var initData = JSON.parse(res);
+						var data = JSON.parse(initData.data);
+						count = initData.count;
+						wait(data, limit);
+	
+				
+//						$(".layui-table-body [data-field=lasttype] div").each(function(i) {
+//											
+//							switch(data[i].lasttype) 
+//							{
+//								case -1:				
+//									
+//									$(this).html("还货出库");
+//								  break;
+//								case 0:				
+//									
+//									$(this).html("直销备货");
+//								  break;
+//								case 1:  
+//								
+//									$(this).html("无订单出库");
+//								  break;
+//								case 2:  				
+//									$(this).html("借货出库");
+//								  break;
+//								 case 3:  				
+//									$(this).html("退货出库");
+//								  break;	
+//								  case 4:  				
+//									$(this).html("赠送出库");
+//								  break;
+//								  case 5:  				
+//									$(this).html("分销订单出库");
+//								  break;
+//								  case 6:  				
+//									$(this).html("直销备库");
+//								  break;
+//							
+//							}
+//						});
+//			
+//						$(".layui-table-body [data-field=isinvoice] div").each(function(i) {
+//							switch(data[i].isinvoice) 
+//							{
+//								
+//								case 0:  
+//									$(this).html("待申请");
+//								  break;
+//								case 1:  				
+//									$(this).html("申请中");
+//								  break;
+//								case 2:  				
+//									$(this).html("待开票");
+//								  break;
+//								case 3:  				
+//									$(this).html("已开票");
+//								  break;
+//							
+//							}
+//						});
+
+						if(jumpFlag) {
+							wait_pages();
+						}
+					}
+												,
+					error: function(res) {
+						parent.layer.close(jiazaiIndex);
+							
+							parent.layer.open({
+								title: "提示",
+								content: '服务器异常!',
+									zIndex: parent.layer.zIndex //重点1
+					
+							});
+						
+				
+					}
+				});
+
+			}
+			function wait(data, limit) {
+				
+				//展示已知数据
+				table.render({
+					elem: '#ZXDSQTable',
+					data: data,
+					id: "order",
+					cols: [
+						[ //标题栏
+						 	{
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							},{
+								field: 'ordernum',
+								title: '出库核价单号',
+								event: "detail",
+								style: "color:#2D89DD;cursor:pointer",
+								minWidth: 150
+							}, {
+								field: 'isinvoicename',
+								title: '操作状态',
+								minWidth: 100
+							}, {
+								field: 'lasttypename',
+								title: '单据类型',
+								minWidth: 100
+							},
+							{
+								field: 'companyname',
+								title: '往来单位',
+								minWidth: 150
+							}, 	{
+								field: 'owncompanyname',
+								title: '所属公司',
+								minWidth: 150
+							}, {
+								field: 'masterdoctorname',
+								title: '主刀医生',
+								minWidth: 100
+							}, {
+								field: 'patienname',
+								title: '患者姓名',
+								minWidth: 100
+							}, {
+								field: 'surgerydate',
+								title: '手术日期',
+								minWidth: 100
+							},
+							{
+								field: 'totalprice',
+								title: '总金额',
+								minWidth: 100
+							},	
+//							{
+//								field: 'taxpercentage',
+//								title: '税率',
+//								minWidth: 100
+//							},	{
+//								field: 'outtickettypename',
+//								title: '票种',
+//								minWidth: 100
+//							},
+//							{
+//								field: 'nomoney',
+//								title: '待收',
+//								minWidth: 100
+//							}, {
+//								field: 'noinvoce',
+//								title: '欠票',
+//								minWidth: 100
+//							}, 
+//							{
+//								field: 'coupon',
+//								title: '优惠',
+//								minWidth: 100
+//							}, {
+//								field: 'discount',
+//								title: '折扣',
+//								minWidth: 100
+//							}, 
+							{
+								field: 'agentname',
+								title: '业务员',
+								minWidth: 100
+							}, {
+								field: 'outsettlementdate',
+								title: '核价日期',
+								minWidth: 100
+							},
+							{
+								field: 'agentname',
+								title: '制单人',
+								minWidth: 100
+							}, {
+								field: 'actiondate',
+								title: '制单日期',
+								minWidth: 100
+							},
+//							{
+//								field: 'checkername',
+//								title: '审核人',
+//								minWidth: 100
+//							}, {
+//								field: 'checkdate',
+//								title: '审核日期',
+//								minWidth: 100
+//							},
+//							{
+//								field: 'checkstate',
+//								title: '单据状态',
+//								minWidth: 100
+//							},
+							{
+								field: 'lastnum',
+								title: '关联单号',
+								minWidth: 100
+							},
+							{
+								field: 'mynum',
+								title: '自定义单号',
+								minWidth: 100
+							}, {
+								field: 'nomo',
+								title: '备注',
+								minWidth: 100
+							},
+							{
+								field: 'recheckstate',
+								title: '复核状态',
+								minWidth: 100
+							},
+							{
+								field: 'recheckername',
+								title: '复核人',
+								minWidth: 100
+							},
+							{
+								field: 'recheckdate',
+								title: '复核日期',
+								minWidth: 100
+							},
+							{
+								field: 'recheckstatenomo',
+								title: '复核备注',
+								minWidth: 100
+							}
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-210",
+					even: true,
+					limit: limit //每页默认显示的数量
+				});
+			}
+			//分页
+			function wait_pages() {
+				laypage.render({
+					elem: 'ZXDSQTable', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj,first) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						if(!first){
+							waitData(false);
+						}
+						
+					}
+				})
+			}
+			
+			
+			table.on('tool(demo)', function(obj) {
+				var data = obj.data;
+				var order = data.ordernum;
+				if(obj.event === 'detail') {
+					
+					if(data.lasttype == "0"){
+						parent.tab.tabAdd({
+							icon: '',
+							id:  "ZXFPQC" +data.ordernum,
+							title: data.ordernum + '直销核价详情',
+							url: 'views/financiaManagement/checkOutZX/detailZhiXiaoJs.html'
+						});
+					}
+					
+					
+					if(data.lasttype == "6"){
+							parent.tab.tabAdd({
+							icon: '',
+							id: "BKFPQC" + data.ordernum,
+							title: data.ordernum + '直销备库详情',
+							url: 'views/financiaManagement/checkOutZX/detailZhiXiaoBeiKuJs.html'
+						});
+					}
+					
+					
+					if(data.lasttype == "7"){
+							parent.tab.tabAdd({
+							icon: '',
+							id: "BKFPQC" + data.ordernum,
+							title: data.ordernum + '直销产品详情',
+							url: 'views/financiaManagement/checkOutZX/detailZhiXiaoProductOprate.html'
+						});
+					}
+					
+
+				}
+			});
+			
+			
+			$(".find").click(function() {
+		
+				waitData(true);
+			})
+			
+					
+			$("body").keydown(function(event) {
+				if(event.keyCode == "13") { //keyCode=13是回车键
+					$('.find').click();
+				}
+			});
+			
+			$(".FPSQ").click(function(){
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			})
+			
+			var active = {
+				//发票申请
+				FPSQ : function(){
+					var checkStatus = table.checkStatus('order'),
+					 data = checkStatus.data;
+					if (data.length ==0){
+						parent.layer.open({
+							title: "提示",
+							content: '请选择单号!',
+							zIndex: layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+					return;
+					}
+					
+		    		var companyid = data[0].companyid;
+		    		var invoiceorderList ="";
+		    		var repeat = false;
+		    		
+		    		var totalprice =0;
+		    		var jingxiangtotalprice =0;
+		    		var bilv = "";
+//					var taxpercentage = data[0].taxpercentage;
+//  				var tickettype = data[0].outtickettype;
+					for(var i=0;i<data.length;i++){
+//						if(companyid != data[i].companyid || taxpercentage != data[i].taxpercentage|| tickettype != data[i].outtickettype){
+						if(companyid != data[i].companyid){
+
+							repeat = true;
+							break;
+						}
+						
+						invoiceorderList += "'" + data[i].ordernum+ "'";
+						if((i+1)!=data.length){
+					      	invoiceorderList += ",";
+					     }
+						
+						totalprice = Number(totalprice) + Number(data[i].totalprice);
+						jingxiangtotalprice = Number(jingxiangtotalprice) + Number(data[i].inseltotalprice);
+					}
+					
+					var str = "";
+
+					var applymodel =  $(".applymodel").val();
+
+					if(applymodel == 1){
+						bilv = (jingxiangtotalprice / totalprice).toFixed(2) * 100; 
+						str += "	总金额："+ Number(totalprice).toFixed(2);
+						str += "	<br>入库金额："+ Number(jingxiangtotalprice).toFixed(2);
+						str += "	<br>比例："+ bilv.toFixed(2) + "%";
+					}else{
+						str = "信息";
+					}
+			
+					
+					if(repeat){
+						parent.layer.open({
+							title: "提示",
+							content: '往来单位完全一致才允许发票申请!',
+							zIndex: layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+					}else{
+						
+			
+						
+					
+					parent.layer.open({
+					  type: 2, //此处以iframe举例
+					  area: ['300px', '280px'],
+					  content: 'views/financiaManagement/checkOutZX/FPSQDialogBox.html'
+					  ,btn: ['确认', '取消']
+					  , success: function(layero, index){
+					  		var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							
+						   $(".jingxiangtotalprice",paentIfarame).text(Number(jingxiangtotalprice).toFixed(2));
+						   $(".totalprice",paentIfarame).text(Number(totalprice).toFixed(2));
+						   $(".bilv",paentIfarame).text(bilv.toFixed(2)+ "%");
+					 }
+						 ,yes: function(index, layero){
+					    //按钮【按钮一】的回调
+					    	var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							
+							var taxpercentage=$(".tax",paentIfarame).val();
+							var tickettype=$(".tickettype",paentIfarame).val();
+							
+							var master = {
+								"invoiceorderList": invoiceorderList,
+								'companyid' : companyid,
+								'applymodel':applymodel,
+								'taxpercentage':taxpercentage,
+								'outtickettype':tickettype,
+								"invoicetype" : 2 //0:表示入库申请 1表示分销出库申请，2表示直销出库申请
+							};
+							
+							var jiazaiIndex;
+							parent.layer.open({
+							  type: 3, 
+							  zIndex: parent.layer.zIndex, //重点1
+							  success: function(layero, index){
+							  		jiazaiIndex = index;
+					  			}
+							});
+			
+
+						
+						$.ajax({
+							type: "post",
+							url:  localStorage.serIp  +"/WebAddInvoiceApplyMaster",
+							async: true,
+							dataType: 'json',
+							contentType:'application/json; charset=utf-8',
+							crossDomain:true,
+							data:JSON.stringify({
+								'userId': localStorage.userId,
+								'userPw': localStorage.userPw,
+								'database': localStorage.database,
+								'master':  JSON.stringify(master),
+								'groupCompanyId':localStorage.groupcompanyid 
+
+							}),
+							success: function(res) {
+																				parent.layer.close(jiazaiIndex);
+
+								var data = JSON.parse(res);
+								if(data.ResultValue == 1) {
+									parent.layer.close(index);
+									
+									parent.layer.open({
+										title: "提示",
+										content: '申请成功',
+										zIndex: layer.zIndex //重点1
+										,
+										success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+									}
+									});
+									waitData(true);
+								} else {
+									parent.layer.open({
+										title: "提示",
+										content: '服务器提出一个问题!',
+										zIndex: layer.zIndex //重点1
+										,
+										success: function(layero) {
+										parent.layer.setTop(layero); //重点2
+									}
+									});
+								}
+							}
+										,
+									error: function(res) {
+										parent.layer.close(jiazaiIndex);
+											
+											parent.layer.open({
+												title: "提示",
+												content: '服务器异常!',
+													zIndex: parent.layer.zIndex //重点1
+									
+											});
+										
+								
+									}
+							});
+						
+											
+						
+					  }
+					  ,btn2: function(index, layero){
+					    //按钮【按钮二】的回调
+					    
+					    //return false 开启该代码可禁止点击该按钮关闭
+					  }
+					
+					  ,cancel: function(){ 
+					    //右上角关闭回调
+					    
+					    //return false 开启该代码可禁止点击该按钮关闭
+					  }
+					});
+														
+						
+//								
+//						parent.layer.confirm(str, {
+//								icon: 3,
+//								title: '提示'
+//						}, function(index) {},
+//						 function(index) {
+//	
+//							return;
+//						}
+//						);
+
+					}
+				}		
+			};
+			
+			
+		});
+	</script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+			<title>备份账套数据</title>
+			<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+				<script src="../../../js/jquery.js" type="text/javascript"></script>
+
+		</head>
+	</head>
+	<style type="text/css">
+		body {
+			margin: 0;
+			padding: 0;
+			
+		}
+		
+		.backupAccount_title {
+			font-size: 20px;
+			color: #232323;
+			font-weight: bold;
+			margin: 20px 0 20px 48px;
+		}
+		
+		.warning {
+			margin-left: 20px;
+			color: red;
+			font-size: 14px !important;
+		}
+		
+		.backupAccount_body {
+			height: 190px;
+			border-top: 1px solid #C5C5C5;
+			border-bottom: 1px solid #C5C5C5;
+		}
+		
+		.backupAccount_body p {
+			margin-top: 16px;
+			margin-left: 72px;
+			font-size: 14px;
+			color: #232323;
+		}
+		
+		.backupAccount_body ul {
+			margin-left: 100px;
+			color: #232323;
+			font-size: 14px;
+		}
+		
+		.backupAccount_body ul li {
+			margin-top: 12px;
+		}
+		.backupAccount_footer button{
+			cursor: pointer;
+			float: right;
+			margin-top: 15px;
+			font-size: 9pt;
+		}
+		.layui-layer-btn0 {
+			width: 60px;
+			display: inline;
+			border: 1px solid #357BEA;
+			background-color: #357BEA;
+			color: #fff;
+			border-radius: 2px;
+			line-height: 25px !important;
+		}
+		
+		.layui-layer-btn1 {
+			width: 60px;
+			display: inline;
+			border: 1px solid #357BEA;
+			background-color: #FFFFFF;
+			color: #357BEA;
+			border-radius: 2px;
+			line-height: 25px !important;
+			margin-left: 5px;
+			margin-right: 20px !important;
+		}
+		
+		.layui-form-switch{
+			margin-top: 0px !important;
+		}
+		
+		.layui-form-radio{
+			margin: 0px !important;
+		}
+	</style>
+
+	<body>
+		<form class="layui-form" action="">
+		
+		<div class="backupAccount_body">
+			<p>纸张选择：</p>
+			<ul>
+				<li> <input type="radio" name="pageType" value="A4" title="" checked>A4（210*297）</li>
+				<li><input type="radio" name="pageType" value="THREE" title="">3联单（241*280）</li>
+			<li><input type="radio" name="pageType" value="THREE_HALF" title="THREE_HALF" >3联单二等分（241*140）</li>
+			</ul>
+		</div>
+		<div class="backupAccount_footer" style="height: 57px;">
+		
+			<div style="display: inline-block;float: right;">
+				<button class="layui-layer-btn1 cancel">取消</button>
+			<button class="layui-layer-btn0 configPrint">确定</button>
+			</div>
+			
+			
+		</div>
+</form>
+
+		<iframe src="" frameborder="0" id="pdfContainer" name="pdfContainer" style="display: none;"></iframe>
+
+	</body>
+
+</html>
+	<script src="../../../plugins/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../../js/public.js"></script>
+
+<script>
+	
+	layui.use(['table', 'jquery','form'], function() {
+ 			var form = layui.form
+			var $ = layui.jquery;
+			
+			
+			
+			
+		$(".cancel").click(function(){
+				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+				parent.layer.close(index); //再执行关闭     
+		})
+		
+	
+						
+	})
+
+</script>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>已完成列表</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link href="../../../css/font-awesome.min.css" rel="stylesheet">
+	</head>
+	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	<style type="text/css">
+		.completeList {
+			font-family: "PingFang SC" !important;
+			/*font-size: 12px !important;*/
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.inputs {
+			margin-bottom: 8px;
+		}
+		
+		.find {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 76px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.layui-form-label {
+			padding: 0;
+		}
+		
+		label {
+			margin-left: 14px;
+		}
+		
+		.action {
+			right: 41px;
+		}
+		
+		.layui-laypage {
+			margin: 0;
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+		}
+		
+		.cs_container,
+		.cs_container_open .cs_input,
+		.cs_result_area {
+			width: 250px !important;
+		}
+		
+		div.cs_result_area div.pagination li {
+			margin: 0 5px !important;
+		}
+		.import {
+		    cursor: pointer;
+		    border: none;
+		    width: 90px;
+		    height: 28px;
+		    line-height: 28px;
+		    border-radius: 2px;
+		    background-color: #2D89DD;
+		    color: #FFFFFF;
+		}
+	</style>
+
+	<body>
+		<div class="completeList">
+			<div class="btns">
+				<button class="layui-btn import" data-type="getCheckDel">开始导入</button>
+			</div>
+			<table id="completelist" lay-filter="demo"></table>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script type="text/javascript">
+		layui.use(['table', 'jquery', 'element', 'laydate', 'laypage'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			var laydate = layui.laydate;
+			var laypage = layui.laypage;
+			$('.moreAction').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			$('.action').hover(function() {
+				$(".action").show();
+			}, function() {
+				$(".action").hide();
+			});
+			var limit = 50;
+			var curpage = 1;
+			var count;
+			var off = true;
+			var seachContent = $(".seachContent").val();
+			var beginTime = $("#completedate1").val();
+			var endTime = $("#completedate2").val();
+			function operationData() {
+				$.ajax({
+					type: "get",
+					url: localStorage.serIp+"/WebDrawOnDirectSellingInfo?jsoncallback=?",
+					dataType: "jsonp",
+					async: true,
+					data: {
+						'userId': localStorage.userId,
+						'userPw': localStorage.userPw,
+						'groupCompanyId': localStorage.groupcompanyid,
+						'database': localStorage.database
+					},
+					success: function(res) {
+						var operationData = JSON.parse(res);
+						count = operationData.count;
+						operationInfo(operationData, limit);
+						$("[data-field=surgerydate] div:gt(0)").each(function(i) {
+							$(this).html($(this).text().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''))
+						});
+						$("[data-field=actiondate] div:gt(0)").each(function(i) {
+							$(this).html($(this).text().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, ''))
+						});
+						$("[data-field=checkstate] div:gt(0)").each(function(i) {
+							if(operationData[i].checkstate == 0) {
+								$(this).html("未审核");
+							} else {
+								$(this).html("已审核");
+							}
+						});
+						$("[data-field=status] div:gt(0)").each(function(i) {
+							if(operationData[i].status == 1) {
+								$(this).html("待备货");
+							} else if(operationData[i].status == 2) {
+								$(this).html("待手术");
+							} else if(operationData[i].status == 3) {
+								$(this).html("待结算");
+							} else if(operationData[i].status == 4) {
+								$(this).html("待返库");
+							} else if(operationData[i].status == 5) {
+								$(this).html("待取票");
+							} else if(operationData[i].status == 6) {
+								$(this).html("待评价");
+							} else if(operationData[i].status == 7) {
+								$(this).html("待收款");
+							} else if(operationData[i].status == 8) {
+								$(this).html("已完成");
+							}
+						});
+						if(off) {
+							off = false;
+							operation_pages();
+						}
+					}
+				});
+			}
+
+			function operationInfo(data, limit) {
+				table.render({
+					elem: '#completelist',
+					data: data,
+					cols: [
+						[ //标题栏
+							{
+								checkbox: true,
+								LAY_CHECKED: false,
+								align: "center",
+								width: 40,
+							}, 
+							{
+								field: 'ordernum',
+								title: '申请备货单号',
+								width: 100
+							},
+							{
+								field: 'status',
+								title: '操作状态',
+								width: 100
+							},
+							{
+								field: 'companyname',
+								title: '往来单位',
+								width: 100
+							},
+							{
+								field: 'warehousename',
+								title: '出货仓库',
+								width: 100
+							},
+							{
+								field: 'masterdoctorname',
+								title: '主刀医生',
+								width: 100
+							},
+							{
+								field: 'surgery',
+								title: '手术名称',
+								width: 100
+							},
+							{
+								field: 'surgerydate',
+								title: '预计手术日期',
+								width: 100
+							},
+							{
+								field: 'agentname',
+								title: '业务员',
+								width: 100
+							}, {
+								field: 'estimatedate',
+								title: '备货日期',
+								width: 100
+							},
+							{
+								field: 'agentname',
+								title: '制单人',
+								width: 100
+							},
+							{
+								field: 'actiondate',
+								title: '制单日期',
+								width: 100
+							},
+							{
+								field: 'checkername',
+								title: '审核人',
+								width: 100
+							},
+							{
+								field: 'checkdate',
+								title: '审核日期',
+								width: 100
+							},
+							{
+								field: 'checkstate',
+								title: '单据状态',
+								width: 100
+							},
+							{
+								field: 'lastnum',
+								title: '关联单号',
+								width: 100
+							}, {
+								field: 'mynum',
+								title: '自定义单号',
+								width: 100
+							},
+							{
+								field: 'nomo',
+								title: '备注',
+								width: 100
+							},
+						]
+					],
+					skin: 'row', //表格风格
+					height: "full-86",
+					even: true,
+					limit: limit
+				});
+			}
+			//分页
+			function operation_pages() {
+				laypage.render({
+					elem: 'completelist', //注意，这里的 test1 是 ID，不用加 # 号
+					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+					limits: [50, 100, 200],
+					limit: limit,
+					curr: curpage,
+					group: 3,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj) {
+						curpage = obj.curr;
+						limit = obj.limit;
+						operationData();
+					}
+				})
+			}
+			operationData();
+			//点击导入
+			$(".import").click(function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			})
+			var active = {
+				getCheckDel: function() { //获取选中数据
+					var checkStatus = table.checkStatus('completelist'),
+					data = checkStatus.data;
+					if(data.length != 1){
+						parent.layer.open({
+							title: "提示",
+							content: '请选择一条数据导入',
+							zIndex: layer.zIndex //重点1
+							,
+							success: function(layero) {
+							}
+						});
+						return;
+					}
+					sessionStorage.consumediaodan=JSON.stringify(data);
+					parent.layer.open({
+						title: "提示",
+						content: '导入成功',
+						zIndex: layer.zIndex //重点1
+						,
+						success: function(layero) {
+							parent.layer.setTop(layero); //重点2
+						},
+						end: function(){
+                			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+							parent.layer.close(index); //再执行关闭     
+              			}
+					});
+					
+				}
+			};
+			
+		});
+	</script>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+
+</html>

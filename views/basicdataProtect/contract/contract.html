@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>合同</title>
+		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+	</head>
+	<style type="text/css">
+		.consumeManagement {
+			font-family: "PingFang SC" !important;
+			font-size: 9pt !important;
+			color: #232323 !important;
+			margin: 0 20px;
+			margin-top: 20px;
+		}
+		
+		.btns {
+			float: right;
+		}
+		
+		.content {
+			border: 1px solid #ddd;
+			border-bottom: none;
+		}
+		
+		.btns button,
+		.find {
+			margin-left: 10px;
+			cursor: pointer;
+			border: none;
+			width: 90px;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 2px;
+			background-color: #2D89DD;
+			color: #FFFFFF;
+		}
+		
+		.find {
+			width: 76px;
+		}
+		
+		.wait,
+		.complete,
+		.baojia{
+			padding: 0 28px !important;
+			border: 1px solid #CCCCCC;
+			border-bottom: none;
+		}
+		.wait{
+			border-right: none !important;
+		}
+		
+		.layui-tab .layui-this {
+			z-index: 5;
+			border-top: 2px solid #2D89DD !important;
+			border-left: none !important;
+			border-right: none !important;
+		}
+		.complete{
+			border-right: none !important;
+		}
+		.layui-table-view{
+			border-width: 1px 0 !important;
+		}
+	</style>
+	<body>
+		<div class="consumeManagement">
+			<div class="layui-tab">
+				<ul class="layui-tab-title">
+					<li class="layui-this wait">销售合同</li>
+					<li class="complete">采购合同</li>
+					<li class="baojia">报价单</li>
+				</ul>
+				<div class="content">
+
+				</div>
+
+			</div>
+		</div>
+	</body>
+	<script src="../../../plugins/layui/layui.js"></script>
+	<script>
+		layui.use(['table', 'jquery', 'element'], function() {
+			var table = layui.table;
+			var $ = layui.jquery;
+			$(function() {
+				$(".content").load("sales.html");
+			});
+			$(".wait").click(function() {
+				$(".content").load("sales.html",function(){
+					window.location.reload();
+				});
+				$(".wait").addClass("layui-this");
+				$(".complete,.baojia").removeClass("layui-this");
+			});
+			$(".complete").click(function() {
+				$(".content").load("procurement.html")
+				$(".wait,.baojia").removeClass("layui-this");
+				$(".complete").addClass("layui-this");
+			});
+			$(".baojia").click(function() {
+				$(".content").load("price.html")
+				$(".wait,.complete").removeClass("layui-this");
+				$(".baojia").addClass("layui-this");
+			});
+		});
+	</script>
+
+
+<script src="../../../js/jquery.js" type="text/javascript"></script>
+
+<script src="../../../js/public.js"></script>
+<!-- DevExtreme library -->
+<script src="../../../devexpresslibrary/js/dx.all.js"></script>
+
+<!-- 分页插件 -->
+<script src="../../../devexpresslibrary/js/pagination/jquery.pagination.js"></script>
+<script src="../../../devexpresslibrary/js/pagination/highlight.min.js"></script>
+</html>
