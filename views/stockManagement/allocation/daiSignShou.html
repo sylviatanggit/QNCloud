@@ -1,576 +1,514 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<title>仓库调拨</title>
-		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
-	</head>
-	<style type="text/css">
-		.allocation {
-			font-family: "PingFang SC" !important;
-			/*font-size: 12px !important;*/
-			font-size: 9pt !important;
-			color: #232323 !important;
-			/*margin: 0 20px;*/
-			/*margin-top: 10px;*/
-		}
-		
-		.btns {
-			float: right;
-		}
-		
-		label {
-			padding: 0 !important;
-			margin-left: 20px;
-		}
-		
-		.btns button,
-		.find {
-			padding: 0;
-			cursor: pointer;
-			border: none;
-			width: 76px;
-			height: 28px;
-			text-align: center;
-			line-height: 28px;
-			border-radius: 2px;
-			background-color: #2D89DD;
-			color: #FFFFFF;
-			margin-left: 8px;
-		}
-		
-		.btns button {
-			width: 90px;
-		}
-		
-		.allocation_header {
-			margin-bottom: 8px;
-			margin: 0 10px;
-		}
-		
-		.layui-laypage {
-			margin: 0;
-			position: absolute;
-			bottom: 0px;
-			left: 25px;
-		}
-		
-		.layui-inline{
-			margin-top: 10px;
-		}
-	</style>
-	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>仓库调拨</title>
+	<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+</head>
+<style type="text/css">
+	.allocation {
+		font-family: "PingFang SC" !important;
+		font-size: 9pt !important;
+		color: #232323 !important;
+	}
 
-	<body>
-		<div class="allocation">
-			<div class="layui-tab">
-				<div class="allocation_header">
-					<div class="inputs">
-						
-							<div class="layui-inline" id="fengongsiId" style="margin-right: 15px;">
-							<label class="layui-form-label" style="margin-left: 0px;">所属公司</label>
-							<div class="layui-input-inline">
-								<select name="" class="layui-input companytypeid" style="width: 200px;">
-									<!--<option value="-1">全部</option>-->
-									
-								</select>
-							</div>
+	.btns {
+		float: right;
+	}
+
+	label {
+		padding: 0 !important;
+		margin-left: 20px;
+	}
+
+	.btns button,
+	.find {
+		padding: 0;
+		cursor: pointer;
+		border: none;
+		width: 76px;
+		height: 28px;
+		text-align: center;
+		line-height: 28px;
+		border-radius: 2px;
+		background-color: #2D89DD;
+		color: #FFFFFF;
+		margin-left: 8px;
+	}
+
+	.btns button {
+		width: 90px;
+	}
+
+	.allocation_header {
+		margin-bottom: 8px;
+		margin: 0 10px;
+	}
+
+	.layui-laypage {
+		margin: 0;
+		position: absolute;
+		bottom: 0px;
+		left: 25px;
+	}
+
+	.layui-inline {
+		margin-top: 10px;
+	}
+	#gridContainer{
+			margin-top: 5px;
+		}
+</style>
+<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+<body>
+	<div class="allocation">
+		<div class="layui-tab">
+			<div class="allocation_header">
+				<div class="inputs">
+
+					<div class="layui-inline" id="fengongsiId" style="margin-right: 15px;">
+						<label class="layui-form-label" style="margin-left: 0px;">所属公司</label>
+						<div class="layui-input-inline">
+							<select name="" class="layui-input companytypeid" style="width: 200px;">
+							</select>
+						</div>
 					</div>
-					
-						<div class="layui-inline"  style="margin-right: 15px;">
-							<label class="layui-form-label" style="margin-left: 0;">调拨状态</label>
-							<div class="layui-input-inline">
-								<select name="" class="layui-input type">
-									
-									<option value="0" selected="selected">调入单据</option>
-									<option value="1">调出单据</option>
-								</select>
-							</div>
+
+					<div class="layui-inline" style="margin-right: 15px;">
+						<label class="layui-form-label" style="margin-left: 0;">调拨状态</label>
+						<div class="layui-input-inline">
+							<select name="" class="layui-input type">
+
+								<option value="0" selected="selected">调入单据</option>
+								<option value="1">调出单据</option>
+							</select>
 						</div>
-						
-					
-						<!--<div class="layui-inline">
-							<label class="layui-form-label" style="margin-left: 0px;">日期范围</label>
-							<div class="layui-input-inline">
-								<input autoallocation="off" id="allocationdate1" class="layui-input" type="text">
-							</div>
-							-
-							<div class="layui-input-inline">
-								<input autoallocation="off" id="allocationdate2" class="layui-input" type="text" style="margin-left: 0;">
-							</div>
-						</div>-->
-						<br />
-						<div class="layui-inline" style="margin-top: 18px;">
-							<div class="layui-input-inline">
-								<input autoallocation="off" class="layui-input seachContent" type="text" style="width: 240px;margin-left: 0;">
-							</div>
+					</div>
+
+
+
+					<br />
+					<div class="layui-inline" style="margin-top: 18px;">
+						<div class="layui-input-inline">
+							<input autoallocation="off" class="layui-input seachContent" type="text" style="width: 240px;margin-left: 0;">
 						</div>
-						<div class="layui-inline" style="margin-top: 18px;">
-							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
-						</div>
-					
+					</div>
+					<div class="layui-inline" style="margin-top: 18px;">
+						<button class="layui-btn find" style="margin-left: 5px;">查询</button>
 					</div>
 
 				</div>
-				<table id="DQSAllocation" lay-filter="demo"></table>
-			</div>
-		</div>
-	</body>
-	<!--<script src="../../../plugins/layui/layui.js"></script>-->
-		<script src="../../../js/public.js"></script>
 
-	<script>
-		layui.use(['table', 'jquery', 'laydate', 'laypage'], function() {
-			var table = layui.table;
-			var $ = layui.jquery;
-			$('.moreAction').hover(function() {
-				$(".action").show();
-			}, function() {
-				$(".action").hide();
+			</div>
+			<table id="DQSAllocation" lay-filter="demo">
+				<div id="gridContainer"></div>
+			</table>
+		</div>
+	</div>
+</body>
+<script src="../../../js/public.js"></script>
+<script>
+	layui.use(['table', 'jquery', 'laydate', 'laypage'], function () {
+		var table = layui.table;
+		var $ = layui.jquery;
+		$('.moreAction').hover(function () {
+			$(".action").show();
+		}, function () {
+			$(".action").hide();
+		});
+		$('.action').hover(function () {
+			$(".action").show();
+		}, function () {
+			$(".action").hide();
+		});
+
+
+		var laydate = layui.laydate;
+		var laypage = layui.laypage;
+		var myDate = new Date();
+		var currentMothFirstDay = getCurrentMothFirstDay();
+		var currentDate = myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate();
+
+
+
+
+
+		var limit = 50;
+		var curpage = 1;
+		var count;
+		if (localStorage.groupcompanyid != "0") {
+			$("#fengongsiId").css("display", "none");
+			allocationData(true);
+		} else {
+			dataFun1();
+		}
+
+
+		//获取公司信息
+		function dataFun1() {
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetAllGroupCompany?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'database': localStorage.database,
+					"groupCompanyId": localStorage.groupcompanyid
+				},
+				success: function (res) {
+					var desData = JSON.parse(res);
+					var optionsStr = "";
+					for (var i = 0; i < desData.length; i++) {
+						var id = desData[i].myg_companyid;
+						var name = desData[i].companyname;
+
+
+						if (id == localStorage.groupcompanyid) {
+							optionsStr += "<option value='" + id + "' selected='selected'>" + name + "</option>";
+
+						} else {
+							optionsStr += "<option value='" + id + "'>" + name + "</option>";
+
+						}
+
+
+
+					}
+					$(".companytypeid").append(optionsStr);
+					allocationData(true);
+
+				}
 			});
-			$('.action').hover(function() {
-				$(".action").show();
-			}, function() {
-				$(".action").hide();
-			});
-			
-			
-			var laydate = layui.laydate;
-			var laypage = layui.laypage;
-			var myDate = new Date();
-			var currentMothFirstDay = getCurrentMothFirstDay();
-			var currentDate =  myDate.getFullYear() + '-' +(myDate.getMonth() + 1)  + '-'+  myDate.getDate();
-			
-			
-//			laydate.render({
-//				elem: '#allocationdate1',
-//				value: currentMothFirstDay
-//			});
-//			laydate.render({
-//				elem: '#allocationdate2',
-//				value: new Date()
-//			});
-			
-			
-			var limit = 50;
-			var curpage = 1;
-			var count;
-			if(localStorage.groupcompanyid != "0"){
-				$("#fengongsiId").css("display","none");
-				allocationData(true);
-			}else{
-					dataFun1();
+
+		}
+
+		$(".companytypeid").change(function () {
+
+			allocationData(true);
+		})
+
+		$(".issign").change(function () {
+
+			allocationData(true);
+		})
+
+
+		$(".type").change(function () {
+
+			allocationData(true);
+		})
+
+		function allocationData(jumpFlag) {
+			var seachContent = $(".seachContent").val();
+			var companytypeid = "";
+			if (localStorage.groupcompanyid == "0") {
+				companytypeid = $('.companytypeid option:selected').val();
+			} else {
+				companytypeid = localStorage.groupcompanyid;
 			}
 
+			var type = $('.type option:selected').val();
 
-			//获取公司信息
-			function dataFun1() {
-				$.ajax({
-					type: "get",
-					url: localStorage.serIp+"/WebGetAllGroupCompany?jsoncallback=?",
-					dataType: "jsonp",
-					async: true,
-					data: {
-						'userId': localStorage.userId,
-						'userPw': localStorage.userPw,
-						'database': localStorage.database,
-						"groupCompanyId": localStorage.groupcompanyid
-					},
-					success: function(res) {
-						var desData = JSON.parse(res);
-						var optionsStr = "";
-						for(var i=0;i<desData.length;i++){
-							var id= desData[i].myg_companyid;
-							var name= desData[i].companyname;
-							
-							
-							if(id == localStorage.groupcompanyid){
-								optionsStr+= "<option value='"+id+"' selected='selected'>"+name+"</option>";
 
-							}else{
-								optionsStr+= "<option value='"+id+"'>"+name+"</option>";
-
-							}
-							
-						
-							
-						}
-						$(".companytypeid").append(optionsStr);
-						allocationData(true);
-						
-					}
-				});
-
-			}	
-			
-			$(".companytypeid").change(function() {
-			
-				allocationData(true);
-			})
-			
-			$(".issign").change(function() {
-			
-				allocationData(true);
-			})
-			
-			
-			$(".type").change(function() {
-			
-				allocationData(true);
-			})
-			
-			function allocationData(jumpFlag) {
-				var seachContent = $(".seachContent").val();
-
-				
-//				var beginTime = $('#allocationdate1').val() !='' ? $('#allocationdate1').val() :currentMothFirstDay;
-//				var endTime = $('#allocationdate2').val() != '' ? $('#allocationdate2').val() : currentDate;
-					var companytypeid = "";
-				if(localStorage.groupcompanyid == "0"){
-					companytypeid = $('.companytypeid option:selected').val();
-				}else{
-					companytypeid = localStorage.groupcompanyid;
-				}
-				
-				var type =  $('.type option:selected').val();
-				
-							
 			var jiazaiIndex;
 			parent.layer.open({
-			  type: 3, 
-			  zIndex: parent.layer.zIndex, //重点1
-			  success: function(layero, index){
-			  		jiazaiIndex = index;
-	  			}
+				type: 3,
+				zIndex: parent.layer.zIndex, //重点1
+				success: function (layero, index) {
+					jiazaiIndex = index;
+				}
 			});
-				$.ajax({
-					type: "get",
-					url: localStorage.serIp  + "/WebGetWarehouseAllotWaitingReceiving?jsoncallback=?",
-					dataType: "jsonp",
-					async: true,
-					data: {
-						'userId': localStorage.userId,
-						'userPw': localStorage.userPw,
-						'num': limit,
-						'page': curpage,
-						'groupCompanyId': companytypeid,
-						'database': localStorage.database,
-//						'beginTime': beginTime,
-//						'endTime': endTime,
-						'issign': 0,
-						'type':type,
-						'txtCondition': seachContent
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetWarehouseAllotWaitingReceiving?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'num': limit,
+					'page': curpage,
+					'groupCompanyId': companytypeid,
+					'database': localStorage.database,
+					'issign': 0,
+					'type': type,
+					'txtCondition': seachContent
 
-					},
-					success: function(res) {
-												parent.layer.close(jiazaiIndex);
+				},
+				success: function (res) {
+					parent.layer.close(jiazaiIndex);
 
-						var allocationData = JSON.parse(res);
-						count = allocationData.count;	
-						var data = JSON.parse(allocationData.data);
-//						console.log(data)
-						allocationInfo(data, limit);
-						$("[data-field=states] div:gt(0)").each(function(i) {
-							if(data[i].states == 1) {
-								$(this).html("待验收");
-							} else {
-								$(this).html("已完结");
-							}
-						});
-						$("[data-field=checkstate] div:gt(0)").each(function(i) {
-									switch(data[i].checkstate) 
-							{
-							case 1:				
-								
-								$(this).html("已审核");
-							  break;
-							case 2:  
-							
-								$(this).html("已作废");
-							  break;
-							case 0:  				
-								$(this).html("未审核");
-							  break;
-		
-							}
-						});
-						
-						
-					$("[data-field=issign] div:gt(0)").each(function(i) {
-									switch(data[i].issign) 
-							{
-							case 0:				
-								
-								$(this).html("未签收");
-							  break;
-							case 1:  
-							
-								$(this).html("已签收");
-							  break;
-							case 2:  				
-								$(this).html("已驳回");
-							  break;
-		
-							}
-						});
-//						$("[data-field=typeof] div:gt(0)").each(function(i) {
-//							if(data[i].typeof == -1) {
-//								$(this).html("换货入库");
-//							} else if(data[i].typeof == 0) {
-//								$(this).html("订货入库");
-//							} else if(data[i].typeof == 1) {
-//								$(this).html("无订单入库");
-//							} else if(data[i].typeof == 2) {
-//								$(this).html("借货入库");
-//							} else if(data[i].typeof == 3) {
-//								$(this).html("退货入库");
-//							} else if(data[i].typeof == 4) {
-//								$(this).html("赠送入库");
-//							} else if(data[i].typeof == 5) {
-//								$(this).html("报溢");
-//							} else if(data[i].typeof == 6) {
-//								$(this).html("初始化入库");
-//							}
-//						});
-						
-						$("[data-field=checkdate] div:gt(0)").each(function(i) {
-							$(this).html($(this).text().substring(0,10))
-						});
-						
-						$("[data-field=actiondate] div:gt(0)").each(function(i) {
-							$(this).html($(this).text().substring(0,10))
-						});
-						
-						
-						if(jumpFlag) {
-							allocation_pages();
+					var allocationData = JSON.parse(res);
+					count = allocationData.count;
+					var data = JSON.parse(allocationData.data);
+
+					allocationInfo(data, limit);
+
+					$("[data-field=states] div:gt(0)").each(function (i) {
+						if (data[i].states == 1) {
+							$(this).html("待验收");
+						} else {
+							$(this).html("已完结");
 						}
+					});
+
+
+					if (jumpFlag) {
+						allocation_pages();
 					}
-										,
-					error: function(res) {
-						parent.layer.close(jiazaiIndex);
-							
-							parent.layer.open({
-								title: "提示",
-								content: '服务器异常!',
-									zIndex: parent.layer.zIndex //重点1
-					
+				}
+				,
+				error: function (res) {
+					parent.layer.close(jiazaiIndex);
+
+					parent.layer.open({
+						title: "提示",
+						content: '服务器异常!',
+						zIndex: parent.layer.zIndex //重点1
+
+					});
+
+
+				}
+			});
+		}
+
+
+		// 根据可视区的高度判断
+		var viewHeight = $(window).height();
+		$('#gridContainer').css('height', viewHeight * 0.76 + 'px');
+
+		function allocationInfo(data) {
+			var dataGrid = $("#gridContainer").dxDataGrid({
+				dataSource: data,
+				showBorders: true,
+				columnChooser: {
+					enabled: false,
+					mode: "dragAndDrop",
+				},
+				headerFilter: {
+					visible: false
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				filterRow: {
+					visible: false,
+				},
+				selection: {
+					mode: "multiple",
+				},
+				paging: {
+					pageSize: 20000000,
+				},
+				allowColumnResizing: true,
+				columnAutoWidth: true,
+				columnFixing: {
+					enabled: false
+				},
+				grouping: {
+					contextMenuEnabled: false,
+					expandMode: "rowClick"
+				},
+				groupPanel: {
+					visible: false
+				},
+				columns: [{
+					dataField: "ordernum",
+					caption: "单据编号",
+					fixed:true,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div style='color:#2D89DD'> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}
+				,
+				{
+					dataField: "owncompanyname",
+					caption: "所属公司",
+					width: 160,
+				}, {
+					dataField: "oldwarehosename",
+					caption: "源仓库",
+					width:100,
+				}, {
+					dataField: "oldareaname",
+					caption: "源货区",
+					width:100,
+				}, {
+					dataField: "oldgoodsshelves_name",
+					caption: "源货架",
+					width:100,
+				}, {
+					dataField: "newwarehosename",
+					caption: "目标仓库",
+					width:100,
+				}, {
+					dataField: "newareaname",
+					caption: "目标货区",
+					width:100,
+				}, {
+					dataField: "newgoodsshelves_name",
+					caption: "目标货架",
+					width:100,
+
+				}, {
+					dataField: "allotdate",
+					caption: "调拨日期",
+					width:100,
+
+				}, {
+					dataField: 'operatorsidname',
+					caption: '制单人',
+					width: 100,
+				}, {
+					dataField: 'actiondate',
+					caption: '制单日期',
+					format: "yyyy-MM-dd",
+					dataType: "date",
+					width: 100,
+				
+				}, {
+					dataField: 'checkername',
+					caption: '审核人',
+					width: 100,
+				}, {
+					dataField: 'checkdate',
+					caption: '审核日期',
+					format: "yyyy-MM-dd",
+					dataType: "date",
+					width: 100,
+				
+				}, {
+					dataField: 'checkstate',
+					caption: '单据状态',
+					width: 100,
+					alignment:'left',
+					cellTemplate: function (container, options) {
+						var str;
+						if (options.value == 0) {
+							str = "未审核"
+						} else if(options.value == 1) {
+							str = '已审核'
+						}else if(options.value == 2){
+                           str = '已作废'
+						}
+						$("<div>")
+							.append($("<div > " + str + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: 'issign',
+					caption: '签收状态',
+					width: 100,
+					cellTemplate: function (container, options) {
+						var str;
+						if (options.value == 0) {
+							str = "未签收"
+						} else if(options.value == 1) {
+							str = '已签收'
+						}else if(options.value == 2){
+                           str = '已驳回'
+						}
+						$("<div>")
+							.append($("<div> " + str + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: 'signdate',
+					caption: '驳回时间',
+					width: 100,
+				}, {
+					dataField: 'rejectnomo',
+					caption: '驳回备注',
+					width: 100,
+				}, {
+					dataField: 'mynum',
+					caption: '自定义单号',
+					width: 160,
+				}, {
+					dataField: 'nomo',
+					caption: '备注',
+					width: 180,
+				},
+				],
+				onSelectionChanged: function (e) {
+					selectedArray = [];
+					selectedArray = e.selectedRowsData;
+				},
+				   // 点击单号修改功能
+				   onCellClick: function (e) {
+					var data = e.data
+					if (e.columnIndex == 1 && e.rowType == 'data') {
+						var type = $('.type option:selected').val();
+						
+						if (type == "0") {
+
+							parent.tab.tabAdd({
+								icon: '',
+								id: "DQSC" + data.ordernum,
+								title: data.ordernum + '仓库调拨',
+								url: 'views/stockManagement/allocation/daiSignDetail.html'
 							});
-						
-				
-					}
-				});
-			}
-//			allocationData(true);
-
-			function allocationInfo(data, limit) {
-				//展示已知数据
-				table.render({
-					elem: '#DQSAllocation',
-					data: data,
-					height: "full-205",
-					cols: [
-						[ //标题栏
-							 {
-								checkbox: true,
-								LAY_CHECKED: false,
-								align: "center",
-								width: 40,
-							}, {
-								field: 'ordernum',
-								title: '单据编号',
-								minWidth: 200,
-								event: "detail",
-								style: "color:#2D89DD;cursor:pointer"
-							}, {
-								field: 'owncompanyname',
-								title: '所属公司',
-								minWidth: 150
-							},
-							{
-								field: 'oldwarehosename',
-								title: '源仓库',
-								minWidth: 150,
-							},{
-								field: 'oldareaname',
-								title: '源货区',
-								minWidth: 150,
-							},{
-								field: 'oldgoodsshelves_name',
-								title: '源货架',
-								minWidth: 150,
-							}, {
-								field: 'newwarehosename',
-								title: '目标仓库',
-								minWidth: 150
-							}, {
-								field: 'newareaname',
-								title: '目标货区',
-								minWidth: 150
-							}, {
-								field: 'newgoodsshelves_name',
-								title: '目标货架',
-								minWidth: 150
-							}, {
-								field: 'allotdate',
-								title: '调拨日期',
-								minWidth: 100
-							}, {
-								field: 'operatorsidname',
-								title: '制单人',
-								minWidth: 80,
-							}, {
-								field: 'actiondate',
-								title: '制单时间',
-								minWidth: 100,
-							}, {
-								field: 'checkername',
-								title: '审核人',
-								minWidth: 80,
-							}, {
-								field: 'checkdate',
-								title: '审核时间',
-								minWidth: 100,
-							}, {
-								field: 'checkstate',
-								title: '单据状态',
-								minWidth: 80,
-							}, {
-								field: 'issign',
-								title: '签收状态',
-								minWidth: 80,
-							}
-							,
-//							{
-//								field: 'signdate',
-//								title: '签收/驳回时间',
-//								minWidth: 100,
-//							}, {
-//								field: 'rejectnomo',
-//								title: '驳回备注',
-//								minWidth: 150,
-//							},
-							{
-								field: 'mynum',
-								title: '自定义单号',
-								minWidth: 100,
-							}, {
-								field: 'nomo',
-								title: '备注',
-								minWidth: 100,
-							},
-						]
-					],
-					skin: 'row' //表格风格
-						,
-					even: true,
-					limit: limit //每页默认显示的数量
-				});
-			}
-
-			function allocation_pages() {
-				laypage.render({
-					elem: 'DQSAllocation', //注意，这里的 test1 是 ID，不用加 # 号
-					layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
-					limits: [50, 100, 200],
-					limit: limit,
-					curr: curpage,
-					group: 3,
-					count: count, //数据总数，从服务端得到
-					jump: function(obj,first) {
-						//						console.log(obj);
-						curpage = obj.curr;
-						limit = obj.limit;
-						if(!first){
-													allocationData(false);
-
+						} else {
+							parent.tab.tabAdd({
+								icon: '',
+								id: "DBLO" + data.ordernum,
+								title: data.ordernum + '仓库调拨',
+								url: 'views/stockManagement/allocation/allocationDetail.html'
+							});
 						}
 					}
-				})
-			}
-			
-			table.on('tool(demo)', function(obj) {
-				var data = obj.data;
+				},
+					
+
 				
 				
-				if(obj.event === 'detail') {
-					
-					var type =  $('.type option:selected').val();
-					
-					if(type == "0"){
-								
-						parent.tab.tabAdd({
-							icon: '',
-							id: "DQSC" + data.ordernum,
-							title: data.ordernum + '仓库调拨',
-							url: 'views/stockManagement/allocation/daiSignDetail.html'
-						});
-					}else{
-						parent.tab.tabAdd({
-							icon: '',
-							id: "DBLO" +data.ordernum,
-							title: data.ordernum + '仓库调拨',
-							url: 'views/stockManagement/allocation/allocationDetail.html'
-						});
+			}).dxDataGrid('instance');
+		}
+		var selectedArray = [];
+
+
+
+		function allocation_pages() {
+			laypage.render({
+				elem: 'DQSAllocation', //注意，这里的 test1 是 ID，不用加 # 号
+				layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+				limits: [50, 100, 200],
+				limit: limit,
+				curr: curpage,
+				group: 3,
+				count: count, //数据总数，从服务端得到
+				jump: function (obj, first) {
+					curpage = obj.curr;
+					limit = obj.limit;
+					if (!first) {
+						allocationData(false);
+
 					}
-			
-							
-//					
-//					if(localStorage.groupcompanyid == "0"){
-//						
-//						if(data.g_companyid == "0"){
-//							
-//								parent.tab.tabAdd({
-//									icon: '',
-//									id: "HEAD" +data.ordernum,
-//									title: data.ordernum + '仓库调拨',
-//									url: 'views/stockManagement/allocation/headAllocationDetail.html'
-//								});
-//									
-//							
-//						}else{
-//							
-//							parent.tab.tabAdd({
-//								icon: '',
-//								id: "DQSC" + data.ordernum,
-//								title: data.ordernum + '仓库调拨',
-//								url: 'views/stockManagement/allocation/daiSignDetail.html'
-//							});
-//							
-//						}
-//						
-//					
-//						
-//						
-//					}else{
-//						parent.tab.tabAdd({
-//							icon: '',
-//							id: "DBLB" +data.ordernum,
-//							title: data.ordernum + '仓库调拨',
-//							url: 'views/stockManagement/allocation/allocationDetail.html'
-//						});
-//					}
-//				
 				}
-			});
-			
-			
-		
-			
-			$('.find').click(function() {
-			
-				allocationData(true);
 			})
-			
-			$("body").keydown(function(event) {
-				if(event.keyCode == "13") { //keyCode=13是回车键
-					$('.find').click();
-				}
-			});
-		
+		}
+
+
+		$('.find').click(function () {
+
+			allocationData(true);
+		})
+
+		$("body").keydown(function (event) {
+			if (event.keyCode == "13") { //keyCode=13是回车键
+				$('.find').click();
+			}
 		});
-	</script>
+
+	});
+</script>
 
 </html>

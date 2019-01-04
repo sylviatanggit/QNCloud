@@ -1,616 +1,558 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<title>货区列表</title>
-		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
-	</head>
-	<style type="text/css">
-		.goodsManagement {
-			font-family: "PingFang SC" !important;
-			/*font-size: 12px !important;*/
-			font-size: 9pt !important;
-			color: #232323 !important;
-			margin: 0 20px;
-			margin-top: 20px;
-		}
-		
-		.goodsManagement_header button {
-			padding: 0;
-			cursor: pointer;
-			border: none;
-			width: 76px;
-			height: 28px;
-			text-align: center;
-			line-height: 28px;
-			border-radius: 2px;
-			background-color: #2D89DD;
-			color: #FFFFFF;
-		}
-		
-		.layui-table td,
-		.layui-table th {
-			/*padding: 0 3.5vw !important;*/
-		}
-		
-		.goodsManagement_header {
-			margin-bottom: 8px;
-		}
-		
-		.btns button,
-		.find {
-			margin-left: 5px;
-			cursor: pointer;
-			border: none;
-			width: 76px;
-			height: 28px;
-			line-height: 28px;
-			border-radius: 2px;
-			background-color: #2D89DD;
-			color: #FFFFFF;
-			font-size: 9pt;
-		}
-		
-		.layui-btn+.layui-btn {
-			margin-left: 0px;
-		}
-		
-		.btns {
-			float: right;
-		}
-		
-		.btns button {
-			width: 90px;
-		}
-		
-				
-		label {
-			padding: 0 !important;
-			margin-left: 20px;
-			
-		}
-	</style>
-	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>货区列表</title>
+	<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+	<!-- DevExtreme themes -->
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
+</head>
+<style type="text/css">
+	.goodsManagement {
+		font-family: "PingFang SC" !important;
+		font-size: 9pt !important;
+		color: #232323 !important;
+		margin: 0 20px;
+		margin-top: 20px;
+	}
 
-	<body>
-		<div class="goodsManagement">
-			<div class="layui-tab">
-				<div class="goodsManagement_header">
-					<div class="inputs">
-						
+	.goodsManagement_header button {
+		padding: 0;
+		cursor: pointer;
+		border: none;
+		width: 76px;
+		height: 28px;
+		text-align: center;
+		line-height: 28px;
+		border-radius: 2px;
+		background-color: #2D89DD;
+		color: #FFFFFF;
+	}
+
+
+	.goodsManagement_header {
+		margin-bottom: 8px;
+	}
+
+	.btns button,
+	.find {
+		margin-left: 5px;
+		cursor: pointer;
+		border: none;
+		width: 76px;
+		height: 28px;
+		line-height: 28px;
+		border-radius: 2px;
+		background-color: #2D89DD;
+		color: #FFFFFF;
+		font-size: 9pt;
+	}
+
+	.layui-btn+.layui-btn {
+		margin-left: 0px;
+	}
+
+	.btns {
+		float: right;
+	}
+
+	.btns button {
+		width: 90px;
+	}
+
+
+	label {
+		padding: 0 !important;
+		margin-left: 20px;
+	}
+</style>
+<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
+
+<body>
+	<div class="goodsManagement">
+		<div class="layui-tab">
+			<div class="goodsManagement_header">
+				<div class="inputs">
+
 					<div class="layui-inline">
-							<!--<label class="layui-form-label" style="margin-left: 0px;">库存来源</label>-->
-							<div class="layui-input-inline">
-								<select name="" class="layui-input source">
-									<option value="">库存来源</option>
-									<option value="0">总部采购</option>
-									<option value="1">子公司收购</option>
-									<option value="2">子仓调拨</option>
-								</select>
-							</div>
-						</div>
-						
-						<div class="layui-inline" style="margin-left: 10px;">
-							<div class="layui-input-inline">
-								<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 0;width: 240px;">
-							</div>
-						</div>
-						<div class="layui-inline">
-							<button class="layui-btn find" style="margin-left: 5px;">查询</button>
-						</div>
-						<div class="btns">
-							<button class="layui-btn" style="display: none;">保存</button>
-							<button class="layui-btn addHang" style="display: none;">添加行</button>
-							<button class="layui-btn addGoods">新增</button>
-							<button class="layui-btn moreAction">更多操作</button>
-							<ul class="action">
-								
-								<!--<li>
-									<a class="chufaShijian" data-type="pihaoTiaoZhen" >批号调整</a>
-								</li>
-									-->
-								
-								<li class="monthlyPandianId" style="display: none;">
-									<a class="chufaShijian" data-type="monthlyPandian" >月度盘点</a>
-								</li>
-								
-								
-								<li class="richangpandianId" style="display: none;">
-									<a class="chufaShijian" data-type="richangpandian" >日常盘点</a>
-								</li>
-		
-								
-								<li id="getCheckDelId">
-									<a class="chufaShijian" data-type="getCheckDel">批量删除</a>
-								</li>
-							</ul>
+						<div class="layui-input-inline">
+							<select name="" class="layui-input source">
+								<option value="">库存来源</option>
+								<option value="0">总部采购</option>
+								<option value="1">子公司收购</option>
+								<option value="2">子仓调拨</option>
+							</select>
 						</div>
 					</div>
+
+					<div class="layui-inline" style="margin-left: 10px;">
+						<div class="layui-input-inline">
+							<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入关键字" style="margin-left: 0;width: 240px;">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<button class="layui-btn find" style="margin-left: 5px;">查询</button>
+					</div>
+					<div class="btns">
+						<button class="layui-btn" style="display: none;">保存</button>
+						<button class="layui-btn addHang" style="display: none;">添加行</button>
+						<button class="layui-btn addGoods">新增</button>
+						<button class="layui-btn moreAction">更多操作</button>
+						<ul class="action">
+							<li class="monthlyPandianId" style="display: none;">
+								<a class="chufaShijian" data-type="monthlyPandian">月度盘点</a>
+							</li>
+
+							<li class="richangpandianId" style="display: none;">
+								<a class="chufaShijian" data-type="richangpandian">日常盘点</a>
+							</li>
+
+							<li id="getCheckDelId">
+								<a class="chufaShijian" data-type="getCheckDel">批量删除</a>
+							</li>
+						</ul>
+					</div>
 				</div>
-				<table id="goodsManagement" lay-filter="demo"></table>
 			</div>
+			<table id="goodsManagement" lay-filter="demo">
+				<div id="gridContainer"></div>
+			</table>
 		</div>
-		<input type="hidden" class="housedepId" value=""/>
-	</body>
-	<script src="../../../plugins/layui/layui.js"></script>
-				<script src="../../../js/public.js"></script>
+	</div>
+	<input type="hidden" class="housedepId" value="" />
+</body>
+<script src="../../../js/jquery.js"></script>
+<script src="../../../plugins/layui/layui.js"></script>
+<script src="../../../js/public.js"></script>
+<!-- DevExtreme library -->
+<script src="../../../devexpresslibrary/js/dx.all.js"></script>
+<script>
+	layui.use(['table', 'jquery'], function () {
+		var table = layui.table;
+		var $ = layui.jquery;
+		$('.moreAction').hover(function () {
+			$(".action").show();
+		}, function () {
+			$(".action").hide();
+		});
+		$('.action').hover(function () {
+			$(".action").show();
+		}, function () {
+			$(".action").hide();
+		});
+		var seachContent = $(".seachContent").val();
 
-	<script>
-		layui.use(['table', 'jquery'], function() {
-			var table = layui.table;
-			var $ = layui.jquery;
-			$('.moreAction').hover(function() {
-				$(".action").show();
-			}, function() {
-				$(".action").hide();
+
+
+
+		if (!checkGongNengPermissionStatus("月度盘点1")) {
+			$(".monthlyPandianId").remove();
+		} else {
+			$(".monthlyPandianId").css("display", "block")
+		}
+
+		if (!checkGongNengPermissionStatus("日常盘点")) {
+			$(".richangpandianId").remove();
+		} else {
+			$(".richangpandianId").css("display", "block")
+		}
+
+
+
+
+
+		if (sessionStorage.wareHousenature != 3 && localStorage.groupcompanyid != "0") {
+			$("#getCheckDelId").css("display", "none")
+		}
+
+		var inventorymaster_lasttype = "-1";
+
+
+
+		function goodsData() {
+			$.ajax({
+				type: "get",
+				url: localStorage.serIp + "/WebGetGoodsareaByWarehouseId?jsoncallback=?",
+				dataType: "jsonp",
+				async: true,
+				data: {
+					'userId': localStorage.userId,
+					'userPw': localStorage.userPw,
+					'database': localStorage.database,
+					"warehouseId": sessionStorage.houseId,
+					'txtCondition': seachContent,
+					"source": $(".source").val(),
+
+				},
+				success: function (res) {
+					var goodsData = JSON.parse(res);
+					goodsDetail(goodsData);
+
+				}
 			});
-			$('.action').hover(function() {
-				$(".action").show();
-			}, function() {
-				$(".action").hide();
-			});
-			var seachContent = $(".seachContent").val();
-			
-					
-					
+		}
+		goodsData()
 
-			if(!checkGongNengPermissionStatus("月度盘点1")){
-				$(".monthlyPandianId").remove();
-			}else{
-				$(".monthlyPandianId").css("display","block")
-			}
-			
-			if(!checkGongNengPermissionStatus("日常盘点")){
-				$(".richangpandianId").remove();
-			}else{
-				$(".richangpandianId").css("display","block")
-			}
-	
-	
-	
-//			 if(localStorage.groupcompanyid != "0"){
-//				$(".btns").css("display","none");
-//			
-//			}
 
-			if(sessionStorage.wareHousenature !=3 && localStorage.groupcompanyid != "0"){
-				$("#getCheckDelId").css("display","none")
-			}
-    		
-    		var inventorymaster_lasttype = "-1";
-    
-    		
-
-			function goodsData() {
-				$.ajax({
-					type: "get",
-					url: localStorage.serIp+"/WebGetGoodsareaByWarehouseId?jsoncallback=?",
-					dataType: "jsonp",
-					async: true,
-					data: {
-						'userId': localStorage.userId,
-						'userPw': localStorage.userPw,
-						'database': localStorage.database,
-						"warehouseId": sessionStorage.houseId,
-						'txtCondition': seachContent,
-						"source": $(".source").val(),
-
-					},
-					success: function(res) {
-						var goodsData = JSON.parse(res);
-						goodsDetail(goodsData);
-						
-						$("[data-field=source] div:gt(0)").each(function(i) {
-							
-							switch(goodsData[i].source) 
-							{
-								case 1:				
-									
-									$(this).html("子公司收购");
-								  break;
-								case 2:  
-								
-									$(this).html("子仓调拨");
-								  break;
-								case 0:  				
-									$(this).html("总部采购");
-								  break;
-							
-							}
-						
-				
-						});
-						
-						$("[data-field=areatype] div:gt(0)").each(function(i) {
-							
-							switch(goodsData[i].areatype) 
-							{
-								case 0:				
-									
-									$(this).html("存货");
-								  break;
-								case 1:  				
-									$(this).html("备货");
-								  break;
-							
-							}
-						
-				
-						});
-						
-						$("[data-field=isdisable] div:gt(0)").each(function(i) {
-							
-							switch(goodsData[i].isdisable) 
-							{
-								case 0:				
-									
-									$(this).html("启用中");
-								  break;
-								case 1:  				
-									$(this).html("<span style='color:red'>停用中</span>");
-								  break;
-								  
-								 case 2:  				
-									$(this).html("<span style='color:red'>盘点中</span>");
-								  break;
-							
-							}
-						
-				
-						});
-						
-						$("[data-field=goodsshelvescount] div:gt(0)").each(function(i) {
-							
-							if(goodsData[i].goodsshelvescount == 0){
-								$(this).html("无货架");
-
-							}else{
-								$(this).html(goodsData[i].goodsshelvescount + "个货架");
-
-							}
-						});
-						
+		// 根据可视区的高度判断
+		var viewHeight = $(window).height();
+		$('#gridContainer').css('height', viewHeight * 0.87 + 'px');
+		function goodsDetail(data) {
+			var dataGrid = $("#gridContainer").dxDataGrid({
+				dataSource: data,
+				allowColumnReordering: true,
+				showBorders: true,
+				//keyExpr: "id",
+				columnChooser: {
+					enabled: false,
+					mode: "dragAndDrop",
+				},
+				headerFilter: {
+					visible: false
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				filterRow: {
+					visible: false,
+				},
+				selection: {
+					mode: "multiple",
+				},
+				paging: {
+					pageSize: 20000000,
+				},
+				allowColumnResizing: true,
+				columnAutoWidth: true,
+				columnFixing: {
+					enabled: false
+				},
+				grouping: {
+					contextMenuEnabled: false,
+					expandMode: "rowClick"
+				},
+				groupPanel: {
+					visible: false
+				},
+				columns: [{
+					dataField: "areaid",
+					caption: "货区编号",
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div style='color:#2D89DD'> " + options.value + "</div>"))
+							.appendTo(container);
 					}
-				});
-			}
-			goodsData()
-			
-			function goodsDetail(data) {
-				//展示已知数据
-				table.render({
-					elem: '#goodsManagement',
-					data: data,
-					height: "full-78",
-					cols: [
-						[ //标题栏
-							{
-								checkbox: true,
-								LAY_CHECKED: false,
-								align: "center",
-								width: 40,
-							}, {
-								field: 'areaid',
-								title: '货区编号',
-								event: "goods",
-								style: "color:#2D89DD;cursor:pointer",
-								minWidth: 100
-							},{
-								field: 'areaname',
-								title: '货区名称',
-								minWidth: 100
-							},{
-								field: 'goodsshelvescount',
-								title: '货架数量',
-								event: "goods1",
-								style: "color:#2D89DD;cursor:pointer",
-								minWidth: 80
-							},{
-								field: 'source',
-								title: '库存来源',
-								minWidth: 60
-							},{
-								field: 'chargemanname',
-								title: '负责人',
-								minWidth: 80
-							},{
-								field: 'employeephone',
-								title: '联系方式',
-								minWidth: 80
-							},{
-								field: 'administrativedivision',
-								title: '行政区域',
-								minWidth: 100
-							},{
-								field: 'address',
-								title: '货区地址',
-								minWidth: 100
-							},{
-								field: 'areatype',
-								title: '货区性质',
-								minWidth: 60
-							},{
-								field: 'isinventory',
-								title: '本月是否盘点',
-								minWidth: 60
-							},{
-								field: 'nomo',
-								title: '备注',
-								minWidth: 80
-							}
-							,{
-								field: 'isdisable',
-								minWidth: 60,
-								title: '是否停用',
-								event: "disableFlag",
-								style:"color:#2D89DD;cursor:pointer",
-							}
-						]
-					],
-					skin: 'row' //表格风格
-						,
-					even: true,
-					page: false //是否显示分页
-						,
-					limits: [50, 100],
-					limit: 5000 //每页默认显示的数量
-				});
-			}
-			
-			
-			//点击新增
-			$(".addGoods").click(function() {
-							
-					if(!checkPermissionStatus("仓库设置管理-保存1")){
-				
+				}
+					,
+				{
+					dataField: "areaname",
+					caption: "货区名称",
+					width: 70
+				}, {
+					dataField: "goodsshelvescount",
+					caption: "货架数量",
+					cellTemplate: function (container, options) {
+						if (options.value == 0) {
+							$("<div>")
+								.append($("<div style='color:#2D89DD'> " + '无货架' + "</div>"))
+								.appendTo(container);
+						} else {
+							$("<div>")
+								.append($("<div style='color:#2D89DD'> " + options.value + '个货架' + "</div>"))
+								.appendTo(container);
+						}
+
+					}
+				}, {
+					dataField: "source",
+					caption: "库存来源",
+					alignment: 'right',
+					width: 160,
+					cellTemplate: function (container, options) {
+						var str;
+						switch (options.value) {
+							case 1:
+								str = "子公司收购"
+								break;
+							case 2:
+								str = "子仓调拨";
+								break;
+							case 0:
+								str = "总部采购";
+								break;
+						}
+						$("<div>")
+							.append($("<div> " + str + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "chargemanname",
+					caption: "负责人",
+					width: 100
+				}, {
+					dataField: "employeephone",
+					caption: "联系方式",
+					width: 100
+				}, {
+					dataField: "administrativedivision",
+					caption: "行政区域",
+					width: 100
+				}, {
+					dataField: "address",
+					caption: "货区地址",
+					width: 100
+				}, {
+					dataField: "areatype",
+					caption: "货区性质",
+					width: 100,
+					cellTemplate: function (container, options) {
+						var str;
+						switch (options.value) {
+							case 1:
+								str = "备货"
+								break;
+							case 0:
+								str = "存货";
+								break;
+						}
+						$("<div>")
+							.append($("<div> " + str + "</div>"))
+							.appendTo(container);
+					}
+				}, {
+					dataField: "isinventory",
+					caption: "本月是否盘点",
+					width: 100
+				}, {
+					dataField: "nomo",
+					caption: "备注",
+					width: 120,
+				}, {
+					dataField: "isdisable",
+					caption: "是否停用",
+					width: 160,
+					cellTemplate: function (container, options) {
+					
+						switch (options.data.isdisable) {
+							case 0:
+								$("<div>")
+									.append($("<div style='color:#2D89DD'>" + "启用中" + "</div>"))
+									.appendTo(container);
+								break;
+							case 1:
+								$("<div>")
+									.append($("<div style='color:red'>" + "停用中" + "</div>"))
+									.appendTo(container);
+								break;
+							case 2:
+								$("<div>")
+									.append($("<div style='color:red'>" + "盘点中" + "</div>"))
+									.appendTo(container);
+								break;
+						}
+
+					}
+				},
+				],
+				onSelectionChanged: function (e) {
+					selectedArray = [];
+					selectedArray = e.selectedRowsData;
+				},
+				onCellClick: function (e) {
+					var data = e.data, value = e.value, field = e.field
+					if (e.columnIndex == 1 && e.rowType == 'data') {
+						if (!checkPermissionStatus("仓库设置管理-保存1")) {
+
 							parent.layer.open({
 								title: "提示",
 								content: localStorage.jurisdictionTips,
 								zIndex: parent.layer.zIndex //重点1
 								,
-								success: function(layero) {
+								success: function (layero) {
 									parent.layer.setTop(layero); //重点2
 								}
 							});
 							return
-						
-					 }	
-		
-				parent.layer.open({
-					type: 2 //此处以iframe举例
-						,
-					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">新增货区</span>',
-					area: ['700px', '90%'],
-					offset: "rb",
-					content: 'views/basicdataProtect/stock/addGoods.html',
-					zIndex: parent.layer.zIndex //重点1
-						,
-					success: function(layero,index) {
-						parent.layer.setTop(layero); //重点2
-						var body = layer.getChildFrame('body', 'index');
-						paentIfarame = layero.find("iframe")[0].contentWindow.document;
 
-					},
-					end: function() {
-						goodsData();
-					}
-				});
-			});
-			
-			
-			
-			
-			table.on('tool(demo)', function(obj) {
-				var value = obj.value //得到修改后的值
-				,
-				data = obj.data //得到所在行所有键值
-				,
-				
-				
-				field = obj.field; //得到字段
-				if(obj.event === 'goods') {
-								
-					if(!checkPermissionStatus("仓库设置管理-保存1")){
-				
-							parent.layer.open({
-								title: "提示",
-								content: localStorage.jurisdictionTips,
-								zIndex: parent.layer.zIndex //重点1
-								,
-								success: function(layero) {
-									parent.layer.setTop(layero); //重点2
-								}
-							});
-							return
-						
-					 }	
-					 
-						
-					if($(".btns").is(":hidden")){
-						return;
-					}
-					
+						}
 
-					parent.layer.open({
-						type: 2 //此处以iframe举例
+
+						if ($(".btns").is(":hidden")) {
+							return;
+						}
+
+
+						parent.layer.open({
+							type: 2 //此处以iframe举例
 							,
-						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">修改货区</span>',
-						area: ['700px', '90%'],
-						offset:"rb",
-						content: 'views/basicdataProtect/stock/changeGoods.html',
-						zIndex: parent.layer.zIndex //重点1
+							title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">修改货区</span>',
+							area: ['700px', '90%'],
+							offset: "rb",
+							content: 'views/basicdataProtect/stock/changeGoods.html',
+							zIndex: parent.layer.zIndex //重点1
 							,
-						success: function(layero, index11) {
-							parent.layer.setTop(layero); //重点2
-							var body = layer.getChildFrame('body', 'index');
-							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							success: function (layero, index11) {
+								parent.layer.setTop(layero); //重点2
+								var body = layer.getChildFrame('body', 'index');
+								paentIfarame = layero.find("iframe")[0].contentWindow.document;
 
-						
-							$('.addgoods_hqbh', paentIfarame).val(data.areaid);
-							$('.addgoods_hqname', paentIfarame).val(data.areaname);
-							$('.addgoods_reginfo', paentIfarame).val(data.nomo);
-							$('.source',paentIfarame).val(data.source);
-							$('.areatype',paentIfarame).val(data.areatype);
-							$('.address',paentIfarame).val(data.address);
-							$('.name', paentIfarame).val(data.chargemanname)
-							$('.name', paentIfarame).attr("data-id",data.chargemanid)	
-							$('#staffName',paentIfarame).val(data.chargemanid)
-							$('.administrativedivision',paentIfarame).val(data.administrativedivision);
-							
-							$(".addgoods_submit",paentIfarame).click(function() {
-								var addgoods_hqbh = $('.addgoods_hqbh',paentIfarame).val();
-								var addgoods_hqname = $('.addgoods_hqname',paentIfarame).val();
-								var addgoods_reginfo = $('.addgoods_reginfo',paentIfarame).val();
-								
-								var source = $('.source',paentIfarame).val();
-								var areatype = $('.areatype',paentIfarame).val();
-								var address = $('.address',paentIfarame).val();
-								var chargemanid = $('#staffName',paentIfarame).val() == ""? $('#staffName',paentIfarame).attr("data-id") :$('#staffName',paentIfarame).val();
-								var administrativedivision = $('.administrativedivision',paentIfarame).val();
 
-								if(addgoods_hqbh == '') {
-									parent.layer.open({
-										title: "提示",
-										content: '请填写货区编号！',zIndex: parent.layer.zIndex //重点1
-									});
-									return false;
-								}
-								
-								if(addgoods_hqname == '') {
-									parent.layer.open({
-										title: "提示",
-										content: '请填写货区名称！',zIndex: parent.layer.zIndex //重点1
-									});
-									return false;
-								}
-								
-								if(chargemanid == '') {
-									parent.layer.open({
-										title: "提示",
-										content: '请选择负责人！',zIndex: parent.layer.zIndex //重点1
-									});
-									return false;
-								}
-								
-								
-								var slave = {
+								$('.addgoods_hqbh', paentIfarame).val(data.areaid);
+								$('.addgoods_hqname', paentIfarame).val(data.areaname);
+								$('.addgoods_reginfo', paentIfarame).val(data.nomo);
+								$('.source', paentIfarame).val(data.source);
+								$('.areatype', paentIfarame).val(data.areatype);
+								$('.address', paentIfarame).val(data.address);
+								$('.name', paentIfarame).val(data.chargemanname)
+								$('.name', paentIfarame).attr("data-id", data.chargemanid)
+								$('#staffName', paentIfarame).val(data.chargemanid)
+								$('.administrativedivision', paentIfarame).val(data.administrativedivision);
+
+								$(".addgoods_submit", paentIfarame).click(function () {
+									var addgoods_hqbh = $('.addgoods_hqbh', paentIfarame).val();
+									var addgoods_hqname = $('.addgoods_hqname', paentIfarame).val();
+									var addgoods_reginfo = $('.addgoods_reginfo', paentIfarame).val();
+
+									var source = $('.source', paentIfarame).val();
+									var areatype = $('.areatype', paentIfarame).val();
+									var address = $('.address', paentIfarame).val();
+									var chargemanid = $('#staffName', paentIfarame).val() == "" ? $('#staffName', paentIfarame).attr("data-id") : $('#staffName', paentIfarame).val();
+									var administrativedivision = $('.administrativedivision', paentIfarame).val();
+
+									if (addgoods_hqbh == '') {
+										parent.layer.open({
+											title: "提示",
+											content: '请填写货区编号！', zIndex: parent.layer.zIndex //重点1
+										});
+										return false;
+									}
+
+									if (addgoods_hqname == '') {
+										parent.layer.open({
+											title: "提示",
+											content: '请填写货区名称！', zIndex: parent.layer.zIndex //重点1
+										});
+										return false;
+									}
+
+									if (chargemanid == '') {
+										parent.layer.open({
+											title: "提示",
+											content: '请选择负责人！', zIndex: parent.layer.zIndex //重点1
+										});
+										return false;
+									}
+
+
+									var slave = {
 										'warehouseid': sessionStorage.warehousid,
 										'areaid': addgoods_hqbh,
-										'areaname':addgoods_hqname,
-										'nomo':addgoods_reginfo,
-										'source' : source,
-										'areatype':areatype,
-										'address':address,
-										'chargemanid':chargemanid,
-										'administrativedivision':administrativedivision,
-										'nature':sessionStorage.wareHousenature,
-										'warehousename':sessionStorage.warehousename
+										'areaname': addgoods_hqname,
+										'nomo': addgoods_reginfo,
+										'source': source,
+										'areatype': areatype,
+										'address': address,
+										'chargemanid': chargemanid,
+										'administrativedivision': administrativedivision,
+										'nature': sessionStorage.wareHousenature,
+										'warehousename': sessionStorage.warehousename
 									};
-									
-									
-					
-								var  jiazaiIndex;
-								parent.layer.open({
-								  type: 3, zIndex: parent.layer.zIndex ,	//重点1
-								  success: function(layero, index){
-								  	jiazaiIndex = index;
-						  			}
-								});
-								
-								$.ajax({
-									type: "get",
-									url: localStorage.serIp+"/WebUpdateGoodsareaTable?jsoncallback=?",
-									async: true,
-									dataType: 'jsonp',
-									data: {
-										"userId": localStorage.userId,
-										"userPw": localStorage.userPw,
-										'database': localStorage.database,
-										'id': data.id,
-										'slave': JSON.stringify(slave)
-									},
-									success: function(res) {
-										var data = JSON.parse(res);
-											parent.layer.close(jiazaiIndex); 
 
-										if(data.ResultValue == 1) {
-											parent.layer.open({
-												title: "提示",
-												content: '修改成功！',zIndex: parent.layer.zIndex //重点1
-												,
-												success: function(layero, index){
-														parent.layer.close(index11); //再执行关闭  
-												 }
-											});
-											goodsData();
-										} else {
-											parent.layer.open({
-												title: "提示",
-												content: '修改失败！',zIndex: parent.layer.zIndex //重点1
-											});
+
+
+									var jiazaiIndex;
+									parent.layer.open({
+										type: 3, zIndex: parent.layer.zIndex,	//重点1
+										success: function (layero, index) {
+											jiazaiIndex = index;
 										}
-									}
-								});
-							})
-						}
-					});
-				}
-				
-				if(obj.event === 'goods1'){
-					
-					sessionStorage.areaid = data.id;
-					sessionStorage.areaname = data.areaname;
+									});
 
-					parent.layer.open({
-						type: 2 //此处以iframe举例
-							,
-						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px" id="huoqu_name">【货架管理】'+data.areaname+'</span>',
-						area: ['85%', '90%'],
-						offset: "rb",
-						content: 'views/basicdataProtect/stock/shelves.html',
-						zIndex: parent.layer.zIndex //重点1
-							,
-						success: function(layero,index) {
-							parent.layer.setTop(layero); //重点2
-							var body = layer.getChildFrame('body', 'index');
-							paentIfarame = layero.find("iframe")[0].contentWindow.document;
-							
-						}	,
-						end: function(layero,index) {
-							if(sessionStorage.areaid){
-								sessionStorage.removeItem("areaid");
+									$.ajax({
+										type: "get",
+										url: localStorage.serIp + "/WebUpdateGoodsareaTable?jsoncallback=?",
+										async: true,
+										dataType: 'jsonp',
+										data: {
+											"userId": localStorage.userId,
+											"userPw": localStorage.userPw,
+											'database': localStorage.database,
+											'id': data.id,
+											'slave': JSON.stringify(slave)
+										},
+										success: function (res) {
+											var data = JSON.parse(res);
+											parent.layer.close(jiazaiIndex);
+
+											if (data.ResultValue == 1) {
+												parent.layer.open({
+													title: "提示",
+													content: '修改成功！', zIndex: parent.layer.zIndex //重点1
+													,
+													success: function (layero, index) {
+														parent.layer.close(index11); //再执行关闭  
+													}
+												});
+												goodsData();
+											} else {
+												parent.layer.open({
+													title: "提示",
+													content: '修改失败！', zIndex: parent.layer.zIndex //重点1
+												});
+											}
+										}
+									});
+								})
 							}
-							if(sessionStorage.areaname){
-								sessionStorage.removeItem("areaname");
+						});
+					}
+					if (e.columnIndex == 3 && e.rowType == 'data') {
+						sessionStorage.areaid = data.id;
+						sessionStorage.areaname = data.areaname;
+						parent.layer.open({
+							type: 2 //此处以iframe举例
+							,
+							title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px" id="huoqu_name">【货架管理】' + data.areaname + '</span>',
+							area: ['85%', '90%'],
+							offset: "rb",
+							content: 'views/basicdataProtect/stock/shelves.html',
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function (layero, index) {
+								parent.layer.setTop(layero); //重点2
+								var body = layer.getChildFrame('body', 'index');
+								paentIfarame = layero.find("iframe")[0].contentWindow.document;
+
+							},
+							end: function (layero, index) {
+								if (sessionStorage.areaid) {
+									sessionStorage.removeItem("areaid");
+								}
+								if (sessionStorage.areaname) {
+									sessionStorage.removeItem("areaname");
+								}
+								goodsData();
 							}
-							goodsData();
-						}
-					});
-				}
-				
-				
-				//是否停用
-				if(obj.event === 'disableFlag') {
-					
-								
-					if(!checkPermissionStatus("仓库设置管理-保存1")){
-				
-							parent.layer.open({
-								title: "提示",
-								content: localStorage.jurisdictionTips,
-								zIndex: parent.layer.zIndex //重点1
-								,
-								success: function(layero) {
+						});
+					}
+					if (e.columnIndex == 12 && e.rowType == 'data') {	
+					   if (!checkPermissionStatus("仓库设置管理-保存1")) {
+							  parent.layer.open({
+								 title: "提示",
+								 content: localStorage.jurisdictionTips,
+								 zIndex: parent.layer.zIndex //重点1
+								 ,
+								 success: function (layero) {
 									parent.layer.setTop(layero); //重点2
 								}
-							});
-							return
-						
-					 }	
-					 
-					 
+							 });
+							 return;
+						 }
 					var isdisable = data.isdisable; //0未停用，1已停用
+					console.log(isdisable);
 					var id = data.id;
 					var str = "";
 					if(isdisable == 2){
@@ -621,11 +563,13 @@
 					if(inventorymaster_lasttype == "0"){
 						titleStr ="【"+data.areaname+"】月度盘点";
 						openUrl = "views/basicdataProtect/stock/monthlyPandianShow.html";
+						
 					}
 					
 					if(inventorymaster_lasttype == "1"){
 						titleStr ="【"+data.areaname+"】日常盘点"
 						openUrl = "views/basicdataProtect/stock/DailyPandian.html";
+				
 					}
 					
 					
@@ -648,6 +592,7 @@
 						success: function(layero,index) {
 							parent.layer.setTop(layero); //重点2
 							var body = layer.getChildFrame('body', 'index');
+							
 							paentIfarame = layero.find("iframe")[0].contentWindow.document;
 							
 						
@@ -726,65 +671,127 @@
 					});
 				
 				
+				
+					}
+				}
+			}).dxDataGrid('instance');
+		}
+		var selectedArray = [];
+
+		//点击新增
+		$(".addGoods").click(function () {
+
+			if (!checkPermissionStatus("仓库设置管理-保存1")) {
+
+				parent.layer.open({
+					title: "提示",
+					content: localStorage.jurisdictionTips,
+					zIndex: parent.layer.zIndex //重点1
+					,
+					success: function (layero) {
+						parent.layer.setTop(layero); //重点2
+					}
+				});
+				return
+
+			}
+
+			parent.layer.open({
+				type: 2 //此处以iframe举例
+				,
+				title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">新增货区</span>',
+				area: ['700px', '90%'],
+				offset: "rb",
+				content: 'views/basicdataProtect/stock/addGoods.html',
+				zIndex: parent.layer.zIndex //重点1
+				,
+				success: function (layero, index) {
+					parent.layer.setTop(layero); //重点2
+					var body = layer.getChildFrame('body', 'index');
+					paentIfarame = layero.find("iframe")[0].contentWindow.document;
+
+				},
+				end: function () {
+					goodsData();
 				}
 			});
-			//点击删除
-			var $ = layui.$,
+		});
+
+
+
+
+		table.on('tool(demo)', function (obj) {
+			var value = obj.value //得到修改后的值
+				,
+				data = obj.data //得到所在行所有键值
+				,
+
+
+				field = obj.field; //得到字段
+
+
+
+
+
+
+		});
+		//点击删除
+		var $ = layui.$,
 			active = {
-				getCheckDel: function() { //获取选中数据
-					
-								
-					if(!checkPermissionStatus("仓库设置管理-保存1")){
-				
-							parent.layer.open({
-								title: "提示",
-								content: localStorage.jurisdictionTips,
-								zIndex: parent.layer.zIndex //重点1
-								,
-								success: function(layero) {
-									parent.layer.setTop(layero); //重点2
-								}
-							});
-							return
-						
-					 }	
-					 
-					 
-					var checkStatus = table.checkStatus('goodsManagement'),
-						data1 = checkStatus.data;
-					var idstr = "";
-					
-					if(data1.length == 0){
+				getCheckDel: function () { //获取选中数据
+
+
+					if (!checkPermissionStatus("仓库设置管理-保存1")) {
+
 						parent.layer.open({
-								title: "提示",
-								content: "请选择要删除的货区!",
-								zIndex: parent.layer.zIndex //重点1
-							});
-							return;
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function (layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+
 					}
-				
-				    for(var i=0;i<data1.length;i++) { 
-			      		idstr += data1[i].id;
-			      		var isdisablename=data1[i].isdisablename;
-			      		if(isdisablename == "未停用"){
-			      			parent.layer.open({
+
+
+					var checkStatus = table.checkStatus('goodsManagement'),
+						data1 = selectedArray;
+					var idstr = "";
+
+					if (data1.length == 0) {
+						parent.layer.open({
+							title: "提示",
+							content: "请选择要删除的货区!",
+							zIndex: parent.layer.zIndex //重点1
+						});
+						return;
+					}
+
+					for (var i = 0; i < data1.length; i++) {
+						idstr += data1[i].id;
+						var isdisablename = data1[i].isdisablename;
+						if (isdisablename == "未停用") {
+							parent.layer.open({
 								title: "提示",
 								content: "所选货区正在启用中不能删除,请重新选择!",
 								zIndex: parent.layer.zIndex //重点1
 							});
 							return;
-			      		}
-			      		if((i+1)!=data1.length){
-			      			idstr += ",";
-			      		}
-					} 
+						}
+						if ((i + 1) != data1.length) {
+							idstr += ",";
+						}
+					}
 					parent.layer.confirm('确定删除记录？', {
 						icon: 3,
-						title: '删除',zIndex: parent.layer.zIndex //重点1
-					}, function(index) {
+						title: '删除', zIndex: parent.layer.zIndex //重点1
+					}, function (index) {
 						$.ajax({
 							type: "get",
-							url: localStorage.serIp+"/WebDeleteGoodsareaTable?jsoncallback=?",
+							url: localStorage.serIp + "/WebDeleteGoodsareaTable?jsoncallback=?",
 							async: true,
 							dataType: 'jsonp',
 							data: {
@@ -793,21 +800,21 @@
 								"database": localStorage.database,
 								"id": idstr
 							},
-							success: function(res) {
+							success: function (res) {
 								var data = JSON.parse(res);
-								var num1=0;
-								var num2=0;
-								for(var i=0;i<data.length;i++){
-									var panduan=data[i].ResultValue;
-									if(panduan == 1){
+								var num1 = 0;
+								var num2 = 0;
+								for (var i = 0; i < data.length; i++) {
+									var panduan = data[i].ResultValue;
+									if (panduan == 1) {
 										++num1;
-									}else{
+									} else {
 										++num2;
 									}
 								}
 								parent.layer.open({
 									title: "提示",
-									content: num1+'个成功 ，'+num2+'个失败',zIndex: parent.layer.zIndex //重点1
+									content: num1 + '个成功 ，' + num2 + '个失败', zIndex: parent.layer.zIndex //重点1
 								});
 								goodsData();
 							}
@@ -815,372 +822,372 @@
 						parent.layer.close(index);
 					});
 				},
-			
-				
-			
-				pihaoTiaoZhen : function(){
-					
-								
-					if(!checkPermissionStatus("仓库设置管理-盘点1")){
-				
-							parent.layer.open({
-								title: "提示",
-								content: localStorage.jurisdictionTips,
-								zIndex: parent.layer.zIndex //重点1
-								,
-								success: function(layero) {
-									parent.layer.setTop(layero); //重点2
-								}
-							});
-							return
-						
-					 }	
-					 
-					 
-					
+
+
+
+				pihaoTiaoZhen: function () {
+
+
+					if (!checkPermissionStatus("仓库设置管理-盘点1")) {
+
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function (layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+
+					}
+
+
+
 					var checkStatus = table.checkStatus('goodsManagement'),
-					 data1 = checkStatus.data;
-					
-					if(data1.length == 0){
+					data1 = selectedArray;
+
+					if (data1.length == 0) {
 						parent.layer.open({
 							title: "提示",
-							content: '请选择货区！',zIndex: parent.layer.zIndex //重点1
-							
+							content: '请选择货区！', zIndex: parent.layer.zIndex //重点1
+
 						});
 						return;
 					}
-					
-					
-					if(data1.length > 1){
+
+
+					if (data1.length > 1) {
 						parent.layer.open({
 							title: "提示",
-							content: '只能选择一个货区！',zIndex: parent.layer.zIndex //重点1
-							
+							content: '只能选择一个货区！', zIndex: parent.layer.zIndex //重点1
+
 						});
 						return;
 					}
-			
-					
-					if(sessionStorage.areaid){
+
+
+					if (sessionStorage.areaid) {
 						sessionStorage.removeItem("areaid")
 					}
 					sessionStorage.areaid = data1[0].id;
-					sessionStorage.pandianWay ='1';
+					sessionStorage.pandianWay = '1';
 					parent.layer.open({
 						type: 2 //此处以iframe举例
-							,
-						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">【'+data1[0].areaname+'】批号调整盘点</span>',
+						,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">【' + data1[0].areaname + '】批号调整盘点</span>',
 						area: ['85%', '90%'],
 						offset: "rb",
 						content: 'views/basicdataProtect/stock/DailyItosAdjust.html',
 						zIndex: parent.layer.zIndex //重点1
-							,
-						success: function(layero,index) {
+						,
+						success: function (layero, index) {
 							parent.layer.setTop(layero); //重点2
 							var body = layer.getChildFrame('body', 'index');
 							paentIfarame = layero.find("iframe")[0].contentWindow.document;
-							
-						
+
+
 						},
-						cancel: function() {
+						cancel: function () {
 						},
-						end: function() {
-								if(sessionStorage.areaid){
-									sessionStorage.removeItem("areaid")
-								}
-								
-								if(sessionStorage.pandiangoodsshelves_id){
-									sessionStorage.removeItem("pandiangoodsshelves_id")
-								}
-									
-								if(sessionStorage.inventorymaster_lasttype){
-									sessionStorage.removeItem("inventorymaster_lasttype")
-								}
-								
-								if(sessionStorage.produceproperty){
-									sessionStorage.removeItem("produceproperty")
-								}
-								
-								if(sessionStorage.producename){
-									sessionStorage.removeItem("producename")
-								}	
-								if(sessionStorage.danwei){
-									sessionStorage.removeItem("danwei")
-								}	
-								if(sessionStorage.producemodel){
-									sessionStorage.removeItem("producemodel")
-								}	
-								if(sessionStorage.manufacturer){
-									sessionStorage.removeItem("manufacturer")
-								}
-								if(sessionStorage.pandianWay){
-									sessionStorage.removeItem("pandianWay")
-								}
+						end: function () {
+							if (sessionStorage.areaid) {
+								sessionStorage.removeItem("areaid")
+							}
+
+							if (sessionStorage.pandiangoodsshelves_id) {
+								sessionStorage.removeItem("pandiangoodsshelves_id")
+							}
+
+							if (sessionStorage.inventorymaster_lasttype) {
+								sessionStorage.removeItem("inventorymaster_lasttype")
+							}
+
+							if (sessionStorage.produceproperty) {
+								sessionStorage.removeItem("produceproperty")
+							}
+
+							if (sessionStorage.producename) {
+								sessionStorage.removeItem("producename")
+							}
+							if (sessionStorage.danwei) {
+								sessionStorage.removeItem("danwei")
+							}
+							if (sessionStorage.producemodel) {
+								sessionStorage.removeItem("producemodel")
+							}
+							if (sessionStorage.manufacturer) {
+								sessionStorage.removeItem("manufacturer")
+							}
+							if (sessionStorage.pandianWay) {
+								sessionStorage.removeItem("pandianWay")
+							}
 						}
 					});
-				
+
 				}
 				,
-				monthlyPandian:function(){
+				monthlyPandian: function () {
 					var checkStatus = table.checkStatus('goodsManagement'),
-					 data1 = checkStatus.data;
-					 				
-					if(!checkPermissionStatus("仓库设置管理-盘点1")){
-				
-							parent.layer.open({
-								title: "提示",
-								content: localStorage.jurisdictionTips,
-								zIndex: parent.layer.zIndex //重点1
-								,
-								success: function(layero) {
-									parent.layer.setTop(layero); //重点2
-								}
-							});
-							return
-						
-					 }	
-					 
-					 
-				
-					
-					if(data1.length == 0){
+					data1 = selectedArray;
+
+					if (!checkPermissionStatus("仓库设置管理-盘点1")) {
+
 						parent.layer.open({
 							title: "提示",
-							content: '请选择货区！',zIndex: parent.layer.zIndex //重点1
-							
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function (layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+
+					}
+
+
+
+
+					if (data1.length == 0) {
+						parent.layer.open({
+							title: "提示",
+							content: '请选择货区！', zIndex: parent.layer.zIndex //重点1
+
 						});
 						return;
 					}
-					
-					
-					if(data1.length > 1){
+
+
+					if (data1.length > 1) {
 						parent.layer.open({
 							title: "提示",
-							content: '只能选择一个货区！',zIndex: parent.layer.zIndex //重点1
-							
+							content: '只能选择一个货区！', zIndex: parent.layer.zIndex //重点1
+
 						});
 						return;
 					}
-					
-					
-				
-				
+
+
+
+
 					var inventorymaster_lasttype = String(data1[0].lasttype);
-					
-					if(inventorymaster_lasttype != "0" && inventorymaster_lasttype != "-1" && inventorymaster_lasttype !="null"){
+
+					if (inventorymaster_lasttype != "0" && inventorymaster_lasttype != "-1" && inventorymaster_lasttype != "null") {
 						var str = "";
-						switch(inventorymaster_lasttype){
+						switch (inventorymaster_lasttype) {
 							case "0":
-							 str ="当前正在进行月度盘点!";
-						    break;
-						    
-						    case "1":
-							   str ="当前正在进行日常盘点!";
-						    break;
-						    
-						    case "2":
-							 
-						    break;
-						    
-						    case "3":
-							 
-						    break;
-						    case "4":
-							
-						    break;
+								str = "当前正在进行月度盘点!";
+								break;
+
+							case "1":
+								str = "当前正在进行日常盘点!";
+								break;
+
+							case "2":
+
+								break;
+
+							case "3":
+
+								break;
+							case "4":
+
+								break;
 						}
-						
+
 						parent.layer.open({
 							title: "提示",
-							content: str,zIndex: parent.layer.zIndex //重点1
-							
+							content: str, zIndex: parent.layer.zIndex //重点1
+
 						});
-						
+
 						return
 					}
-				
-					
-					
-			
-					
-					if(sessionStorage.areaid){
+
+
+
+
+
+					if (sessionStorage.areaid) {
 						sessionStorage.removeItem("areaid")
 					}
 					sessionStorage.areaid = data1[0].id;
 
 					parent.layer.open({
 						type: 2 //此处以iframe举例
-							,
-						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">【'+data1[0].areaname+'】月度盘点</span>',
+						,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">【' + data1[0].areaname + '】月度盘点</span>',
 						area: ['85%', '90%'],
 						offset: "rb",
 						content: 'views/basicdataProtect/stock/monthlyPandianShow.html',
 						zIndex: parent.layer.zIndex //重点1
-							,
-						success: function(layero,index) {
+						,
+						success: function (layero, index) {
 							parent.layer.setTop(layero); //重点2
 							var body = layer.getChildFrame('body', 'index');
 							paentIfarame = layero.find("iframe")[0].contentWindow.document;
-							
-						
+
+
 						},
-						cancel: function() {
+						cancel: function () {
 						},
-						end: function() {
-								if(sessionStorage.areaid){
-									sessionStorage.removeItem("areaid")
-								}
-								
-									goodsData()
+						end: function () {
+							if (sessionStorage.areaid) {
+								sessionStorage.removeItem("areaid")
+							}
+
+							goodsData()
 						}
 					});
-				
+
 				}
 				,
-				richangpandian:function(){
-					
-						if(!checkPermissionStatus("仓库设置管理-盘点1")){
-							parent.layer.open({
-								title: "提示",
-								content: localStorage.jurisdictionTips,
-								zIndex: parent.layer.zIndex //重点1
-								,
-								success: function(layero) {
-									parent.layer.setTop(layero); //重点2
-								}
-							});
-							return
-						
-					 }	
-					 
-					 
+				richangpandian: function () {
+
+					if (!checkPermissionStatus("仓库设置管理-盘点1")) {
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function (layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+
+					}
+
+
 					var checkStatus = table.checkStatus('goodsManagement'),
-					 data1 = checkStatus.data;
-					
-					if(data1.length == 0){
+						data1 = selectedArray;
+
+					if (data1.length == 0) {
 						parent.layer.open({
 							title: "提示",
-							content: '请选择货区！',zIndex: parent.layer.zIndex //重点1
-							
+							content: '请选择货区！', zIndex: parent.layer.zIndex //重点1
+
 						});
 						return;
 					}
-					
-					
-					if(data1.length > 1){
+
+
+					if (data1.length > 1) {
 						parent.layer.open({
 							title: "提示",
-							content: '只能选择一个货区！',zIndex: parent.layer.zIndex //重点1
-							
+							content: '只能选择一个货区！', zIndex: parent.layer.zIndex //重点1
+
 						});
 						return;
 					}
-					
-					
-					
+
+
+
 					var inventorymaster_lasttype = String(data1[0].lasttype);
 
-					
-					if(inventorymaster_lasttype != "1" && inventorymaster_lasttype != "-1" && inventorymaster_lasttype !="null"){
+
+					if (inventorymaster_lasttype != "1" && inventorymaster_lasttype != "-1" && inventorymaster_lasttype != "null") {
 						var str = "";
-						switch(inventorymaster_lasttype){
+						switch (inventorymaster_lasttype) {
 							case "0":
-							 str ="当前正在进行月度盘点!";
-						    break;
-						    str ="当前正在进行日常盘点!";
-						    case "1":
-							 
-						    break;
-						    
-						    case "2":
-							 
-						    break;
-						    
-						    case "3":
-							 
-						    break;
-						    case "4":
-							  
-						    break;
+								str = "当前正在进行月度盘点!";
+								break;
+								str = "当前正在进行日常盘点!";
+							case "1":
+
+								break;
+
+							case "2":
+
+								break;
+
+							case "3":
+
+								break;
+							case "4":
+
+								break;
 						}
-						
+
 						parent.layer.open({
 							title: "提示",
-							content: str,zIndex: parent.layer.zIndex //重点1
-							
+							content: str, zIndex: parent.layer.zIndex //重点1
+
 						});
-						
+
 						return
-					}	
-				
-				
-			
-					
-					if(sessionStorage.areaid){
+					}
+
+
+
+
+					if (sessionStorage.areaid) {
 						sessionStorage.removeItem("areaid")
 					}
 					sessionStorage.areaid = data1[0].id;
 
 					parent.layer.open({
 						type: 2 //此处以iframe举例
-							,
-						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">【'+data1[0].areaname+'】日常盘点</span>',
+						,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">【' + data1[0].areaname + '】日常盘点</span>',
 						area: ['85%', '90%'],
 						offset: "rb",
 						content: 'views/basicdataProtect/stock/DailyPandian.html',
 						zIndex: parent.layer.zIndex //重点1
-							,
-						success: function(layero,index) {
+						,
+						success: function (layero, index) {
 							parent.layer.setTop(layero); //重点2
 							var body = layer.getChildFrame('body', 'index');
 							paentIfarame = layero.find("iframe")[0].contentWindow.document;
-							
-						
+
+
 						},
-						cancel: function() {
+						cancel: function () {
 						},
-						end: function() {
-								if(sessionStorage.areaid){
-									sessionStorage.removeItem("areaid")
-								}
-									goodsData()
+						end: function () {
+							if (sessionStorage.areaid) {
+								sessionStorage.removeItem("areaid")
+							}
+							goodsData()
 						}
 					});
-				
-				
+
+
 				}
 			};
-			
-			$('.action .chufaShijian').on('click', function() {
-				var type = $(this).data('type');
-				active[type] ? active[type].call(this) : '';
-			});
-			
-			
-			//查询
-			$(".find").click(function() {
+
+		$('.action .chufaShijian').on('click', function () {
+			var type = $(this).data('type');
+			active[type] ? active[type].call(this) : '';
+		});
+
+
+		//查询
+		$(".find").click(function () {
+			off = true;
+			seachContent = $(".seachContent").val();
+			goodsData()
+		})
+
+		$(".source").change(function () {
+			off = true;
+			seachContent = $(".seachContent").val();
+			goodsData();
+		})
+
+		//查询回车事件
+		$(".seachContent").bind("keydown", function (e) {
+			var theEvent = e || window.event;
+			var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+			if (code == 13) {
 				off = true;
 				seachContent = $(".seachContent").val();
 				goodsData()
-			})
-			
-			$(".source").change(function(){
-				off = true;
-				seachContent = $(".seachContent").val();
-				goodsData();
-			})
-			
-			//查询回车事件
-			$(".seachContent").bind("keydown",function(e){
-			　　  var theEvent = e || window.event;
-			　　  var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
-			　　   if (code == 13) {
-			　　	    off = true;
-					seachContent = $(".seachContent").val();
-					goodsData()
-			　　  }
-			});
+			}
 		});
-	</script>
+	});
+</script>
 
 </html>

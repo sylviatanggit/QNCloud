@@ -10,7 +10,6 @@
 	<style type="text/css">
 		.lendInManagement {
 			font-family: "PingFang SC" !important;
-			/*font-size: 12px !important;*/
 			font-size: 9pt !important;
 			color: #232323 !important;
 			margin: 0 20px;
@@ -22,7 +21,6 @@
 		}
 		
 		.content {
-			/*padding: 0 20px;*/
 			padding-top: 8px;
 			border: 1px solid #ddd;
 			border-bottom: none;
@@ -45,10 +43,7 @@
 			width: 76px;
 		}
 		
-		.layui-table td,
-		.layui-table th {
-			/*padding: 0 2.5vw !important;*/
-		}
+
 		.wait,.jieru,
 		.complete{
 			padding: 0 28px !important;
@@ -107,7 +102,6 @@
 			$(".complete").click(function() {
 				$(".content").load("complete.html")
 				$(".jieru").css("border-right","0px");
-
 				$(".wait").removeClass("layui-this");
 				$(".complete").addClass("layui-this");
 			})
@@ -120,5 +114,12 @@
 			})
 		});
 	</script>
-
+     <script src="../../../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+	 <script type="text/javascript" src="../../../js/comboselect.js"></script>
+	 <script type="text/javascript" src="../../../js/b.comboselect.js"></script>
+	 <script src="../../../devexpresslibrary/js/dx.all.js"></script>
+	 <script src="../../../js/public.js"></script>
+	<!-- DevExtreme themes -->
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
 </html>

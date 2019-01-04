@@ -10,11 +10,13 @@
 		<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
 		<link href="../../css/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="../../css/same.css" />
+		<!-- DevExtreme themes -->
+		 <link rel="stylesheet" href="../../devexpresslibrary/css/dx.common.css">
+	     <link rel="stylesheet" href="../../devexpresslibrary/css/dx.light.css">
 	</head>
 	<style type="text/css">
 		.account {
 			font-family: "PingFang SC" !important;
-			/*font-size: 12px !important;*/
 			font-size: 9pt !important;
 			color: #232323 !important;
 			margin: 0 20px;
@@ -23,7 +25,6 @@
 		
 		.account .layui-table td,
 		.layui-table th {
-			/*font-size: 12px !important;*/
 			font-size: 9pt !important;
 		}
 		
@@ -184,15 +185,20 @@
 							</ul>
 						</div>
 					</div>
-</div>
+                  </div>
 				</div>
-				<table id="account" lay-filter="demo"></table>
+				<table id="account" lay-filter="demo">
+					<div id="gridContainer"></div>
+				</table>
 			</div>
 		</div>
 	</body>
+	<script src="../../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="../../js/comboselect.js"></script>
+	<script type="text/javascript" src="../../js/b.comboselect.js"></script>
+	<script src="../../devexpresslibrary/js/dx.all.js"></script>
 	<script src="../../plugins/layui/layui.js"></script>
 	<script src="../../js/public.js"></script>
-
 	<script>
 					
 		var limit = 50;
@@ -292,7 +298,6 @@
 					},
 					success: function(res) {
 						var data = JSON.parse(res);
-						//							console.log(data)
 						$('#warehouse').bComboSelect({
 							showField: 'warehousename',
 							keyField: 'id',
@@ -455,135 +460,166 @@
 				}
 			});
 		
-			//展示已知数据
-			function account(data) {
-				table.render({
-					elem: '#account',
-					data: data,
-					height: "full-155",
-					cols: [
-						[ //标题栏
-							{
-								checkbox: true,
-								LAY_CHECKED: false,
-								align: "center",
-								width: 40,
-							}, {
-								field: 'date',
-								title: '日期',								minWidth: 100,
+	    // 根据可视区的高度判断
+		var viewHeight = $(window).height();
+		$('#gridContainer').css('height', viewHeight * 0.83 + 'px');
 
-							},
-							{
-								field: 'ordernum',								minWidth: 100,
+		function account(data,limit) {
+			var dataGrid = $("#gridContainer").dxDataGrid({
+				dataSource: data,
+				showBorders: true,
+				columnChooser: {
+					enabled: false,
+					mode: "dragAndDrop",
+				},
+				headerFilter: {
+					visible: false
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				filterRow: {
+					visible: false,
+				},
+				selection: {
+					mode: "multiple",
+				},
+				paging: {
+					pageSize: 20000000,
+				},
+				allowColumnResizing: true,
+				columnAutoWidth: true,
+				columnFixing: {
+					enabled: false
+				},
+				grouping: {
+					contextMenuEnabled: false,
+					expandMode: "rowClick"
+				},
+				groupPanel: {
+					visible: false
+				},
+				columns: [{
+					dataField: "date",
+					caption: "日期",
+					width: 100,
+					alignment:'left',
+				},{
+					dataField: "ordernum",
+					caption: "单据编号",
+					width: 160,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}
+				,{
+					dataField: "companyname",
+					caption: "往来单位",
+					width: 160,
+					alignment:'left',
+				},{
+					dataField: "owncompanyname",
+					caption: "所属公司",
+					width: 160,
+				},{
+					dataField: "producename",
+					caption: "产品名称",
+					width: 160,
+				},{
+					dataField: "manufacturer",
+					caption: "厂家",
+					width: 160,
+				},
+				{
+					dataField: "danwei",
+					caption: "规格",
+					width: 160,
+				},{
+					dataField: "producemodel",
+					caption: "型号",
+					width:100,
+				}, {
+					dataField: "producenum",
+					caption: "编号",
+					width:100,
+				}, {
+					dataField: "produceunit",
+					caption: "单位",
+					width:100,
+				}, {
+					dataField: "realcost",
+					caption: "出/入库成本价",
+					width:100,
+				}, {
+					dataField: "incount",
+					caption: "收入数量",
+					width:100,
 
-								title: '单据编号',
-							}, {
-								field: 'companyname',								minWidth: 100,
+				}, {
+					dataField: "outcount",
+					caption: "发出数量",
+					width:100,
+				}, {
+					dataField: 'unitprice',
+					caption: '单价',
+					width: 100,
+				},  {
+					dataField: 'totalprice',
+					caption: '金额',
+					width: 100,
+				},{
+					dataField: 'iots',
+					caption: '产品批号',
+					width: 100,
+				},{
+					dataField: 'productiondate',
+					caption: '生产日期',
+					width: 100,
+				},{
+					dataField: 'indate',
+					caption: '有效期',
+					width: 100,
+				},{
+					dataField: 'warehousename',
+					caption: '仓库',
+					width: 100,
+				},{
+					dataField: 'areaname',
+					caption: '货区',
+					width: 100,
+				},{
+					dataField: 'goodsshelves_name',
+					caption: '货架',
+					width: 100,
+				},{
+					dataField: 'produceusename',
+					caption: '通俗名称',
+					width: 100,
+				},{
+					dataField: 'produceseries',
+					caption: '产品系列',
+					width: 100,
+				},{
+					dataField: 'producematerial',
+					caption: '材质',
+					width: 100,
+				},{
+					dataField: 'referencename',
+					caption: '注册证号',
+					width: 100,
+				},{
+					dataField: 'productcertificate',
+					caption: '产品生产许可证编号',
+					width: 160,
+				},
+				],
 
-								title: '往来单位',
-							}, {
-								field: 'owncompanyname',								minWidth: 100,
-
-								title: '所属公司',
-							}, {
-								field: 'producename',								minWidth: 100,
-
-								title: '产品名称',
-							}, {
-								field: 'manufacturer',								minWidth: 100,
-
-								title: '厂家',
-							}, {
-								field: 'danwei',								minWidth: 100,
-
-								title: '规格',
-							}, {
-								field: 'producemodel',								minWidth: 100,
-
-								title: '型号',
-							}, {
-								field: 'producenum',								minWidth: 100,
-
-								title: '编号',
-							}, {
-								field: 'produceunit',								minWidth: 100,
-
-								title: '单位',
-							},
-							{
-								field: 'realcost',								minWidth: 100,
-
-								title: '出/入库成本价',
-							},{
-								field: 'incount',								minWidth: 100,
-
-								title: '收入数量',
-							}, {
-								field: 'outcount',
-								title: '发出数量',								minWidth: 100,
-
-							}, {
-								field: 'unitprice',
-								title: '单价',								minWidth: 100,
-
-							},{
-								field: 'totalprice',
-								title: '金额',								minWidth: 100,
-
-							}, {
-								field: 'iots',								minWidth: 100,
-
-								title: '产品批号',
-							}, {
-								field: 'productiondate',
-								title: '生产日期',								minWidth: 100,
-
-							}, {
-								field: 'indate',
-								title: '有效期',								minWidth: 100,
-
-							}, {
-								field: 'warehousename',
-								title: '仓库',								minWidth: 100,
-
-							}, {
-								field: 'areaname',
-								title: '货区',								minWidth: 100,
-
-							}, {
-								field: 'goodsshelves_name',
-								title: '货架',								minWidth: 100,
-
-							},
-							{
-								field: 'produceusename',
-								title: '通俗名称',								minWidth: 100,
-
-							}, {
-								field: 'produceseries',
-								title: '产品系列',								minWidth: 100,
-
-							}, {
-								field: 'producematerial',
-								title: '材质',								minWidth: 100,
-
-							}, {
-								field: 'referencename',
-								title: '注册证号',
-								minWidth: 100,
-							},{
-								field: 'productcertificate',
-								title: '产品生产许可证编号',
-								minWidth: 150,
-							}
-						]
-					],
-					skin: 'row' //表格风格
-						,
-					even: true, //每页默认显示的数量
-					limit: limit
-				});
-			}
+				  
+			}).dxDataGrid('instance');
+		}
+		var selectedArray = [];
 			
 			//分页
 			function pages() {
@@ -596,7 +632,6 @@
 					group: 3,
 					count: count, //数据总数，从服务端得到
 					jump: function(obj) {
-						//						console.log(obj);
 						curpage = obj.curr;
 						limit = obj.limit;
 						accountData(false);
@@ -760,8 +795,6 @@
 
 		});
 	</script>
-	<script src="../../js/jquery.js" type="text/javascript"></script>
-	<script type="text/javascript" src="../../js/comboselect.js"></script>
-	<script type="text/javascript" src="../../js/b.comboselect.js"></script>
+
 
 </html>

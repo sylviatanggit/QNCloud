@@ -10,11 +10,8 @@
 	<style type="text/css">
 		.allocation {
 			font-family: "PingFang SC" !important;
-			/*font-size: 12px !important;*/
 			font-size: 9pt !important;
 			color: #232323 !important;
-			/*margin: 0 20px;*/
-			/*margin-top: 10px;*/
 		}
 		
 		.btns {
@@ -40,7 +37,9 @@
 			color: #FFFFFF;
 			margin-left: 8px;
 		}
-		
+		#gridContainer{
+			margin-top: 5px;
+		}
 		.btns button {
 			width: 90px;
 		}
@@ -73,8 +72,6 @@
 							<label class="layui-form-label" style="margin-left: 0px;">所属公司</label>
 							<div class="layui-input-inline">
 								<select name="" class="layui-input companytypeid" style="width: 200px;">
-									<!--<option value="-1">全部</option>-->
-									
 								</select>
 							</div>
 					</div>
@@ -111,13 +108,13 @@
 					</div>
 
 				</div>
-				<table id="YBHAllocation" lay-filter="demo"></table>
+				<table id="YBHAllocation" lay-filter="demo">
+					<div id="gridContainer"></div>
+				</table>
 			</div>
 		</div>
 	</body>
-	<!--<script src="../../../plugins/layui/layui.js"></script>-->
 		<script src="../../../js/public.js"></script>
-
 	<script>
 		layui.use(['table', 'jquery', 'laydate', 'laypage'], function() {
 			var table = layui.table;
@@ -267,7 +264,7 @@
 						var allocationData = JSON.parse(res);
 						count = allocationData.count;	
 						var data = JSON.parse(allocationData.data);
-//						console.log(data)
+
 						allocationInfo(data, limit);
 						$("[data-field=states] div:gt(0)").each(function(i) {
 							if(data[i].states == 1) {
@@ -312,25 +309,7 @@
 		
 							}
 						});
-//						$("[data-field=typeof] div:gt(0)").each(function(i) {
-//							if(data[i].typeof == -1) {
-//								$(this).html("换货入库");
-//							} else if(data[i].typeof == 0) {
-//								$(this).html("订货入库");
-//							} else if(data[i].typeof == 1) {
-//								$(this).html("无订单入库");
-//							} else if(data[i].typeof == 2) {
-//								$(this).html("借货入库");
-//							} else if(data[i].typeof == 3) {
-//								$(this).html("退货入库");
-//							} else if(data[i].typeof == 4) {
-//								$(this).html("赠送入库");
-//							} else if(data[i].typeof == 5) {
-//								$(this).html("报溢");
-//							} else if(data[i].typeof == 6) {
-//								$(this).html("初始化入库");
-//							}
-//						});
+
 						
 		
 						
@@ -353,109 +332,180 @@
 					}
 				});
 			}
-//			allocationData(true);
 
-			function allocationInfo(data, limit) {
-				//展示已知数据
-				table.render({
-					elem: '#YBHAllocation',
-					data: data,
-					height: "full-205",
-					cols: [
-						[ //标题栏
-							 {
-								checkbox: true,
-								LAY_CHECKED: false,
-								align: "center",
-								width: 40,
-							}, {
-								field: 'ordernum',
-								title: '单据编号',
-								minWidth: 200,
-								event: "detail",
-								style: "color:#2D89DD;cursor:pointer"
-							}, {
-								field: 'owncompanyname',
-								title: '所属公司',
-								minWidth: 150
-							},
-							{
-								field: 'oldwarehosename',
-								title: '源仓库',
-								minWidth: 150,
-							},{
-								field: 'oldareaname',
-								title: '源货区',
-								minWidth: 150,
-							},{
-								field: 'oldgoodsshelves_name',
-								title: '源货架',
-								minWidth: 150,
-							}, {
-								field: 'newwarehosename',
-								title: '目标仓库',
-								minWidth: 150
-							}, {
-								field: 'newareaname',
-								title: '目标货区',
-								minWidth: 150
-							}, {
-								field: 'newgoodsshelves_name',
-								title: '目标货架',
-								minWidth: 150
-							}, {
-								field: 'allotdate',
-								title: '调拨日期',
-								minWidth: 100
-							}, {
-								field: 'operatorsidname',
-								title: '制单人',
-								minWidth: 80,
-							}, {
-								field: 'actiondate',
-								title: '制单时间',
-								minWidth: 100,
-							}, {
-								field: 'checkername',
-								title: '审核人',
-								minWidth: 80,
-							}, {
-								field: 'checkdate',
-								title: '审核时间',
-								minWidth: 100,
-							}, {
-								field: 'checkstate',
-								title: '单据状态',
-								minWidth: 80,
-							}, {
-								field: 'issign',
-								title: '签收状态',
-								minWidth: 80,
-							}, {
-								field: 'signdate',
-								title: '驳回时间',
-								minWidth: 100,
-							}, {
-								field: 'rejectnomo',
-								title: '驳回备注',
-								minWidth: 150,
-							}, {
-								field: 'mynum',
-								title: '自定义单号',
-								minWidth: 100,
-							}, {
-								field: 'nomo',
-								title: '备注',
-								minWidth: 100,
-							},
-						]
-					],
-					skin: 'row' //表格风格
-						,
-					even: true,
-					limit: limit //每页默认显示的数量
-				});
-			}
+
+				// 根据可视区的高度判断
+				var viewHeight = $(window).height();
+		$('#gridContainer').css('height', viewHeight * 0.76 + 'px');
+
+		function allocationInfo(data) {
+			var dataGrid = $("#gridContainer").dxDataGrid({
+				dataSource: data,
+				showBorders: true,
+				columnChooser: {
+					enabled: false,
+					mode: "dragAndDrop",
+				},
+				headerFilter: {
+					visible: false
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				filterRow: {
+					visible: false,
+				},
+				selection: {
+					mode: "multiple",
+				},
+				paging: {
+					pageSize: 20000000,
+				},
+				allowColumnResizing: true,
+				columnAutoWidth: true,
+				columnFixing: {
+					enabled: false
+				},
+				grouping: {
+					contextMenuEnabled: false,
+					expandMode: "rowClick"
+				},
+				groupPanel: {
+					visible: false
+				},
+				columns: [{
+					dataField: "ordernum",
+					caption: "单据编号",
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div style='color:#2D89DD'> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}
+				,
+				{
+					dataField: "owncompanyname",
+					caption: "所属公司",
+					width: 160,
+					// cellTemplate: function (container, options) {
+					// 	var str;
+					// 	if (options.value == 0) {
+					// 		str = "无货区"
+					// 	} else {
+					// 		str = options.value + "个货区"
+					// 	}
+					// 	$("<div>")
+					// 		.append($("<div style='color:#2D89DD'> " + str + "</div>"))
+					// 		.appendTo(container);
+					// }
+				}, {
+					dataField: "oldwarehosename",
+					caption: "源仓库",
+				}, {
+					dataField: "oldareaname",
+					caption: "源货区",
+				}, {
+					dataField: "oldgoodsshelves_name",
+					caption: "源货架",
+				}, {
+					dataField: "newwarehosename",
+					caption: "目标仓库",
+				}, {
+					dataField: "newareaname",
+					caption: "目标货区",
+				}, {
+					dataField: "newgoodsshelves_name",
+					caption: "目标货架",
+
+				}, {
+					dataField: "allotdate",
+					caption: "调拨日期",
+
+				}, {
+					dataField: 'operatorsidname',
+					caption: '制单人',
+					width: 100,
+				}, {
+					dataField: 'actiondate',
+					caption: '制单日期',
+					format: "yyyy-MM-dd",
+					dataType: "date",
+					width: 100,
+				}, {
+					dataField: 'checkername',
+					caption: '审核人',
+					width: 100,
+				}, {
+					dataField: 'checkdate',
+					caption: '审核日期',
+					format: "yyyy-MM-dd",
+					dataType: "date",
+					width: 100,
+				}, {
+					dataField: 'checkstate',
+					caption: '单据状态',
+					width: 100,
+				}, {
+					dataField: 'issign',
+					caption: '签收状态',
+					width: 160,
+				}, {
+					dataField: 'signdate',
+					caption: '驳回时间',
+					width: 160,
+				}, {
+					dataField: 'rejectnomo',
+					caption: '驳回备注',
+					width: 180,
+				}, {
+					dataField: 'mynum',
+					caption: '自定义单号',
+					width: 180,
+				}, {
+					dataField: 'nomo',
+					caption: '备注',
+					width: 180,
+				},
+				],
+				onSelectionChanged: function (e) {
+					selectedArray = [];
+					selectedArray = e.selectedRowsData;
+				},
+				 // 点击单号修改功能
+				 onCellClick: function (e) {
+					var data = e.data
+					if (e.columnIndex == 1 && e.rowType == 'data') {
+						
+						var type =  $('.type option:selected').val();
+					
+					if(type == "0"){
+								
+						parent.tab.tabAdd({
+							icon: '',
+							id: "YBHD" + data.ordernum,
+							title: data.ordernum + '仓库调拨',
+							url: 'views/stockManagement/allocation/yibohuiDetail.html'
+						});
+						
+						
+					}else{
+						parent.tab.tabAdd({
+							icon: '',
+							id: "DBLO" +data.ordernum,
+							title: data.ordernum + '仓库调拨',
+							url: 'views/stockManagement/allocation/allocationDetail.html'
+						});
+					}
+						
+					}
+				},
+
+
+				
+				
+			}).dxDataGrid('instance');
+		}
+		var selectedArray = [];
 
 			function allocation_pages() {
 				laypage.render({
@@ -478,74 +528,7 @@
 				})
 			}
 			
-			table.on('tool(demo)', function(obj) {
-				var data = obj.data;
-				
-				
-				if(obj.event === 'detail') {
-					
-			
-					var type =  $('.type option:selected').val();
-					
-					if(type == "0"){
-								
-						parent.tab.tabAdd({
-							icon: '',
-							id: "YBHD" + data.ordernum,
-							title: data.ordernum + '仓库调拨',
-							url: 'views/stockManagement/allocation/yibohuiDetail.html'
-						});
-						
-						
-					}else{
-						parent.tab.tabAdd({
-							icon: '',
-							id: "DBLO" +data.ordernum,
-							title: data.ordernum + '仓库调拨',
-							url: 'views/stockManagement/allocation/allocationDetail.html'
-						});
-					}
-			
-							
-					
-//					if(localStorage.groupcompanyid == "0"){
-//						
-//						if(data.g_companyid == "0"){
-//							
-//								parent.tab.tabAdd({
-//									icon: '',
-//									id: "HEAD" +data.ordernum,
-//									title: data.ordernum + '仓库调拨',
-//									url: 'views/stockManagement/allocation/headAllocationDetail.html'
-//								});
-//									
-//							
-//						}else{
-//							
-//							parent.tab.tabAdd({
-//								icon: '',
-//								id: "DQSC" + data.ordernum,
-//								title: data.ordernum + '仓库调拨',
-//								url: 'views/stockManagement/allocation/daiSignDetail.html'
-//							});
-//							
-//						}
-//						
-//					
-//						
-//						
-//					}else{
-//						parent.tab.tabAdd({
-//							icon: '',
-//							id: "DBLB" +data.ordernum,
-//							title: data.ordernum + '仓库调拨',
-//							url: 'views/stockManagement/allocation/allocationDetail.html'
-//						});
-//					}
-					
-				
-				}
-			});
+	
 			
 			
 		

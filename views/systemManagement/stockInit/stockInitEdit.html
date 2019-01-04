@@ -2340,6 +2340,45 @@ $('.addDianJiEvent').on('click', function() {
 								return;
 							} 
 							
+							
+							if (data.CheckState.state == 3) {
+
+
+
+
+								if (sessionStorage.shengheErrorData) {
+									if (sessionStorage.shengheErrorData.length > 0 && sessionStorage.shengheErrorData != "[]") {
+										sessionStorage.removeItem("shengheErrorData")
+									}
+								}
+
+								sessionStorage.shengheErrorData = data.CheckState.result;
+
+								parent.layer.open({
+									type: 2
+									,
+									title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">信息</span>',
+									area: ['60%', '65%'],
+
+									content: 'views/public/shengheerror.html',
+
+									zIndex: layer.zIndex //重点1
+									,
+									success: function (layero, index) {
+										parent.layer.setTop(layero); //重点2
+										var body = layer.getChildFrame('body', 'index');
+										paentIfarame = layero.find("iframe")[0].contentWindow.document;
+
+									}
+								});
+
+
+								return;
+
+
+
+							}
+							
 //							if(data.CheckState.state == 3) {
 //								parent.layer.open({
 //									title: "库存数量不足",

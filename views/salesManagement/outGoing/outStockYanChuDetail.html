@@ -1019,6 +1019,15 @@
 						}
 						else {
 							if(options.value > options.data.usefulcount){
+								parent.layer.open({
+							title: "提示",
+							content: '可用数量为' + options.data.usefulcount ,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
 								options.data.producecount =  options.data.usefulcount
 								$("<div>")
 								.append($("<div>" + options.data.usefulcount + "</div>"))
@@ -2161,9 +2170,334 @@
 				
 			});
 	
+<<<<<<< .mine
+	//出库详情
+	function yanshou(data) {
+		table.render({
+			elem: '#addaccept',
+			data: data,
+			id:'orderTest',
+			height: "full-350",
+			cols: [
+						[ //标题栏
+{
+ 								type:'numbers'
+ 							},
+							{
+								checkbox: true,
+//								LAY_CHECKED: true,
+								align: "center",
+								width: 40,
+							},
+							{
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 200, sort: true
+							}, 
+							{
+								field: 'danwei',
+								title: '规格',
+								minWidth: 150, sort: true
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 80, sort: true
+							}, {
+								field: 'producenum',
+								title: '编号',
+								minWidth: 100, sort: true
+							}, {
+								field: 'producecode',
+								title: '主条码',
+								minWidth: 100, sort: true
+							}, {
+								field: 'producesubbarcode',
+								title: '副条码',
+//								edit: 'text',
+								minWidth: 100, sort: true
+							}, {
+								field: 'produceunit',
+								title: '单位',
+								minWidth: 80, sort: true
+							}, {
+								field: 'iots',
+								title: '批号',
+//								edit: 'text',
+								minWidth: 100, sort: true
+							}, {
+								field: 'productiondate',
+								title: '生产日期',
+								minWidth: 150, sort: true
+							}, {
+								field: 'indate',
+								title: '有效期',
+								minWidth: 150, sort: true
+							}, {
+								field: 'goodsshelves_name',
+								title: '出库货架',
+								minWidth: 150, sort: true
+							}, {
+								field: 'qsname',
+								title: '合格',
+								//								edit: 'text',
+								minWidth: 80, sort: true
+							}, {
+								field: 'package',
+								title: '包装',
+								minWidth: 80, sort: true
+							}
+							, {
+								field: 'storagecondition',
+								title: '存储条件',
+								minWidth: 80, sort: true
+							},
+							
+							{
+								field: 'producepropertyname',
+								title: '产品种类',
+								minWidth: 60, sort: true
+						},
+						{
+								field: 'produceusename',
+								title: '通俗名称',
+								minWidth: 80, sort: true
+							},{
+								field: 'producettypename',
+								title: '产品属性',
+								minWidth: 60, sort: true
+							},
+						
+						
+							{
+								field: 'produceseries',
+								title: '产品系列',
+								minWidth: 150, sort: true
+							}, {
+								field: 'producematerial',
+								title: '材质',
+								minWidth: 80, sort: true
+							},{
+								field: 'manufacturer',
+								title: '品牌',
+								minWidth: 100, sort: true
+							}
+						,{
+								field: 'manufacturename',
+								title: '厂家',
+								minWidth: 150, sort: true
+							},
+							{
+							field: 'regproducename',
+							title: '注册证产品名称',
+							minWidth: 150, sort: true
+						}, {
+								field: 'referencenum',
+								title: '注册证号',
+								minWidth: 200, sort: true
+							},{
+								field: 'productcertificate',
+								title: '产品生产许可证编号',
+								minWidth: 150,
+//								sort: true
+							},{
+								field: 'producecount',
+								title: '数量',
+								edit: 'text',
+								event: "setSign",
+								fixed: 'right',
+								width: 80
+							}, {
+								field: 'referprice',
+								title: '参考未税成本',
+								fixed: 'right',
+								width: 100
+							}, {
+								field: 'referpricetotal',
+								title: '小计',
+								fixed: 'right',
+								width: 100
+							}
+						]
+					],
+			skin: 'row' //表格风格
+				,
+			even: true,
+			page: false //是否显示分页
+				,
+			limit: 100000 //每页默认显示的数量
+		});
+		
+		rukuyanshou(data);
+	}
+||||||| .r1124
+	//出库详情
+	function yanshou(data) {
+		table.render({
+			elem: '#addaccept',
+			data: data,
+			id:'orderTest',
+			height: "full-350",
+			cols: [
+						[ //标题栏
+{
+ 								type:'numbers'
+ 							},
+							{
+								checkbox: true,
+//								LAY_CHECKED: true,
+								align: "center",
+								width: 40,
+							},
+							{
+								field: 'producename',
+								title: '产品名称',
+								minWidth: 200, sort: true
+							}, 
+//							{
+//								field: 'manufacturer',
+//								title: '厂家',
+//								minWidth: 150, sort: true
+//							},
+							{
+								field: 'danwei',
+								title: '规格',
+								minWidth: 150, sort: true
+							}, {
+								field: 'producemodel',
+								title: '型号',
+								minWidth: 80, sort: true
+							}, {
+								field: 'producenum',
+								title: '编号',
+								minWidth: 100, sort: true
+							}, {
+								field: 'producecode',
+								title: '主条码',
+								minWidth: 100, sort: true
+							}, {
+								field: 'producesubbarcode',
+								title: '副条码',
+//								edit: 'text',
+								minWidth: 100, sort: true
+							}, {
+								field: 'produceunit',
+								title: '单位',
+								minWidth: 80, sort: true
+							}, {
+								field: 'iots',
+								title: '批号',
+//								edit: 'text',
+								minWidth: 100, sort: true
+							}, {
+								field: 'productiondate',
+								title: '生产日期',
+								minWidth: 150, sort: true
+							}, {
+								field: 'indate',
+								title: '有效期',
+								minWidth: 150, sort: true
+							}, {
+								field: 'goodsshelves_name',
+								title: '出库货架',
+								minWidth: 150, sort: true
+							}, {
+								field: 'qsname',
+								title: '合格',
+								//								edit: 'text',
+								minWidth: 80, sort: true
+							}, {
+								field: 'package',
+								title: '包装',
+								minWidth: 80, sort: true
+							}
+							, {
+								field: 'storagecondition',
+								title: '存储条件',
+								minWidth: 80, sort: true
+							},
+							
+							{
+								field: 'producepropertyname',
+								title: '产品种类',
+								minWidth: 60, sort: true
+						},
+						{
+								field: 'produceusename',
+								title: '通俗名称',
+								minWidth: 80, sort: true
+							},{
+								field: 'producettypename',
+								title: '产品属性',
+								minWidth: 60, sort: true
+							},
+						
+						
+							{
+								field: 'produceseries',
+								title: '产品系列',
+								minWidth: 150, sort: true
+							}, {
+								field: 'producematerial',
+								title: '材质',
+								minWidth: 80, sort: true
+							},{
+								field: 'manufacturer',
+								title: '品牌',
+								minWidth: 100, sort: true
+							}
+						,{
+								field: 'manufacturename',
+								title: '厂家',
+								minWidth: 150, sort: true
+							},
+							{
+							field: 'regproducename',
+							title: '注册证产品名称',
+							minWidth: 150, sort: true
+						}, {
+								field: 'referencenum',
+								title: '注册证号',
+								minWidth: 200, sort: true
+							},{
+								field: 'productcertificate',
+								title: '产品生产许可证编号',
+								minWidth: 150,
+//								sort: true
+							},{
+								field: 'producecount',
+								title: '数量',
+								edit: 'text',
+								event: "setSign",
+								fixed: 'right',
+								width: 80
+							}, {
+								field: 'referprice',
+								title: '参考未税成本',
+								fixed: 'right',
+								width: 100
+							}, {
+								field: 'referpricetotal',
+								title: '小计',
+								fixed: 'right',
+								width: 100
+							}
+						]
+					],
+			skin: 'row' //表格风格
+				,
+			even: true,
+			page: false //是否显示分页
+				,
+			limit: 100000 //每页默认显示的数量
+		});
+		
+		rukuyanshou(data);
+	}
+=======
 	       //出库详情
             
 	 
+>>>>>>> .r1335
 	
 	
 	

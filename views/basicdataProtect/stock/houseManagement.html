@@ -6,11 +6,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<title>仓库管理</title>
 		<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
+		<!-- DevExtreme themes -->
+		<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
+		<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
 	</head>
 	<style type="text/css">
 		.stockManagement {
 			font-family: "PingFang SC" !important;
-			/*font-size: 12px !important;*/
 			font-size: 9pt !important;
 			color: #232323 !important;
 			margin: 0 20px;
@@ -116,9 +118,6 @@
 								<li>
 									<a class="del" data-type="breakAccount" lay-event='breakAccount'>仓库断帐</a>
 								</li>
-								<!--<li>
-									<a class="del" data-type="costjisuan" lay-event='costjisuan'>成本结转</a>
-								</li>-->
 								<li>
 									<a class="del" data-type="getCheckDel" lay-event='del'>批量删除</a>
 								</li>
@@ -126,22 +125,19 @@
 						</div>
 					</div>
 				</div>
-				<table id="stockManagement" lay-filter="demo"></table>
+				<table id="stockManagement" lay-filter="demo">
+					<div id="gridContainer"></div>
+				</table>
 			</div>
 		</div>
 	</body>
+	<script src="../../../js/jquery.js" type="text/javascript"></script>
+	<!-- DevExtreme library -->
+	<script src="../../../devexpresslibrary/js/dx.all.js"></script>
 	<script src="../../../plugins/layui/layui.js"></script>
 	<script src="../../../js/public.js"></script>
 
 	<script>
-//		
-//		    var msg = new SpeechSynthesisUtterance("hello everyone");
-//  		console.log(msg);
-// 			window.speechSynthesis.speak(msg);
-    
-   
-    
-    
 		layui.use(['table', 'jquery'], function() {
 			var table = layui.table;
 			var $ = layui.jquery;
@@ -157,7 +153,7 @@
 			});
 			
 			 if(localStorage.groupcompanyid != "0"){
-//				$(".btns").css("display","none");
+
 				$("#fengongsiId").css("display","none");
 			
 			}else{
@@ -241,24 +237,7 @@
 					
 						$("[data-field=nature] div:gt(0)").each(function(i) {
 							
-							switch(stockData[i].nature) 
-							{
-								case 1:				
-									
-									$(this).html("外管仓库");
-								  break;
-								case 2:  
-								
-									$(this).html("周转仓库");
-								  break;
-								case 0:  				
-									$(this).html("直管仓库");
-								  break;
-								  	case 3:  				
-									$(this).html("自营仓库");
-								  break;
-							
-							}
+						
 						
 				
 						});
@@ -307,317 +286,162 @@
 					}
 				});
 			}
+			
+					// 根据可视区的高度判断
+		var viewHeight = $(window).height();
+		$('#gridContainer').css('height', viewHeight * 0.9 + 'px');
+
 			function stockInfo(data) {
-				//展示已知数据
-				table.render({
-					elem: '#stockManagement',
-					data: data,
-					height: "full-80",
-					cols: [
-						[ //标题栏
-							 {
-								checkbox: true,
-								LAY_CHECKED: false,
-								align: "center",
-								width: 40,
-							}, {
-								field: 'warehousename',
-								title: '仓库名称',
-								event: "detail",
-								cursor: "pointer",
-								style:"color:#2D89DD;cursor:pointer",
-								minWidth: 150,
-
-							}, {
-								field: 'goodsareacount',
-								title: '货区数量',
-								event: "goods",
-								cursor: "pointer",
-								style:"color:#2D89DD",
-							}
-							,
-							{
-								field: 'owncompanytable',
-								title: '所属公司',
-								minWidth: 100,
-
-							}
-							,
-							{
-								field: 'leadername',
-								title: '分管领导',
-							},{
-								field: 'employeephone',
-								title: '联系电话',
-							},{
-								field: 'nature',
-								title: '仓库性质',
-							}
-//							,{
-//								field: 'isinventory',
-//								title: '本月是否盘点',
-//							}
-//							,{
-//								field: 'phone',
-//								title: '本月是否断帐',
-//							}
-							, {
-								field: 'watrehousenote',
-								minWidth: 100,
-
-								title: '备注',
-							},{
-								field: 'isdisable',
-								width: 80,
-								event: "disableFlag",
-								style:"color:#2D89DD;cursor:pointer",
-								title: '是否停用',
-							}
-						]
-					],
-					skin: 'row' //表格风格
-						,
-					even: true,
-					page: false //是否显示分页
-						,
-					limits: [50,100],
-					limit: 50000 //每页默认显示的数量
-				});
-			}
-			stockData()
-			$(".find").click(function() {
-				off = true;
-				seachContent = $(".seachContent").val();
-				stockData();
-			})
-			//查询回车事件
-			$(".seachContent").bind("keydown",function(e){
-			　　  var theEvent = e || window.event;
-			　　  var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
-			　　   if (code == 13) {
-			　　	    off = true;
-					seachContent = $(".seachContent").val();
-					stockData();
-			　　  }
-			});
-			
-			
-				$(".companytypeid").change(function() {
-					stockData();
-				})
-			
-			$(".nature").change(function(){
-				off = true;
-				seachContent = $(".seachContent").val();
-				stockData();
-			})
-			
-			//点击新增
-			$(".stockadd").click(function() {
-				
-				if(!checkPermissionStatus("仓库设置管理-保存1")){
-				
-						parent.layer.open({
-							title: "提示",
-							content: localStorage.jurisdictionTips,
-							zIndex: parent.layer.zIndex //重点1
-							,
-							success: function(layero) {
-								parent.layer.setTop(layero); //重点2
-							}
-						});
-						return
-						
-					}	
-				
-				
-				
-				parent.layer.open({
-					type: 2 //此处以iframe举例
-						,
-					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">添加仓库</span>',
-					area: ['600px', '90%'],
-					content: 'views/public/wareHouse/houseAdd.html',
-					offset: "rb",
-					zIndex: parent.layer.zIndex //重点1
-						,
-					success: function(layero) {
-						parent.layer.setTop(layero); //重点2
-					},
-					end: function() {
-						stockData();
+				var dataGrid = $("#gridContainer").dxDataGrid({
+				dataSource: data,
+				//allowColumnReordering: true,
+				showBorders: true,
+				//keyExpr: "id",
+				columnChooser: {
+					enabled: false,
+					mode: "dragAndDrop",
+				},
+				headerFilter: {
+					visible: false
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				filterRow: {
+					visible: false,
+				},
+				selection: {
+					mode: "multiple",
+				},
+				paging: {
+					pageSize: 20000000,
+				},
+				allowColumnResizing: true,
+				columnAutoWidth:true,
+				columnFixing: {
+					enabled: false
+				},
+				grouping: {
+					contextMenuEnabled: false,
+					expandMode: "rowClick"
+				},
+				groupPanel: {
+					visible: false
+				},
+				columns: [{
+					dataField: "warehousename",
+					caption: "仓库名称",
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div style='color:#2D89DD'> " + options.value + "</div>"))
+							.appendTo(container);
 					}
-				});
-			});
-			table.on('tool(demo)', function(obj) {
-				var value = obj.value //得到修改后的值
-					,
-					data = obj.data //得到所在行所有键值
-					,
-					field = obj.field; //得到字段
-					
-				//货区
-				if(obj.event === 'goods') {
-	
-					sessionStorage.groupcompanyid =data.myg_companyid; //获取公司ID
-					sessionStorage.wareHousenature =data.nature;
-					sessionStorage.warehousename =data.warehousename;
-					sessionStorage.warehousid =data.id;
-
-//
-//					var huoqu_name=data.warehousename;
-//					var huoqu_id=data.id;
-					parent.layer.open({
-						type: 2 //此处以iframe举例
-							,
-						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px" id="huoqu_name">【货区管理】'+data.warehousename+'</span>',
-						area: ['85%', '90%'],
-						offset: "rb",
-						content: 'views/basicdataProtect/stock/goods.html',
-						zIndex: parent.layer.zIndex //重点1
-							,
-						success: function(layero,index) {
-							sessionStorage.houseId = data.id;
-							var body = layer.getChildFrame('body', 'index');
-							paentIfarame = layero.find("iframe")[0].contentWindow.document;
-							if(localStorage.groupcompanyid != "0"){
-								if(data.nature == "3"){
-									$(".btns",paentIfarame).show();
-								}else{
-									$(".btns",paentIfarame).hide();
-								}
-							}
-//							$(".find",paentIfarame).attr("name",huoqu_name)
-//							$(".find",paentIfarame).attr("add_id",huoqu_id)
-						}	,
-						end: function(layero,index) {
-//							parent.layer.setTop(layero); //重点2
-							if(sessionStorage.groupcompanyid){
-								
-								sessionStorage.removeItem("groupcompanyid");
-							}
-							if(sessionStorage.wareHousenature){
-								
-								sessionStorage.removeItem("wareHousenature");
-							}
-							
-							if(sessionStorage.warehousename){
-								
-								sessionStorage.removeItem("warehousename");
-							}
-							
-							if(sessionStorage.warehousid){
-								
-								sessionStorage.removeItem("warehousid");
-							}
-							stockData();
-						}
-					});
-					
-					
 				}
-				
-				//是否停用
-				if(obj.event === 'disableFlag') {
+				,
+				{
+					dataField: "goodsareacount",
+					caption: "货区数量",
+					width: 100,
+					cellTemplate: function (container, options) {
+						var str;
+						if(options.value == 0){
+                                str = "无货区"
+						}else{
+							str = options.value + "个货区"
+						}
+						$("<div>")
+							.append($("<div style='color:#2D89DD'> " + str + "</div>"))
+							.appendTo(container);
+					}
+				},	{
+					dataField: "owncompanytable",
+					caption: "所属公司",
+					//width: 160
+				},	{
+					dataField: "leadername",
+					caption: "分管领导",
+					//width: 100
+				},	{
+					dataField: "employeephone",
+					caption: "联系电话",
+					//width: 100
+				},	{
+					dataField: "nature",
+					caption: "仓库性质",
+					//width: 100
+					cellTemplate: function (container, options) {
+						var str;
+						switch(options.data.nature) 
+							{
+								case 1:
+									
+								str = "外管仓库"
+								  break;
+								case 2:  
+								
+									str = "周转仓库"
+								  break;
+								case 0:  				
+									str = "直管仓库"
+								  break;
+								  	case 3:  				
+									str = "自营仓库"
+								  break;
 							
-					if(!checkPermissionStatus("仓库设置管理-保存1")){
-				
+							}
+							$("<div>")
+							.append($("<div> " + str + "</div>"))
+							.appendTo(container);	
+					
+					}
+				},	{
+					dataField: "watrehousenote",
+					caption: "备注",
+					//width: 100
+				},	{
+					dataField: "isdisable",
+					caption: "是否停用",
+					//width: 100
+					cellTemplate: function (container, options) {
+						var str;
+						if(options.value == 0){
+							$("<div>")
+							.append($("<div style='color:#2D89DD'> " + "启用中" + "</div>"))
+							.appendTo(container);
+						}else{
+							$("<div>")
+							.append($("<div style='color:red'> " + "停用中" + "</div>"))
+							.appendTo(container);
+						}
+					
+					}
+				}
+				],
+				onSelectionChanged: function (e) {
+					selectedArray = [];
+					selectedArray = e.selectedRowsData;
+				},
+				onCellClick:function(e){
+					var data = e.data,
+					 value = e.data.value,
+					 field = e.data.field
+					
+					//仓库名称
+                     if (e.columnIndex == 1 && e.rowType == 'data') {
+						if (!checkPermissionStatus("仓库设置管理-保存1")) {
+
 							parent.layer.open({
 								title: "提示",
 								content: localStorage.jurisdictionTips,
 								zIndex: parent.layer.zIndex //重点1
 								,
-								success: function(layero) {
+								success: function (layero) {
 									parent.layer.setTop(layero); //重点2
 								}
 							});
 							return
-						
-					 }	
-					
-					
-					var isdisable = data.isdisable; //0未停用，1已停用
-					var id = data.id;
-					var str = "";
-					if(isdisable == 0){
-						isdisable =1;
-						str ="停用中";
-					}else{
-						isdisable =0;
-						str ="启用中";
 
-					}
-					
-					
-					$.ajax({
-						type: "get",
-						url: localStorage.serIp+"/WebIsdisableWareAndArea?jsoncallback=?",
-						dataType: "jsonp",
-						async: true,
-						data: {
-							'userId': localStorage.userId,
-							'userPw': localStorage.userPw,
-							'database': localStorage.database,
-							"type": 0,
-							'state': isdisable,
-							"id" : id
-						},
-						success: function(res) {
-							var res = JSON.parse(res);
-
-						
-							if(res.ResultValue == '1') {
-								parent.layer.open({
-									title: "提示",
-									content: '成功！',zIndex: parent.layer.zIndex //重点1
-								});
-								
-								stockData();			
-						
-							}
-							
-							if(res.ResultValue == '0')
-							{
-								parent.layer.open({
-									title: "提示",
-									content: '失败！',zIndex: parent.layer.zIndex //重点1
-								});
-							}
-		
-						if(res.ResultValue == '3')
-							{
-								parent.layer.open({
-									title: "提示",
-									content: '库存表已经使用!',zIndex: parent.layer.zIndex //重点1
-								});
-							}
-							
-			
 						}
-					});
-				
-				
-				}
-				
-				
-				//修改
-				if(obj.event === 'detail') {
-					
-								
-					if(!checkPermissionStatus("仓库设置管理-保存1")){
-				
-							parent.layer.open({
-								title: "提示",
-								content: localStorage.jurisdictionTips,
-								zIndex: parent.layer.zIndex //重点1
-								,
-								success: function(layero) {
-									parent.layer.setTop(layero); //重点2
-								}
-							});
-							return
-						
-					 }	
 					 
 					 
 					 
@@ -741,7 +565,7 @@
 						}
 					,
 						end: function(layero,index) {
-//							parent.layer.setTop(layero); //重点2
+
 							if(sessionStorage.groupcompanyid){
 								
 								sessionStorage.removeItem("groupcompanyid");
@@ -752,7 +576,308 @@
 							}
 						}
 					});
+				
+                     }
+					 //货区数量
+					 if(e.columnIndex == 2 && e.rowType == 'data'){
+						sessionStorage.groupcompanyid =data.myg_companyid; //获取公司ID
+					sessionStorage.wareHousenature =data.nature;
+					sessionStorage.warehousename =data.warehousename;
+					sessionStorage.warehousid =data.id;
+
+
+					parent.layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px" id="huoqu_name">【货区管理】'+data.warehousename+'</span>',
+						area: ['85%', '90%'],
+						offset: "rb",
+						content: 'views/basicdataProtect/stock/goods.html',
+						zIndex: parent.layer.zIndex //重点1
+							,
+						success: function(layero,index) {
+							sessionStorage.houseId = data.id;
+							var body = layer.getChildFrame('body', 'index');
+							paentIfarame = layero.find("iframe")[0].contentWindow.document;
+							if(localStorage.groupcompanyid != "0"){
+								if(data.nature == "3"){
+									$(".btns",paentIfarame).show();
+								}else{
+									$(".btns",paentIfarame).hide();
+								}
+							}
+
+						}	,
+						end: function(layero,index) {
+//							parent.layer.setTop(layero); //重点2
+							if(sessionStorage.groupcompanyid){
+								
+								sessionStorage.removeItem("groupcompanyid");
+							}
+							if(sessionStorage.wareHousenature){
+								
+								sessionStorage.removeItem("wareHousenature");
+							}
+							
+							if(sessionStorage.warehousename){
+								
+								sessionStorage.removeItem("warehousename");
+							}
+							
+							if(sessionStorage.warehousid){
+								
+								sessionStorage.removeItem("warehousid");
+							}
+							stockData();
+						}
+					});
+					}
+					 //是否停用
+					 if(e.columnIndex == 8 && e.rowType == 'data'){
+						
+							
+							if(!checkPermissionStatus("仓库设置管理-保存1")){
+						
+									parent.layer.open({
+										title: "提示",
+										content: localStorage.jurisdictionTips,
+										zIndex: parent.layer.zIndex //重点1
+										,
+										success: function(layero) {
+											parent.layer.setTop(layero); //重点2
+										}
+									});
+									return
+								
+							 }	
+							
+							
+							var isdisable = data.isdisable; //0未停用，1已停用
+							var id = data.id;
+							var str = "";
+							if(isdisable == 0){
+								isdisable =1;
+								str ="停用中";
+							}else{
+								isdisable =0;
+								str ="启用中";
+		
+							}
+							
+							
+							$.ajax({
+								type: "get",
+								url: localStorage.serIp+"/WebIsdisableWareAndArea?jsoncallback=?",
+								dataType: "jsonp",
+								async: true,
+								data: {
+									'userId': localStorage.userId,
+									'userPw': localStorage.userPw,
+									'database': localStorage.database,
+									"type": 0,
+									'state': isdisable,
+									"id" : id
+								},
+								success: function(res) {
+									var res = JSON.parse(res);
+		
+								
+									if(res.ResultValue == '1') {
+										parent.layer.open({
+											title: "提示",
+											content: '成功！',zIndex: parent.layer.zIndex //重点1
+										});
+										
+										stockData();			
+								
+									}
+									
+									if(res.ResultValue == '0')
+									{
+										parent.layer.open({
+											title: "提示",
+											content: '失败！',zIndex: parent.layer.zIndex //重点1
+										});
+									}
+				
+								if(res.ResultValue == '3')
+									{
+										parent.layer.open({
+											title: "提示",
+											content: '库存表已经使用!',zIndex: parent.layer.zIndex //重点1
+										});
+									}
+									
+					
+								}
+							});
+						
+						
+						
+					}
 				}
+			}).dxDataGrid('instance');
+			}
+			var selectedArray = [];
+			stockData()
+			$(".find").click(function() {
+				off = true;
+				seachContent = $(".seachContent").val();
+				stockData();
+			})
+			//查询回车事件
+			$(".seachContent").bind("keydown",function(e){
+			　　  var theEvent = e || window.event;
+			　　  var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+			　　   if (code == 13) {
+			　　	    off = true;
+					seachContent = $(".seachContent").val();
+					stockData();
+			　　  }
+			});
+			
+			
+				$(".companytypeid").change(function() {
+					stockData();
+				})
+			
+			$(".nature").change(function(){
+				off = true;
+				seachContent = $(".seachContent").val();
+				stockData();
+			})
+			
+			//点击新增
+			$(".stockadd").click(function() {
+				
+				if(!checkPermissionStatus("仓库设置管理-保存1")){
+				
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: parent.layer.zIndex //重点1
+							,
+							success: function(layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return
+						
+					}	
+				
+				
+				
+				parent.layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '<img width="20px" src="image/logo.png" alt="" /><span style="margin-left:10px">添加仓库</span>',
+					area: ['600px', '90%'],
+					content: 'views/public/wareHouse/houseAdd.html',
+					offset: "rb",
+					zIndex: parent.layer.zIndex //重点1
+						,
+					success: function(layero) {
+						parent.layer.setTop(layero); //重点2
+					},
+					end: function() {
+						stockData();
+					}
+				});
+			});
+			table.on('tool(demo)', function(obj) {
+				var value = obj.value //得到修改后的值
+					,
+					data = obj.data //得到所在行所有键值
+					,
+					field = obj.field; //得到字段
+					
+			
+				
+				//是否停用
+				if(obj.event === 'disableFlag') {
+							
+					if(!checkPermissionStatus("仓库设置管理-保存1")){
+				
+							parent.layer.open({
+								title: "提示",
+								content: localStorage.jurisdictionTips,
+								zIndex: parent.layer.zIndex //重点1
+								,
+								success: function(layero) {
+									parent.layer.setTop(layero); //重点2
+								}
+							});
+							return
+						
+					 }	
+					
+					
+					var isdisable = data.isdisable; //0未停用，1已停用
+					var id = data.id;
+					var str = "";
+					if(isdisable == 0){
+						isdisable =1;
+						str ="停用中";
+					}else{
+						isdisable =0;
+						str ="启用中";
+
+					}
+					
+					
+					$.ajax({
+						type: "get",
+						url: localStorage.serIp+"/WebIsdisableWareAndArea?jsoncallback=?",
+						dataType: "jsonp",
+						async: true,
+						data: {
+							'userId': localStorage.userId,
+							'userPw': localStorage.userPw,
+							'database': localStorage.database,
+							"type": 0,
+							'state': isdisable,
+							"id" : id
+						},
+						success: function(res) {
+							var res = JSON.parse(res);
+
+						
+							if(res.ResultValue == '1') {
+								parent.layer.open({
+									title: "提示",
+									content: '成功！',zIndex: parent.layer.zIndex //重点1
+								});
+								
+								stockData();			
+						
+							}
+							
+							if(res.ResultValue == '0')
+							{
+								parent.layer.open({
+									title: "提示",
+									content: '失败！',zIndex: parent.layer.zIndex //重点1
+								});
+							}
+		
+						if(res.ResultValue == '3')
+							{
+								parent.layer.open({
+									title: "提示",
+									content: '库存表已经使用!',zIndex: parent.layer.zIndex //重点1
+								});
+							}
+							
+			
+						}
+					});
+				
+				
+				}
+				
+				
+				//修改
+				
 			});
 			//删除（在主页面写）
 			var $ = layui.$,
@@ -777,7 +902,7 @@
 					 
 					 
 					var checkStatus = table.checkStatus('stockManagement'),
-						data1 = checkStatus.data;
+						data1 = selectedArray;
 					var idstr = "";
 				    for(var i=0;i<data1.length;i++) { 
 			      		idstr += data1[i].id ;
@@ -842,7 +967,7 @@
 					 
 					 
 						var checkStatus = table.checkStatus('stockManagement'),
-						data2 = checkStatus.data;
+						data2 = selectedArray;
 						
 						if(localStorage.groupcompanyid == 0){
 								if($(".companytypeid").val() == "-1") {

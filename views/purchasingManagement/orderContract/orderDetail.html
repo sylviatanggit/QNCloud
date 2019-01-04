@@ -499,7 +499,7 @@
 
 </body>
 <!-- DevExtreme library -->
-<script  async src="../../../devexpresslibrary/js/dx.all.js"></script>
+<script  async src="../../../devexpresslibrary/js/dx-DataGrid-18-2-4.js"></script>
 
 <!-- 分页插件 -->
 <script src="../../../devexpresslibrary/js/pagination/jquery.pagination.js"></script>
@@ -898,6 +898,7 @@
 
 		var realCostCheck;
 		function orderDetail(data) { //展示已知数据
+		
 			var employeesStore = new DevExpress.data.ArrayStore({
 				data: data
 			});
@@ -1074,7 +1075,7 @@
 					allowEditing: false,
 					cellTemplate:function(container,options){
 						$("<div>")
-							.append($("<div> " + options.text + "</div>"))
+							.append($("<div> " + options.value + "</div>"))
 							.appendTo(container);
 					}
 				}
@@ -1085,7 +1086,7 @@
 					allowEditing: false,
 					cellTemplate:function(container,options){
 						$("<div>")
-							.append($("<div> " + options.text + "</div>"))
+							.append($("<div> " + options.value + "</div>"))
 							.appendTo(container);
 					}
 				}, {

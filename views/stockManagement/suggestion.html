@@ -6,11 +6,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<title>库存调整建议</title>
 		<link rel="stylesheet" href="../../plugins/layui/css/layui.css">
+		<!-- DevExtreme themes -->
+		<link rel="stylesheet" href="../../devexpresslibrary/css/dx.common.css">
+		<link rel="stylesheet" href="../../devexpresslibrary/css/dx.light.css">
 	</head>
 	<style type="text/css">
 		.suggestion {
 			font-family: "PingFang SC" !important;
-			/*font-size: 12px !important;*/
 			font-size: 9pt !important;
 			color: #232323 !important;
 			margin: 0 20px;
@@ -85,14 +87,17 @@
 					</div>
 
 				</div>
-				<table id="suggestion" lay-filter="demo"></table>
+				<table id="suggestion" lay-filter="demo">
+					<div id="gridContainer"></div>
+				</table>
 			</div>
 		</div>
 	</body>
 	<script src="../../plugins/layui/layui.js"></script>
+			 
+	<script src="../../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../devexpresslibrary/js/dx.all.js"></script>
 	<script>
-		
-		
 			var limit = 50;
 			var curpage = 1;
 			var count;
@@ -188,7 +193,6 @@
 
 					},
 					success: function(res) {
-						//						console.log(res)
 						var lossData = JSON.parse(res);
 						var data = JSON.parse(lossData.data);
 						count = lossData.count;
@@ -221,81 +225,112 @@
 
 			}
 			
+			    // 根据可视区的高度判断
+		var viewHeight = $(window).height();
+		$('#gridContainer').css('height', viewHeight * 0.9 + 'px');
+
+		function detail(data,limit) {
+			var dataGrid = $("#gridContainer").dxDataGrid({
+				dataSource: data,
+				showBorders: true,
+				columnChooser: {
+					enabled: false,
+					mode: "dragAndDrop",
+				},
+				headerFilter: {
+					visible: false
+				},
+				sorting: {
+					mode: "none"//none
+				},
+				filterRow: {
+					visible: false,
+				},
+				selection: {
+					mode: "multiple",
+				},
+				paging: {
+					pageSize: 20000000,
+				},
+				allowColumnResizing: true,
+				columnAutoWidth: true,
+				columnFixing: {
+					enabled: false
+				},
+				grouping: {
+					contextMenuEnabled: false,
+					expandMode: "rowClick"
+				},
+				groupPanel: {
+					visible: false
+				},
+				columns: [{
+					dataField: "producename",
+					caption: "产品名称",
+					width: 160,
+					cellTemplate: function (container, options) {
+						$("<div>")
+							.append($("<div> " + options.value + "</div>"))
+							.appendTo(container);
+					}
+				}
+				,{
+					dataField: "manufacturer",
+					caption: "厂家",
+					width: 160,
+					alignment:'left',
+				},{
+					dataField: "owncompanyname",
+					caption: "所属公司",
+					width: 160,
+				},
+				{
+					dataField: "danwei",
+					caption: "规格",
+					width: 160,
+				},{
+					dataField: "producemodel",
+					caption: "型号",
+					width:100,
+				}, {
+					dataField: "producenum",
+					caption: "编号",
+					width:100,
+				}, {
+					dataField: "producecode",
+					caption: "主条码",
+					width:100,
+				}, {
+					dataField: "realstockcount",
+					caption: "实存",
+					width:100,
+				}, {
+					dataField: "safecount",
+					caption: "安全库存",
+					width:100,
+
+				}, {
+					dataField: "lowerlimit",
+					caption: "库存下限百分比",
+					//width:100,
+				}, {
+					dataField: 'upperlimit',
+					caption: '库存上限百分比',
+					//width: 100,
+				},  {
+					dataField: 'suggest',
+					caption: '建议调整方式',
+					width: 250,
+				},
+				],
+
+				  
+			}).dxDataGrid('instance');
+		}
+		var selectedArray = [];
 			
-			function detail(data) {
-				//展示已知数据
-				table.render({
-					elem: '#suggestion',
-					data:data,
-					height: "full-80",
-					cellMinWidth: 80,
-					cols: [
-						[ //标题栏
-							 {
-								checkbox: true,
-								LAY_CHECKED: false,
-								align: "center",
-								width: 40,
-							}, {
-								field: 'producename',
-								title: '产品名称',
-								align: "center",
-							},
-							{
-								field: 'manufacturer',
-								title: '厂家',
-								align: "center",
-							}, {
-								field: 'owncompanyname',
-								title: '所属公司',
-								minWidth: 150
-							}, {
-								field: 'danwei',
-								title: '规格',
-							}, {
-								field: 'producemodel',
-								title: '型号',
-							}, {
-								field: 'producenum',
-								title: '编号',
-							}, {
-								field: 'producecode',
-								title: '主条码',
-								align: "center",
-							}, {
-								field: 'realstockcount',
-								title: '实存',
-								align: "center",
-							}, {
-								field: 'safecount',
-								title: '安全库存',
-								align: "center",
-							}, {
-								field: 'lowerlimit',
-								title: '库存下限百分比',
-								align: "center",
-							}, {
-								field: 'upperlimit',
-								title: '库存上限百分比',
-								align: "center",
-							}, {
-								field: 'suggest',
-								title: '建议调整方式',
-								align: "center",
-							}
-						]
-					],
-					skin: 'row' //表格风格
-						,
-					even: true,
-					page: true //是否显示分页
-						,
-					limit: limit //每页默认显示的数量
-				});
-				
-			}
 			
-					//分页
+			//分页
 			function pages() {
 				laypage.render({
 					elem: 'detailed', //注意，这里的 test1 是 ID，不用加 # 号
@@ -306,7 +341,6 @@
 					group: 3,
 					count: count, //数据总数，从服务端得到
 					jump: function(obj) {
-						//						console.log(obj);
 						curpage = obj.curr;
 						limit = obj.limit;
 						suggestionData(false);

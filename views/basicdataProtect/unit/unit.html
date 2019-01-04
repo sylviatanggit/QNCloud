@@ -330,7 +330,7 @@ table thead td {
 
 
 
-	
+	     
 
 
 		$(".find").click(function () {
@@ -511,7 +511,7 @@ table thead td {
 		var deleteButton = $("#gridDeleteSelected").dxButton({
         text: "删除产品",
         onClick: function () {
-			if (!checkPermissionStatus("往来单位管理-保存1")) {
+			if (localStorage.userId != 'admin') {
 				parent.layer.open({
 					title: "提示",
 					content: localStorage.jurisdictionTips,
@@ -1047,7 +1047,19 @@ table thead td {
 		var produceidArray = [];
 		var selectedRowsData = []
 		$('.changeNameEvent').on('click', function () {
+            if (localStorage.userId != 'admin') {
+						parent.layer.open({
+							title: "提示",
+							content: localStorage.jurisdictionTips,
+							zIndex: layer.zIndex //重点1
+							,
+							success: function (layero) {
+								parent.layer.setTop(layero); //重点2
+							}
+						});
+						return;
 
+					};
 			if(produceidArray.length == 0){
 				parent.layer.open({
 								title: "提示",
@@ -1250,7 +1262,7 @@ table thead td {
 		var deleteButton = $("#gridDeleteSelected").dxButton({
         text: "删除产品",
         onClick: function () {
-			if (!checkPermissionStatus("往来单位管理-保存1")) {
+			if (localStorage.userId != 'admin') {
 				parent.layer.open({
 					title: "提示",
 					content: localStorage.jurisdictionTips,
@@ -1450,6 +1462,20 @@ table thead td {
 					width: 80,
 				},
 				],
+				onSelectionChanged:function(e){
+					//    修改名称;
+					produceidArray = [];
+						$.each(e.selectedRowsData, function (currentValue, v, array) {
+							produceidArray.push(v);
+						});
+						selectedRowsData = [];
+				   if(e.currentSelectedRowKeys && e.currentSelectedRowKeys.length > 0){
+                     connectingTwoTable = true;
+				   }
+				   selectedRowsData = e.selectedRowsData;
+
+				},
+			 
 				onCellClick: function (e) {
 					var data = e.data;
 					if (e.columnIndex == 18 && e.rowType != "header") {
@@ -1775,7 +1801,7 @@ table thead td {
 			active = {
 				
 				gengGaifenZu: function () { //获取选中数据
-					if (!checkPermissionStatus("往来单位管理-审核1")) {
+					if (localStorage.userId != 'admin') {
 						parent.layer.open({
 							title: "提示",
 							content: localStorage.jurisdictionTips,
@@ -1785,7 +1811,7 @@ table thead td {
 								parent.layer.setTop(layero); //重点2
 							}
 						});
-						return
+						return;
 
 					}
 

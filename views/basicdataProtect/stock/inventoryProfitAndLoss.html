@@ -1086,6 +1086,7 @@
 					success: function(res) {
 						var desData = JSON.parse(res);
 						
+//						profitData = desData;
 						inventoryProfitData(desData)
 					}
 				});
@@ -1422,7 +1423,7 @@
 					success: function(res) {
 						parent.layer.close(jiazaiIndex);
 						var data = JSON.parse(res)
-						
+//						lossData = data;
 						inventoryLossDataInfo = data;
 						inventoryLossData(data)
 					
@@ -2245,16 +2246,11 @@
 		  			}
 				});
 				
-				$.each(profitData,function(i,v,arr){	
-						v.qs = 1;
-						
-				 })
-						
-				$.each(lossData,function(i,v,arr){	
-						v.qs = 1;
-				 })	
+			
 				 
-				
+				 var profitData =[];
+				 var lossData =[];
+
 				
 				$.ajax({
 					type: "POST",

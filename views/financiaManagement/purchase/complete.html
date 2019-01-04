@@ -5,20 +5,12 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<title>采购核价已完成列表</title>
-	
 	<link rel="stylesheet" type="text/css" href="../../../css/demo.css" />
 	<link rel="stylesheet" href="../../../plugins/layui/css/layui.css">
 	<link href="../../../css/font-awesome.min.css" rel="stylesheet">
-  
-	<!-- DevExtreme themes -->
-	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.common.css">
-	<link rel="stylesheet" href="../../../devexpresslibrary/css/dx.light.css">
-	<link rel="stylesheet" type="text/css" href="../../../css/same.css" />
-	<link rel="stylesheet" type="text/css" href="../../../css/comboselect.css" />
 </head>
-
 <style>
-         		table thead td {
+  table thead td {
     padding: 0;
     border-left: 1px solid #CAD3DA;
     background: #DFEBFB;
@@ -35,22 +27,8 @@ table tbody tr:nth-child(even) {
       display: block;
       clear: both;
   }
-  .layui-laypage-limits {
-        font-size: 12px;
-        display: none;
-        float: left;
-		margin-top: 7px;
-	}
-	#lay-ignore {
-      height: 25px;
-      width: 60px;
-    
-    }
-     #lay-ignore {
-      height: 25px;
-      width: 60px;
-     
-	}
+
+
 	tbody tr:not(:last-child):hover{
 	background-color: rgba(137, 207, 240,.6)!important;
 }
@@ -66,39 +44,7 @@ colgroup > col:first-child{
 	width: 45px !important;
 }
 
-.M-box2 {
-        display: inline-block;
-        padding: 0 15px;
-        height: 28px;
-        color: #333;
-        font-size: 12px;
-        margin-top: 6px;
-       }
-        .M-box2 a {
-            margin-left: 15px;
-            padding: 0 15px;
-            text-decoration: none;
-            background-color: #ffffff;
-            color: #000000;  
-        }
-    
-        .M-box2 .active {
-            margin-left: 5px;
-            padding: 0 15px;
-            color: #ffffff;
-            width: 100%;
-            height: 100%;
-            background-color: #2D89DD;
-            border: 1px solid #e2e2e2;
-		}
-		.jump-ipt {
-            float: none;
-            margin-left: 5px;
-            margin-left: 11px;
-            width: 60px;
-            border: 1px solid #e6e6e6;
-            height: 20px!important;
-		}
+
 		.dx-data-row,.dx-column-lines:not(:first-child) > td:nth-child(2) {
 		cursor: pointer;
 	 }
@@ -119,19 +65,14 @@ colgroup > col:first-child{
 	.dx-data-row,.dx-column-lines > td:nth-child(2) {
 		cursor: pointer;
 	 }
-	 .totalInfo{
-        width: 100px;
-        height: 20px;
-        float: left;
-        margin-top: 12px;
-	}
+
 	.fl{
 		float: left;
 	}
 	.fr{
 		float: right;
 	}
-/* <!-- 分割线  --> */
+    /* <!-- 分割线  --> */
 		.purchase {
 			font-family: "PingFang SC" !important;
 			font-size: 9pt !important;
@@ -214,6 +155,9 @@ colgroup > col:first-child{
         .inputs{
 			margin-left: 10px;
 		}
+		#gridContainer{
+			margin-top: 5px;
+		}
 </style>
 
 <body>
@@ -268,7 +212,7 @@ colgroup > col:first-child{
 				</div>
 				<div class="layui-inline" style="margin-top: 10px;">
 					<div class="layui-input-inline">
-						<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入单号/医院/患者姓名/住院号/手术名称/手术日期" style="margin-left: 14px;width: 240px;">
+						<input autocomplete="off" class="layui-input seachContent" type="text" placeholder="请输入单号/医院/患者姓名/住院号/手术名称/手术日期/备注" style="margin-left: 14px;width: 240px;">
 					</div>
 				</div>
 				<div class="layui-inline" style="margin-top: 10px;">
@@ -288,44 +232,16 @@ colgroup > col:first-child{
 			</div>
 		</div>	
 	    </div>
-
+        <div id="gridContainer"></div>
 		<div id="completelist" lay-filter="demo">
-			<div class="demo-container">
-				<div id="gridContainer"></div>
-			</div>
-		</div>
-		
-		<div class="footer .clearfix">
-			<div class="totalInfo fl"></div>
-			<div class="M-box2 fl"></div>
-			<span class="layui-laypage-limits">
-				<select id="lay-ignore">
-					<option value="50" selected>50</option>
-					<option value="100">100</option>
-					<option value="200">200</option>
-				</select>
-				<span>条/页</span>
-			</span>
-		</div>
 
+		</div>
 	</div>
 </body>
 
-
-
-<!-- DevExtreme library -->
-<script src="../../../devexpresslibrary/js/dx.all.js" type="text/javascript"></script>
-<!-- 分页插件 -->
-<script src="../../../devexpresslibrary/js/pagination/jquery.pagination.js"></script>
-<script src="../../../devexpresslibrary/js/pagination/highlight.min.js"></script>
-<script type="text/javascript" src="../../../js/comboselect.js"></script>
-<script type="text/javascript" src="../../../js/b.comboselect.js"></script>
-
 <script type="text/javascript">
-
-
 	var limit = 50;
-	var currentPage = 1;
+	var curpage = 1;
 	var totalInfo = '';
 	var count;
 
@@ -360,7 +276,7 @@ colgroup > col:first-child{
 
 		if (localStorage.groupcompanyid != "0") {
 			$("#fengongsiId").css("display", "none");
-			completeData(currentPage, limit, totalInfo);
+			completeData(true);
 		} else {
 			dataFun1();
 		}
@@ -400,7 +316,7 @@ colgroup > col:first-child{
 
 					}
 					$(".companytypeid").append(optionsStr);
-					completeData(currentPage, limit, totalInfo);
+					completeData(true);
 
 				}
 			});
@@ -414,7 +330,7 @@ colgroup > col:first-child{
 
 		$(".companytypeid").change(function () {
 
-			completeData(currentPage, limit, totalInfo);
+			completeData(true);
 			//业务员跟这变
 			groupcompanyid = $(".companytypeid").val();
 			groupcompanyid = groupcompanyid == -1 ? '' : groupcompanyid;
@@ -446,11 +362,8 @@ colgroup > col:first-child{
 			$("#append_sale").empty().append(bandstr);
 
 			getstaffList(groupcompanyid, $("#owngroup").val());
-
-
-
-
 		});
+
          var data;
 		function staffList() {
 			$.ajax({
@@ -476,8 +389,8 @@ colgroup > col:first-child{
 			});
 		}
 		staffList()
-          var returnTypeOf;
-		function completeData(currentPage, limit) {
+        var returnTypeOf;
+		function completeData(flag) {
 			var unit = $("#unit").val();
 			var agentId = $("#salesman").val();
 			var orderNum = $(".seachContent").val();
@@ -490,8 +403,6 @@ colgroup > col:first-child{
 			}
 
 			var employeedep = $('#owngroup').val();
-
-
 
 			var jiazaiIndex;
 			parent.layer.open({
@@ -512,7 +423,7 @@ colgroup > col:first-child{
 					'userId': localStorage.userId,
 					'userPw': localStorage.userPw,
 					'num': limit,
-					'page': currentPage,
+					'page': curpage,
 					'orderNum': orderNum,
 					'agentId': agentId,
 					'beginTime': beginTime,
@@ -531,19 +442,18 @@ colgroup > col:first-child{
 					var initData = JSON.parse(res);
 					
 					data = JSON.parse(initData.data);
-					// console.log(data);
+					
 				
 
 					count = initData.count;
-					totalInfo = count;
-					var totalInfoTag = '<span>' + '共' + totalInfo + '条' + '</span>';
-					$('.totalInfo').append(totalInfoTag);
-					complete(data);
-					pagination(currentPage, limit, count);
-					$('.layui-laypage-limits').css('display', 'block');
 
-					// 改变单据类型的颜色
-					
+					complete(data);
+
+
+				
+					 if(flag) {
+                            house_pages();
+                        }
 				}
 				,
 				error: function (res) {
@@ -565,7 +475,6 @@ colgroup > col:first-child{
 			$(function () {
 				var dataGrid = $("#gridContainer").dxDataGrid({
 					dataSource: data,
-	
 					keyExpr: "ordernum",
 					allowColumnReordering: true,
 					showBorders: true,
@@ -594,6 +503,11 @@ colgroup > col:first-child{
 						width: 160,
 						caption: "入库核价单号",
 						fixed: true,
+						cellTemplate:function(container,options){
+							$("<div>",{ "style": "color:#2D89DD;"})
+							.append(options.value)
+							.appendTo(container)
+						}
 					}
 					,
 					{
@@ -816,23 +730,6 @@ colgroup > col:first-child{
 		
 			onCellClick:function(e){
 				if (e.columnIndex == 1) {
-//                    if(e.data.typeof == 8){
-//						parent.tab.tabAdd({
-//									icon: '',
-//									id: 'CGHJDH'+ e.data.ordernum,
-//									title: e.data.ordernum + '采购核价',
-//									url: 'views/financiaManagement/purchase/directAccessoryFinishDetail.html'
-//								});
-//					  }else{
-//						parent.tab.tabAdd({
-//		             	icon: '',
-//		             	id: 'CGHJDH' + e.data.ordernum,
-//		             	title: e.data.ordernum + '采购核价',
-//		             	url: 'views/financiaManagement/purchase/addPurchase2.html'
-//		             });
-//					  }
-
-
 					switch(e.data.typeof)
 					{
 					case "8":
@@ -868,52 +765,35 @@ colgroup > col:first-child{
 
 				
 			});
-			// 结束
-
+			// 结束;
 		}
+
 		// 根据可视区的高度判断
 		var viewHeight = $(window).height();
-		if (viewHeight == 855) {
-			$('#gridContainer').css('height', 650 + 'px'); //855*0.76
-		} else {
-			$('#gridContainer').css('height', viewHeight * 0.7 + 'px');
-		}
+		$('#gridContainer').css('height', viewHeight * 0.77 + 'px');
 
-		// 获取当前页面渲染数量
-		$('#lay-ignore').change(function () {
-			limit = $(this).children('option:selected').val();
-			completeData(currentPage, limit, totalInfo);
-		});
+        
+		   function house_pages(){
+                laypage.render({
+                    elem: 'completelist', //注意，这里的 test1 是 ID，不用加 # 号
+                    layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+                    limits: [50, 100, 200],
+                    limit: limit,
+                    curr: curpage,
+                    group: 3,
+                    count: count, //数据总数，从服务端得到
+                    jump: function(obj,first) {
+                        curpage = obj.curr;
+                        limit = obj.limit;
+                        if(!first){
+							completeData(false);
+                        }
+                    }
+                })
+            }
 
 
-		$('.M-box2').on('click', 'a', function () {
-			currentPage = $(this).data('page');
-			completeData(currentPage, limit, totalInfo);
-		});
 
-
-
-		//分页
-		function pagination(currentPage, limit, totalInfo) {
-			$('.M-box2').empty();
-
-			if (totalInfo == 0) {
-				return;
-			}
-			$('.M-box2').pagination({
-				current: currentPage,
-				totalData: totalInfo,
-				showData: limit,
-				pageCount: Math.floor(totalInfo / limit),
-				mode: 'fixed',
-				isHide: true,
-				jump: true,
-				callback: function (api) {
-					currentPage = api.getCurrent();
-					completeData(currentPage, limit, totalInfo);
-				}
-			});
-		}
 
 
 
@@ -925,7 +805,7 @@ colgroup > col:first-child{
 		})
 
 		$(".find").click(function () {
-			completeData(currentPage, limit, totalInfo);
+			completeData(true);
 		});
 
 
@@ -938,26 +818,7 @@ colgroup > col:first-child{
 
 
 	
-		//点击单号跳转
-	// 	$('.demo-container').on('click', ' .dx-datagrid-rowsview .dx-column-lines > td:nth-child(2)', function () {
-	// 	var id = $(this).parent().attr('aria-rowindex') - 1;
-	// 	if(data[id].typeof == 8){
-	// 					parent.tab.tabAdd({
-	// 								icon: '',
-	// 								id: 'CGHJDH'+data.ordernum,
-	// 								title: data.ordernum + '采购核价',
-	// 								url: 'views/financiaManagement/purchase/directAccessoryFinishDetail.html'
-	// 							});
-					
-	// 				}else{
-	// 	             	parent.tab.tabAdd({
-	// 	             	icon: '',
-	// 	             	id: 'CGHJDH' + $(this).text(),
-	// 	             	title: $(this).text() + '采购核价',
-	// 	             	url: 'views/financiaManagement/purchase/addPurchase2.html'
-	// 	             });
-	// 				}	
-	// });
+
 	  
 	$('.export').on('click', function () {
 		
@@ -1090,8 +951,6 @@ colgroup > col:first-child{
 
 
 						} else {
-
-							//							url = "/"+ res.ResultValue
 							var url = "\\" + res.ResultValue
 							while (true) {
 								var isExists = 0;

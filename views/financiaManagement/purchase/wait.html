@@ -102,55 +102,45 @@
 						<input autocomplete="off" class="layui-input salesman" id="salesman" type="text" style="width: 250px;height: 28px;line-height: 28px;">
 					</div>
 				</div>
-                <!--<div class="layui-inline">
-                    <label class="layui-form-label" >日期范围</label>
-                    <div class="layui-input-inline">
-                        <input autocomplete="off" id="date1" class="layui-input" type="text">
-                    </div>
-                    -
-                    <div class="layui-input-inline">
-                        <input autocomplete="off" id="date2" class="layui-input" type="text" style="margin-left: 0;">
-                    </div>
-                </div>-->
+
               	<div style="width: 100%;height: auto;position: relative;margin-top: 10px;">
                 <div class="layui-inline" style="margin-top: 10px;margin-left: 4px;">
                     <div class="layui-input-inline">
                      	   <select name="" class="status layui-input">
                             <option value="0">订单入库</option>
                             <option value="1">无订单入库</option>
-                            <!--<option value="2">借货入库</option>-->
                             <option value="8">直销入库 </option>
                              <option value="7">盘盈入库</option>
                             <option value="9">直销产品</option>
                              <option value="3">分销退货</option>
                             <option value="10">子公司分销</option>
-                            <!--<option value="4">赠送入库</option>-->
-                             <!--<option value="5">报溢</option>-->
                         </select>
                     </div>
                 </div>
                 <div class="layui-inline" style="margin-top: 10px;">
                     <div class="layui-input-inline">
-                        <input autocomplete="off" class="layui-input seachContent" type="text" placeholder="入库单号、关联单号" style="margin-left: 14px;width: 240px;">
+                        <input autocomplete="off" class="layui-input seachContent" type="text" placeholder="入库单号、关联单号、备注" style="margin-left: 14px;width: 240px;">
                     </div>
                 </div>
                 <div class="layui-inline" style="margin-top: 10px;">
                     <button class="layui-btn find" style="margin-left: 5px;">查询</button>
                 </div>
                 <div class="btns" style="margin-top: 18px;margin-right: 20px;">
-                    <!--<button class="layui-btn addPurchase">新增</button>-->
                 </div>
             </div>
 				</div>
             <div class="hidden_one">
-            	<table id="houselist" lay-filter="demo"></table>
+            	<table id="houselist" lay-filter="demo">
+                    <div id="gridContainer1"></div>
+                </table>
             </div>
             <div class="hidden_two">
-            	<table id="Nohouselist" lay-filter="demo1"></table>
+            	<table id="Nohouselist" lay-filter="demo1">
+                    <div id="gridContainer2"></div>
+                </table>
             </div>
             
         </div>
-
     </body>
     <script src="../../../js/public.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
@@ -182,14 +172,7 @@
             var off1 = true;
             
             
-//           laydate.render({
-//              elem: '#date1',
-//              value: currentMothFirstDay
-//          });
-//          laydate.render({
-//              elem: '#date2',
-//              value: new Date()
-//          });
+
             var groupcompanyid=localStorage.groupcompanyid;
             getunit(-1,0);
             if(localStorage.groupcompanyid != "0"){
@@ -221,7 +204,6 @@
 						for(var i=0;i<desData.length;i++){
 							var id= desData[i].myg_companyid;
 							var name= desData[i].companyname;
-							
 							
 							if(id == localStorage.groupcompanyid){
 								optionsStr+= "<option value='"+id+"' selected='selected'>"+name+"</option>";
@@ -328,9 +310,6 @@
             	var unit = $("#unit").val();
                 var agentId = $("#salesman").val();
                 var orderNum = $(".seachContent").val();
-                
-//          	var beginTime = $('#date1').val() != "" ?   $('#date1').val() : currentMothFirstDay;
-//				var endTime = $('#date2').val() != "" ? $('#date2').val() : currentDate;
 				if(localStorage.groupcompanyid == "0"){
 					companytypeid = $('.companytypeid option:selected').val();
 				}else{
@@ -362,9 +341,7 @@
                         'page': curpage,
                         'orderNum': orderNum,
                         'agentId': agentId,
-//                      'beginTime': beginTime,
                         'companyId' :unit,
-//                      'endTime': endTime,
                         'database': localStorage.database,
                         'checkState': 1,
                         'orderState': 2,
@@ -374,7 +351,7 @@
 
                     },
                     success: function(res) {
-                    							parent.layer.close(jiazaiIndex);
+                    	parent.layer.close(jiazaiIndex);
 
                         var initData = JSON.parse(res);
                         var data = JSON.parse(initData.data);
@@ -384,7 +361,7 @@
                             house_pages();
                         }
                     }
-               						,
+               		,
 					error: function(res) {
 						parent.layer.close(jiazaiIndex);
 							
@@ -399,121 +376,155 @@
 					}
                 });
             }
+            
+            function houseList(data) {
+			$(function () {
+				var dataGrid = $("#gridContainer1").dxDataGrid({
+					dataSource: data,
+					keyExpr: "ordernum",
+					allowColumnReordering: true,
+					showBorders: true,
+					paging: {
+						pageSize: 200,
+					},
+					sorting: {
+						mode: "none"//none
+					},
+					selection: {
+						mode: "multiple"
+					},
+					filterRow: {
+						visible: false,
+						applyFilter: "auto"
+					},
+					headerFilter: {
+						visible: false
+					},
+					allowColumnResizing: true,
+					columnFixing: {
+						enabled: false
+					},
+					columns: [{
+						dataField: "ordernum",
+						width: 160,
+						caption: "入库单号",
+						fixed: true,
+                        cellTemplate:function(container,options){
+							$("<div>",{ "style": "color:#2D89DD;"})
+							.append(options.value)
+							.appendTo(container)
+						}
+					}
+					,
+					{
+						dataField: "statesname",
+						width: 100,
+						caption: "操作状态",
+						// cellTemplate: function (container, options){
+						// 	$("<div>")
+						// 	.append(options.value)
+						// 	.appendTo(container);
+						// }
+					}
+					,
+					{
+						dataField: "typeofname",
+						width: 100,
+						caption: "单据类型",
+					},
+					{
+						dataField: "companyname",
+						width: 100,
+						caption: "往来单位"
+					},
+					{
+						dataField: "owncompanyname",
+						width: 100,
+						caption: "所属公司",
+					},{
+						dataField: "owngroupname",
+						width: 100,
+						caption: "所属部门",
+					},{
+						dataField: "agentname",
+						width: 100,
+						caption: "业务员",
+					},{
+						dataField: "operatorname",
+						width: 100,
+						caption: "制单人",
+					},{
+						dataField: "actiondate",
+						width: 100,
+						caption: "制单日期",
+					},{
+						dataField: 'checkername',
+						caption: '审核人',
+						width: 100,
+						cssClass: "color: red"
+					}, {
+						dataField: 'checkdate',
+						caption: '审核日期',
+						format: "yyyy-MM-dd",
+						dataType: "date",
+						width: 110,
+					}, {
+						dataField: 'lastnum',
+						caption: '关联单号',
+						width: 160,
+					}, {
+						dataField: 'mynum',
+						caption: '自定义单号',
+						width: 160,
+					}, {
+						dataField: 'nomo',
+						caption: '备注',
+						width: 180,
+					}
+					]
+					,
+			    onCellClick:function(e){
+                    var data = e.data;
+				    if (e.columnIndex == 1 &&  e.rowType == 'data') {
+                    switch($(".status").val())
+					{
+					case "8":
+					 	  parent.tab.tabAdd({
+	                        icon: '',
+	                        id: 'CGHJDH'+data.ordernum,
+	                        title: data.ordernum + '采购核价',
+	                        url: 'views/financiaManagement/purchase/directAccessoryDetail.html'
+                   		 });
+					  break;
+					case "9":
+						  parent.tab.tabAdd({
+	                        icon: '',
+	                        id: 'CGHJDH'+data.ordernum,
+	                        title: data.ordernum + '采购核价',
+	                        url: 'views/financiaManagement/purchase/directAccessoryDetail.html'
+                   		 });
+					  break;
+					default:
+					 	   parent.tab.tabAdd({
+	                        icon: '',
+	                        id: 'CGHJDH'+data.ordernum,
+	                        title: data.ordernum + '采购核价',
+	                        url: 'views/financiaManagement/purchase/addPurchase1.html'
+                   		 });
+					}
+				}
+			}
+				}).dxDataGrid('instance');
 
-            function houseList(data, limit) {
-                //展示已知数据
-                table.render({
-                    elem: '#houselist',
-                    data: data,
-                    cols: [
-                        [ //标题栏
-                            {
-                                checkbox: true,
-                                LAY_CHECKED: false,
-                                align: "center",
-                                width: 40,
-                            }, {
-                                field: 'ordernum',
-                                title: '入库单号',
-                                event: "detail",
-                                style: "color:#2D89DD;cursor:pointer",
-                                minWidth: 170
-                            },
-                            {
-                                field: 'statesname',
-                                title: '操作状态',
-                                minWidth: 100,
-                            }, {
-                                field: 'typeofname',
-                                title: '单据类型',
-                                minWidth: 100,
-                            },{
-                                field: 'companyname',
-                                title: '往来单位',
-                                minWidth: 150
-                            }, {
-								field: 'owncompanyname',
-								title: '所属公司',
-								minWidth: 150
-							}	,
-							{
-								field: 'owngroupname',
-								title: '所属部门',
-								minWidth: 120,
-							}, {
-                                field: 'agentname',
-                                title: '业务员',
-                                minWidth: 100,
-                            }, {
-                                field: 'operatorname',
-                                title: '制单人',
-                                minWidth: 100,
-                            }, {
-                                field: 'actiondate',
-                                title: '制单日期',
-                                minWidth: 100,
-                            }, {
-                                field: 'checkername',
-//                              checkername
-                                title: '审核人',
-                                minWidth: 100,
-                            }, {
-                                field: 'checkdate',
-                                //checkdate
-                                title: '审核日期',
-                                minWidth: 100,
-                            },
-//                          {
-//                              field: 'checkstate',
-//                              title: '单据状态',
-//                              minWidth: 100,
-//                          }, 
-                            {
-                                field: 'lastnum',
-                                title: '关联单号',
-                                minWidth: 150,
-                            },
-                            {
-                                field: 'mynum',
-                                title: '自定义单号',
-                                minWidth: 150,
-                            }, {
-                                field: 'nomo',
-                                title: '备注',
-                                minWidth: 150,
-                            }
-//                          ,
-//							{
-//								field: 'hospitalname',
-//								title: '医院',
-//								minWidth: 100,
-//							}, {
-//								field: 'surgery',
-//								title: '手术名称',
-//								minWidth: 100,
-//							}, {
-//								field: 'patienname',
-//								title: '患者姓名',
-//								minWidth: 100,
-//							}, {
-//								field: 'surgerydate',
-//								title: '手术日期',
-//								minWidth: 100,
-//							}, {
-//								field: 'patienthospitalnum',
-//								title: '住院号',
-//								minWidth: 100,
-//							}
-                        ]
-                    ],
-                    skin: 'row', //表格风格
-                    height: "full-210",
-                    even: true,
-                    limit: limit //每页默认显示的数量
-                });
+				
+			});
+			// 结束
+		}
 
-               
-            }
+		// 根据可视区的高度判断
+		var viewHeight = $(window).height();
+		$('#gridContainer1,#gridContainer2').css('height', viewHeight * 0.76 + 'px');
+        
             //分页
             function house_pages() {
                 laypage.render({
@@ -535,27 +546,13 @@
                     }
                 })
             }
-            table.on('tool(demo)', function(obj) {
-                var data = obj.data;
-                if(obj.event === 'detail') {
-                    parent.tab.tabAdd({
-                        icon: '',
-                        id: 'CGHJDH'+data.ordernum,
-                        title: data.ordernum + '采购核价',
-                        url: 'views/financiaManagement/purchase/addPurchase.html'
-                    });
-                }
-
-            });
+     
             //无订单
             function nohouseData(flag) {
             	
             	var unit = $("#unit").val();
                 var agentId = $("#salesman").val();
                 var orderNum = $(".seachContent").val();
-                
-//          	var beginTime = $('#date1').val() != "" ?   $('#date1').val() : currentMothFirstDay;
-//				var endTime = $('#date2').val() != "" ? $('#date2').val() : currentDate;
 				if(localStorage.groupcompanyid == "0"){
 					companytypeid = $('.companytypeid option:selected').val();
 				}else{
@@ -563,7 +560,7 @@
 				}
 				
 				var orderType = $(".status").val();
-									var employeedep = $('#owngroup').val();
+				var employeedep = $('#owngroup').val();
 
 					var jiazaiIndex;
 			parent.layer.open({
@@ -586,11 +583,8 @@
                         'page': curpage,
                         'orderNum': orderNum,
                         'agentId': agentId,
-//                      'beginTime': beginTime,
-//                      'endTime': endTime,
                         'database': localStorage.database,
-                                                'companyId' :unit,
-
+                        'companyId' :unit,
                         'checkState': 1,
                         'orderState': 2,
                         'orderType': orderType,  //1无订单，8直销入库 9 直销产品 10 子公司分销,3分销退货（103所有无订单）
@@ -628,174 +622,142 @@
 					}
                 });
             }
-
-            function nohouseList(data, limit) {
-                table.render({
-                    elem: '#Nohouselist',
-                    data: data,
-                    cols: [
-                        [ //标题栏
-                            {
-                                checkbox: true,
-                                LAY_CHECKED: false,
-                                align: "center",
-                                width: 40,
-                            },  {
-                                field: 'ordernum',
-                                title: '入库单号',
-                                event: "detail",
-                                style: "color:#2D89DD;cursor:pointer",
-                                minWidth: 170
-                            },
-                            {
-                                field: 'statesname',
-                                title: '操作状态',
-                                minWidth: 100
-                            }, {
-                                field: 'typeofname',
-                                title: '单据类型',
-                                minWidth: 100
-                            },
-							{
-								field: 'hospitalname',
-								title: '医院',
-								minWidth: 100,
-							}, {
-								field: 'surgery',
-								title: '手术名称',
-								minWidth: 100,
-							}, {
-								field: 'patienname',
-								title: '患者姓名',
-								minWidth: 100,
-							}, {
-								field: 'surgerydate',
-								title: '手术日期',
-								minWidth: 100,
-							}, {
-								field: 'patienthospitalnum',
-								title: '住院号',
-								minWidth: 100,
-							}, {
-								field: 'owncompanyname',
-								title: '所属公司',
-								minWidth: 150
-							}, {
-                                field: 'companyname',
-                                title: '往来单位',
-                                minWidth: 100
-                            }, {
-                                field: 'warehousename',
-                                title: '对应仓库',
-                                minWidth: 100
-                            }	,
-							{
-								field: 'owngroupname',
-								title: '所属部门',
-								minWidth: 120,
-							}, {
-                                field: 'agentname',
-                                title: '业务员',
-                                minWidth: 100
-                            }, {
-                                field: 'instoragedate',
-                                title: '入库日期',
-                                minWidth: 100
-                            }, {
-                                field: 'operatorname',
-                                title: '制单人',
-                                minWidth: 100
-                            }, {
-                                field: 'actiondate',
-                                title: '制单日期',
-                                minWidth: 100
-                            }, {
-                                field: 'checkername',
-//                              checkername
-                                title: '审核人',
-                                minWidth: 100
-                            }, {
-                                field: 'checkdate',
-//                              checkdate
-                                title: '审核日期',
-                                minWidth: 100
-                            },
-//                          {
-//                              field: 'checkstatename',
-//                              title: '单据状态',
-//                              minWidth: 100
-//                          }, 
-                            {
-                                field: 'lastnum',
-                                title: '关联单号',
-                                minWidth: 100
-                            }, {
-                                field: 'mynum',
-                                title: '自定义单号',
-                                minWidth: 100
-                            }, {
-                                field: 'nomo',
-                                title: '备注',
-                                minWidth: 100
-                            }
-                        ]
-                    ],
-                    skin: 'row', //表格风格
-                    height: "full-210",
-                    even: true,
-                    limit: limit //每页默认显示的数量
-                });
-                var status = $(".status").val();
-                if(status == "10" || status == "1" || status == "3" || status == "5"  || status == "7"){
-                	$("[data-field=hospitalname]").css("display","none");
-
-                	$("[data-field=surgery]").css("display","none");
-					$("[data-field=patienname]").css("display","none");
-					$("[data-field=surgerydate]").css("display","none");
-					$("[data-field=patienthospitalnum]").css("display","none");
-
-                }
-                
-                
-               if(status == "9"){
-               		$("[data-field=hospitalname]").css("display","none");
-                	$("[data-field=surgery]").css("display","none");
-					$("[data-field=patienname]").css("display","none");
-					$("[data-field=surgerydate]").css("display","none");
-					$("[data-field=patienthospitalnum]").css("display","none");
-                }
-                
-            }
-            //分页
-            function nohouse_pages() {
-                laypage.render({
-                    elem: 'Nohouselist', //注意，这里的 test1 是 ID，不用加 # 号
-                    layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
-                    limits: [50, 100, 200],
-                    limit: limit,
-                    curr: curpage,
-                    group: 3,
-                    count: count, //数据总数，从服务端得到
-                    jump: function(obj,first) {
-                        curpage = obj.curr;
-                        limit = obj.limit;
-                        if(!first){
-                        	                        nohouseData(false);
-
-                        }
-                    }
-                })
-            }
             
-            
-            
-            table.on('tool(demo1)', function(obj) {
-                var data = obj.data;
-                if(obj.event === 'detail') {
-                	
-                	
-                	
-					switch($(".status").val())
+            function nohouseList(data){
+			$(function () {
+				var dataGrid = $("#gridContainer2").dxDataGrid({
+					dataSource: data,
+					keyExpr: "ordernum",
+					allowColumnReordering: true,
+					showBorders: true,
+					paging: {
+						pageSize: 200,
+					},
+					sorting: {
+						mode: "none"//none
+					},
+					selection: {
+						mode: "multiple"
+					},
+					filterRow: {
+						visible: false,
+						applyFilter: "auto"
+					},
+					headerFilter: {
+						visible: false
+					},
+					allowColumnResizing: true,
+					columnFixing: {
+						enabled: false
+					},
+					columns: [{
+						dataField: "ordernum",
+						width: 160,
+						caption: "入库单号",
+						fixed: true,
+                        cellTemplate:function(container,options){
+							$("<div>",{ "style": "color:#2D89DD;"})
+							.append(options.value)
+							.appendTo(container)
+						}
+					}
+					,
+					{
+						dataField: "statesname",
+						width: 100,
+						caption: "操作状态",
+					}
+					,
+					{
+						dataField: "typeofname",
+						width: 100,
+						caption: "单据类型",
+					},
+					{
+						dataField: "hospitalname",
+						width: 100,
+						caption: "医院"
+					},
+					{
+						dataField: "surgery",
+						width: 100,
+						caption: "手术名称",
+					},{
+						dataField: "patienname",
+						width: 100,
+						caption: "患者姓名",
+					},{
+						dataField: "surgerydate",
+						width: 100,
+						caption: "手术日期",
+					},{
+						dataField: "patienthospitalnum",
+						width: 100,
+						caption: "住院号",
+					},{
+						dataField: "owncompanyname",
+						width: 160,
+						caption: "所属公司",
+					},{
+						dataField: "companyname",
+						width: 100,
+						caption: "往来单位",
+					},{
+						dataField: "warehousename",
+						width: 100,
+						caption: "对应仓库",
+					},{
+						dataField: "owngroupname",
+						width: 100,
+						caption: "所属部门",
+					},{
+						dataField: "agentname",
+						width:100,
+						caption: "业务员",
+					},{
+						dataField: "instoragedate",
+						width: 100,
+						caption: "入库日期",
+					},{
+						dataField: "operatorname",
+						width: 100,
+						caption: "制单人",
+					},{
+						dataField: "actiondate",
+						width: 100,
+						caption: "制单日期",
+					},{
+						dataField: "checkername",
+						width: 100,
+						caption: "审核人",
+					},
+				{
+						dataField: 'checkdate',
+						caption: '审核日期',
+						format: "yyyy-MM-dd",
+						dataType: "date",
+						width: 100
+					},
+					{
+						dataField: 'lastnum',
+						caption: '关联单号',
+						width: 160,
+					},  {
+						dataField: 'mynum',
+						caption: '自定义单号',
+						width: 160,
+					}, {
+						dataField: 'nomo',
+						caption: '备注',
+						width: 180,
+					},
+					]
+					,
+		
+			onCellClick:function(e){
+                var data = e.data;
+				if (e.columnIndex == 1 &&  e.rowType == 'data') {
+                    switch($(".status").val())
 					{
 					case "8":
 					 	  parent.tab.tabAdd({
@@ -825,45 +787,76 @@
 	                        url: 'views/financiaManagement/purchase/addPurchase1.html'
                    		 });
 					}
-
-
-//
-//              	if($(".status").val() == 8){
-//              		
-//              		  parent.tab.tabAdd({
-//	                        icon: '',
-//	                        id: 'CGHJDH'+data.ordernum,
-//	                        title: data.ordernum + '采购核价',
-//	                        url: 'views/financiaManagement/purchase/directAccessoryDetail.html'
-//                 		 });
-//                 		 
-//              	}else{
-//              		   parent.tab.tabAdd({
-//	                        icon: '',
-//	                        id: 'CGHJDH'+data.ordernum,
-//	                        title: data.ordernum + '采购核价',
-//	                        url: 'views/financiaManagement/purchase/addPurchase1.html'
-//                 		 });
-//              	}
-//              	
-                 
+				}
+			},
+            onContentReady:function(e){
+                var status = $(".status").val();
+                if(status == "10" || status == "1" || status == "3"|| status == "7"){
+                    e.component.deleteColumn("hospitalname");
+                    e.component.deleteColumn("surgery");
+                    e.component.deleteColumn("patienname");
+                    e.component.deleteColumn("surgerydate");
+                    e.component.deleteColumn("patienthospitalnum");
                 }
+                if(status == "9"){
+                    e.component.deleteColumn("hospitalname");
+                    e.component.deleteColumn("surgery");
+                    e.component.deleteColumn("patienname");
+                    e.component.deleteColumn("surgerydate");
+                    e.component.deleteColumn("patienthospitalnum");
+                }
+            }
+				}).dxDataGrid('instance');
 
-            });
+				
+			});
+			// 结束
+
+		}
+        
+
+            //分页
+            function nohouse_pages() {
+                laypage.render({
+                    elem: 'Nohouselist', //注意，这里的 test1 是 ID，不用加 # 号
+                    layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+                    limits: [50, 100, 200],
+                    limit: limit,
+                    curr: curpage,
+                    group: 3,
+                    count: count, //数据总数，从服务端得到
+                    jump: function(obj,first) {
+                        curpage = obj.curr;
+                        limit = obj.limit;
+                        if(!first){
+                        	                        nohouseData(false);
+
+                        }
+                    }
+                })
+            }
+            
+            
+            
+
             (function() {
                 $("#Nohouselist").next().hide();
+                 $('#gridContainer2').hide();
             })();
             
             
             $(".status").change(function() {
-                if($(".status").val() == 0) {
+                var str = $(".status").val();
+                if( str == 0) {
                     houseData(true);
                     $(".hidden_one").show();
                     $(".hidden_two").hide();
+                     $('#gridContainer1').show();
                 } else {
                     nohouseData(true);
                     $(".hidden_two").show();
                     $(".hidden_one").hide();
+                     $('#gridContainer2').show();
                 }
             });
             $(".salesman").change(function(){
@@ -895,8 +888,5 @@
 			});
         });
     </script>
-    <script src="../../../js/jquery.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../../../js/comboselect.js"></script>
-    <script type="text/javascript" src="../../../js/b.comboselect.js"></script>
 
 </html>

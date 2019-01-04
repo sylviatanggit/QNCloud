@@ -245,7 +245,7 @@ layui.use(['table', 'jquery', 'laydate'], function () {
 			dataSource: dataSource,
 			allowColumnReordering: true,
             showBorders: true,
-            keyExpr: "ordernum",
+            //keyExpr: "ordernum",
            columnChooser: {
 	            enabled: false,
 				mode: "dragAndDrop",
@@ -398,7 +398,7 @@ layui.use(['table', 'jquery', 'laydate'], function () {
                                options.totalValue = 0;
                            };
                            if (options.summaryProcess === "calculate") {
-                               if (options.component.isRowSelected(options.value.ordernum)) {
+                               if (options.component.isRowSelected(options.value)) {
                                    options.totalValue = options.totalValue + options.value.totalprice;
                                    options.totalValue = Math.round(options.totalValue * 100) / 100;
                                }

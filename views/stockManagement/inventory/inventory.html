@@ -356,11 +356,8 @@
 			
 		// 根据可视区的高度判断
          var viewHeight = $(window).height();
-        if(viewHeight == 855){
-           $('#gridContainer').css('height',694 + 'px'); //855*0.81
-        }else{
-           $('#gridContainer').css('height', viewHeight*0.79 + 'px');
-        }
+        $('#gridContainer').css('height', viewHeight*0.835 + 'px');
+       
         
 	function devTableRenderDaTa(dataSource) {
 
